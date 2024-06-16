@@ -260,7 +260,6 @@ const rootReducer = combineReducers({
   coursebyscore: CoursebyScoreReducer,
   //quizmodule
   quizId: quizIdReducer,
-  quizQuestions: fetchQuizQuestionsReducer,
   deleteQuestion: deleteQuizQuestionsReducer,
   editQuizDetails: editQuizReducer,
   quiz: createQuizReducer,
@@ -317,7 +316,6 @@ const store = createStore(
     ApiViewEnrollmentReport, EnrollCoursePassedLearner, EnrollCourseProgressLearner,
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
     FetchQuizById,
-    FetchQuizQuestionsApi,
     DeleteQuizQuestionsApi,
     PutQuizDetails,
     CreateQuizApi,

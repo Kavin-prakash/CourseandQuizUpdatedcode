@@ -18,13 +18,14 @@ import { updateQuizQuestionRequest } from '../../../../actions/Quiz And Feedback
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Container } from 'react-bootstrap';
 import { set } from 'react-hook-form';
+import { FetchQuizQuestionsApi } from '../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizQuestionsApi';
 
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
 
   useEffect(() => {
     fetchQuestions(quizId);
-  },[]);
+  });
 
   const dispatch = useDispatch();
   const [error, setError] = useState("");
@@ -55,11 +56,14 @@ const QuestionTemplate = () => {
     correctOptions: ["", "", ""],
   });
 
-  const questions = useSelector((state) => state.quizQuestions.quizQuestions);
+  const[questions, setQuestions] = useState([]);
+  // const questions = useSelector((state) => state.quizQuestions.quizQuestions);
 
-  const fetchQuestions = (quizId) => {
+  const fetchQuestions = async (quizId) => {
     try {
-      dispatch(fetchAllQuizQuestionRequest(quizId));
+      // dispatch(fetchAllQuizQuestionRequest(quizId));
+      const data = await FetchQuizQuestionsApi(quizId);
+      setQuestions(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

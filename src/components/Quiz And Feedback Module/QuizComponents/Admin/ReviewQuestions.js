@@ -14,11 +14,13 @@ import { fetchAllQuizQuestionRequest } from "../../../../actions/Quiz And Feedba
 import { useSelector } from 'react-redux';
 import { Row, Container } from 'react-bootstrap';
 import Alert from "@mui/material/Alert";
+import { FetchQuizQuestionsApi } from '../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizQuestionsApi';
 
 export const ReviewQuestions = () => {
 
   
 const [selectedQuestion, setSelectedQuestion] = useState(null);
+const [questions, setQuestions] = useState();
     const location = useLocation();
     const [error, setError] = useState('');
     const [errorfb, setErrorfb] = useState('');
@@ -58,16 +60,15 @@ const [selectedQuestion, setSelectedQuestion] = useState(null);
     }, []);
  
     const fetchQuestions = async (quizId) => {
- 
         try {
-            dispatch(fetchAllQuizQuestionRequest(quizId));
- 
+            const questionsData = await FetchQuizQuestionsApi(quizId);
+            setQuestions(questionsData);
         } catch (error) {
-            console.error('Error fetching data:', error)
+            console.error("Error fetching data:", error);
         }
-    }
+    };
  
-    const questions = useSelector((state) => state.quizQuestions.quizQuestions);
+    // const questions = useSelector((state) => state.quizQuestions.quizQuestions);
     const loading = useSelector((state) => state.quizQuestions.loading);
     const selector = useSelector((state) => state.quizQuestions);
  
