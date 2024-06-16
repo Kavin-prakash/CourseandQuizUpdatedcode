@@ -117,7 +117,7 @@ export const QuizFeedback = () => {
 
   return (
     <>
-    <Container fluid style={{marginTop:'600px'}}>
+    <Container fluid style={{marginTop:'700px'}}>
     <div>
       <button
         class="btn btn-light"

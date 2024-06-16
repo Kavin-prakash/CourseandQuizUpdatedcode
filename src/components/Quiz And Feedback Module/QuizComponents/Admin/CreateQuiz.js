@@ -30,6 +30,8 @@ import { Container } from "react-bootstrap";
 export const Home = () => {
     const quizId = sessionStorage.getItem('quizId');
     const topicId = sessionStorage.getItem('topicId');
+    const courseId = sessionStorage.getItem('courseId');
+    const [button, setButton] = useState(true);
     // console.log("create page topic id", topicId);
 
     const dispatch = useDispatch();
@@ -66,8 +68,6 @@ export const Home = () => {
         passMark: '',
         attemptsAllowed: ''
     });
-
-
 
     const [isQuizEditable, setIsQuizEditable] = useState(!quizId);
 
@@ -163,7 +163,7 @@ export const Home = () => {
             sessionStorage.setItem('quizName', data.nameOfQuiz);
             setQuizData(data);
         } catch (error) {
-            console.error('Error fetching data:', error)
+            console.error('Error fetching data:', error);
         }
     }
 
@@ -188,7 +188,7 @@ export const Home = () => {
             DeleteQuizDetails(quizId);
             alert('Quiz deleted successfully');
             handleCloseQuizDeleteModal();
-            navigate('/');
+            navigate('`/addtopic/${courseId}`');
             dispatch(fetchQuizIdFailure(topicId))
         } else {
             setErrorDeleteQuiz('The QuizTitle you entered does not match !');
@@ -199,19 +199,18 @@ export const Home = () => {
         setInputQuizTitle(event.target.value);
     };
 
-    const handleBulkUpload = async (topicId) => {
-
-        try {
-            navigate("/upload", { state: { quiz: quizId } });
-        } catch (error) {
-            console.log("Error fetching quiz: ", error)
-        }
-    }
+    // const handleBulkUpload = async (topicId) => {
+    //     try {
+    //         navigate("/upload", { state: { quiz: quizId } });
+    //     } catch (error) {
+    //         console.log("Error fetching quiz: ", error)
+    //     }
+    // }
 
     const handleNavigate = () => {
         sessionStorage.removeItem("quizId");
         sessionStorage.removeItem("topicId");
-        navigate('/')
+        navigate(`/addtopic/${courseId}`)
         dispatch(fetchQuizIdFailure(topicId))
     }
 
@@ -219,11 +218,12 @@ export const Home = () => {
         <div>
             <Container fluid className="creat-quiz-container">
                 <div >
-                    <form className='quiz-content'>
-                        <div className="d-flex justify-content-end mb-5">
-                            <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50' }} onClick={() => { handleNavigate() }} >Back</button>
+                <div className="d-flex justify-content-end mb-5">
+                            <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50' }} onClick={() => { handleNavigate() }}>Back</button>
                         </div>
-                        <div className="card" id="QuizCard" style={{backgroundColor:'#F9F5F6'}}>
+                    <form className='quiz-content'>
+
+                        <div className="" id="QuizCard" style={{backgroundColor:'#F9F5F6'}}>
                             <div className="card-bodycreatequiz">
                                 <div className="dx mt-2">
                                     <div className="container">
@@ -258,7 +258,7 @@ export const Home = () => {
                                         </div>
                                         {quizId ? <div></div> : <div className="form-group row">
                                             <div className="col-sm-10">
-                                                <Button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "50%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white" }} ><FaUpload /> Import Question</Button>
+                                                <Button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "50%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white" }} disabled={false} ><FaUpload /> Import Question</Button>
                                             </div>
                                         </div>}
                                     </div>
@@ -344,7 +344,7 @@ export const Home = () => {
                             <Modal.Title id='questitle'>Question Library</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <h6><BiSolidCoinStack style={{ fontSize: "30", color: "GrayText", marginBottom: "11", marginLeft: "10" }} /><Link id='bulklink' onClick={() => { handleBulkUpload(bulkQuizId) }}> Add Question from Bulk Upload</Link></h6>
+                            {/* <h6><BiSolidCoinStack style={{ fontSize: "30", color: "GrayText", marginBottom: "11", marginLeft: "10" }} /><Link id='bulklink' onClick={() => { handleBulkUpload(bulkQuizId) }}> Add Question from Bulk Upload</Link></h6> */}
                             <h6><ImFolderUpload style={{ fontSize: "20", color: "GrayText", marginBottom: "11", marginLeft: "13" }} /><Link id='newquelink' onClick={() => { handleOpenAddQuestionModal(); closeModal() }}> Add New Question</Link></h6>
                         </Modal.Body>
                         <Modal.Footer>

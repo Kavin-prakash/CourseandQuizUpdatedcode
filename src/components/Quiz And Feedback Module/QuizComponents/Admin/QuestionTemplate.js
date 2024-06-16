@@ -17,13 +17,14 @@ import Button from 'react-bootstrap/Button';
 import { updateQuizQuestionRequest } from '../../../../actions/Quiz And Feedback Module/Admin/UpdateQuizQuestionAction';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Container } from 'react-bootstrap';
+import { set } from 'react-hook-form';
 
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
 
   useEffect(() => {
     fetchQuestions(quizId);
-  }, [quizId]);
+  },[]);
 
   const dispatch = useDispatch();
   const [error, setError] = useState("");
@@ -233,6 +234,9 @@ const QuestionTemplate = () => {
       UpdateQuizQuestionsApi(requestBody)
       handleCloseEditQuestionModal();
     }
+    setTimeout(function(){
+      window.location.reload(1);
+   }, 1000);
   };
 
   const validateField = (fieldName, value, index = null) => {

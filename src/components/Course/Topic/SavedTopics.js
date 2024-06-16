@@ -46,11 +46,15 @@ import { Container } from '@mui/material';
 import { Card } from 'react-bootstrap';
 import VideoViewer from '../Material/VideoViewer';
 import AudioViewer from '../Material/AudioViewer';
+import { fetchQuizIdRequest } from '../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction';
 export default function SavedTopics(props) {
     // const topicsDetail=useSelector((state)=>state);
     const selectorTopicsDetail = useSelector((state) => state.fetchTopic.topics[0]);
     const [topicsDetail, setTopicsDetails] = useState([]);
     // const topicsDetailSelector = useSelector((state) => state.fetchTopic.topics[0].topics);
+    const quizId = useSelector((state) => state.quizId.quizId);
+
+    const isSuccess = useSelector((state) => state.quizId.isSubmitted);
 
     const [loading, setLoading] = useState(false);
     const [deleteId, setDeleteId] = useState("");
@@ -102,6 +106,13 @@ export default function SavedTopics(props) {
         //         console.log(";t.,:",topicsDetail);
     }, []);
 
+    useEffect(()=>{
+        if(isSuccess){
+            sessionStorage.setItem("courseId",id)
+            sessionStorage.setItem("quizId",quizId);
+            navigate(`/createquiz`);
+        }
+    }, [isSuccess, quizId, navigate])
 
     const fetchTopics = async () => {
         try {
@@ -276,9 +287,10 @@ export default function SavedTopics(props) {
         sessionStorage.setItem('topicId',topicId);
         navigate('/quizfeedback')
         }
+
         const handleAddQuizButton=(topicId)=>{
+        dispatch(fetchQuizIdRequest(topicId));
         sessionStorage.setItem('topicId',topicId);
-        navigate('/createquiz')
         }
 
     return (
