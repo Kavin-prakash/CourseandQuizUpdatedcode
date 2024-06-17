@@ -24,7 +24,7 @@ const Admincourse = ({ fetchCourses, courses }) => {
     //     return () => clearTimeout(timer);
 
     // }, []);
-    
+
     useEffect(() => {
         fetchCourses();
     }, [fetchCourses]);
@@ -36,49 +36,57 @@ const Admincourse = ({ fetchCourses, courses }) => {
         <>
             {
                 courses.length > 0 ? (
-                    
+
                     <Container fluid className='coursepagebody'>
                         {/* <Row className='mb-5'>
                         </Row> */}
                         <Row className='pt-3 contentbody'>
                             <Col>
-                            <Col className='text-end mt-5'>
-                                <Link to='/addcourse'><Button>Add Course</Button></Link></Col>
+                                <Col className='text-end mt-5'>
+                                    <Link to='/addcourse'><Button>Add Course</Button></Link></Col>
 
                             </Col>
                             <Container>
-                            <Col xs={12} md={12} className='landingcoursepage  mb-5'>
-                                <Row>
-                                    <Col className='mt-2'><h4>Recently Added Courses</h4></Col>
-                                    <Col className='text-end  mt-2'><Link to='/adminviewallcourse'><Button variant="outline-primary">View All courses</Button></Link></Col>
-                                </Row>
-                                <div className='scrollable-content'>
-                                    {courses.map((course) => (
-                                        // <Card key={index} sx={{ maxWidth: 250, maxHeight: 250, mb:5,borderRadius:1}}>
+                                <Col xs={12} md={12} className='landingcoursepage  mb-5'>
+                                    <Row>
+                                        <Col className='mt-2'><h4>Recently Added Courses</h4></Col>
+                                        <Col className='text-end  mt-2'><Link to='/adminviewallcourse'><Button variant="outline-primary">View All courses</Button></Link></Col>
+                                    </Row>
+                                    <div className='scrollable-content'>
+                                        {courses.map((course) => (
+                                            // <Card key={index} sx={{ maxWidth: 250, maxHeight: 250, mb:5,borderRadius:1}}>
 
-                                        <Card key={course.courseId} sx={{ maxWidth: 250, maxHeight: 300, mb: 5, borderRadius: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                            <CardActionArea>
-                                                <CardMedia
+                                            <Card key={course.courseId} sx={{ maxWidth: 250, maxHeight: 300, mb: 5, borderRadius: 2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                <CardActionArea>
+                                                    {/* <CardMedia
                                                     component="img"
                                                     height="140"
                                                     // width="80"
                                                     image={course.thumbnailimage}
                                                     alt={course.title || 'Course image'}
                                                     style={{objectFit:"contain"}}
-                                                />
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="div">
-                                                        {course.title}
-                                                    </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {course.category}
-                                                    </Typography>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Card>
-                                    ))}
-                                </div>
-                            </Col>
+                                                /> */}
+                                                    <CardMedia
+                                                        component="img"
+                                                        height="200"
+                                                        width="240"
+                                                        image={course.thumbnailimage}
+                                                        alt={course.title || 'Course image'}
+                                                        style={{ objectFit: "cover", height: '140px', width: '240px' }}
+                                                    />
+                                                    <CardContent>
+                                                        <Typography gutterBottom variant="h5" component="div">
+                                                            {course.title}
+                                                        </Typography>
+                                                        <Typography variant="body2" color="text.secondary">
+                                                            {course.category}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </CardActionArea>
+                                            </Card>
+                                        ))}
+                                    </div>
+                                </Col>
                             </Container>
                         </Row>
                     </Container>
@@ -128,7 +136,7 @@ const Admincourse = ({ fetchCourses, courses }) => {
                                     404 Error
                                 </Typography>
                                 <Typography id="server-modal-description" sx={{ pt: 2 }}>
-                                  Faliled to Load Resource 
+                                    Faliled to Load Resource
                                 </Typography>
                             </Box>
                         </Modal>

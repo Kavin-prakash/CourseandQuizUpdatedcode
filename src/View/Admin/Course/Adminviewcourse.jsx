@@ -312,17 +312,14 @@ const Adminviewcourse = ({
  
   useEffect(() => {
     setFilteredCourses(
-      courses.filter(
-        (course) =>
-          Object.values(course).some((value) =>
- 
-            value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-          )
- 
-        // course.title.toLowerCase().includes(searchTerm.toLowerCase())
+      courses.filter((course) =>
+        Object.values(course).some((value) =>
+          value !== null && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        )
       )
     );
   }, [courses, searchTerm]);
+  
  
   const dispatch = useDispatch();
  
