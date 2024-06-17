@@ -67,12 +67,12 @@ export default function EnrollCourseProgressLearners() {
             disablePadding: false,
             label: "S.No",
         },
-        {
-            id: "profilePhoto",
-            numeric: false,
-            disablePadding: false,
-            label: "Profile Photo",
-        },
+        // {
+        //     id: "profilePhoto",
+        //     numeric: false,
+        //     disablePadding: false,
+        //     label: "Profile Photo",
+        // },
         {
             id: "learnerName",
             numeric: false,
@@ -175,7 +175,7 @@ export default function EnrollCourseProgressLearners() {
                         component="div"
                         align="center"
                     >
-                        Learners Details
+                       Inprogress User List
                     </Typography>
                 )}
             </Toolbar>
@@ -299,9 +299,9 @@ export default function EnrollCourseProgressLearners() {
                                             component={Link} to={'/individuallearner/' + row.learnerId}
                                         >
                                             <TableCell align="left">{index + 1}</TableCell>
-                                            <TableCell align="center">
+                                            {/* <TableCell align="center">
                                                 <Avatar alt="Remy Sharp" src={row.profilePhoto} />
-                                            </TableCell>
+                                            </TableCell> */}
                                             <TableCell
                                                 component="th"
                                                 id={row.learnerID}

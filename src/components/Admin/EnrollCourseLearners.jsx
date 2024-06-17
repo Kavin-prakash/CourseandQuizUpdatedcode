@@ -121,7 +121,7 @@ export default function EnrollCourseLearners() {
                 imgWidth * ratio,
                 imgHeight * ratio
             );
-            pdf.save(`Course_Enrollment_Reports_${Dates}.pdf`);
+            pdf.save(`Enrolled_User_List_${Dates}.pdf`);
         });
     };
 
@@ -212,7 +212,7 @@ export default function EnrollCourseLearners() {
                         component="div"
                         align="center"
                     >
-                        Learners Details
+                      Enrolled User List
                     </Typography>
                 )}
             </Toolbar>
