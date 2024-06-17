@@ -168,7 +168,18 @@ export default function AdminNavbar() {
       </AppBar> */}
       <AppBar position="fixed" open={showSideNav}>
         <Toolbar className="top-nav">
-          {/* ... AppBar content */}
+        <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(showSideNav && { display: "none" }),
+            }}
+          >
+          <MenuIcon />
+          </IconButton>
           <Box component="div">
             <img src={logo} alt="logo" />
             <Button style={{ position: 'absolute', marginLeft: '72%', marginTop: '10px' }} onClick={handleLogoutClick}>Logout</Button>
