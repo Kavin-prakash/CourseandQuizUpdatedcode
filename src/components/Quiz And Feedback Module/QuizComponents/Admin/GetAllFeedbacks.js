@@ -15,6 +15,7 @@ import {  Container } from 'react-bootstrap';
 
 export const GetAllFeedbacks = () => {
 
+  const courseId = sessionStorage.getItem('courseId');
 
   const [getallfeedback, setGetAllfeedback] = useState();
   const [getfeedback, setGetFeedback] = useState();
@@ -164,10 +165,11 @@ export const GetAllFeedbacks = () => {
 
   };
   const handleNavigate = () => {
-    // sessionStorage.removeItem("quizId");
-    // sessionStorage.removeItem("topicId");
-    navigate(`/addtopic/${topicId}`)
-    dispatch(fetchQuizIdFailure(topicId))
+    sessionStorage.removeItem("quizId");
+        sessionStorage.removeItem("topicId");
+        sessionStorage.removeItem("courseId");
+        navigate(`/addtopic/${courseId}`)
+        dispatch(fetchQuizIdFailure(topicId))
   }
 
   // savedtopics/:id
@@ -277,7 +279,7 @@ export const GetAllFeedbacks = () => {
                 marginLeft: "55%",
               }}
               onClick={() => {
-                handleCloseModal();
+              
                 handleNavigate();
               }}
             >

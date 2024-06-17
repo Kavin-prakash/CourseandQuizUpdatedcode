@@ -260,13 +260,10 @@ const rootReducer = combineReducers({
   coursebyscore: CoursebyScoreReducer,
   //quizmodule
   quizId: quizIdReducer,
-  quizQuestions: fetchQuizQuestionsReducer,
   deleteQuestion: deleteQuizQuestionsReducer,
   editQuizDetails: editQuizReducer,
-  quiz: createQuizReducer,
   updatequizfeedback: UpdateQuizFeedbackReducer,
   deletequizfeedback: DeleteQuizFeedbackReducer,
-  deletetopicfeedback: DeleteTopicFeedbackReducer,
   updatetopicfeedback: UpdateTopicFeedbackReducer,
   //quizmodule-learner
   //Learner side
@@ -317,12 +314,10 @@ const store = createStore(
     ApiViewEnrollmentReport, EnrollCoursePassedLearner, EnrollCourseProgressLearner,
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
     FetchQuizById,
-    FetchQuizQuestionsApi,
     DeleteQuizQuestionsApi,
     PutQuizDetails,
-    CreateQuizApi,
+
     UpdateQuizFeedbackApi,
-    DeleteTopicFeedbackApi,
     DeleteQuizFeedbackApi,
     UpdateTopicFeedbackApi,
     //quiz-learner flow

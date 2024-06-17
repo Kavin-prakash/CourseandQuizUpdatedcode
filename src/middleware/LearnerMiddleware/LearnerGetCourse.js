@@ -52,7 +52,7 @@ import { FETCH_COURSES_REQUEST, fetchCoursesFailure, fetchCoursesSuccess } from 
 
 const LearnerGetCourse = ({ dispatch }) => (next) => async (action) => {
   next(action);
-  console.log("coursegetapi", action)
+  // console.log("coursegetapi", action)
   const API_URL = `http://localhost:5199/lxp/view/Getallcoursebylearnerid/${action.payload}`;
 
   if (action.type === FETCH_COURSES_REQUEST) {

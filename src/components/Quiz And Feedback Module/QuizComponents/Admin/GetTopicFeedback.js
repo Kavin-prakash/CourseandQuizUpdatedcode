@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { AiFillEdit } from "react-icons/ai";
@@ -10,12 +10,15 @@ import { deletetopicfeedbackRequest } from "../../../../actions/Quiz And Feedbac
 import { updatetopicfeedbackRequest } from "../../../../actions/Quiz And Feedback Module/Admin/UpdateTopicFeedbackAction";
 import { GetTopicFeedbackApi } from "../../../../middleware/Quiz And Feedback Module/Admin/GetTopicFeedbackApi";
 import GetByIDTopicFeedbackApi from "../../../../middleware/Quiz And Feedback Module/Admin/GetByIDTopicFeedbackApi";
+import DeleteTopicFeedbackApi from "../../../../middleware/Quiz And Feedback Module/Admin/DeleteTopicFeedbackApi";
 
 export const GetTopicFeedback = () => {
   // const { topicFeedbackId } = useParams();
   //  const getallfeedback = useSelector(
   //    (state) => state.fetchtopicfeedback.quizfeedback[0]
   //  );
+  const courseId = sessionStorage.getItem('courseId');
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [topicfeedback, setGetAllfeedback] = useState();
   const [getfeedback, setGetFeedback] = useState();
   const [errorfb, setErrorfb] = useState("");
@@ -60,6 +63,17 @@ export const GetTopicFeedback = () => {
     setShowEditfbQuestionModal(false);
     window.location.reload();
   };
+
+  const handleOpenConfirmationModal = (topicFeedbackId) => {
+    setShowConfirmationModal(true);
+    // Store the topicFeedbackId in a state variable or use it directly in the delete function
+  };
+
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+
 
   const validateField = (fieldName, value, index = null) => {
     let tempErrors = { ...errors };
@@ -117,22 +131,24 @@ export const GetTopicFeedback = () => {
     };
     console.log("requestBody", requestBody);
     dispatch(updatetopicfeedbackRequest(topicFeedbackId, requestBody));
-    
+    //   setTimeout(function(){
+    //     window.location.reload(1);
+    //  }, 1000);
+
   };
 
   const validUpdatedQuestion = (event) => {
     event.preventDefault();
     handleUpdateQuestion();
     setShowEditfbQuestionModal(false);
-
   };
 
 
   const handleOpenEditQuestionModal = async (TopicFeedbackQuestionId) => {
-    console.log("handle topic ",TopicFeedbackQuestionId);
+    console.log("handle topic ", TopicFeedbackQuestionId);
     const getIdfeedback = await GetByIDTopicFeedbackApi(TopicFeedbackQuestionId)
     setGetFeedback(getIdfeedback);
-    console.log("topic edit open",getIdfeedback)
+    console.log("topic edit open", getIdfeedback)
     if (getIdfeedback && getIdfeedback.options) {
       setShowEditfbQuestionModal(true);
       setEditedQuestion({
@@ -145,12 +161,19 @@ export const GetTopicFeedback = () => {
     }
   };
 
-  const handleDeletetopicfbQuestion = (topicFeedbackId) => {
-    dispatch(deletetopicfeedbackRequest(topicFeedbackId));
+  const handleDeletetopicfbQuestion = async (topicFeedbackId) => {
+    await DeleteTopicFeedbackApi(topicFeedbackId);
+    // Optionally, you can add a success message or perform any other actions after deleting the feedback question
   };
 
+  // const handleDeletetopicfbQuestion = async (topicFeedbackId) => {
+  //   // await dispatch(deletetopicfeedbackRequest(topicFeedbackId));
+  //   await DeleteTopicFeedbackApi(topicFeedbackId);
+  // };
+
   const handleNavigate = () => {
-    navigate("/");
+    sessionStorage.removeItem("topicId");
+    navigate(`/addtopic/${courseId}`)
   };
 
   const handleCloseModal = () => {
@@ -183,15 +206,13 @@ export const GetTopicFeedback = () => {
                     }}
                     className="m-2 me-2"
                   >
-                    <AiFillEdit style={{ fontSize: "30", color: "#365486", cursor:"pointer" }} />
+                    <AiFillEdit style={{ fontSize: "30", color: "#365486", cursor: "pointer" }} />
                   </a>
                   <a
-                    onClick={() => {
-                      handleDeletetopicfbQuestion(feedback.topicFeedbackQuestionId);
-                    }}
+                    onClick={() => handleOpenConfirmationModal(feedback.topicFeedbackQuestionId)}
                     className="m-2 ms-3"
                   >
-                    <FaTrashCan style={{ fontSize: "23", color: "#365486", cursor:"pointer" }} />
+                    <FaTrashCan style={{ fontSize: "23", color: "#365486", cursor: "pointer" }} />
                   </a>
                 </div>
                 <div className="card-body">
@@ -225,7 +246,7 @@ export const GetTopicFeedback = () => {
         </div>
       </div>
       <div>
-        {topicfeedback? <button
+        {topicfeedback ? <button
           onClick={handleTypeChange}
           className="btn btn-light mt-3 mb-5 float-right"
           style={{
@@ -235,7 +256,7 @@ export const GetTopicFeedback = () => {
           }}
         >
           Submit
-        </button>: <></>}
+        </button> : <></>}
         <Modal show={showAddModal} onHide={handleCloseModal}>
           <Modal.Header
             closeButton
@@ -269,11 +290,11 @@ export const GetTopicFeedback = () => {
       <Modal
         show={showEditfbQuestionModal}
         onHide={handleCloseEditQuestionModal}
-        style={{marginTop:"2.5%",marginLeft:"4%"}}
+        style={{ marginTop: "2.5%", marginLeft: "4%" }}
       >
         <Modal.Header
           closeButton
-          style={{ backgroundColor: "#23275c", color: "whitesmoke" }}  
+          style={{ backgroundColor: "#23275c", color: "whitesmoke" }}
         >
           <Modal.Title>
             <h5>Edit Question</h5>
@@ -347,8 +368,30 @@ export const GetTopicFeedback = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this feedback question?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              handleDeletetopicfbQuestion(/* Pass the topicFeedbackId here */);
+              handleCloseConfirmationModal();
+            }}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
-    
+
   );
 };
 export default GetTopicFeedback;

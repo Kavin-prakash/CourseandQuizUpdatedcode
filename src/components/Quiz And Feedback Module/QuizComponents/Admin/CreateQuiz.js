@@ -26,12 +26,15 @@ import { editQuizDetailsRequest } from "../../../../actions/Quiz And Feedback Mo
 import QuestionTemplateView from "../../../../View/Quiz And Feedback Module/QuestionTemplateView";
 import { fetchQuizIdFailure } from "../../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction";
 import { Container } from "react-bootstrap";
+import CreateQuizApi from "../../../../middleware/Quiz And Feedback Module/Admin/CreateQuizApi";
 
 export const Home = () => {
     const quizId = sessionStorage.getItem('quizId');
     const topicId = sessionStorage.getItem('topicId');
+    const courseId = sessionStorage.getItem('courseId');
+    const [button, setButton] = useState(true);
     // console.log("create page topic id", topicId);
-
+const [showQuestions, setShowQuestions] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [showOptions, setShowOptions] = useState(false);
@@ -50,7 +53,6 @@ export const Home = () => {
     const [inputQuizTitle, setInputQuizTitle] = useState('');
     const [errordeletequiz, setErrorDeleteQuiz] = useState('');
     const [bulkQuizId, setBulkQuizId] = useState('');
-
     const [quizDetails, setQuizDetails] = useState({
         topicId: topicId,
         nameOfQuiz: '',
@@ -67,8 +69,6 @@ export const Home = () => {
         attemptsAllowed: ''
     });
 
-
-
     const [isQuizEditable, setIsQuizEditable] = useState(!quizId);
 
     console.log("create page Id: ", quizId, topicId);
@@ -83,10 +83,16 @@ export const Home = () => {
         event.target.nextSibling.style.display = showOptions ? 'none' : 'block';
     };
 
-    const handleUploadClick = (e) => {
+    const toggleQuestions = () => {
+        setShowQuestions(!showQuestions);
+    };
+
+
+    const handleUploadClick = async (e) => {
         e.preventDefault();
         console.log("quiz details:", quizDetails);
-        dispatch(setQuizDetailsRequest(quizDetails));
+        // dispatch(setQuizDetailsRequest(quizDetails));
+        await CreateQuizApi(quizDetails)
         navigate('/upload');
     };
 
@@ -135,9 +141,10 @@ export const Home = () => {
     }
 
     const handleQuizChange = (e) => {
-        setQuizDetails({ ...quizDetails, [e.target.name]: e.target.value })
-        setQuizData({ ...quizData, [e.target.name]: e.target.value })
-    };
+        setQuizDetails({ ...quizDetails, [e.target.name]: e.target.value });
+        setQuizData({ ...quizData, [e.target.name]: e.target.value });
+ 
+      };
 
     const handleSubmit = () => {
         try {
@@ -163,7 +170,7 @@ export const Home = () => {
             sessionStorage.setItem('quizName', data.nameOfQuiz);
             setQuizData(data);
         } catch (error) {
-            console.error('Error fetching data:', error)
+            console.error('Error fetching data:', error);
         }
     }
 
@@ -188,8 +195,8 @@ export const Home = () => {
             DeleteQuizDetails(quizId);
             alert('Quiz deleted successfully');
             handleCloseQuizDeleteModal();
-            navigate('/');
-            dispatch(fetchQuizIdFailure(topicId))
+            navigate(`/addtopic/${courseId}`)
+        dispatch(fetchQuizIdFailure(topicId))
         } else {
             setErrorDeleteQuiz('The QuizTitle you entered does not match !');
         }
@@ -199,19 +206,12 @@ export const Home = () => {
         setInputQuizTitle(event.target.value);
     };
 
-    const handleBulkUpload = async (topicId) => {
 
-        try {
-            navigate("/upload", { state: { quiz: quizId } });
-        } catch (error) {
-            console.log("Error fetching quiz: ", error)
-        }
-    }
 
     const handleNavigate = () => {
         sessionStorage.removeItem("quizId");
         sessionStorage.removeItem("topicId");
-        navigate('/')
+        navigate(`/addtopic/${courseId}`)
         dispatch(fetchQuizIdFailure(topicId))
     }
 
@@ -219,11 +219,12 @@ export const Home = () => {
         <div>
             <Container fluid className="creat-quiz-container">
                 <div >
-                    <form className='quiz-content'>
-                        <div className="d-flex justify-content-end mb-5">
-                            <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50' }} onClick={() => { handleNavigate() }} >Back</button>
+                <div className="d-flex justify-content-end mb-5">
+                            <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50', marginTop:100 }} onClick={() => { handleNavigate() }}>Back</button>
                         </div>
-                        <div className="card" id="QuizCard" style={{backgroundColor:'#F9F5F6'}}>
+                    <form className='quiz-content'>
+
+                        <div className="" id="QuizCard" style={{backgroundColor:'#F9F5F6'}}>
                             <div className="card-bodycreatequiz">
                                 <div className="dx mt-2">
                                     <div className="container">
@@ -235,30 +236,30 @@ export const Home = () => {
                                         <div className="form-group row mt-3">
                                             <label htmlFor="lbl1" className="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }} >Quiz Title<span id='required'>*</span></label>
                                             <div className="col-sm-8">
-                                                <input type="text" className="form-control" id="lbl1" placeholder="Enter the Quiz Title" style={{ borderRadius: 8 }} name='nameOfQuiz' value={quizData.nameOfQuiz} readOnly={!isQuizEditable} onChange={handleQuizChange} />
+                                                <input type="text" className="form-control" id="lbl1" placeholder="Enter the Quiz Title" style={{ borderRadius: 8 }} name='nameOfQuiz' value={quizData.nameOfQuiz} readOnly={!isQuizEditable} onChange={handleQuizTitleChange} />
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl3" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Duration (In Minutes)<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={handleQuizChange} />
+                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={ handleInputChange }/>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl5" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Grade to be Secured<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={handleQuizChange} />
+                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={ handlemarkChange}/>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl4" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Attempts Allowed<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={handleQuizChange} />
+                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={ handleattemptsChange} />
                                             </div>
                                         </div>
                                         {quizId ? <div></div> : <div className="form-group row">
                                             <div className="col-sm-10">
-                                                <Button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "50%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white" }} ><FaUpload /> Import Question</Button>
+                                                <Button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "50%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white" }}  ><FaUpload /> Import Question</Button>
                                             </div>
                                         </div>}
                                     </div>
@@ -267,11 +268,29 @@ export const Home = () => {
                         </div>
                     </form>
                     {/* --------------------------------------------------------------*/}
-                    {quizId ?
-                        <div className="">
-                            <QuestionTemplateView />
-                        </div> : <div></div>
-                    }
+                    <div>
+                    <Button
+                        type="submit"
+                        className="btn btn-light"
+                        onClick={toggleQuestions}
+                        style={{
+                            marginLeft: "50%",
+                            marginTop: "3%",
+                            borderRadius: 8,
+                            backgroundColor: "#365486",
+                            color: "white",
+                        }}
+                    >
+                        {showQuestions ? "Hide Questions" : "View Questions"}
+                    </Button>
+                </div>
+                    {showQuestions && quizId ? (
+                    <div className="">
+                        <QuestionTemplateView />
+                    </div>
+                ) : (
+                    <div></div>
+                )}
                     {quizId ? <div>
                         <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-left" style={{ backgroundColor: "#365486", color: "white", marginLeft: "92%" }}>Proceed</button>
                     </div> : <div></div>}
@@ -344,7 +363,7 @@ export const Home = () => {
                             <Modal.Title id='questitle'>Question Library</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <h6><BiSolidCoinStack style={{ fontSize: "30", color: "GrayText", marginBottom: "11", marginLeft: "10" }} /><Link id='bulklink' onClick={() => { handleBulkUpload(bulkQuizId) }}> Add Question from Bulk Upload</Link></h6>
+                            {/* <h6><BiSolidCoinStack style={{ fontSize: "30", color: "GrayText", marginBottom: "11", marginLeft: "10" }} /><Link id='bulklink' onClick={() => { handleBulkUpload(bulkQuizId) }}> Add Question from Bulk Upload</Link></h6> */}
                             <h6><ImFolderUpload style={{ fontSize: "20", color: "GrayText", marginBottom: "11", marginLeft: "13" }} /><Link id='newquelink' onClick={() => { handleOpenAddQuestionModal(); closeModal() }}> Add New Question</Link></h6>
                         </Modal.Body>
                         <Modal.Footer>

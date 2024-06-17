@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 // import { fetchTopicsRequest } from '../../../action/Course/Topic/FetchTopicsAction';
-import {fetchTopicsRequest} from '../../../actions/Course/Topic/FetchTopicsAction'
+import { fetchTopicsRequest } from '../../../actions/Course/Topic/FetchTopicsAction'
 import { useSelector } from 'react-redux';
 import PDFViewer from '../Material/PDFViewer';
 // import '../../style/AddTopic.css'
@@ -28,14 +28,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 // import { createTopicsRequest } from '../../../action/Course/Topic/AddTopicAction'
 
 // import { fetchEditTopicsRequest } from '../../../action/Course/Topic/FetchEditTopicRequest'
-import {fetchEditTopicsRequest} from '../../../actions/Course/Topic/FetchEditTopicRequest'
+import { fetchEditTopicsRequest } from '../../../actions/Course/Topic/FetchEditTopicRequest'
 
 // import { updateTopicsRequest } from '../../../action/Course/Topic/UpdateTopicsAction'
-import {updateTopicsRequest} from '../../../actions/Course/Topic/UpdateTopicsAction'
+import { updateTopicsRequest } from '../../../actions/Course/Topic/UpdateTopicsAction'
 // import { deleteTopicsRequest } from '../../../action/Course/Topic/DeleteTopicsAction';
-import {deleteTopicsRequest} from '../../../actions/Course/Topic/DeleteTopicsAction'
+import { deleteTopicsRequest } from '../../../actions/Course/Topic/DeleteTopicsAction'
 //import DialogContentText from '@mui/material/DialogContentText';
-import {fetchContentUrlSuccess} from '../../../actions/Course/Material/FetchContentUrlAction'
+import { fetchContentUrlSuccess } from '../../../actions/Course/Material/FetchContentUrlAction'
 import { useParams, useNavigate, Link } from 'react-router-dom';
 //----------------------------------------------------------------------------------------------DELETE----------
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -46,21 +46,25 @@ import { Container } from '@mui/material';
 import { Card } from 'react-bootstrap';
 import VideoViewer from '../Material/VideoViewer';
 import AudioViewer from '../Material/AudioViewer';
+import { fetchQuizIdRequest } from '../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction';
 export default function SavedTopics(props) {
     // const topicsDetail=useSelector((state)=>state);
     const selectorTopicsDetail = useSelector((state) => state.fetchTopic.topics[0]);
     const [topicsDetail, setTopicsDetails] = useState([]);
     // const topicsDetailSelector = useSelector((state) => state.fetchTopic.topics[0].topics);
+    const quizId = useSelector((state) => state.quizId.quizId);
+
+    const isSuccess = useSelector((state) => state.quizId.isSubmitted);
 
     const [loading, setLoading] = useState(false);
     const [deleteId, setDeleteId] = useState("");
     const navigate = useNavigate();
     const dispatch = useDispatch();
-  const [viewerModelHeader, setViewerModelHeader] = useState();
+    const [viewerModelHeader, setViewerModelHeader] = useState();
     const [errors, setErrors] = useState({});
-  const [selectedComponent, setSelectedComponent] = useState();
+    const [selectedComponent, setSelectedComponent] = useState();
 
-  const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
 
     const [material_id, setMaterialIdl] = useState(false);
     const { id } = useParams();
@@ -102,6 +106,13 @@ export default function SavedTopics(props) {
         //         console.log(";t.,:",topicsDetail);
     }, []);
 
+    useEffect(() => {
+        if (isSuccess) {
+            sessionStorage.setItem("courseId", id)
+            sessionStorage.setItem("quizId", quizId);
+            navigate(`/createquiz`);
+        }
+    }, [isSuccess, quizId, navigate])
 
     const fetchTopics = async () => {
         try {
@@ -205,32 +216,32 @@ export default function SavedTopics(props) {
 
     }
     const handleShow = () => setShow(true);
-    const handlePreview = (filePath, materialType, materialName,materialId) => {
+    const handlePreview = (filePath, materialType, materialName, materialId) => {
         setViewerModelHeader(materialName);
         switch (materialType) {
-          case 'PDF':
-            setSelectedComponent(<PDFViewer material={filePath} />);
-            break;
-          case 'VIDEO':
-            // setSelectedComponent(<VideoViewer material={materialId}/>)
-            setSelectedComponent(<VideoViewer material={filePath} />)
-            break;
-          case 'AUDIO':
-            setSelectedComponent(<AudioViewer material={filePath} />)
-            break;
-          case 'PPT':
-            setSelectedComponent(<PDFViewer material={filePath} />);
-            break;
-          case 'TEXT':
-            setSelectedComponent(<PDFViewer material={filePath} />);
-            break;
-          default:
-            setSelectedComponent(<></>)
-    
+            case 'PDF':
+                setSelectedComponent(<PDFViewer material={filePath} />);
+                break;
+            case 'VIDEO':
+                // setSelectedComponent(<VideoViewer material={materialId}/>)
+                setSelectedComponent(<VideoViewer material={filePath} />)
+                break;
+            case 'AUDIO':
+                setSelectedComponent(<AudioViewer material={filePath} />)
+                break;
+            case 'PPT':
+                setSelectedComponent(<PDFViewer material={filePath} />);
+                break;
+            case 'TEXT':
+                setSelectedComponent(<PDFViewer material={filePath} />);
+                break;
+            default:
+                setSelectedComponent(<></>)
+
         }
-    
+
         handleShow();
-      }
+    }
     const handleDeleteClickOpen = (topicId) => {
         setDeleteId(topicId)
         setOpenDelete(true);
@@ -248,7 +259,7 @@ export default function SavedTopics(props) {
     //   }
     // -----------Model opening for pdf viewer model opening function---------//           modifued lines
 
-    const handleModelClose = () => {setShow(false);dispatch(fetchContentUrlSuccess(null));};
+    const handleModelClose = () => { setShow(false); dispatch(fetchContentUrlSuccess(null)); };
     const handleModelShow = () => setShow(true);
     // -----------Model opening for pdf viewer model opening function end---------//
 
@@ -268,18 +279,18 @@ export default function SavedTopics(props) {
 
     // ------------------Handlefunctions ffor quiz
 
-    const handleAddFeedBackButton=(topicId)=>{
-        sessionStorage.setItem('topicId',topicId);
+    const handleAddFeedBackButton = (topicId) => {
+        sessionStorage.setItem("courseId", id)
+
+        sessionStorage.setItem('topicId', topicId);
         navigate('/topicfeedback')
-        }
-        const handleAddQuizFeedBackButton=(topicId)=>{
-        sessionStorage.setItem('topicId',topicId);
-        navigate('/quizfeedback')
-        }
-        const handleAddQuizButton=(topicId)=>{
-        sessionStorage.setItem('topicId',topicId);
-        navigate('/createquiz')
-        }
+    }
+
+
+    const handleAddQuizButton = (topicId) => {
+        dispatch(fetchQuizIdRequest(topicId));
+        sessionStorage.setItem('topicId', topicId);
+    }
 
     return (
         <Container fluid className='mt-5' style={divStyle}>
@@ -304,11 +315,10 @@ export default function SavedTopics(props) {
                                 <div>
                                     <EditIcon style={{ marginRight: 16 }} variant="outlined" onClick={() => handleEditClickOpen(topic.topicId)} />
                                     <DeleteIcon onClick={() => handleDeleteClickOpen(topic.topicId)} /></div></div>
-                                            {/* added button for quiz teams */}
-                                            <button class="btn-link" style={{ marginLeft: '250px' }} onClick={()=>{handleAddFeedBackButton(topic.topicId)}}>Add  Feedback</button>
-<button class="btn-link" style={{ marginLeft: '250px' }} onClick={()=>{handleAddQuizFeedBackButton(topic.topicId)}}>Add Quiz Feedback</button>
- 
-<button class="btn-link" style={{ marginLeft: '250px' }} onClick={()=>{handleAddQuizButton(topic.topicId)}}>Add Quiz</button> 
+                            {/* added button for quiz teams */}
+                            <button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddFeedBackButton(topic.topicId) }}>Add  Feedback</button>
+
+                            <button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddQuizButton(topic.topicId) }}>Add Quiz</button>
                             {/* <DeleteIcon onClick={() => handleDelete(topic.topicId)} /></div></div> */}
 
                         </AccordionSummary>
@@ -318,12 +328,12 @@ export default function SavedTopics(props) {
                             <ul type='none'>
                                 {topic.materials.map((material) => (<>
 
-                                    <li onClick={() => { handlePreview(material.filePath, material.materialType, material.materialName,material.materialId) }}>{material.materialType === 'VIDEO' ? <><CiYoutube className="icon" style={{ color: 'blue', fontSize: '20px' }} /></> : material.materialType == 'AUDIO' ? <><CiMusicNote1 className="icon" style={{ color: 'blue' }} /></> : material.materialType == 'TEXT' ? <><FaFileAlt className="icon" style={{ color: 'red' }} /></> : material.materialType == 'PDF' ? <><BsFiletypePdf className="icon" style={{ color: 'red' }} /></> : <><BsFiletypePpt className="icon" style={{ color: 'red' }} /></>}{material.materialName}</li>
+                                    <li onClick={() => { handlePreview(material.filePath, material.materialType, material.materialName, material.materialId) }}>{material.materialType === 'VIDEO' ? <><CiYoutube className="icon" style={{ color: 'blue', fontSize: '20px' }} /></> : material.materialType == 'AUDIO' ? <><CiMusicNote1 className="icon" style={{ color: 'blue' }} /></> : material.materialType == 'TEXT' ? <><FaFileAlt className="icon" style={{ color: 'red' }} /></> : material.materialType == 'PDF' ? <><BsFiletypePdf className="icon" style={{ color: 'red' }} /></> : <><BsFiletypePpt className="icon" style={{ color: 'red' }} /></>}{material.materialName}</li>
                                 </>))}
                             </ul>
 
                             <Link style={{ marginLeft: '250px' }} to={`/addcontent/${topic.topicId}`}>Add Content</Link>
-                            {/* <Button onClick={handleNavigate(topic.topicId)} >Add Content</Button> */}                             
+                            {/* <Button onClick={handleNavigate(topic.topicId)} >Add Content</Button> */}
                         </AccordionDetails>
 
                     </Accordion>
@@ -421,9 +431,6 @@ export default function SavedTopics(props) {
                     {selectedComponent}
                 </Modal.Body>
             </Modal>
-
-
-
             {/* </div> */}
         </Container>
     );

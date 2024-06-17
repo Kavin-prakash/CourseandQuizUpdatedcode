@@ -127,156 +127,173 @@ const Courseupdate = () => {
     console.log('courseId in state:', course.courseId);
 
     return (
-        <>
-            <Row>
-                <Col md={12}>
-                    <Container className='courseForm mt-5'>
-                        <h3>Update Course</h3>
-                        {/* <hr /> */}
-                        <Card className="course-form">
-                            <Card.Body>
-                                <Form onSubmit={handleSubmit}>
-                                    <div className="addcourse">
-                                        <Row>
-                                            <label>
-                                                Course Title:
-                                                <input
-                                                    type="text"
-                                                    name="title"
-                                                    placeholder="Course title"
-                                                    value={course.title}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </label>
-                                            {errors.title && <p className="error">{errors.title}</p>}
-                                        </Row>
-                                        <Row>
-                                            <Col>
-                                                <label>
-                                                    Course Category:
-                                                    <select name="category" onChange={handleInputChange}>
-                                                        <option value="">Select category</option>
-                                                        {coursecategory.map((category) => (
-                                                            <option key={category.categoryId} value={category.categoryId}>
-                                                                {category.category}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </label>
-                                                {errors.category && <p className="error">{errors.category}</p>}
-                                            </Col>
-                                        </Row>
-
-                                        <Row>
-                                            <label>
-                                                Course Level:
-                                                <select name="level" onChange={handleInputChange}>
-                                                    <option value="">Select level</option>
-                                                    {courselevel.map((level) => (
-                                                        <option key={level.levelId} value={level.levelId}>
-                                                            {level.level}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </label>
-                                            {errors.level && <p className="error">{errors.level}</p>}
-                                        </Row>
-                                        {/* Course Duration */}
-                                        <Row>
-                                            <label>
-                                                Course Duration (in Hrs):
-                                                <input
-                                                    className='inputnumber'
-                                                    // type="number"
-                                                    // min="0"
-                                                    placeholder="Enter no. of hours"
-                                                    name="duration"
-                                                    value={course.duration}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </label>
-                                            {errors.duration && <p className="error">{errors.duration}</p>}
-                                        </Row>
-                                        {/* Course Description */}
-                                        <Row>
-                                            <label>
-                                                Course Description:
-                                                <textarea
-                                                    placeholder="Enter your description"
-                                                    name="description"
-                                                    value={course.description}
-                                                    onChange={handleInputChange}
-                                                ></textarea>
-                                            </label>
-                                            {errors.description && <p className="error">{errors.description}</p>}
-                                        </Row>
-                                        {/* Course Thumbnail */}
-                                        <Row>
-                                            <label htmlFor="thumbnail">Course Thumbnail:</label>
-                                            <div className="course-thumbnail">
-                                                <input
-                                                    type="file"
-                                                    id="thumbnailimage"
-                                                    onChange={handleThumbnailChange}
-                                                    accept="image/*"
-                                                />
-                                                {course.thumbnailimage && (
-                                                    <div className="uploaded-file">
-                                                        <img
-                                                            src={URL.createObjectURL(course.thumbnailimage)}
-                                                            alt="uploaded thumbnail"
-                                                            className="thumbnail-image"
-                                                        />
-                                                        <GiCancel
-                                                            onClick={removeThumbnail}
-                                                            className="cancel-icon"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </div>
-                                            {errors.thumbnailimage && <p className="error">{errors.thumbnailimage}</p>}
-                                        </Row>
-                                        {/* Submit Button */}
-                                        {/* <Row> */}
-                                        <button type='submit' className='btn btn-primary'>UPDATE COURSE</button>
-                                        {/* <input type="submit" value="UPDATE COURSE" /> */}
-                                        {/* </Row> */}
-                                    </div>
-                                </Form>
-
-                            </Card.Body>
-                        </Card>
-                    </Container>
-                </Col>
-            </Row>
-            <Modal show={show} onHide={handleClose} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Category</Modal.Title>
-                </Modal.Header>
-                <Form>
-                    {/* <Form onSubmit={handleCategory}> */}
-                    <Modal.Body>
-
-                        <input
+      <div id="admin_courseupdate">
+        <Row>
+          <Col md={12}>
+            <Container className="courseForm mt-5">
+              <h3>Update Course</h3>
+              {/* <hr /> */}
+              <Card className="course-form">
+                <Card.Body>
+                  <Form onSubmit={handleSubmit}>
+                    <div className="addcourse">
+                      <Row>
+                        <label>
+                          Course Title:
+                          <input
                             type="text"
-                            placeholder="Enter new category"
-                            value={category.category}
-                            onChange={handleInputCategory}
-                            name="category"
-                        />
+                            name="title"
+                            placeholder="Course title"
+                            value={course.title}
+                            onChange={handleInputChange}
+                          />
+                        </label>
+                        {errors.title && (
+                          <p className="error">{errors.title}</p>
+                        )}
+                      </Row>
+                      <Row>
+                        <Col>
+                          <label>
+                            Course Category:
+                            <select
+                              name="category"
+                              onChange={handleInputChange}
+                            >
+                              <option value="">Select category</option>
+                              {coursecategory.map((category) => (
+                                <option
+                                  key={category.categoryId}
+                                  value={category.categoryId}
+                                >
+                                  {category.category}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                          {errors.category && (
+                            <p className="error">{errors.category}</p>
+                          )}
+                        </Col>
+                      </Row>
 
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Close
-                        </Button>
-                        <Button variant="primary" type='submit'>
-                            Add
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
-        </>
+                      <Row>
+                        <label>
+                          Course Level:
+                          <select name="level" onChange={handleInputChange}>
+                            <option value="">Select level</option>
+                            {courselevel.map((level) => (
+                              <option key={level.levelId} value={level.levelId}>
+                                {level.level}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        {errors.level && (
+                          <p className="error">{errors.level}</p>
+                        )}
+                      </Row>
+                      {/* Course Duration */}
+                      <Row>
+                        <label>
+                          Course Duration (in Hrs):
+                          <input
+                            className="inputnumber"
+                            // type="number"
+                            // min="0"
+                            placeholder="Enter no. of hours"
+                            name="duration"
+                            value={course.duration}
+                            onChange={handleInputChange}
+                          />
+                        </label>
+                        {errors.duration && (
+                          <p className="error">{errors.duration}</p>
+                        )}
+                      </Row>
+                      {/* Course Description */}
+                      <Row>
+                        <label>
+                          Course Description:
+                          <textarea
+                            placeholder="Enter your description"
+                            name="description"
+                            value={course.description}
+                            onChange={handleInputChange}
+                          ></textarea>
+                        </label>
+                        {errors.description && (
+                          <p className="error">{errors.description}</p>
+                        )}
+                      </Row>
+                      {/* Course Thumbnail */}
+                      <Row>
+                        <label htmlFor="thumbnail">Course Thumbnail:</label>
+                        <div className="course-thumbnail">
+                          <input
+                            type="file"
+                            id="thumbnailimage"
+                            onChange={handleThumbnailChange}
+                            accept="image/*"
+                          />
+                          {course.thumbnailimage && (
+                            <div className="uploaded-file">
+                              <img
+                                src={URL.createObjectURL(course.thumbnailimage)}
+                                alt="uploaded thumbnail"
+                                className="thumbnail-image"
+                              />
+                              <GiCancel
+                                onClick={removeThumbnail}
+                                className="cancel-icon"
+                              />
+                            </div>
+                          )}
+                        </div>
+                        {errors.thumbnailimage && (
+                          <p className="error">{errors.thumbnailimage}</p>
+                        )}
+                      </Row>
+                      {/* Submit Button */}
+                      {/* <Row> */}
+                      <button type="submit" className="btn btn-primary">
+                        UPDATE COURSE
+                      </button>
+                      {/* <input type="submit" value="UPDATE COURSE" /> */}
+                      {/* </Row> */}
+                    </div>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Container>
+          </Col>
+        </Row>
+        <Modal show={show} onHide={handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Category</Modal.Title>
+          </Modal.Header>
+          <Form>
+            {/* <Form onSubmit={handleCategory}> */}
+            <Modal.Body>
+              <input
+                type="text"
+                placeholder="Enter new category"
+                value={category.category}
+                onChange={handleInputCategory}
+                name="category"
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" type="submit">
+                Add
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+      </div>
     );
 };
 

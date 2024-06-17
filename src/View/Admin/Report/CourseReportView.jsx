@@ -280,7 +280,7 @@ const Exportreport=()=>{
         setFilteredUser(
           visibleRows.filter((row) =>
             Object.values(row).some((value) =>
-              value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            value !== null && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
             )
           )
         );
@@ -377,7 +377,8 @@ const Exportreport=()=>{
                       </TableCell>
                       <TableCell align="left">
 
-                        {row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1]}
+                      {row.modifiedAt}  
+                        {/* {row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1]} */}
                         </TableCell>
                     
                     </TableRow>
