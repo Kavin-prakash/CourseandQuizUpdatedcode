@@ -65,6 +65,8 @@ const Admincourse = ({ fetchCourses, courses }) => {
                     // <Card key={index} sx={{ maxWidth: 250, maxHeight: 250, mb:5,borderRadius:1}}>
 
                     <Card
+                      component={Link}
+                      to={'/coursecontent/' + course.courseId}
                       key={course.courseId}
                       sx={{
                         maxWidth: 250,
@@ -74,6 +76,7 @@ const Admincourse = ({ fetchCourses, courses }) => {
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
+                        textDecoration: "none"
                       }}
                     >
                       <CardActionArea>

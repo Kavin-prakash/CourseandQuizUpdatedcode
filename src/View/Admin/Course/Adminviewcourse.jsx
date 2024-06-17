@@ -34,7 +34,7 @@ import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { updateCoursesRequest } from "../../../actions/Admin/Updatecourse";
 import ClearIcon from "@mui/icons-material/Clear";
- 
+
 const Adminviewcourse = ({
   fetchCourses,
   deleteCourse,
@@ -42,10 +42,10 @@ const Adminviewcourse = ({
   enableordisable,
 }) => {
   console.log("Checking the courses", courses);
- 
+
   // State for update course dialog
   const [openDialog, setOpenDialog] = useState(false);
- 
+
   const [selectedcourse, setSelectedcourse] = useState({
     courseId: "",
     title: "",
@@ -58,12 +58,12 @@ const Adminviewcourse = ({
     levelId: "",
     categoryId: "",
   });
- 
+
   console.log("selected courses", selectedcourse);
   console.log(selectedcourse.category);
- 
+
   const [thumbnail, setThumbnail] = useState();
- 
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     onDrop: (acceptedFiles) => {
@@ -78,37 +78,37 @@ const Adminviewcourse = ({
       });
     },
   });
- 
- 
- 
- 
- 
+
+
+
+
+
   console.log("thumbnailimageinuput", thumbnail);
- 
+
   // Remove image .......
- 
+
   const [removeImage, setRemoveImage] = useState(false);
- 
+
   const handleRemoveImage = () => {
     setThumbnail(null);
     setSelectedcourse({ ...selectedcourse, thumbnailimage: null });
     setRemoveImage(true);
   };
- 
+
   /////
- 
+
   const handleupdatecourse = (course) => {
- 
+
     console.log("check and check", course);
- 
- 
+
+
     const blob = new Blob([course.thumbnailimage]);
- 
+
     console.log("caadasd", blob)
- 
+
     const objecturl = URL.createObjectURL(blob);
- 
- 
+
+
     setSelectedcourse({
       courseId: course.courseId,
       title: course.title,
@@ -119,11 +119,11 @@ const Adminviewcourse = ({
       modifiedby: "Kavin",
       thumbnailimage: course.thumbnailimage,
     });
- 
+
     setThumbnail({ preview: objecturl });
     setOpenDialog(true);
   };
- 
+
   const closedialog = () => {
     setOpenDialog(false);
     setSelectedcourse({
@@ -140,7 +140,7 @@ const Adminviewcourse = ({
   };
   const [coursecategory, setCategory] = useState([]);
   const [courselevel, setLevel] = useState([]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -148,7 +148,7 @@ const Adminviewcourse = ({
           "http://localhost:5199/lxp/course/category"
         );
         setCategory(categoryResponse.data.data);
- 
+
         const levelResponse = await axios.get(
           "http://localhost:5199/lxp/course/courselevel/kavin"
         );
@@ -159,16 +159,16 @@ const Adminviewcourse = ({
     };
     fetchData();
   }, []);
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedcourse({ ...selectedcourse, [name]: value });
   };
- 
+
   useEffect(() => {
     fetchCourses();
   }, [fetchCourses]);
- 
+
   // Form Validation
   // const validationform = () => {
   //   const { title, level, category, description, duration } = selectedcourse;
@@ -180,70 +180,70 @@ const Adminviewcourse = ({
   //     duration > 0
   //   );
   // };
- 
+
   // check the the values in the dialog box container when its open
- 
+
   useEffect(() => {
     if (openDialog) {
       console.log("Current selected value", selectedcourse);
     }
   }, [openDialog, selectedcourse]);
- 
+
   //Form Submission for the Update course
   const handleSubmit = async (event) => {
     event.preventDefault();
- 
+
     // const checkcoursevalidform = validationform();
- 
+
     // if (!checkcoursevalidform) {
     //   setDialogMessage("All the fields are required for validation");
     //   setOpen(true);
     //   return;
     // }
- 
+
     const formData = new FormData();
- 
+
     formData.append("CourseId", selectedcourse.courseId);
     // console.log("checking the courseID", selectedcourse.courseId);
- 
+
     formData.append("Title", selectedcourse.title);
     formData.append("LevelId", selectedcourse.level);
     formData.append("CategoryId", selectedcourse.category);
     formData.append("Description", selectedcourse.description);
     formData.append("Duration", selectedcourse.duration);
     formData.append("ModifiedBy", selectedcourse.modifiedby);
- 
+
     // console.log(
     //   "Selected course thumbnail image:",
     //   selectedcourse.thumbnailimage
     // );
- 
- 
+
+
     if (thumbnail && thumbnail.preview) {
- 
+
       formData.append("Thumbnailimage", selectedcourse.thumbnailimage);
     } else {
- 
+
       formData.append("Thumbnailimage", selectedcourse.thumbnailimage);
     }
- 
+
     try {
       console.log("updatecourse", formData);
- 
- 
- 
+
+
+
       // Debugging: Log the formData contents
- 
+
       for (let [key, value] of formData.entries()) {
         console.log("kkakakakaakakaa", `${key}: ${value}`)
       };
- 
- 
+
+
       console.log("Action payload:", {
         courseId: selectedcourse.courseId,
         formData,
       });
- 
+
       dispatch(
         updateCoursesRequest({ courseId: selectedcourse.courseId, formData })
       );
@@ -252,36 +252,36 @@ const Adminviewcourse = ({
       console.error("Error updating course:", error);
     }
   };
- 
- 
+
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCourses, setFilteredCourses] = useState([]);
- 
+
   console.log("filtered courses:", filteredCourses);
- 
+
   const [showModal, setShowModal] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   // State to control the open status of the dialog
   const [open, setOpen] = React.useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
- 
+
   const istrue = useSelector((state) => state.deletecourse.isdeleted);
   const mes = useSelector((state) => state.deletecourse.message);
- 
+
   const isfalse = useSelector((state) => state.deletecourse.isnotdelete);
   const failuremessage = useSelector((state) => state.deletecourse.message);
- 
+
   // Update successfull Message-----//
- 
+
   const isUpdated = useSelector((state) => state.updatecourse.isUpdated);
   console.log("check the updatestatues", isUpdated);
   const courseupdatesuccessfullmessage = useSelector(
     (state) => state.updatecourse.message
   );
   console.log("message", courseupdatesuccessfullmessage);
- 
+
   const updatefailuremessage = "Updated was not successfull";
- 
+
   useEffect(() => {
     if (isUpdated) {
       setOpen(true);
@@ -291,13 +291,13 @@ const Adminviewcourse = ({
     }
     // setOpen(false);
   }, [isUpdated, courseupdatesuccessfullmessage]);
- 
+
   ////
- 
+
   const handleClose = () => {
     setOpen(false);
   };
- 
+
   useEffect(() => {
     if (istrue) {
       setOpen(true);
@@ -309,7 +309,7 @@ const Adminviewcourse = ({
       setDialogMessage(failuremessage);
     }
   }, [istrue, mes, isfalse, failuremessage, fetchCourses]);
- 
+
   useEffect(() => {
     setFilteredCourses(
       courses.filter((course) =>
@@ -319,20 +319,20 @@ const Adminviewcourse = ({
       )
     );
   }, [courses, searchTerm]);
-  
- 
+
+
   const dispatch = useDispatch();
- 
+
   const handleDeleteClick = (courseId) => {
     setSelectedCourseId(courseId);
     setShowModal(true);
   };
- 
+
   const confirmDeletion = () => {
     deleteCourse(selectedCourseId);
     setShowModal(false);
   };
- 
+
   //const for Enable & Disable Pop up
   const [showEnableModal, setShowEnableModal] = useState(false);
   const handleToggle = (title, courseId, status) => {
@@ -342,27 +342,27 @@ const Adminviewcourse = ({
     setCourseStatus(status);
     setShowEnableModal(true);
   };
- 
+
   const [enabledisablecourseId, setenabledisablecourseId] = useState("");
   const [coursetitle, setCourseTitle] = useState("");
   const [coursestatus, setCourseStatus] = useState();
- 
+
   //Event for Enable And Disable
- 
+
   const Enablesuccessage = useSelector((state) => state.enabledisablecourse.successfullmessage);
- 
- 
+
+
   const EnableOrDisable = () => {
     enableordisable(enabledisablecourseId, !coursestatus);
     setShowEnableModal(false);
     setTimeout(() => {
       document.location.reload();
     }, 500);
- 
+
   };
- 
+
   //Style for Disable And Enable Modal
- 
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -374,7 +374,7 @@ const Adminviewcourse = ({
     boxShadow: 24,
     p: 4,
   };
- 
+
   const IOSSwitch = styled((props) => (
     <Switch
       focusVisibleClassName=".Mui-focusVisible"
@@ -430,7 +430,7 @@ const Adminviewcourse = ({
       }),
     },
   }));
- 
+
   return (
     <>
       {/* Modal for Enable & Disable */}
@@ -530,9 +530,11 @@ const Adminviewcourse = ({
                           <TableCell>{course.level}</TableCell>
                           <TableCell>{course.createdAt}</TableCell>
                           <TableCell align="right">
-                            <Button>
-                              <GridViewIcon />
-                            </Button>
+                            <Link to={'/coursecontent/' + course.courseId}>
+                              <Button>
+                                <GridViewIcon />
+                              </Button>
+                            </Link>
                           </TableCell>
                           <TableCell align="right">
                             <Button
@@ -577,8 +579,8 @@ const Adminviewcourse = ({
               </Paper>
             </Row>
           </Col>
-        </Row>
-      </Container>
+        </Row >
+      </Container >
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Delete Confirmation</Modal.Title>
@@ -761,16 +763,16 @@ const Adminviewcourse = ({
     </>
   );
 };
- 
+
 const mapStateToProps = (state) => ({
   courses: state.allcourse.courses,
 });
- 
+
 const mapDispatchToProps = (dispatch) => ({
   fetchCourses: () => dispatch(fetchallCoursesRequest()),
   deleteCourse: (courseId) => dispatch(deleteCoursesRequest(courseId)),
   enableordisable: (enabledisablecourseId, coursestatus) =>
     dispatch(enableDisableCourseRequest(enabledisablecourseId, coursestatus)),
 });
- 
+
 export default connect(mapStateToProps, mapDispatchToProps)(Adminviewcourse);

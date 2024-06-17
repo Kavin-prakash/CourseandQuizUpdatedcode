@@ -19,6 +19,9 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import { fetchEnrollCourseLearnerRequest } from "../../actions/Admin/EnrollmentCourseLearners";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 export default function EnrollCourseLearners() {
     const courseId = useParams();
     const dispatch = useDispatch();
@@ -66,12 +69,12 @@ export default function EnrollCourseLearners() {
             disablePadding: false,
             label: "S.No",
         },
-        {
-            id: "profilePhoto",
-            numeric: false,
-            disablePadding: false,
-            label: "Profile Photo",
-        },
+        // {
+        //     id: "profilePhoto",
+        //     numeric: false,
+        //     disablePadding: false,
+        //     label: "Profile Photo",
+        // },
         {
             id: "learnerName",
             numeric: false,
@@ -91,6 +94,36 @@ export default function EnrollCourseLearners() {
             label: "Status",
         },
     ];
+
+    const pdfRef = React.useRef();
+    let today = new Date();
+    today.setDate(today.getDate());
+    let month = String(today.getMonth() + 1).padStart(2, "0");
+    let day = String(today.getDate()).padStart(2, "0");
+    let Dates = day + "-" + month + "-" + today.getFullYear();
+    const Exportreport = () => {
+        const input = pdfRef.current;
+        html2canvas(input).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4", true);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 30;
+            pdf.addImage(
+                imgData,
+                "PNG",
+                imgX,
+                imgY,
+                imgWidth * ratio,
+                imgHeight * ratio
+            );
+            pdf.save(`Course_Enrollment_Reports_${Dates}.pdf`);
+        });
+    };
 
     //Component for Head in Table
     function EnhancedTableHead(props) {
@@ -259,82 +292,94 @@ export default function EnrollCourseLearners() {
                     }}
                 >
                     <EnhancedTableToolbar numSelected={selected.length} />
-                    <form className="form-inline my-2 my-lg-0">
-                        <input
-                            className="form-control mr-sm-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                            value={searchTerm}
-                            style={{ width: "30vw" }}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </form>
-
-                    <TableContainer>
-                        <Table
-                            sx={{ minWidth: 100 }}
-                            aria-labelledby="tableTitle"
-                            size={dense ? "medium" : "medium"}
-                        >
-                            <EnhancedTableHead
-                                numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
-                                onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
-                                rowCount={rows.length}
+                    <div style={{ display: "flex", padding: "10px" }}>
+                        <form className="form-inline my-2 my-lg-0">
+                            <input
+                                className="form-control mr-sm-2"
+                                type="search"
+                                placeholder="Search"
+                                aria-label="Search"
+                                value={searchTerm}
+                                style={{ width: "30vw" }}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                            <TableBody>
-                                {filteredUser.map((row, index) => {
-                                    const isItemSelected = isSelected(row.learnerID);
+                        </form>
+                        <button
+                            className="btn btn-success"
+                            onClick={Exportreport}
+                            style={{ marginLeft: "48%" }}
+                        >
+                            Download Report
+                            <ArrowDownwardIcon />
+                        </button>
+                    </div>
+                    <div id="learnersreport" className="m-2">
+                        <TableContainer ref={pdfRef}>
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            // onClick={(event) => handleClick(event, row.id)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.index}
-                                            selected={isItemSelected}
-                                            sx={{ cursor: "pointer" }}
-                                            style={{ textDecoration: 'none' }}
-                                            component={Link} to={'/individuallearner/' + row.learnerId}
-                                        >
-                                            <TableCell align="left">{index + 1}</TableCell>
-                                            <TableCell align="center">
-                                                <Avatar alt={row.name} src={row.profilePhoto} />
-                                            </TableCell>
-                                            <TableCell
-                                                component="th"
-                                                id={row.learnerID}
-                                                scope="row"
-                                                align="left"
-                                                padding="none"
+                            <Table
+                                sx={{ minWidth: 100 }}
+                                aria-labelledby="tableTitle"
+                                size={dense ? "medium" : "medium"}
+                            >
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={handleSelectAllClick}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={rows.length}
+                                />
+                                <TableBody>
+                                    {filteredUser.map((row, index) => {
+                                        const isItemSelected = isSelected(row.learnerID);
+
+                                        return (
+                                            <TableRow
+                                                hover
+                                                // onClick={(event) => handleClick(event, row.id)}
+                                                role="checkbox"
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.index}
+                                                selected={isItemSelected}
+                                                sx={{ cursor: "pointer" }}
+                                                style={{ textDecoration: 'none' }}
+                                                component={Link} to={'/individuallearner/' + row.learnerId}
                                             >
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="left">{row.emailId}</TableCell>
+                                                <TableCell align="left">{index + 1}</TableCell>
+                                                {/* <TableCell align="center">
+                                                    <Avatar alt={row.name} src={row.profilePhoto} />
+                                                </TableCell> */}
+                                                <TableCell
+                                                    component="th"
+                                                    id={row.learnerID}
+                                                    scope="row"
+                                                    align="left"
+                                                    padding="none"
+                                                >
+                                                    {row.name}
+                                                </TableCell>
+                                                <TableCell align="left">{row.emailId}</TableCell>
 
-                                            <TableCell align="left">
-                                                {row.status == true ? <h6 style={{ color: "green" }}>Finished</h6> : <h6 style={{ color: "red" }}>In Progress</h6>}
-                                            </TableCell>
+                                                <TableCell align="left">
+                                                    {row.status == true ? <h6 style={{ color: "green" }}>Finished</h6> : <h6 style={{ color: "red" }}>In Progress</h6>}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (dense ? 33 : 53) * emptyRows,
+                                            }}
+                                        >
+                                            <TableCell colSpan={6} />
                                         </TableRow>
-                                    );
-                                })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
                     <TablePagination
                         rowsPerPageOptions={[
                             { label: '5 Rows', value: 5 },

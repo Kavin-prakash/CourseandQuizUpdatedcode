@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import {FetchCoursereportRequest} from '../../../actions/Admin/CourseReportAction';
-import { useEffect,useState } from "react";
+import { FetchCoursereportRequest } from '../../../actions/Admin/CourseReportAction';
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
@@ -24,28 +24,28 @@ import { Button } from "bootstrap";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import  ReportSkeleton from '../../../components/Loading/Reportskeleton'
+import ReportSkeleton from '../../../components/Loading/Reportskeleton'
 
-const CourseReportView = ({FetchCoursereportRequest,coursereport}) => {
-  
+const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-      const timer = setTimeout(() => {
-          setLoading(false)
-      }, 1000);
-      return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-  FetchCoursereportRequest();
-}, [FetchCoursereportRequest]);
+    FetchCoursereportRequest();
+  }, [FetchCoursereportRequest]);
 
-//Pdf 
-const pdfRef=React.useRef();
+  //Pdf 
+  const pdfRef = React.useRef();
 
-if (loading||coursereport.length === 0) {
+  if (loading || coursereport.length === 0) {
     return <div>
-      <ReportSkeleton/>
+      <ReportSkeleton />
     </div>;
   }
   //Rows for the table
@@ -89,7 +89,7 @@ if (loading||coursereport.length === 0) {
       disablePadding: false,
       label: "S.No",
     },
-    {   
+    {
       id: "coursename",
       numeric: false,
       disablePadding: false,
@@ -114,36 +114,36 @@ if (loading||coursereport.length === 0) {
       label: "Create Date",
     },
     {
-        id: "modifydate",
-        numeric: true,
-        disablePadding: true,
-        label: "Modify Date",
- },
+      id: "modifydate",
+      numeric: true,
+      disablePadding: true,
+      label: "Modify Date",
+    },
   ];
- 
-  // today date
-let today = new Date();
-today.setDate(today.getDate()); 
-let month = String(today.getMonth() + 1).padStart(2, '0');
-let day = String(today.getDate()).padStart(2, '0');
-let Dates = day+ '-' + month + '-' + today.getFullYear() ;
 
-const Exportreport=()=>{
-  const input=pdfRef.current;
-  html2canvas(input).then((canvas)=>{
-    const imgData=canvas.toDataURL('image/png');
-    const pdf=new jsPDF('p','mm','a4',true);
-    const pdfWidth=pdf.internal.pageSize.getWidth();
-    const pdfHeight=pdf.internal.pageSize.getHeight();
-    const imgWidth=canvas.width;
-    const imgHeight=canvas.height;
-    const ratio=Math.min(pdfWidth/imgWidth,pdfHeight/imgHeight);
-    const imgX=(pdfWidth-imgWidth*ratio)/2;
-    const imgY=30;
-    pdf.addImage(imgData,'PNG',imgX,imgY,imgWidth*ratio,imgHeight*ratio);
-    pdf.save(`CourseReports_${Dates}.pdf`);
-  })
-};
+  // today date
+  let today = new Date();
+  today.setDate(today.getDate());
+  let month = String(today.getMonth() + 1).padStart(2, '0');
+  let day = String(today.getDate()).padStart(2, '0');
+  let Dates = day + '-' + month + '-' + today.getFullYear();
+
+  const Exportreport = () => {
+    const input = pdfRef.current;
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4', true);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 30;
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      pdf.save(`CourseReports_${Dates}.pdf`);
+    })
+  };
 
   //Component for Head in Table
   function EnhancedTableHead(props) {
@@ -167,7 +167,7 @@ const Exportreport=()=>{
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
-                style={{color:"white"}}
+                style={{ color: "white" }}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
@@ -224,8 +224,8 @@ const Exportreport=()=>{
             {numSelected} selected
           </Typography>
         ) : (
-         <>
-         </>
+          <>
+          </>
         )}
       </Toolbar>
     );
@@ -261,7 +261,7 @@ const Exportreport=()=>{
       }
       setSelected([]);
     };
-    
+
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
@@ -277,13 +277,13 @@ const Exportreport=()=>{
       page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     useEffect(() => {
-        setFilteredUser(
-          visibleRows.filter((row) =>
-            Object.values(row).some((value) =>
+      setFilteredUser(
+        visibleRows.filter((row) =>
+          Object.values(row).some((value) =>
             value !== null && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-            )
           )
-        );
+        )
+      );
     });
 
     const visibleRows = React.useMemo(
@@ -294,7 +294,7 @@ const Exportreport=()=>{
         ),
       [order, orderBy, page, rowsPerPage]
     );
-    
+
     return (
       <Box sx={{ width: "100%" }}>
         <Paper
@@ -304,101 +304,103 @@ const Exportreport=()=>{
           }}
         >
           <EnhancedTableToolbar numSelected={selected.length} />
-          <div style={{display:'flex',padding:"10px"}}>
-          <form className="form-inline my-2 my-lg-0">
-            <input
-              className="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              value={searchTerm}
-              style={{ width: "30vw" }}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-         </form>         
-         <button className="btn btn-success"  onClick={Exportreport} style={{marginLeft:'48%'}}>Download Report<ArrowDownwardIcon/></button>   
-          </div>
-         <div id="learnersreport">
-          <TableContainer ref={pdfRef}>
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h4"
-            id="tableTitle"
-            component="div"
-            align="center"
-            style={{marginBottom:"15px"}}
-          >
-            Course Report
-          </Typography>
-            <Table
-              sx={{width:'100%'}}
-              aria-labelledby="tableTitle"
-              size={dense ? "medium" : "medium"}
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+          <div style={{ display: 'flex', padding: "10px" }}>
+            <form className="form-inline my-2 my-lg-0">
+              <input
+                className="form-control mr-sm-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                value={searchTerm}
+                style={{ width: "30vw" }}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <TableBody>
-                {filteredUser.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+            </form>
+            <button className="btn btn-success" onClick={Exportreport} style={{ marginLeft: '48%' }}>Download Report<ArrowDownwardIcon /></button>
+          </div>
+          <div id="learnersreport">
+            <TableContainer ref={pdfRef}>
+              <Typography
+                sx={{ flex: "1 1 100%" }}
+                variant="h4"
+                id="tableTitle"
+                component="div"
+                align="center"
+                style={{ marginBottom: "15px" }}
+              >
+                Course Report
+              </Typography>
+              <Table
+                sx={{ width: '100%' }}
+                aria-labelledby="tableTitle"
+                size={dense ? "medium" : "medium"}
+              >
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={rows.length}
+                />
+                <TableBody>
+                  {filteredUser.map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.index}
-                      selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <TableCell align="left">{index + 1}</TableCell>
-                      <TableCell
-                        component="th"
-                        id={row.id}
-                        scope="row"
-                        align="left"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.index}
+                        selected={isItemSelected}
+                        sx={{ cursor: "pointer", textDecoration: "none" }}
+                        component={Link}
+                        to={'/coursecontent/' + row.courseId}
                       >
-                        {row.title}
-                      </TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
-                      <TableCell align="left">
-                        {/* {row.lastLogin.replace("T", " ")} */}
-                        {row.level}
-                      </TableCell>
-                      <TableCell align="left">
-                      {row.createdAt.split('T')[0].split('-').reverse().join('-') + ' ' + row.createdAt.split('T')[1]}
-                      </TableCell>
-                      <TableCell align="left">
-
-                      {row.modifiedAt}  
-                        {/* {row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1]} */}
+                        <TableCell align="left">{index + 1}</TableCell>
+                        <TableCell
+                          component="th"
+                          id={row.id}
+                          scope="row"
+                          align="left"
+                          padding="none"
+                        >
+                          {row.title}
                         </TableCell>
-                    
+                        <TableCell align="left">{row.category}</TableCell>
+                        <TableCell align="left">
+                          {/* {row.lastLogin.replace("T", " ")} */}
+                          {row.level}
+                        </TableCell>
+                        <TableCell align="left">
+                          {row.createdAt.split('T')[0].split('-').reverse().join('-') + ' ' + row.createdAt.split('T')[1]}
+                        </TableCell>
+                        <TableCell align="left">
+
+                          {row.modifiedAt}
+                          {/* {row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1]} */}
+                        </TableCell>
+
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
           <TablePagination
-           style={{color:'black'}}
+            style={{ color: 'black' }}
             rowsPerPageOptions={[
               { label: '5 Rows', value: 5 },
               { label: '10 rows', value: 10 },
@@ -412,7 +414,7 @@ const Exportreport=()=>{
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-   
+
         </Paper>
       </Box>
     );
@@ -426,11 +428,11 @@ const Exportreport=()=>{
 };
 
 const mapStateToProps = (state) => ({
-    coursereport: state.coursereport.coursereport,
+  coursereport: state.coursereport.coursereport,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    FetchCoursereportRequest: () => dispatch(FetchCoursereportRequest()),
+  FetchCoursereportRequest: () => dispatch(FetchCoursereportRequest()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseReportView);
