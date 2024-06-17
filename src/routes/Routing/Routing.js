@@ -117,7 +117,10 @@ function Routing() {
 
           {/* course module */}
           <Route path="/addcourse" element={<AddCourseView />} />
-          <Route path="/coursecontent" element={<CourseContent />} />
+          {/* mano changes */}
+          <Route path="/coursecontent/:id" element={<CourseContent />} />/
+          {/* stop mano changes */}
+
           <Route path="/addtopic/:id" element={<Topics />} />
           <Route path="/savedtopics/:id" element={<SavedTopics />} />
           <Route path='/addcontent/:id' element={<AddMaterial />} />
@@ -134,7 +137,11 @@ function Routing() {
         {/* course team */}
 
         <Route path="/addcourse" element={<AddCourseView />} />
-        <Route path="/coursecontent" element={<CourseContent />} />
+          {/* mano changes */}
+
+        <Route path="/coursecontent/:id" element={<CourseContent />} />
+          {/* stop mano changes */}
+
         <Route path="/addtopic/:id" element={<Topics />} />
         <Route path="/savedtopics/:id" element={<SavedTopics />} />
         <Route path='/addcontent/:id' element={<AddMaterial />} />

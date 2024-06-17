@@ -8,7 +8,7 @@ import {
   Card,
   Form,
   Modal,
-  
+
   Image,
   CloseButton,
   CardHeader,
@@ -21,22 +21,24 @@ import { useDispatch, connect, useSelector } from "react-redux";
 // } from "../../../action/Course/Course/AddCourseAction"; // Assuming this is your action creator
 
 
-import { createCoursesRequest,
-    createCoursesSuccess,
-    fetchLevelRequest} from '../../../actions/Course/Course/AddCourseAction'
+import {
+  createCoursesRequest,
+  createCoursesSuccess,
+  fetchLevelRequest
+} from '../../../actions/Course/Course/AddCourseAction'
 import { GiCancel } from "react-icons/gi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "../../../utils/Course/Course/AddCourseValidation";
 // import { createCategoryrequest } from "../../../action/Course/Category/AddCategoryAction";
-import {createCategoryrequest} from '../../../actions/Course/Category/AddCategoryAction';
+import { createCategoryrequest } from '../../../actions/Course/Category/AddCategoryAction';
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Dialog,TextField,DialogContent,DialogTitle,DialogActions,Button,Alert, Stack,Box,MenuItem,FormControl,FormHelperText,CardContent} from "@mui/material";
+import { Dialog, TextField, DialogContent, DialogTitle, DialogActions, Button, Alert, Stack, Box, MenuItem, FormControl, FormHelperText, CardContent } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
-import {  validateCategory } from "../../../utils/Course/Course/AddCourseValidation";
+import { validateCategory } from "../../../utils/Course/Course/AddCourseValidation";
 // import { fetchCategoryRequest } from "../../../action/Course/Category/FetchCategoryAction";
-import {fetchCategoryRequest} from '../../../actions/Course/Category/FetchCategoryAction';
+import { fetchCategoryRequest } from '../../../actions/Course/Category/FetchCategoryAction';
 
 const AddCourse = () => {
   const navigate = useNavigate();
@@ -60,83 +62,84 @@ const AddCourse = () => {
     duration: "",
     thumbnailimage: null,
   });
- //If course is created then navigate to course creation  page\
- const courseid = useSelector((state) => state.addcourse.course_id);
+  //If course is created then navigate to course creation  page\
+  const courseid = useSelector((state) => state.addcourse.course_id);
 
-//  const isSubmits = useSelector((state) => state.addcourse);
- const isSubmit = useSelector((state) => state.addcourse.isSubmitted);
-//  const CourseId= useSelector((state)=>state.AddCourse.course_id)
-//  console.log("checkcoursecontent",isSubmits);
- useEffect(() => {
-   if (isSubmit) {
-    // console.log("oppp",courseid);
-     navigate("/coursecontent"); // Navigate to the next page on success
-   }
- }, [isSubmit, navigate]);
+  //  const isSubmits = useSelector((state) => state.addcourse);
+  const isSubmit = useSelector((state) => state.addcourse.isSubmitted);
+  //  const CourseId= useSelector((state)=>state.AddCourse.course_id)
+  //  console.log("checkcoursecontent",isSubmits);
+  useEffect(() => {
+    if (isSubmit) {
+      // console.log("oppp",courseid);
+  // const courseid = useSelector((state) => state.addcourse.course_id);
+      navigate(`/coursecontent/${courseid}`); // Navigate to the next page on success
+    }
+  }, [isSubmit, navigate]);
   //success message for adding category
-  const addCategorySuccessState=useSelector((state)=>state.addCategory.isSuccess);
-  const addCategoryFailureState=useSelector((state)=>state.addCategory.isFailure);
-//   const categorySuccessMsg=useSelector((state)=>state.addCategory.message)
-  const [successMsg,setSuccessMsg]=useState('')
-  useEffect(()=>{
-    if(addCategorySuccessState){
-       handleClose();
-       setSuccessMsg('Category added successfully');
-       fetchData();
-       const timer = setTimeout(() => {
+  const addCategorySuccessState = useSelector((state) => state.addCategory.isSuccess);
+  const addCategoryFailureState = useSelector((state) => state.addCategory.isFailure);
+  //   const categorySuccessMsg=useSelector((state)=>state.addCategory.message)
+  const [successMsg, setSuccessMsg] = useState('')
+  useEffect(() => {
+    if (addCategorySuccessState) {
+      handleClose();
+      setSuccessMsg('Category added successfully');
+      fetchData();
+      const timer = setTimeout(() => {
         setSuccessMsg('');
       }, 7000);
 
       // Clear the timeout if the component unmounts
       return () => clearTimeout(timer);
-      
-       
-       
-    }
-  },[addCategorySuccessState])
-  const[failurMsg,setFailureMsg]=useState('');
-  useEffect(()=>{
-    if(addCategoryFailureState){
-       handleClose();
-       setFailureMsg('Category already exists');
-       
-    }
-  },[addCategoryFailureState])
 
-  const[servererror,setserverrError]=useState('');
-  const InternalError=useSelector((state)=>state.addCategory.isError);
-  useEffect(()=>{
-    if(InternalError){
-        handleClose();
-        setserverrError('Internal Server error occured');
-      
+
+
     }
-  },[InternalError])
-  
+  }, [addCategorySuccessState])
+  const [failurMsg, setFailureMsg] = useState('');
+  useEffect(() => {
+    if (addCategoryFailureState) {
+      handleClose();
+      setFailureMsg('Category already exists');
+
+    }
+  }, [addCategoryFailureState])
+
+  const [servererror, setserverrError] = useState('');
+  const InternalError = useSelector((state) => state.addCategory.isError);
+  useEffect(() => {
+    if (InternalError) {
+      handleClose();
+      setserverrError('Internal Server error occured');
+
+    }
+  }, [InternalError])
+
   //If course is already exists
-  const isExist=useSelector((state)=>state.course.isExists);
-  const [existMsg,setExistMsg]=useState('');
-  useEffect(()=>{
-    if(isExist){
-        setExistMsg('Course already exists');
-        
+  const isExist = useSelector((state) => state.course.isExists);
+  const [existMsg, setExistMsg] = useState('');
+  useEffect(() => {
+    if (isExist) {
+      setExistMsg('Course already exists');
+
     }
-  },[isExist])
-   
+  }, [isExist])
+
   //if internal message occurs for creating course
-  const[failure,setFailure]=useState('');
-  const isFailure=useSelector((state)=>state.course.isError);
-  useEffect(()=>{
-    if(isFailure){
-        setFailure('Internal Server error occured');
-       
+  const [failure, setFailure] = useState('');
+  const isFailure = useSelector((state) => state.course.isError);
+  useEffect(() => {
+    if (isFailure) {
+      setFailure('Internal Server error occured');
+
     }
-  },[isFailure])
-   
-  const fetchCategory=useSelector((state)=>state.category.courses);
-  
-  const fetchLevel=useSelector((state)=>state.level.courses);
-  
+  }, [isFailure])
+
+  const fetchCategory = useSelector((state) => state.category.courses);
+
+  const fetchLevel = useSelector((state) => state.level.courses);
+
 
   const fetchData = async () => {
     // try {
@@ -157,19 +160,19 @@ const AddCourse = () => {
 
     fetchData();
     dispatch(fetchLevelRequest());
-    
+
   }, []);
 
 
-  const handleClickOpen = async() => {
+  const handleClickOpen = async () => {
     setOpen(true);
- 
+
   };
- 
+
   const handleClose = () => {
     setOpen(false);
     setAddCategory('');
-    
+
   };
 
   const handleSubmit = async (event) => {
@@ -185,7 +188,7 @@ const AddCourse = () => {
       }
     }
   };
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -235,7 +238,7 @@ const AddCourse = () => {
   };
 
   const removeThumbnail = () => {
-   
+
     setSelectedImage(null);
   };
 
@@ -257,52 +260,57 @@ const AddCourse = () => {
     <>
       <Container fluid>
         <Row>
-             <Col  xs={0} sm={1} md={2}></Col>
-            <Col xs={12} sm={10} md={8}>
-            {!open && successMsg && (
-        <Alert  severity="success" className="mt-3">
-          {successMsg}
-        </Alert>
-      )}
+          <Col xs={0} sm={1} md={2}></Col>
+          <Col xs={12} sm={10} md={8}>
+            <Box className="Course-AddcourseAlert">
+              <Col xs={12} sm={10} md={8} lg={12}>
+                {!open && successMsg && (
+                  <Alert severity="success" className="mt-5">
+                    {successMsg}
+                  </Alert>
+                )}
 
-{!open && failurMsg && (
-        <Alert severity="error" className="mt-3">
-          {failurMsg}
-        </Alert>
-      )}
+                {!open && failurMsg && (
+                  <Alert severity="error" className="mt-5">
+                    {failurMsg}
+                  </Alert>
+                )}
 
-{!open && servererror && (
-        <Alert severity="error" className="mt-3">
-          {servererror}
-        </Alert>
-      )}
+                {!open && servererror && (
+                  <Alert severity="error" className="mt-5">
+                    {servererror}
+                  </Alert>
+                )}
 
-{!open && failure && (
-        <Alert severity="error" className="mt-3">
-          {failure}
-        </Alert>
-      )}
+                {!open && failure && (
+                  <Alert severity="error" className="mt-5">
+                    {failure}
+                  </Alert>
+                )}
 
-{!open && existMsg && (
-        <Alert severity="warning" className="mt-3">
-          {existMsg}
-        </Alert>
-      )}
-      
-      </Col>
-             <Col xs={0} sm={1} md={2}></Col>
+                {!open && existMsg && (
+                  <Alert severity="warning" className="mt-5">
+                    {existMsg}
+                  </Alert>
+                )}
+
+              </Col>
+            </Box>
+
+          </Col>
+          <Col xs={0} sm={1} md={2}></Col>
         </Row>
-     
+
         <Row>
-           <Col  xs={2} sm={3} md={4} ></Col>
+          <Col xs={2} sm={3} md={4} ></Col>
           <Col xs={12} sm={12} md={9} lg={6}>
             <Card className="mt-5" id="Course-custom-card" >
-              <Card.Header style={{backgroundColor:'#23275C',color:'white'}} className="Course-header">
+              <Card.Header style={{ backgroundColor: '#23275C', color: 'white' }} className="Course-header">
                 Create Course
               </Card.Header>
               <CardContent className="Course-scrollable-body">
-              <Form onSubmit={handleSubmit}>
-                <FormControl className="mb-3" fullWidth>
+                <Form onSubmit={handleSubmit}>
+                  <FormControl className="mb-3" fullWidth>
                     {/* <Form.Label>Course Title</Form.Label> */}
                     <TextField
                       type="text"
@@ -322,7 +330,7 @@ const AddCourse = () => {
                   <FormControl className="mb-3" fullWidth>
                     {/* <Form.Label required>Course Category</Form.Label> */}
 
-                    <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory"  placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
+                    <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
                       <b>Select Category</b>
                       {fetchCategory.map((category) => (
                         <MenuItem
@@ -332,16 +340,16 @@ const AddCourse = () => {
                           {category.category}
                         </MenuItem>
                       ))}
-                      <MenuItem value="Add category" style={{color:"#050C9C"}}>+ Add Category</MenuItem>
+                      <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
                     </TextField>
                     {/* {errors.category && (
                       <p className="error">{errors.category}</p>
                     )} */}
-                   
+
                   </FormControl>
                   <FormControl className="mb-3" fullWidth>
                     {/* <Form.Label>Course Level</Form.Label> */}
-                    <TextField name="level"select  onChange={handleInputChange}  label="Course Level"  fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
+                    <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
                       <MenuItem>Select Level</MenuItem>
                       {fetchLevel.map((level) => (
                         <MenuItem key={level.levelId} value={level.levelId}>
@@ -350,14 +358,14 @@ const AddCourse = () => {
                       ))}
                     </TextField>
                     {/* {errors.level && <p className="error">{errors.level}</p>} */}
-                    </FormControl>
+                  </FormControl>
 
                   <FormControl className="mb-3" fullWidth>
-                   
+
                     <TextField
-                        margin="dense"
-                       id="name"
-                       label="Course Duration (in hrs)"
+                      margin="dense"
+                      id="name"
+                      label="Course Duration (in hrs)"
                       fullWidth
                       type="time"
                       helperText={errors.duration}
@@ -372,43 +380,43 @@ const AddCourse = () => {
                     {/* {errors.duration && (
                       <p className="error">{errors.duration}</p>
                     )} */}
-                  
+
                   </FormControl>
 
                   <FormControl className="mb-3" fullWidth >
-      <TextField
-        type="text"
-        label="Description"
-        multiline
-        rows={3}
-        placeholder="Enter your description"
-        name="description"
-        value={course.description}
-        error={(errors.description)}
-        helperText={(errors.description)}
-        onChange={handleInputChange}
-      />
-      {/* {errors.description && (
+                    <TextField
+                      type="text"
+                      label="Description"
+                      multiline
+                      rows={3}
+                      placeholder="Enter your description"
+                      name="description"
+                      value={course.description}
+                      error={(errors.description)}
+                      helperText={(errors.description)}
+                      onChange={handleInputChange}
+                    />
+                    {/* {errors.description && (
                       <p className="error">{errors.description}</p>
                     )} */}
-    </FormControl>
+                  </FormControl>
 
                   <FormControl controlId="formFile" className="mb-3" fullWidth>
                     <Form.Label>Course Thumbnail</Form.Label>
-                  
+
                     <Box {...getRootProps()} className="course-thumbnail">
                       <Card.Body className="text-center">
-                        <input {...getInputProps()} type="file"/>
+                        <input {...getInputProps()} type="file" />
                         {selectedImage ? (
-                            
+
                           <Card >
                             {/* <Card.Header> */}
-                              <CloseButton
-                               className="position-absolute top-0 end-0"
-                               style={{color:'red'}}
-                                onClick={removeThumbnail}
-                                aria-label="Remove image"
-                              />
+                            <CloseButton
+                              className="position-absolute top-0 end-0"
+                              style={{ color: 'red' }}
+                              onClick={removeThumbnail}
+                              aria-label="Remove image"
+                            />
                             {/* </Card.Header> */}
 
                             <img
@@ -419,11 +427,11 @@ const AddCourse = () => {
                           </Card>
                         ) : (
                           <p >
-                          {isDragActive
-                            ? "Drag the course thumbnail here ..."
-                            : <span>Click to select thumbnail image or <span className="upload-link">Click to upload</span></span>
+                            {isDragActive
+                              ? "Drag the course thumbnail here ..."
+                              : <span>Click to select thumbnail image or <span className="upload-link">Click to upload</span></span>
                             }
-                        </p>
+                          </p>
                         )}
                       </Card.Body>
                     </Box>
@@ -445,18 +453,18 @@ const AddCourse = () => {
                   <Row className="mt-3">
                     <Col md={4} ></Col>
                     <Col md={8}>
-                    <Button type="submit" value="CREATE COURSE" style={{backgroundColor:'#23275C',color:'white'}} className="align-items-center justify-content-center">
-                      CREATE COURSE
-                    </Button></Col>
+                      <Button type="submit" value="CREATE COURSE" style={{ backgroundColor: '#23275C', color: 'white' }} className="align-items-center justify-content-center">
+                        CREATE COURSE
+                      </Button></Col>
                     <Col md={2}></Col>
-                    
+
                   </Row>
                 </Form>
               </CardContent>
-              
+
             </Card>
           </Col>
-         <Col xs={0} sm={1} md={2}></Col>
+          <Col xs={0} sm={1} md={2}></Col>
         </Row>
       </Container>
       {/* <React.Fragment>
@@ -504,7 +512,7 @@ const AddCourse = () => {
       </Dialog>
       </React.Fragment> */}
 
-<React.Fragment>
+      <React.Fragment>
         <Dialog
           open={open}
           onClose={handleClose}
@@ -521,7 +529,7 @@ const AddCourse = () => {
           <DialogContent className='dialog-content'>
             <TextField
               autoFocus
-            
+
               margin="dense"
               id="name"
               name="category"
@@ -540,7 +548,7 @@ const AddCourse = () => {
           </DialogActions>
         </Dialog>
       </React.Fragment>
-   </>
+    </>
   );
 };
 

@@ -29,35 +29,45 @@ import { LogoDev } from "@mui/icons-material";
 
 // import CourseCreationForm from "./Content_Page";
 const Content = () => {
+          {/* mano changes */}
+
+  const {id} = useParams();
+          {/* stop mano changes */}
+
   //const [content,setContent]=useState([]);
   const dispatch = useDispatch();
-  const courseid = useSelector((state) => state.addcourse.course_id);
-  debugger
+  // const courseid = useSelector((state) => state.addcourse.course_id);
   const course = useSelector((state) => state.fetchindividualCourse.courses);
   console.log("Course", course);
-  console.log("content", courseid);
+  // console.log("content", courseid);
+          {/* mano changes */}
+  
   useEffect(() => {
-    if (courseid) {
-      dispatch(fetchCourseRequest(courseid));
+    if (id) {
+      dispatch(fetchCourseRequest(id));
     }
-    console.log("asdfgh", courseid);
+    // console.log("asdfgh", courseid);
   }
-    , [courseid]);
+    , [id]);
 
+          {/* stop mano changes */}
 
   //id=courseid;
   const navigate = useNavigate();
   const iscourse = useSelector((state) => state.fetchindividualCourse.isNavigate)
+          {/* mano changes */}
 
 
   const handleAddTopic = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     if (iscourse) {
-      navigate(`/addtopic/${courseid}`)
+      navigate(`/addtopic/${id}`)
     }
 
 
   }
+          {/* stop mano changes */}
+
   const divStyle = {
     boxShadow: '0px 4px 8px #23275c', // Replace #yourShadowColor with your color
   };
@@ -81,7 +91,10 @@ const Content = () => {
                     {course.title}
                   </Typography>
                   <Typography variant="caption" display="block">
-                    Category : {course.catagory}
+                    {/* mano changes */}
+                    Category : {course.category}
+                    {/* stop mano changes */}
+
                   </Typography>
                   <Typography variant="caption" display="block">
                     Level : {course.level}
