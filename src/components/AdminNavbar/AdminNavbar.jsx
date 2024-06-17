@@ -19,7 +19,7 @@ import "../../Styles/Admin/AdminNavbar.css";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Button,Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 // import { AppBar, CssBaseline, Divider, Drawer, IconButton, Toolbar } from "@mui/material";
 // import { FaBookOpenReader, FaUserGraduate, FaHome, FaChartBar } from "react-icons/fa";
 import Toast from 'react-bootstrap/Toast';
@@ -168,7 +168,8 @@ export default function AdminNavbar() {
       </AppBar> */}
       <AppBar position="fixed" open={showSideNav}>
         <Toolbar className="top-nav">
-        <IconButton
+          {/* ... AppBar content */}
+          <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -178,8 +179,9 @@ export default function AdminNavbar() {
               ...(showSideNav && { display: "none" }),
             }}
           >
-          <MenuIcon />
+            <MenuIcon />
           </IconButton>
+
           <Box component="div">
             <img src={logo} alt="logo" />
             <Button style={{ position: 'absolute', marginLeft: '72%', marginTop: '10px' }} onClick={handleLogoutClick}>Logout</Button>
@@ -189,7 +191,7 @@ export default function AdminNavbar() {
       {/* ... Drawer and other components */}
 
       {/* Logout Confirmation Modal */}
-      <Modal  className="mt-5" show={showLogoutModal} onHide={() => setShowLogoutModal(false)} animation={false}>
+      <Modal className="mt-5" show={showLogoutModal} onHide={() => setShowLogoutModal(false)} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Logout Confirmation</Modal.Title>
         </Modal.Header>
