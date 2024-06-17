@@ -11,6 +11,7 @@ import { fetchTopicsRequest } from '../../../actions/Course/Topic/FetchTopicsAct
 import { useSelector } from 'react-redux';
 import PDFViewer from '../Material/PDFViewer';
 // import '../../style/AddTopic.css'
+
 import { CiMusicNote1 } from "react-icons/ci";
 import { BsFiletypePdf, BsFiletypePpt } from "react-icons/bs";
 import EditIcon from '@mui/icons-material/Edit';
@@ -47,7 +48,15 @@ import { Card } from 'react-bootstrap';
 import VideoViewer from '../Material/VideoViewer';
 import AudioViewer from '../Material/AudioViewer';
 import { fetchQuizIdRequest } from '../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction';
+
+//mano changes
+import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
+import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
+import { VscFeedback } from "react-icons/vsc";
+import { IconButton,Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
+//stop mano changes
 export default function SavedTopics(props) {
+
     // const topicsDetail=useSelector((state)=>state);
     const selectorTopicsDetail = useSelector((state) => state.fetchTopic.topics[0]);
     const [topicsDetail, setTopicsDetails] = useState([]);
@@ -291,6 +300,10 @@ export default function SavedTopics(props) {
         dispatch(fetchQuizIdRequest(topicId));
         sessionStorage.setItem('topicId', topicId);
     }
+    const handleAddQuizFeedBackButton=(topicId)=>{
+        sessionStorage.setItem('topicId',topicId);
+        navigate('/quizfeedback')
+        }
 
     return (
         <Container fluid className='mt-5' style={divStyle}>
@@ -313,13 +326,28 @@ export default function SavedTopics(props) {
                         ><div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <span>  {topic.topicName}</span>
                                 <div>
-                                    <EditIcon style={{ marginRight: 16 }} variant="outlined" onClick={() => handleEditClickOpen(topic.topicId)} />
-                                    <DeleteIcon onClick={() => handleDeleteClickOpen(topic.topicId)} /></div></div>
-                            {/* added button for quiz teams */}
-                            <button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddFeedBackButton(topic.topicId) }}>Add  Feedback</button>
+                                    
 
-                            <button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddQuizButton(topic.topicId) }}>Add Quiz</button>
-                            {/* <DeleteIcon onClick={() => handleDelete(topic.topicId)} /></div></div> */}
+
+{/* mano changes */}
+
+                                     <Tooltip title="Add Quiz"> <IconButton aria-label="Addquiz"  onClick={()=>{handleAddQuizButton(topic.topicId)}}><QuizOutlinedIcon style={{color:"#0074D9"}}/></IconButton> </Tooltip>
+                                      <Tooltip title="Add QuizFeedback"><IconButton aria-label="Addquizfeedback"  onClick={()=>{handleAddQuizFeedBackButton(topic.topicId)}}><FeedbackOutlinedIcon style={{color:"#FF851B"}}/></IconButton></Tooltip>
+                                      <Tooltip title="Add Feedback"><IconButton aria-label="Addfeedback"  onClick={()=>{handleAddFeedBackButton(topic.topicId)}} ><VscFeedback style={{color:"#FFDC00"}}/></IconButton></Tooltip>
+                                      <Tooltip title="Edit topics"><IconButton aria-label="Edittopics"  onClick={() => handleEditClickOpen(topic.topicId)}  ><EditIcon style={{ color:"604CC3" }} variant="outlined" /> </IconButton></Tooltip>
+                                      <Tooltip title="Delete topics"><IconButton aria-label="deletetopics"  onClick={() => handleDeleteClickOpen(topic.topicId)}  ><DeleteIcon style={{color:"C80036"}} /></IconButton></Tooltip>
+
+                                  
+
+                                   {/* // <EditIcon style={{ marginRight: 16 }} variant="outlined" onClick={() => handleEditClickOpen(topic.topicId)} /> */}
+                                    {/* //<DeleteIcon onClick={() => handleDeleteClickOpen(topic.topicId)} /></div></div> */}
+                            {/* added button for quiz teams */}
+                            {/* //<button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddFeedBackButton(topic.topicId) }}>Add  Feedback</button> */}
+
+                            {/* //<button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddQuizButton(topic.topicId) }}>Add Quiz</button> */}
+                            {/* <DeleteIcon onClick={() => handleDelete(topic.topicId)} />/ */}
+                              {/* stop mano changes */}
+                            </div></div>
 
                         </AccordionSummary>
 
@@ -435,6 +463,5 @@ export default function SavedTopics(props) {
         </Container>
     );
 }
-
 
 

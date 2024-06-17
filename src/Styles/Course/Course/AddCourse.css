@@ -16,7 +16,14 @@
 margin: auto;
   width: 100vh;
 }
-
+/* mano changes */
+.Course-AddcourseAlert{
+  position: absolute;
+  top: 2%;
+ z-index: 1;
+  width: 400px;
+} 
+/* stop mano changes */
 
 
 
@@ -200,5 +207,4 @@ h2{
 .courseForm{
   margin-top: 50px;
 }
-
 
