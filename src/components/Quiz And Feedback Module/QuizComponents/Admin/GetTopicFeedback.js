@@ -10,6 +10,7 @@ import { deletetopicfeedbackRequest } from "../../../../actions/Quiz And Feedbac
 import { updatetopicfeedbackRequest } from "../../../../actions/Quiz And Feedback Module/Admin/UpdateTopicFeedbackAction";
 import { GetTopicFeedbackApi } from "../../../../middleware/Quiz And Feedback Module/Admin/GetTopicFeedbackApi";
 import GetByIDTopicFeedbackApi from "../../../../middleware/Quiz And Feedback Module/Admin/GetByIDTopicFeedbackApi";
+import DeleteTopicFeedbackApi from "../../../../middleware/Quiz And Feedback Module/Admin/DeleteTopicFeedbackApi";
 
 export const GetTopicFeedback = () => {
   // const { topicFeedbackId } = useParams();
@@ -117,6 +118,9 @@ export const GetTopicFeedback = () => {
     };
     console.log("requestBody", requestBody);
     dispatch(updatetopicfeedbackRequest(topicFeedbackId, requestBody));
+  //   setTimeout(function(){
+  //     window.location.reload(1);
+  //  }, 1000);
     
   };
 
@@ -124,7 +128,6 @@ export const GetTopicFeedback = () => {
     event.preventDefault();
     handleUpdateQuestion();
     setShowEditfbQuestionModal(false);
-
   };
 
 
@@ -145,8 +148,9 @@ export const GetTopicFeedback = () => {
     }
   };
 
-  const handleDeletetopicfbQuestion = (topicFeedbackId) => {
-    dispatch(deletetopicfeedbackRequest(topicFeedbackId));
+  const handleDeletetopicfbQuestion = async (topicFeedbackId) => {
+    // await dispatch(deletetopicfeedbackRequest(topicFeedbackId));
+    await DeleteTopicFeedbackApi(topicFeedbackId);
   };
 
   const handleNavigate = () => {

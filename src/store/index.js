@@ -264,7 +264,6 @@ const rootReducer = combineReducers({
   editQuizDetails: editQuizReducer,
   updatequizfeedback: UpdateQuizFeedbackReducer,
   deletequizfeedback: DeleteQuizFeedbackReducer,
-  deletetopicfeedback: DeleteTopicFeedbackReducer,
   updatetopicfeedback: UpdateTopicFeedbackReducer,
   //quizmodule-learner
   //Learner side
@@ -319,7 +318,6 @@ const store = createStore(
     PutQuizDetails,
 
     UpdateQuizFeedbackApi,
-    DeleteTopicFeedbackApi,
     DeleteQuizFeedbackApi,
     UpdateTopicFeedbackApi,
     //quiz-learner flow
