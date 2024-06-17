@@ -17,6 +17,8 @@ export const GetTopicFeedback = () => {
   //  const getallfeedback = useSelector(
   //    (state) => state.fetchtopicfeedback.quizfeedback[0]
   //  );
+  const courseId = sessionStorage.getItem('courseId');
+
   const [topicfeedback, setGetAllfeedback] = useState();
   const [getfeedback, setGetFeedback] = useState();
   const [errorfb, setErrorfb] = useState("");
@@ -154,7 +156,8 @@ export const GetTopicFeedback = () => {
   };
 
   const handleNavigate = () => {
-    navigate("/");
+    sessionStorage.removeItem("topicId");
+        navigate(`/addtopic/${courseId}`)
   };
 
   const handleCloseModal = () => {
