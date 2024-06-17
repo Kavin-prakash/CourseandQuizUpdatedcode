@@ -12,6 +12,8 @@ import { Container } from "react-bootstrap";
 
 export const QuizFeedback = () => {
   const quizName = sessionStorage.getItem("quizName");
+  const courseId = sessionStorage.getItem('courseId');
+
   console.log("name", quizName);
   const [getallfeedback, setGetAllfeedback] = useState();
   const [errorfb, setErrorfb] = useState("");

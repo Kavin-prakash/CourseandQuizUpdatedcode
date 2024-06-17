@@ -262,7 +262,6 @@ const rootReducer = combineReducers({
   quizId: quizIdReducer,
   deleteQuestion: deleteQuizQuestionsReducer,
   editQuizDetails: editQuizReducer,
-  quiz: createQuizReducer,
   updatequizfeedback: UpdateQuizFeedbackReducer,
   deletequizfeedback: DeleteQuizFeedbackReducer,
   deletetopicfeedback: DeleteTopicFeedbackReducer,
@@ -318,7 +317,7 @@ const store = createStore(
     FetchQuizById,
     DeleteQuizQuestionsApi,
     PutQuizDetails,
-    CreateQuizApi,
+
     UpdateQuizFeedbackApi,
     DeleteTopicFeedbackApi,
     DeleteQuizFeedbackApi,
