@@ -37,14 +37,14 @@
 //           ? selectedCourse.topics.map((topic) => ({
 //               name: topic.topicName,
 //               isOpen: false,
-              
+
 //                 materials: topic.materials? topic.materials.map((material)=>(
 //                   {
 //                     materialId:material.materialId,
 //                     materialname:material.materialName,
 //                     materiallink:material.material,
 //                     materialType:material.materialType
-                    
+
 //                   }
 //                 )):<>loading...</>
 
@@ -82,7 +82,7 @@
 //     e.stopPropagation();
 //     console.log("oo")
 //     const updatedFolders = [...folders];
-    
+
 //     if (updatedFolders[folderIndex].topics[topicIndex].materialType[typeIndex].isOpen) {
 //         updatedFolders[folderIndex].topics[topicIndex].materialType[typeIndex].isOpen = false;
 //     } else {
@@ -91,7 +91,7 @@
 //         });
 //         updatedFolders[folderIndex].topics[topicIndex].materialType[typeIndex].isOpen = true;
 //     }
-    
+
 //     setFolders(updatedFolders);
 // };
 //    const navigate = useNavigate();
@@ -103,7 +103,7 @@
 //   //           <PptViewerComponent Document={materiallink}/>
 //   //         </div>
 //   //       );
-     
+
 //   //       break;
 //   //     case "PDF":
 //   //       setSelectedComponent(<PDFViewer Document={"k"}/>);
@@ -138,8 +138,8 @@
 //  switch (type) {
 //   case "PPT":
 //         setSelectedComponent(<PDFViewer material={materiallink}/>);
-   
-    
+
+
 //     break;
 //   case "PDF":
 //     setSelectedComponent(<PDFViewer material={materiallink}/>);
@@ -158,7 +158,7 @@
 //     break;
 //     case "TEXT":
 //       setSelectedComponent(<PDFViewer material={materiallink}/>);
-  
+
 //   default:
 //     // setSelectedComponent(<CourseDescription course={selectedCourse}/>);         for emg
 //     break;
@@ -184,17 +184,17 @@
 //             Back
 //           </Link>
 //         </div>
-       
+
 //       </nav>
 //       <div className="d-flex">
 
 
-    
-      
+
+
 //       <div className="side">
 
-     
-        
+
+
 //     <ul className="tree" style={{ width: 250 }}>
 //         {folders.map((folder, folderIndex) => (
 //             <li key={folderIndex} className={`folder ${folder.isOpen ? "open" : ""}`} onClick={() => toggleFolder(folderIndex)}>
@@ -214,7 +214,7 @@
 //                                                             </li>
 //                                                         ))}
 //                                                         <button style={{marginLeft:"5%" , backgroundColor:"#fff"}}>Take Quiz</button>
-                                                 
+
 //                                     </ul>
 //                                 )}
 //                             </li>
@@ -262,6 +262,7 @@ import { CiYoutube } from "react-icons/ci";
 import CourseDescription from "./CourseDescription";
 import LearnerAudioViewer from "./LearnerAudioViewer";
 import LearnerVideoViewer from "./LearnerVideoViewer";
+import { fetchlearnerscoreRequest } from "../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
 import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
 
 
@@ -272,13 +273,13 @@ function SidebarTopics() {
   const userId = sessionStorage.getItem("UserSessionID");
   const navigate = useNavigate();
   const dispatch = useDispatch();
- 
+
   const pdf = useSelector((state) => state.fetchPdf.material);
- 
+
   useEffect(() => {
     console.log(selectedCourse);
   }, [selectedCourse]);
- 
+
   const [folders, setFolders] = useState([
     {
       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
@@ -287,31 +288,31 @@ function SidebarTopics() {
         selectedCourse && selectedCourse.topics
           ? selectedCourse.topics.map((topic) => ({
             name: topic.topicName,
-            topicid:topic.topicId,
-              isOpen: false,
-              materials: topic.materials
-                ? topic.materials.map((material) => ({
-                    materialId: material.materialId,
-                    materialname: material.materialName,
-                    materiallink: material.material,
-                    materialType: material.materialType,
-                  }))
-                : [],
-            }))
+            topicid: topic.topicId,
+            isOpen: false,
+            materials: topic.materials
+              ? topic.materials.map((material) => ({
+                materialId: material.materialId,
+                materialname: material.materialName,
+                materiallink: material.material,
+                materialType: material.materialType,
+              }))
+              : [],
+          }))
           : [],
     },
   ]);
- 
+
   useEffect(() => {
     console.log(folders);
   }, [folders]);
- 
+
   const [selectedComponent, setSelectedComponent] = useState(
     <CourseDescription course={selectedCourse} />
   );
- 
+
   const [openedMaterials, setOpenedMaterials] = useState(new Set());
- 
+
   const [completedTopics, setCompletedTopics] = useState(() => {
     const storedCompletedTopics = sessionStorage.getItem(
       `completedTopics_${userId}`
@@ -320,7 +321,7 @@ function SidebarTopics() {
       ? new Set(JSON.parse(storedCompletedTopics))
       : new Set();
   });
- 
+
   useEffect(() => {
     const storedOpenedMaterials = sessionStorage.getItem(
       `openedMaterials_${userId}`
@@ -329,30 +330,42 @@ function SidebarTopics() {
       setOpenedMaterials(new Set(JSON.parse(storedOpenedMaterials)));
     }
   }, [userId]);
- 
+
   const saveOpenedMaterials = (openedMaterials) => {
     sessionStorage.setItem(
       `openedMaterials_${userId}`,
       JSON.stringify(Array.from(openedMaterials))
     );
   };
- 
+
   const saveCompletedTopics = (completedTopics) => {
     sessionStorage.setItem(
       `completedTopics_${userId}`,
       JSON.stringify(Array.from(completedTopics))
     );
   };
- 
+
+  const learnersAttemptId = sessionStorage.getItem("learnerAttemptId");
+  const learnerAttempt = useSelector(
+    (state) => state.learnerscore.learnerscoredetails
+  );
+  console.log("hi,", learnerAttempt);
+
+  useEffect(() => {
+    debugger;
+    dispatch(fetchlearnerscoreRequest(learnersAttemptId));
+  }, [dispatch]);
+  console.log("learner", learnerAttempt);
+
   const toggleFolder = (index) => {
     const updatedFolders = [...folders];
     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
     setFolders(updatedFolders);
   };
- 
+
   const toggleTopic = (folderIndex, topicIndex, e) => {
     e.stopPropagation();
- 
+
     // Prevent the next topic from opening unless the previous topic's quiz has been completed
     if (
       topicIndex > 0 &&
@@ -361,7 +374,7 @@ function SidebarTopics() {
       alert("Please complete the quiz for the previous topic before proceeding.");
       return;
     }
- 
+
     const updatedFolders = [...folders];
     updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
       (topic, index) => ({
@@ -371,18 +384,18 @@ function SidebarTopics() {
     );
     setFolders(updatedFolders);
   };
- 
+
   const opencontent = (type, materiallink, materialId) => {
     console.log("io" + type);
     console.log("link" + materiallink);
- 
+
     setOpenedMaterials((prevOpenedMaterials) => {
       const updatedMaterials = new Set(prevOpenedMaterials);
       updatedMaterials.add(materialId);
       saveOpenedMaterials(updatedMaterials);
       return updatedMaterials;
     });
- 
+
     switch (type) {
       case "PPT":
         setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
@@ -403,7 +416,7 @@ function SidebarTopics() {
         break;
     }
   };
- 
+
   const areAllMaterialsOpened = (materials) => {
     return materials.every((material) =>
       openedMaterials.has(material.materialId)
@@ -412,22 +425,22 @@ function SidebarTopics() {
   // const quizId = useSelector(
   //   (state) => state.fetchquizinstruction.quizinstructiondetails
   // );
- 
-  const completeTopic = (topicName,topicId) => {
+
+  const completeTopic = (topicName, topicId) => {
     debugger;
-        // dispatch(fetchQuizIdRequest(topicId));
+    // dispatch(fetchQuizIdRequest(topicId));
     setCompletedTopics((prevCompletedTopics) => {
       const updatedCompletedTopics = new Set(prevCompletedTopics);
       updatedCompletedTopics.add(topicName);
       saveCompletedTopics(updatedCompletedTopics);
-      sessionStorage.setItem("topicId", topicId);    
-    // sessionStorage.setItem("quizId",quizId.quizId);
+      sessionStorage.setItem("topicId", topicId);
+      // sessionStorage.setItem("quizId",quizId.quizId);
       navigate("/instruction");
-      
+
       return updatedCompletedTopics;
     });
   };
-//  console.log(quizId);
+  //  console.log(quizId);
   return (
     <div>
       <nav className="navbar navbar-expand-sm navbar-default navbar-fixed-top">
@@ -529,15 +542,52 @@ function SidebarTopics() {
                                 )}
                               </li>
                             ))}
-                            <button
+                            {/* <button
                               className="btn btn-success"
                               disabled={!areAllMaterialsOpened(topic.materials)}
-                              onClick={() => completeTopic(topic.name,topic.topicid)
+                              onClick={() => completeTopic(topic.name, topic.topicid)
                               }
                             >
-                              {/* {topic.topicid} */}
                               Take Quiz
-                            </button>
+                            </button> */}
+
+                            {/* {learnerAttempt.isPassed ? <>h1</> : <h2>h2</h2>} */}
+                            {learnerAttempt.isPassed === false ? (
+                              <>
+                                <button
+                                  className="btn btn-success"
+                                  disabled={
+                                    !areAllMaterialsOpened(topic.materials)
+                                  }
+                                  onClick={() =>
+                                    completeTopic(topic.name, topic.topicid)
+                                  }
+                                >
+                                  {/* {topic.topicid} */}
+                                  Take Quiz
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  id="takebutton"
+                                  disabled
+                                  type="button"
+
+                                  title="Your attempt has been finished"
+
+
+                                  onClick={() =>
+                                    completeTopic(topic.name, topic.topicid)
+                                  }
+                                >
+                                  {/* {topic.topicid} */}
+                                  Take Quiz
+                                </button>
+                              </>
+                            )}
+
+
                           </ul>
                         )}
                       </li>
@@ -554,6 +604,6 @@ function SidebarTopics() {
     </div>
   );
 }
- 
+
 export default SidebarTopics;
 

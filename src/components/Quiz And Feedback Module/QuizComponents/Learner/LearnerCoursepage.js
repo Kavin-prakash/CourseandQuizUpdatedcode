@@ -13,13 +13,13 @@ import { fetchQuizIdRequest } from "../../../../actions/Quiz And Feedback Module
 
 function LearnerCoursepage() {
   const [noQuizTopicId, setNoQuizTopicId] = useState(
-    "f50d40ae-9eb5-4674-80f1-c5a25f6e2a0d"
+    "c6ce0441-f10b-492f-8536-978718b0b1a3"
   );
   const [yesQuizTopicId, setYesQuizTopicId] = useState(
-    "6c4bcc2f-535d-4792-a978-da9e75047120"
+    "db7c16a2-49e6-44e7-8504-ff4f293f3efd"
   );
   const [LearnerId, setLearnerId] = useState(
-    "b9c313df-f48b-43ce-9c12-8a4c4546aad3"
+    "a2b7a936-9809-4128-bc3e-e69a1dc48d3b"
   );
   const quizId = useSelector(
     (state) => state.fetchquizinstruction.quizinstructiondetails
@@ -28,7 +28,7 @@ function LearnerCoursepage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [topicId, setTopicId] = useState("");
- 
+
   console.log("course page quizId", quizId, isSuccess);
 
   const handleAddQuiz = async (topicId) => {
@@ -38,7 +38,7 @@ function LearnerCoursepage() {
     sessionStorage.setItem("topicId", topicId);
     sessionStorage.setItem("quizId", quizId.quizId);
     // console.log(quizId);
-    sessionStorage.setItem("LearnerId",LearnerId);
+    sessionStorage.setItem("LearnerId", LearnerId);
     if (isSuccess) {
       navigate("/instruction");
     }
@@ -47,13 +47,13 @@ function LearnerCoursepage() {
   const handleGiveFeedback = async (topicId) => {
     dispatch(fetchtopicfeedbackquestionrequest(topicId));
     sessionStorage.setItem("topicId", topicId);
-      navigate("/topicfeedbackquestion");
-   
+    navigate("/topicfeedbackquestion");
+
   };
- 
+
   const handleQuizGiveFeedback = async (topicId) => {
     dispatch(fetchQuizIdRequest(topicId));
-    sessionStorage.setItem("quizId",quizId);
+    sessionStorage.setItem("quizId", quizId);
     navigate("/quizfeedbackquestion");
   };
 
@@ -110,25 +110,25 @@ function LearnerCoursepage() {
                       Take Quiz
                     </Button>
                     <Button
-                        variant="warning"
-                        size="sm"
-                        style={{ marginLeft: "5px" }}
-                        onClick={() => {
-                          handleGiveFeedback(yesQuizTopicId);
-                        }}
-                      >
-                        Give Feedback
-                      </Button>
-                      <Button
-                        variant="success"
-                        size="sm"
-                        style={{ marginLeft: "5px" }}
-                        onClick={() => {
-                          handleQuizGiveFeedback(yesQuizTopicId);
-                        }}
-                      >
-                        Give QuizFeedback
-                      </Button>
+                      variant="warning"
+                      size="sm"
+                      style={{ marginLeft: "5px" }}
+                      onClick={() => {
+                        handleGiveFeedback(yesQuizTopicId);
+                      }}
+                    >
+                      Give Feedback
+                    </Button>
+                    <Button
+                      variant="success"
+                      size="sm"
+                      style={{ marginLeft: "5px" }}
+                      onClick={() => {
+                        handleQuizGiveFeedback(yesQuizTopicId);
+                      }}
+                    >
+                      Give QuizFeedback
+                    </Button>
                     {/* <Button variant="secondary" size="sm" onClick={() => { handleFeedback(yesQuizTopicId) }} style={{ marginLeft: "5px" }}>Add Feedback</Button>
                     <Button variant="secondary" size="sm" onClick={() => { handleQuizFeedback(yesQuizTopicId) }} style={{ marginLeft: "5px" }}>Add Quiz Feedback</Button> */}
                   </div>

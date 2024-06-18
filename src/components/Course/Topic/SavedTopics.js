@@ -333,7 +333,7 @@ export default function SavedTopics(props) {
                                     {/* mano changes */}
 
                                     <Tooltip title="Add Quiz"> <IconButton aria-label="Addquiz" onClick={() => { handleAddQuizButton(topic.topicId) }}><QuizOutlinedIcon style={{ color: "#0074D9" }} /></IconButton> </Tooltip>
-                                    <Tooltip title="Add QuizFeedback"><IconButton aria-label="Addquizfeedback" onClick={() => { handleAddQuizFeedBackButton(topic.topicId) }}><FeedbackOutlinedIcon style={{ color: "#FF851B" }} /></IconButton></Tooltip>
+                                    {/* <Tooltip title="Add QuizFeedback"><IconButton aria-label="Addquizfeedback" onClick={() => { handleAddQuizFeedBackButton(topic.topicId) }}><FeedbackOutlinedIcon style={{ color: "#FF851B" }} /></IconButton></Tooltip> */}
                                     <Tooltip title="Add Feedback"><IconButton aria-label="Addfeedback" onClick={() => { handleAddFeedBackButton(topic.topicId) }} ><VscFeedback style={{ color: "#FFDC00" }} /></IconButton></Tooltip>
                                     <Tooltip title="Edit topics"><IconButton aria-label="Edittopics" onClick={() => handleEditClickOpen(topic.topicId)}  ><EditIcon style={{ color: "604CC3" }} variant="outlined" /> </IconButton></Tooltip>
                                     <Tooltip title="Delete topics"><IconButton aria-label="deletetopics" onClick={() => handleDeleteClickOpen(topic.topicId)}  ><DeleteIcon style={{ color: "C80036" }} /></IconButton></Tooltip>

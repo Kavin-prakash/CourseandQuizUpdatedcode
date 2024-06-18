@@ -14,15 +14,26 @@ import { fetchQuizInstructionRequest } from "../../../../actions/Quiz And Feedba
 import { fetchlearneridRequest } from "../../../../actions/Quiz And Feedback Module/Learner/GetLearnerIDAction";
 import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
 import "../../../../Styles/Quiz And Feedback Module/Learner/LearnerScorePage.css";
+import { fetchQuizIdRequest } from "../../../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
+
 
 export const LearnerScorePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isSuccess = useSelector((state) => state.fetchquizinstruction.isSubmitted);
+
 
   const topicId = sessionStorage.getItem("topicId");
   const quizinstructions = useSelector(
     (state) => state.fetchquizinstruction.quizinstructiondetails
   );
+
+  // const quizId = sessionStorage.getItem("quizId");
+  const quizId = useSelector(
+    (state) => state.fetchquizinstruction.quizinstructiondetails
+  );
+
+  console.log("FB- quizId", quizId, isSuccess);
 
   const learnerId = sessionStorage.getItem("UserSessionID");
   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
@@ -40,6 +51,13 @@ export const LearnerScorePage = () => {
     debugger;
     dispatch(fetchlearnerscoreRequest(learnersAttemptId));
   }, [dispatch]);
+
+  const handleQuizGiveFeedback = async (topicId) => {
+    dispatch(fetchQuizIdRequest(topicId));
+    // sessionStorage.setItem("quizId", quizId);
+    sessionStorage.setItem("quizId", quizId.quizId);
+    navigate("/quizfeedbackquestion");
+  };
 
   return (
     <Container style={{ marginTop: "100px", width: "90%", marginLeft: "15%" }}>
@@ -156,23 +174,40 @@ export const LearnerScorePage = () => {
                               </div>
                             </div>
                             <>
-                              <div>
+                              {/* <div>
                                 <Button
                                   variant="default"
                                   style={{
                                     backgroundColor: "#365486",
                                     color: "whitesmoke",
                                     width: "150px",
-                                    marginLeft: "50%",
+                                    marginLeft: "10%",
                                   }}
                                   onClick={() => {
                                     navigate("/quizengine");
                                   }}
+                                  >
+                                    Go To Course
+                                  </Button>
+                                </div> */}
+                            </>
+                            <div>
+                                <Button
+                                  variant="default"
+                                  style={{
+                                    backgroundColor: "#365486",
+                                    color: "whitesmoke",
+                                    width: "180px",
+                                    marginLeft: "70%",
+                                    marginBottom: "55px"
+                                  }}
+                                  onClick={() => {
+                                    handleQuizGiveFeedback(quizId);
+                                  }}
                                 >
-                                  Go To Course
+                                  Give Quiz Feedback
                                 </Button>
                               </div>
-                            </>
                           </>
                         ) : (
                           <>
@@ -221,7 +256,7 @@ export const LearnerScorePage = () => {
                                       color: "whitesmoke",
                                       width: "150px",
                                       marginLeft: "80%",
-                                      marginTop: "-221px",
+                                      marginTop: "-170px",
                                     }}
                                     onClick={() => {
                                       navigate("/instruction");
