@@ -48,11 +48,11 @@ export const LearnerScorePage = () => {
           <Container
             fluid
             id="containers"
-            style={{
-              boxShadow: "0px 4px 8px #23275c",
-              marginTop: "100px",
-              width: "100%",
-            }}
+            // style={{
+            //   boxShadow: "0px 4px 8px #23275c",
+            //   marginTop: "100px",
+            //   width: "100%",
+            // }}
           >
             <Box
               id="instructions"
@@ -66,14 +66,14 @@ export const LearnerScorePage = () => {
               }}
               style={{}}
             >
-              <Card
-                id="cards"
+           <Card
+                id="scorepage-topic"
                 style={{
                   height: "50px",
-                  width: "650%",
-                  marginLeft: "-8%",
+                  width: "500%",
+                  marginLeft: "108%",
                   marginBottom: "2%",
-                  marginTop: "5%",
+                  marginTop: "-20%",
                 }}
                 variant="soft"
               >
@@ -84,9 +84,9 @@ export const LearnerScorePage = () => {
                 </CardContent>
               </Card>
               <Card
-                id="card"
+                id="scorepage-content"
                 variant="soft"
-                style={{ width: "650%", height: "85%" }}
+                style={{ width: "500%", height: "105%" }}
               >
                 <CardContent>
                   <Divider inset="none" id="divider" />

@@ -4,7 +4,7 @@ import { fetchQuestionsRequest } from "../../../../actions/Quiz And Feedback Mod
 import { fetchReviewRequest } from "../../../../actions/Quiz And Feedback Module/Learner/ReviewAction";
 import { selectAnswerRequest } from "../../../../actions/Quiz And Feedback Module/Learner/SelectAnswerAction";
 import { useNavigate } from "react-router-dom";
-// import "../../../../Styles/Quiz And Feedback Module/Learner/AttemptQuiz.css";
+import "../../../../Styles/Quiz And Feedback Module/Learner/AttemptQuiz.css";
 
 import Timer from "./Timer";
 const AttemptQuiz = () => {
