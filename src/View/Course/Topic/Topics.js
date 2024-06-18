@@ -11,6 +11,7 @@ import SavedTopics from '../../../components/Course/Topic/SavedTopics';
 // import AddTopic from '../../../Components/Course/Topic/AddTopic';
 
 import AddTopic from '../../../components/Course/Topic/AddTopic'
+import { BackButton } from '../BackButton';
 
 function Topics() {
   return (
@@ -21,12 +22,18 @@ function Topics() {
       {/* <Col md={12} ><Sidenavbar/> */}
       {/* </Col> */}
     </Row>
-
+    
     <Row>
     <Col xs={4} md={2}>
     {/* <Sidenavbar/> */}
     </Col>
     <Col xs={8} md={6} className='mt-5'>
+    <Row className="mt-4">
+          <Col sx={10} md={2}></Col>
+          <Col className="text-end mt-3">
+            <BackButton/>
+          </Col>
+        </Row>
     <AddTopic/>
     <SavedTopics/>
   
