@@ -258,7 +258,7 @@ export const GetAllFeedbacks = () => {
         >
           Submit
         </button> : <></>}
-        <Modal show={showAddModal} onHide={handleCloseModal}>
+        <Modal show={showAddModal} onHide={handleCloseModal} style={{marginTop:"2.5%",marginLeft:"4%"}}>
           <Modal.Header
             closeButton
             style={{ backgroundColor: "#23275c" }}
@@ -271,8 +271,8 @@ export const GetAllFeedbacks = () => {
             </div>
           </Modal.Body>
           <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
-            <Button
-              className="btn btn-default mt-1 mb-5"
+            <button
+              className="btn btn-default mt-1 mb-2"
               style={{
                 backgroundColor: "#365486",
                 color: "white",
@@ -284,7 +284,7 @@ export const GetAllFeedbacks = () => {
               }}
             >
               Close
-            </Button>
+            </button>
           </Modal.Footer>
         </Modal>
       </div>

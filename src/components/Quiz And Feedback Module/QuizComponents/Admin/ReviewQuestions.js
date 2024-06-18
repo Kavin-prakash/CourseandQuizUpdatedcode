@@ -209,7 +209,8 @@ export const ReviewQuestions = () => {
                                                 <div
                                                     key={index}
                                                     id={`question-${index}`} // Add an ID to each question card
-                                                    className='card mt-3'>
+                                                    className='card mt-3' 
+                                                    style={{ backgroundColor: "#F9F5F6" }}>
                                                     <div className='d-flex justify-content-end'></div>
                                                     <div className="card-body">
                                                         <h5 className="card-title">Question {question.questionNo}:</h5>
@@ -229,8 +230,8 @@ export const ReviewQuestions = () => {
                                                     </div>
                                                 </div>
                                             ))}
-                                            <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-right" style={{ backgroundColor: "#365486", color: "white" }}>Go to Edit Page</button>
-                                            <button onClick={handleTypeChange} className="btn btn-light mb-5 float-right" style={{ backgroundColor: "#365486", color: "white", marginLeft: "80%", marginTop: "-15%" }}>Review & Publish</button>
+                                            <button onClick={handleSubmit} className="btn btn-light mt-4 mb-5 float-right" style={{ backgroundColor: "#365486", color: "white" }}>Go to Edit Page</button>
+                                            <button onClick={handleTypeChange} className="btn btn-light mb-5 float-right" style={{ backgroundColor: "#365486", color: "white", marginLeft: "78%", marginTop: "-17%" }}>Review & Publish</button>
                                         </div>
                                     )}
                                 </div>
@@ -294,8 +295,8 @@ export const ReviewQuestions = () => {
                                         </div>
                                     </Modal.Body>
                                     <Modal.Footer style={{ backgroundColor: "#F9F5F6", display:'flex' }}>
-                                        <Button onClick={handleFeedback} className="btn btn-light mt-3 mb-3 " style={{ backgroundColor: "#365486", color: "white" }}>Add Feedback</Button>
-                                        <Button className="btn btn-light mt-3 mb-5" style={{ backgroundColor: "#365486", color: "white", marginLeft: "55%" }} onClick={handleClose}>Go to course</Button>
+                                        <Button onClick={handleFeedback} className="btn btn-light mt-2 mb-5" style={{ backgroundColor: "#365486", color: "white" }}>Add Feedback</Button>
+                                        <Button className="btn btn-light mt-2 mb-5" style={{ backgroundColor: "#365486", color: "white", marginLeft: "40%" }} onClick={handleClose}>Go to course</Button>
 
                                     </Modal.Footer>
                                 </Modal>

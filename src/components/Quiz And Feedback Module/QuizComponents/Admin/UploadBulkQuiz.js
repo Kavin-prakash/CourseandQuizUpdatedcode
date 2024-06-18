@@ -73,7 +73,7 @@ const UploadBulkQuiz = () => {
   };
   return (
     <>
-  <Container fluid style={{marginTop:"820px"}}>
+  <Container fluid style={{marginTop:"600px"}}>
       <div id="uploadContent">
         <h5 id="heading" style={{ marginTop: "-38%", marginLeft: "25%" }}>
           Upload Question from device{" "}
@@ -110,7 +110,7 @@ const UploadBulkQuiz = () => {
               <div>
                 <h5 id="heading">Selected File</h5>
                 {Array.from(files).map((file, idx) => (
-                  <p key={idx}>{file.name}</p>
+                  <p id="selectedfilename" key={idx}>{file.name}</p>
                 ))}
               </div>
             </>
@@ -120,8 +120,9 @@ const UploadBulkQuiz = () => {
         </div>
         <br />
         <div className="position-absolute start-50 translate-middle">
-          <button
-            style={{ backgroundColor: "#365486", color: "white" }}
+          <div id="uploadfilebtn">
+          <button 
+            style={{ backgroundColor: "#365486", color: "white"}}
             className="btn btn-light mt-3 ms-5"
             type="submit"
             onClick={handleFileUpload}
@@ -129,6 +130,7 @@ const UploadBulkQuiz = () => {
           >
             Upload File
           </button>
+          </div>
           <div id="temp">
             <a
               href={Exceltemplate}

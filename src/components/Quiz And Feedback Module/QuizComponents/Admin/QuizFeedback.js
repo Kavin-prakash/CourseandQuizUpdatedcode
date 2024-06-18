@@ -162,7 +162,7 @@ export const QuizFeedback = () => {
               <h5>Add Feedback Questions</h5>
               <Modal.Title></Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
+            <Modal.Body style={{ backgroundColor: "#F9F5F6" }} >
               <div className="form-group">
                 <label>Question Type</label>
                 <select
@@ -238,7 +238,7 @@ export const QuizFeedback = () => {
               )}
             </Modal.Body>
 
-            <Modal.Footer style={{ backgroundColor: "F9F5F6" }}>
+            <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
               <Button
                 variant="default"
                 style={{ backgroundColor: "#365486", color: "whitesmoke" }}

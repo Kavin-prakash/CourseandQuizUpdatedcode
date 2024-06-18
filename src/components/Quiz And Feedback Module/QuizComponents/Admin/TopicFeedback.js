@@ -103,7 +103,7 @@ export const TopicFeedback = () => {
 
     return (
         <>
-        <Container fluid style={{marginTop:'820px'}}>
+        <Container fluid style={{marginTop:'700px'}}>
         <div>
             <div>
         <button
@@ -125,11 +125,11 @@ export const TopicFeedback = () => {
           
             <div>
                 <div>
-                    <h4 className="text" style={{ marginLeft: "10%", marginTop: "-40%" }}><b>Feedback Questions for the Topic</b></h4>
+                    <h4 className="text" style={{ marginLeft: "5%", marginTop: "-35%" }}><b>Feedback Questions for the Topic</b></h4>
                     <button onClick={handleOpenAddfbQuestionModal} className="btn btn-light mt-3 mb-5 float-right" style={{ backgroundColor: "#365486", color: "white", marginLeft: "43%" }}>Add Feedback Questions</button>
                 </div>
                 <GetTopicFeedback/>
-                <Modal show={showAddfbModal} onHide={handleCloseAddfbQuestionModal}>
+                <Modal show={showAddfbModal} onHide={handleCloseAddfbQuestionModal}  style={{marginTop:"2.5%",marginLeft:"4%"}}>
                     <Modal.Header closeButton style={{ backgroundColor: "#23275c", color: "whitesmoke" }}>
                         <h5>Add Feedback Questions</h5>
                         <Modal.Title></Modal.Title>

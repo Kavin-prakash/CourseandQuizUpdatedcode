@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
+import React, { useRef, useState } from "react";
+// import Button from "react-bootstrap/Button";
+import { Button } from "@mui/material";
 import Modal from "react-bootstrap/Modal";
 import { ImFolderUpload } from "react-icons/im";
 import { BiSolidCoinStack } from "react-icons/bi";
@@ -7,6 +8,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaTrashCan } from "react-icons/fa6";
 import { FaUpload } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 import AdminNavbar from "./AdminNavbar";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -34,7 +36,7 @@ export const Home = () => {
     const courseId = sessionStorage.getItem('courseId');
     const [button, setButton] = useState(true);
     // console.log("create page topic id", topicId);
-const [showQuestions, setShowQuestions] = useState(false);
+    const [showQuestions, setShowQuestions] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [showOptions, setShowOptions] = useState(false);
@@ -68,6 +70,8 @@ const [showQuestions, setShowQuestions] = useState(false);
         passMark: '',
         attemptsAllowed: ''
     });
+
+    const deleteAlert=useRef();
 
     const [isQuizEditable, setIsQuizEditable] = useState(!quizId);
 
@@ -143,8 +147,8 @@ const [showQuestions, setShowQuestions] = useState(false);
     const handleQuizChange = (e) => {
         setQuizDetails({ ...quizDetails, [e.target.name]: e.target.value });
         setQuizData({ ...quizData, [e.target.name]: e.target.value });
- 
-      };
+
+    };
 
     const handleSubmit = () => {
         try {
@@ -193,10 +197,15 @@ const [showQuestions, setShowQuestions] = useState(false);
 
         if (inputQuizTitle === quizData.nameOfQuiz) {
             DeleteQuizDetails(quizId);
-            alert('Quiz deleted successfully');
+
+            // alert('Quiz deleted successfully');
+            deleteAlert.current.style.display="block"
             handleCloseQuizDeleteModal();
-            navigate(`/addtopic/${courseId}`)
-        dispatch(fetchQuizIdFailure(topicId))
+            // navigate(`/addtopic/${courseId}`)
+            setTimeout(function () {
+                navigate(`/addtopic/${courseId}`)
+              }, 2000);
+            dispatch(fetchQuizIdFailure(topicId))
         } else {
             setErrorDeleteQuiz('The QuizTitle you entered does not match !');
         }
@@ -219,18 +228,20 @@ const [showQuestions, setShowQuestions] = useState(false);
         <div>
             <Container fluid className="creat-quiz-container">
                 <div >
-                <div className="d-flex justify-content-end mb-5">
-                            <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50', marginTop:100 }} onClick={() => { handleNavigate() }}>Back</button>
-                        </div>
+                    <div className="d-flex justify-content-end mb-5">
+                        <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50', marginTop: 100 }} onClick={() => { handleNavigate() }}>Back</button>
+                    </div>  
+                    <Alert id="delalert" ref={deleteAlert} color="info">
+                        Quiz Deleted successfully !
+                    </Alert>
                     <form className='quiz-content'>
-
-                        <div className="" id="QuizCard" style={{backgroundColor:'#F9F5F6'}}>
+                        <div className="" id="QuizCard" style={{ backgroundColor: '#F9F5F6' }}>
                             <div className="card-bodycreatequiz">
                                 <div className="dx mt-2">
                                     <div className="container">
                                         <div className="d-flex justify-content-end" >
-                                            <Button class="btn btn-default me-1" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleOpenQuizEditModal}><AiFillEdit /> Edit</Button>
-                                            <Button class="btn btn-default ms-2" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleOpenQuizDeleteModal}><FaTrashCan /> Delete</Button>
+                                            <Button class="btn btn-light me-1" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleOpenQuizEditModal}><AiFillEdit /> Edit</Button>
+                                            <Button class="btn btn-light ms-2" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleOpenQuizDeleteModal}><FaTrashCan /> Delete</Button>
                                         </div>
 
                                         <div className="form-group row mt-3">
@@ -242,24 +253,24 @@ const [showQuestions, setShowQuestions] = useState(false);
                                         <div class="form-group row mt-3">
                                             <label for="lbl3" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Duration (In Minutes)<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={ handleInputChange }/>
+                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={handleInputChange} />
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl5" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Grade to be Secured<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={ handlemarkChange}/>
+                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={handlemarkChange} />
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl4" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Attempts Allowed<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={ handleattemptsChange} />
+                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={handleattemptsChange} />
                                             </div>
                                         </div>
                                         {quizId ? <div></div> : <div className="form-group row">
                                             <div className="col-sm-10">
-                                                <Button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "50%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white" }}  ><FaUpload /> Import Question</Button>
+                                                <button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "48%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white", width: "180px", }}><FaUpload /> &nbsp; Import Question</button>
                                             </div>
                                         </div>}
                                     </div>
@@ -269,28 +280,30 @@ const [showQuestions, setShowQuestions] = useState(false);
                     </form>
                     {/* --------------------------------------------------------------*/}
                     <div>
-                    <Button
-                        type="submit"
-                        className="btn btn-light"
-                        onClick={toggleQuestions}
-                        style={{
-                            marginLeft: "50%",
-                            marginTop: "3%",
-                            borderRadius: 8,
-                            backgroundColor: "#365486",
-                            color: "white",
-                        }}
-                    >
-                        {showQuestions ? "Hide Questions" : "View Questions"}
-                    </Button>
-                </div>
-                    {showQuestions && quizId ? (
-                    <div className="">
-                        <QuestionTemplateView />
+                        {quizId ? <div>
+                            <button
+                                type="submit"
+                                className="btn btn-light"
+                                onClick={toggleQuestions}
+                                style={{
+                                    marginLeft: "48%",
+                                    marginTop: "3%",
+                                    borderRadius: 8,
+                                    backgroundColor: "#365486",
+                                    color: "white",
+                                }}
+                            >
+                                {showQuestions ? "Hide Questions" : "View Questions"}
+                            </button>
+                        </div> : <></>}
                     </div>
-                ) : (
-                    <div></div>
-                )}
+                    {showQuestions && quizId ? (
+                        <div className="">
+                            <QuestionTemplateView />
+                        </div>
+                    ) : (
+                        <div></div>
+                    )}
                     {quizId ? <div>
                         <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-left" style={{ backgroundColor: "#365486", color: "white", marginLeft: "92%" }}>Proceed</button>
                     </div> : <div></div>}
@@ -312,7 +325,7 @@ const [showQuestions, setShowQuestions] = useState(false);
                         </Modal.Body>
                         <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
                             <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleCloseQuizDeleteModal}>Back</Button>
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={() => { handleDeleteQuiz(quizId) }}>Delete</Button>
+                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke", marginLeft: "2%" }} onClick={() => { handleDeleteQuiz(quizId) }}>Delete</Button>
                         </Modal.Footer>
                     </Modal>
 
@@ -353,9 +366,12 @@ const [showQuestions, setShowQuestions] = useState(false);
                                 </div>
                             </div>
                         </Modal.Body>
-                        <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}  >
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleCloseQuizEditModal}>Back</Button>
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleUpdateQuiz}>Update</Button>
+                        <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
+                        <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleCloseQuizEditModal}>Back</Button>
+                        <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke", marginLeft: "2%" }} onClick={handleUpdateQuiz}>Update</Button>
+                      
+                            {/* <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleCloseQuizEditModal}>Back</Button>
+                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke", marginLeft: "2%" }} onClick={handleUpdateQuiz}>Update</Button> */}
                         </Modal.Footer>
                     </Modal>
                     <Modal show={showModal} onHide={closeModal}>

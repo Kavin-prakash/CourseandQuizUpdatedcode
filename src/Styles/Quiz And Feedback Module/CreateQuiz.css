@@ -1,8 +1,8 @@
 #QuizCard {
   width: 1100px;
-  height:430px;
-  /* margin-left: 18%;
-  margin-top: -50%; */
+  height:390px;
+  margin-left:8%;
+  /* margin-top: -50%; */
   background-color: rgb(237, 231, 231);
 }
 .col-sm-3{
@@ -71,8 +71,9 @@ font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
 .text{
 font-style:unset;
-color: #365486;
-font-weight:500;
+color:black;
+/* color: #365486; */
+font-weight:800;
 /* color:slategrey; */
 }
 
@@ -125,4 +126,11 @@ padding: 8px 12px;
 .question-template-container{
   display: block;
   margin-top: 400px;
+}
+
+#delalert{
+  width:500px;
+  height:70px;
+  margin-left:35%;
+  display:none;
 }

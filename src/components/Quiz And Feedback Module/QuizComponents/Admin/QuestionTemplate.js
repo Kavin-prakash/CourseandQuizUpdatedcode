@@ -395,9 +395,11 @@ const QuestionTemplate = () => {
             : newQuestion.correctOptions.includes(option),
       })),
     };
-
     PostSingleQuestion(requestBody);
-    handleCloseAddQuestionModal();
+    // handleCloseAddQuestionModal();
+    setTimeout(function () {
+      window.location.reload(1);
+    }, 1000);
   };
 
   return (
@@ -448,9 +450,10 @@ const QuestionTemplate = () => {
                 <div
                   key={index}
                   className="card mt-4"
-                  style={{ backgroundColor: "rgb(237, 231, 231)" }}
+                  style={{ backgroundColor: "#F9F5F6" }}
+                  // style={{ backgroundColor: "rgb(237, 231, 231)" }}
                 >
-                  <div className="d-flex justify-content-end header">
+                  <div className="d-flex justify-content-end header" style={{ backgroundColor: "#F9F5F6" }}>
                     <a
                       onClick={() => {
                         handleOpenEditQuestionModal(question.quizQuestionId);
@@ -585,7 +588,7 @@ const QuestionTemplate = () => {
                       {index >= 5 && (
                         <div className="input-group-append">
                           <button className="btn btn-default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={() => handleRemoveOption(index)}>
-                            <FaMinus style={{ fontSize: "10px" }} />
+                            <FaMinus style={{backgroundColor: "#365486", color: "white", width:"-15px"}}/>
                           </button>
                         </div>
                       )}
@@ -618,7 +621,7 @@ const QuestionTemplate = () => {
                       {index >= 1 && (
                         <div className="input-group-append">
                           <button className="btn btn-default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={() => handleRemoveCorrectOption(index)}>
-                            <FaMinus style={{ fontSize: "10px" }} />
+                            <FaMinus style={{backgroundColor: "#365486", color: "white", width:"25px"}}  />
                           </button>
                         </div>
                       )}
@@ -626,8 +629,8 @@ const QuestionTemplate = () => {
                   </div>
                 ))}
                 <div className="form-group mt-3">
-                  <button className="btn btn-default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleAddCorrectOption}>
-                    <FaPlus style={{ fontSize: "10px" }} />Add Correct Option
+                  <button className="btn btn-default" style={{ backgroundColor: "#365486", color: "whitesmoke", width: "180px"}} onClick={handleAddCorrectOption}>
+                    <FaPlus style={{ fontSize: "10px" }} /> Add Correct Option
                   </button>
                 </div>
               </>

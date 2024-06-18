@@ -252,12 +252,12 @@ export const GetTopicFeedback = () => {
           style={{
             backgroundColor: "#365486",
             color: "white",
-            marginLeft: "85%",
+            marginLeft: "90%",
           }}
         >
           Submit
         </button> : <></>}
-        <Modal show={showAddModal} onHide={handleCloseModal}>
+        <Modal show={showAddModal} onHide={handleCloseModal} style={{marginTop:"2.5%",marginLeft:"4%"}}>
           <Modal.Header
             closeButton
             style={{ backgroundColor: "#23275c" }}
@@ -271,7 +271,7 @@ export const GetTopicFeedback = () => {
           </Modal.Body>
           <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
             <Button
-              className="btn btn-light mt-1 mb-5"
+              className="btn btn-light mt-1 mb-2"
               style={{
                 backgroundColor: "#365486",
                 color: "white",
