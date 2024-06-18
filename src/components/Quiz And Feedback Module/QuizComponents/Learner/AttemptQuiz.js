@@ -4,8 +4,8 @@ import { fetchQuestionsRequest } from "../../../../actions/Quiz And Feedback Mod
 import { fetchReviewRequest } from "../../../../actions/Quiz And Feedback Module/Learner/ReviewAction";
 import { selectAnswerRequest } from "../../../../actions/Quiz And Feedback Module/Learner/SelectAnswerAction";
 import { useNavigate } from "react-router-dom";
-import "../../../../Styles/Quiz And Feedback Module/Learner/AttemptQuiz.css";
-import AdminNavbar from "../../AdminNavbar";
+// import "../../../../Styles/Quiz And Feedback Module/Learner/AttemptQuiz.css";
+
 import Timer from "./Timer";
 const AttemptQuiz = () => {
   const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const AttemptQuiz = () => {
   const quizId = sessionStorage.getItem("quizId");
   const questions = useSelector((state) => state.AttemptQuiz.questions);
   const selectAnswerError = useSelector((state) => state.AttemptQuiz.error);
+
   const learnerattemptid = useSelector(
     (state) => state.learnerattempt.attemptId
   );
@@ -153,9 +154,9 @@ const AttemptQuiz = () => {
                             type={
                               questions[currentQuestionIndex].questionType ===
                                 "MCQ" ||
-                              questions[currentQuestionIndex].questionType ===
+                                questions[currentQuestionIndex].questionType ===
                                 "TF" ||
-                              questions[currentQuestionIndex].questionType ===
+                                questions[currentQuestionIndex].questionType ===
                                 "T/F"
                                 ? "radio"
                                 : "checkbox"
@@ -174,7 +175,7 @@ const AttemptQuiz = () => {
                                 questions[currentQuestionIndex].quizQuestionId,
                                 option.option,
                                 questions[currentQuestionIndex].questionType ===
-                                  "MSQ"
+                                "MSQ"
                               )
                             }
                             style={{ cursor: "pointer" }} className="option-type"
@@ -241,6 +242,12 @@ export default AttemptQuiz;
 //     const storedCurrentQuestionIndex = sessionStorage.getItem('currentQuestionIndex');
 //     return storedCurrentQuestionIndex ? parseInt(storedCurrentQuestionIndex) : 0;
 //   });
+//git branch learnerintegrated
+//git add .
+//git commit -m"integrated"
+//git checkout learnerintegrated
+//git push origin learnerintegrated
+//
 
 //   const [selectedOptions, setSelectedOptions] = useState(() => {
 //     const storedSelectedOptions = sessionStorage.getItem('selectedOptions');

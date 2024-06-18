@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
- import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
+//  import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
 
 function DynamicTimer() {
   const [startTime, setStartTime] = useState("");

@@ -160,10 +160,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import AdminNavbar from '../../AdminNavbar';
+
 // import '../../../../Styles/Quiz And Feedback Module/Learner/FeedbackResponse.css';
 import Button from 'react-bootstrap/Button';
-import { fetchallquizfeedbackRequest } from '../../../../actions/Quiz And Feedback Module/Admin/GetAllQuizFeedbackAction';
+import { fetchallquizfeedbackRequest } from '../../../../actions/Quiz And Feedback Module/Learner/GetAllQuizFeedbackAction';
 import { fetchquizfeedbackquestionrequest } from '../../../../actions/Quiz And Feedback Module/Learner/FetchQuizFeedbackQuestionAction';
 import { quizfeedbackresponserequest } from '../../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction';
 import { Container } from 'react-bootstrap';
@@ -184,10 +184,12 @@ const FetchQuizFeedbackQuestion = () => {
     dispatch(fetchallquizfeedbackRequest(quizId));
  
   }, [quizId])
- 
-  useEffect(()=>{
+
+
+   useEffect(() => {
     dispatch(fetchquizfeedbackquestionrequest(quizId));
-  },[quizId])
+ 
+  }, [quizId])
  
  
  
@@ -198,7 +200,7 @@ const[answers,setAnswers]=useState([])
       setAnswers(quizfeedbackquestionfetch.map(question => ({
         quizFeedbackQuestionId: question.quizFeedbackQuestionId,
         quizId: question.quizId,
-        learnerId: "a2b7a936-9809-4128-bc3e-e69a1dc48d3b",
+        learnerId: "b9c313df-f48b-43ce-9c12-8a4c4546aad3",
         response: "",
         optionText: ""
       })));
@@ -242,10 +244,13 @@ const[answers,setAnswers]=useState([])
     boxShadow: "0px 4px 8px #23275c"
   };
  
+
+
+  
   return (
  
     <div>
-      <AdminNavbar />
+      
       <div className="question template container" id="fq">
         <div>
           <button

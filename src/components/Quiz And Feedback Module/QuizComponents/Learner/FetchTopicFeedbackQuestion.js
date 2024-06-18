@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import AdminNavbar from '../../AdminNavbar';
+
 // import '../../../../Styles/Quiz And Feedback Module/Learner/FeedbackResponse.css';
 import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
@@ -21,7 +21,7 @@ const TopicFeedbackquestion = () => {
   const [answers, setAnswers] = useState(topicfeedbackquestionfetch.map(question => ({
     topicFeedbackQuestionId: question.topicFeedbackQuestionId,
     topicId: question.topicId,
-    learnerId:"a2b7a936-9809-4128-bc3e-e69a1dc48d3b",
+    learnerId: "b9c313df-f48b-43ce-9c12-8a4c4546aad3",
     response: "",
     optionText: ""
   })));
@@ -62,7 +62,7 @@ const TopicFeedbackquestion = () => {
  
   return (
     <div>
-      <AdminNavbar />
+    
       <div className="question template container" id="fq">
         <div>
           <button

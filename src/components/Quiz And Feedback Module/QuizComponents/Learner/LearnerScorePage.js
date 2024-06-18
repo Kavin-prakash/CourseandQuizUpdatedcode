@@ -5,7 +5,7 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
-import AdminNavbar from "../../AdminNavbar";
+
 import { Container } from "react-bootstrap";
 import Divider from "@mui/joy/Divider";
 import { useNavigate } from "react-router-dom";
@@ -48,11 +48,11 @@ export const LearnerScorePage = () => {
           <Container
             fluid
             id="containers"
-            // style={{
-            //   boxShadow: "0px 4px 8px #23275c",
-            //   marginTop: "100px",
-            //   width: "100%",
-            // }}
+            style={{
+              boxShadow: "0px 4px 8px #23275c",
+              marginTop: "100px",
+              width: "100%",
+            }}
           >
             <Box
               id="instructions"
@@ -67,13 +67,13 @@ export const LearnerScorePage = () => {
               style={{}}
             >
               <Card
-                id="scorepage-topic"
+                id="cards"
                 style={{
                   height: "50px",
-                  width: "500%",
-                  marginLeft: "108%",
+                  width: "650%",
+                  marginLeft: "-8%",
                   marginBottom: "2%",
-                  marginTop: "-20%",
+                  marginTop: "5%",
                 }}
                 variant="soft"
               >
@@ -84,9 +84,9 @@ export const LearnerScorePage = () => {
                 </CardContent>
               </Card>
               <Card
-                id="scorepage-content"
+                id="card"
                 variant="soft"
-                style={{ width: "500%", height: "105%" }}
+                style={{ width: "650%", height: "85%" }}
               >
                 <CardContent>
                   <Divider inset="none" id="divider" />
@@ -115,21 +115,21 @@ export const LearnerScorePage = () => {
                   <Typography>
                     {learnerAttempt ? (
                       <div className="scorecard">
-                        <h5>
-                          The time taken : {learnerAttempt.timeTaken / 60}
-                        </h5>
+                        <h1>
+                          {learnerAttempt.timeTaken > 60 ? `The time taken : ${Math.round((learnerAttempt.timeTaken / 60) * 100) / 100} minutes` : `The time taken : ${learnerAttempt.timeTaken} seconds`}
+                        </h1>
                         {learnerAttempt.isPassed === true ? (
                           <>
-                            <h5>
+                            <h1>
                               Contragulations {getlearners.learnerFirstName}{" "}
                               {getlearners.learnerLastName}
-                            </h5>
-                            <h5>
+                            </h1>
+                            <h1>
                               You Passed the {quizinstructions.nameOfQuiz}
                               Assessment
-                            </h5>
+                            </h1>
 
-                            <h5>Your Score is {learnerAttempt.score} </h5>
+                            <h1>Your Score is {learnerAttempt.score} </h1>
 
                             <div>
                               <div class="emoji emoji--haha">
@@ -192,7 +192,7 @@ export const LearnerScorePage = () => {
                             </div>
                             {quizinstructions.attemptsAllowed -
                               learnerAttempt.currentAttempt ===
-                            0 ? (
+                              0 ? (
                               <>
                                 <h5>Your Attempt is over...</h5>
                               </>

@@ -247,7 +247,7 @@ export default function QuizFailedReport() {
         imgWidth * ratio,
         imgHeight * ratio
       );
-      pdf.save(`Course_Enrollment_Reports_${Dates}.pdf`);
+      pdf.save(`Quiz_Failed_User_List_${Dates}.pdf`);
     });
   };
 
@@ -338,7 +338,7 @@ export default function QuizFailedReport() {
             component="div"
             align="center"
           >
-            Learners Details
+            Failed Learner Details
           </Typography>
         )}
       </Toolbar>

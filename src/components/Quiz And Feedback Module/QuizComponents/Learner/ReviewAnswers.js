@@ -157,9 +157,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchReviewRequest } from '../../../../actions/Quiz And Feedback Module/Learner/ReviewAction';
 import { fetchQuestionsRequest } from '../../../../actions/Quiz And Feedback Module/Learner/AttemptQuizAction';
 import { submitAttemptRequest } from '../../../../actions/Quiz And Feedback Module/Learner/SubmitAttemptAction';
-import '../../../../Styles/Quiz And Feedback Module/Learner/ReviewAnswers.css';  
+// import '../../../../Styles/Quiz And Feedback Module/Learner/ReviewAnswers.css';
 import { useNavigate } from 'react-router-dom';
-import AdminNavbar from '../../AdminNavbar';
+
 import QuestionNavigationBar from './QuestionNavigationBar'; 
 import { Container } from 'react-bootstrap';
 
