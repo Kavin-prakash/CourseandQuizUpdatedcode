@@ -4,11 +4,14 @@ import React from 'react'
 // import Content from '../../../Components/Course/Course/CourseContent';
 
 import Content from '../../../components/Course/Course/CourseContent'
-import { Row,Col } from 'react-bootstrap';
+import { Row,Col,Container } from 'react-bootstrap';
+import SavedTopics from '../../../components/Course/Topic/SavedTopics';
 
 export const CourseContent = () => {
   return (
     <>
+    
+
     <Row>
       {/* <Col md={12}><Header/></Col>
       <Col md={12}><Sidenavbar/> */}
@@ -16,6 +19,16 @@ export const CourseContent = () => {
       
       {/* </Col> */}
     </Row>
+    <Row className="mt-5">
+      <h3>
+        List of Topics : 
+      </h3>
+    </Row>
+    <Row>
+
+      <SavedTopics/>
+    </Row>
+   
     </>
   )
 }
