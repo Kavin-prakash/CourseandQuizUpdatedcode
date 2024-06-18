@@ -1,43 +1,50 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {CREATE_COURSES_REQUEST,createCoursesSuccess,createCoursesFailure, createcontent, createCoursesExists} from '../../../actions/Course/Course/AddCourseAction'
+import { CREATE_COURSES_REQUEST, createCoursesSuccess, createCoursesFailure, createcontent, createCoursesExists, SET_COURSE_STATUS } from '../../../actions/Course/Course/AddCourseAction'
 
 
 
 const API_URL = 'http://localhost:5199/lxp/course';
 
- const addCourse = ({ dispatch }) => (next) => async (action) => {
-  
+const addCourse = ({ dispatch, getState }) => (next) => async (action) => {
+
 
   if (action.type === CREATE_COURSES_REQUEST) {
-    try {
-      debugger
-      console.log("post",action.payload)
-      // Assuming 'action.payload' contains the data you want to senda
-      const response = await axios.post(API_URL,action.payload, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+    const ReducerData = getState().addcourse;
+
+    if (!ReducerData.isRequesting) {
+      dispatch({ type: SET_COURSE_STATUS, payload: true });
+      try {
+        debugger
+        console.log("post", action.payload)
+        // Assuming 'action.payload' contains the data you want to senda
+        const response = await axios.post(API_URL, action.payload, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log('API Response:', response.data); // Log the response data
+
+        console.log("aaa", response.data.data.courseId)
+
+
+        if (response.data.statusCode == 412) {
+          dispatch(createCoursesExists());
         }
-      });
-      console.log('API Response:', response.data); // Log the response data
-      
-      console.log("aaa",response.data.data.courseId)
-      
-      
-      if(response.data.statusCode==412){
-        dispatch(createCoursesExists());
+        else {
+          dispatch(createCoursesSuccess(response.data.data.courseId));// Dispatch success action with the response data
+        }
+
+      } catch (error) {
+        console.error('API Error:', error.message);
+        dispatch(createCoursesFailure(error.message));
+      } finally {
+        dispatch({ type: SET_COURSE_STATUS, payload: false })
       }
-      else{
-        dispatch(createCoursesSuccess(response.data.data.courseId));// Dispatch success action with the response data
-      }
-      
-    } catch (error) {
-      console.error('API Error:', error.message);
-      dispatch(createCoursesFailure(error.message));
     }
   }
   return next(action);
-  
+
 };
 
 export default addCourse;

@@ -1,4 +1,4 @@
-import { 
+import {
   CREATE_COURSES_REQUEST,
   CREATE_COURSES_SUCCESS,
   CREATE_COURSES_FAILURE,
@@ -7,21 +7,22 @@ import {
   FETCH_CATEGORY_SUCCESS,
   FETCH_CATEGORY_FAILURE,
   CREATE_COURSES_EXISTS,
+  SET_COURSE_STATUS
 } from '../../../actions/Course/Course/AddCourseAction';
-
+ 
 const initialState = {
-
+  isRequesting:false,
   // course_id:null,
-  
+ 
 };
-
+ 
 const AddCourseReducer = (state = initialState, action) => {
   switch (action.type) {
      case CREATE_COURSES_REQUEST:
       return {
         ...state,
         // course_id:null,
-  
+ 
       };
     case CREATE_COURSES_SUCCESS:
       console.log('Coursecaa', action.payload);
@@ -44,7 +45,7 @@ const AddCourseReducer = (state = initialState, action) => {
         isExists:false,
         isError:true,
       };
-
+ 
       case CREATE_COURSES_EXISTS:
         return {
           ...state,
@@ -53,10 +54,16 @@ const AddCourseReducer = (state = initialState, action) => {
           isSubmitted:false,
           isError:false,
         };
-    
+        case SET_COURSE_STATUS:
+          return{
+            ...state,
+            isRequesting:action.payload,
+          };
+   
     default:
       return state;
   }
 };
-
+ 
 export default AddCourseReducer;
+ 
