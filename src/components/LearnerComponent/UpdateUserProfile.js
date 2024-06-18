@@ -136,11 +136,11 @@ function UpdateUserProfileComponent() {
                 <Avatar
                   alt="User Avatar"
                   src={file || (editInfo && editInfo.profilePhoto ? editInfo.profilePhoto : "default-avatar.png")}
-                  style={{ width: "200px", height: "200px", marginTop: 80, }}
+                  style={{ width: "200px", height: "200px",marginTop:80,}}
                   className='avatar-outline'
                 />
                 <IconButton
-
+                
                   color="primary"
                   aria-label="upload picture"
                   component="label"
@@ -154,11 +154,11 @@ function UpdateUserProfileComponent() {
                     accept="image/jpeg, image/png, image/gif, image/bmp, image/svg+xml"
                     style={{ display: "none" }}
                   />
-                  <CameraAltIcon sx={{ color: "#27235C", marginTop: 1 }} />
+                  <CameraAltIcon sx={{ color: "#27235C",marginTop:1}} />
                 </IconButton>
               </div>
-              <div className="col-md-4" sx={{ marginRight: 60 }}>
-
+              <div className="col-md-4" sx={{marginRight:60}}>
+                
                 <div className="mb-4 get">
                   <h5>First Name</h5>
                   <input
@@ -250,7 +250,7 @@ function UpdateUserProfileComponent() {
                     options={options}
                     type="text"
                     color="#27235C"
-
+                    
                     className="basic-multi-select_learner"
                     classNamePrefix="stream"
                     placeholder="Choose your stream"

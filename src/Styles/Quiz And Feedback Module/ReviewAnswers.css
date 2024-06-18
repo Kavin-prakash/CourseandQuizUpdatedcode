@@ -1,5 +1,5 @@
 .review-answer-page {
-  margin-top: -46%;
+  margin-top: 26%;
 }
 
 
@@ -7,7 +7,7 @@
 .review-container {
   padding: 20px;
   border-radius: 8px;
-  margin-top: 10%;
+  margin-top: 30%;
 }
 
 .review-question-container {
@@ -23,6 +23,7 @@
 
 ul {
   list-style-type: none;
+  padding: 0;
 }
 
 .question-container h5 {
@@ -34,8 +35,13 @@ ul {
   padding: 0;
 }
 
+
 .question-container li {
   margin-bottom: 10px;
+}
+
+.option-type {
+  margin-right: 10px;
 }
 
 .button-container {
@@ -134,6 +140,16 @@ ul {
 
 .popup-close-button:hover {
   color: #000;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  /* Adjust the spacing */
+  margin: 0 -350px 0 0; 
+  /* margin-left: -45%; */
+  /* Aligns the input vertically with the text */
+  /* vertical-align: middle;  */
 }
 
 

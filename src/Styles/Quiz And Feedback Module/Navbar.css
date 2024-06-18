@@ -1,4 +1,4 @@
-/* .dashboard {
+.dashboard {
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -6,7 +6,7 @@
 
 .top-nav {
     display: flex;
-
+    /* justify-content: flex-end; */
     align-items: center;
     background-color: #23275c;
     color: #fff;
@@ -35,11 +35,11 @@
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 20px;
-    
+    /* width: 10px; */
   }
   
   input[type="search"] {
-    padding: 8px 12px 8px 30px; 
+    padding: 8px 12px 8px 30px; /* Add left padding to make room for the search icon */
     border: none;
     border-radius: 20px;
     width: 80%;
@@ -58,7 +58,7 @@
   }
   
 .menu-btn {
-
+    /* position: absolute; */
     left: 30px;
     padding: 10px 20px;
     background-color: #23275c;
@@ -71,21 +71,21 @@
 .side-nav {
     margin-top:4rem;
     width: 70px;
-  
+    /* Collapsed width */
     height: 100%;
     background-color: #23275c;
     position: fixed;
     top: 0;
     left: 0;
     transition: width 0.3s ease;
-   
+    /* Animate width change */
     overflow: hidden;
-   
+    /* Hide overflowing icons */
 }
 
 .side-nav.open {
     width: 200px;
-  
+    /* Expanded width */
 }
 
 .side-nav ul {
@@ -114,14 +114,14 @@
     flex: 1;
     padding: 20px;
     margin-left: 70px;
-   
+    /* Ensure main content doesn't overlap sidebar */
     transition: margin-left 0.3s ease;
-
+    /* Animate margin-left change */
 }
 
 .side-nav.open+.main-content {
     margin-left: 200px;
-   
+    /* Adjusted for expanded sidebar width */
 }
 
 
@@ -151,4 +151,4 @@
 
 .submenu li:hover {
     background-color: #524f7d;
-} */
+}

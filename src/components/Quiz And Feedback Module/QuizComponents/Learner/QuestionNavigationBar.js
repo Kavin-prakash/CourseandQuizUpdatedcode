@@ -152,7 +152,7 @@
 
 
 import React from 'react';
-// import '../../../../Styles/Quiz And Feedback Module/Learner/QuestionNavigationBar.css';
+import '../../../../Styles/Quiz And Feedback Module/Learner/QuestionNavigationBar.css';
 
 const QuestionNavigationBar = ({ questions, selectedOptions, currentQuestionIndex, onQuestionClick }) => {
     return (

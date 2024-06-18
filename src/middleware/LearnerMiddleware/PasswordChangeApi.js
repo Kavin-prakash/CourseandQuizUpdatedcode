@@ -26,16 +26,17 @@ const updatePasswordApi = ({ dispatch }) => (next) => async (action) => {
       }
       else {
         console.error("no data received");
-        alert("password updation fail");
+        alert("password update failed");
       }
     }
     catch (error) {
       console.error("api error", error.responce ? error.responce.data.data : error.message);
       dispatch(UpdatePasswordFailure(error.message))
-      alert("password update failed");
+      // alert("password update failed");
     }
  
-    return next(action);
+    
   }
+  return next(action);
 };
 export default updatePasswordApi;

@@ -35,7 +35,7 @@
   border-right: 1px solid #ddd;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 3px;
+  gap: 10px;
   align-self: flex-start;
   border-radius: 5px;
   margin-right: 20px;
@@ -60,7 +60,7 @@
   background-color: #fafafa;
   border-radius: 5px;
   border: 1px solid #ddd;
-  height: 342px;
+  height: 350px;
   overflow-y: auto;
 }
 
@@ -117,17 +117,11 @@
 
 .review-button {
   background-color: #0d0932d0;
-  /* margin-top: 20px; */
+  margin-top: 20px;
 }
-
-.previous-button {
-  width: 120px;
-  height: 45px;
-}
-
 
 .review-button:hover {
-  /* background-color: #0758ee8b; */
+  background-color: #0758ee8b;
 }
 
 /* Responsive adjustments */
@@ -203,7 +197,7 @@
 input[type="radio"],
 input[type="checkbox"] {
   /* Adjust the spacing */
-  margin: 0 -350px 0 0;
+  margin: 0 -350px 0 0; 
   margin-left: -45%;
   /* Aligns the input vertically with the text */
   /* vertical-align: middle;  */

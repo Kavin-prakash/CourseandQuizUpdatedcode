@@ -7,7 +7,7 @@ const initialState = {
     isRequestingOTP:false,
 };
 
-const fetchEmailReducer = (state = initialState, action) => {
+const emailReducer = (state = initialState, action) => {
     switch (action.type) {
         case CREATE_EMAIL_REQUEST:
             return {
@@ -42,4 +42,4 @@ const fetchEmailReducer = (state = initialState, action) => {
     }
 };
 
-export default fetchEmailReducer;
+export default emailReducer;

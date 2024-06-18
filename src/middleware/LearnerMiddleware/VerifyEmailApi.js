@@ -17,7 +17,7 @@ const VerifyEmailApi = ({dispatch})=> (next) =>async(action)=>{
     {
         console.log("api email",action.payload.email);
         console.log("api otp",action.payload.otp);
-        console.log("check otp");
+
         try{
             // const response= await axios.post(`http://localhost:5199/api/Email`);
             const response= await axios.post(`http://localhost:5199/api/Email/VerifyOTP`,action.payload);

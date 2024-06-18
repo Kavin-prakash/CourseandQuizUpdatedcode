@@ -10,14 +10,14 @@ import {
 import { getUserProfileSuccess } from "../../actions/LearnerAction/GetUpdateUserProfileAction";
 
 
-
+ 
 
 
 export const fetchUserData = async (userId) => {
   try {
     const response = await axios.get(`http://localhost:5199/lxp/view/learnerProfile/${userId}`);
-    console.log("ses", response.data.data);
-    sessionStorage.setItem("Learnerdatails", response.data.data);
+    console.log("ses",response.data.data);
+    sessionStorage.setItem("Learnerdatails",response.data.data);
     return response.data.data;
   } catch (error) {
     console.error('Error fetching data: ', error);
@@ -45,9 +45,9 @@ export const fetchProfileData = ({ dispatch }) => (next) => async (action) => {
       console.log("response", response);
 
       if (response.data.statusCode === 200) {
-
+        
         dispatch(getUserProfileSuccess(response));
-
+        
       } else {
         console.error("No data received from API");
         dispatch(getUserProfileFailure()); // Assuming you want to dispatch without error data
@@ -63,6 +63,7 @@ export const fetchProfileData = ({ dispatch }) => (next) => async (action) => {
 // Removed default export here
 
 // export { fetchUserData, fetchProfileData }; // Exporting as named exports
+
 
 
 

@@ -115,7 +115,7 @@ const AttemptQuiz = () => {
   return (
     <div className="learner-attemptquiz">
       {/* <AdminNavbar /> */}
-      <Timer />
+    <Timer/>
       <div className="attempt-quiz-page">
         <h1 className="quiz-title">Attempt Quiz</h1>
         <div className="quiz-content">
@@ -154,9 +154,9 @@ const AttemptQuiz = () => {
                             type={
                               questions[currentQuestionIndex].questionType ===
                                 "MCQ" ||
-                                questions[currentQuestionIndex].questionType ===
+                              questions[currentQuestionIndex].questionType ===
                                 "TF" ||
-                                questions[currentQuestionIndex].questionType ===
+                              questions[currentQuestionIndex].questionType ===
                                 "T/F"
                                 ? "radio"
                                 : "checkbox"
@@ -175,7 +175,7 @@ const AttemptQuiz = () => {
                                 questions[currentQuestionIndex].quizQuestionId,
                                 option.option,
                                 questions[currentQuestionIndex].questionType ===
-                                "MSQ"
+                                  "MSQ"
                               )
                             }
                             style={{ cursor: "pointer" }} className="option-type"

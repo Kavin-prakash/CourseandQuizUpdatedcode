@@ -2,6 +2,7 @@
 export const ENROLL_REQUEST = 'ENROLL_REQUEST';
 export const ENROLL_SUCCESS = 'ENROLL_SUCCESS';
 export const ENROLL_FAILURE = 'ENROLL_FAILURE';
+export const SET_IS_ENROLL_COURSE = 'SET_IS_REQUESTING_OTP';
 
 export const enrollRequest = (courseId, learnerId) => ({
     type: ENROLL_REQUEST,
@@ -19,6 +20,11 @@ export const enrollFailure = (error) => ({
     type: ENROLL_FAILURE,
     error,
 });
+
+export const setIsEnrollCourse = (isRequesting) => ({
+    type: SET_IS_ENROLL_COURSE,
+    payload: isRequesting,
+  });
 
 // export const enrollCourse = (courseId, learnerId) => {
 //     return (dispatch) => {

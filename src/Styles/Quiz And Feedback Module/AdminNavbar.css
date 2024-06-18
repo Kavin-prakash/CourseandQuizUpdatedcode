@@ -1,4 +1,4 @@
-/* .dashboard {
+.dashboard {
     display: flex;
     flex-direction: column;
     height: 90vh;
@@ -10,7 +10,7 @@
     background-color: #23275c;
     color: #fff;
     height: 4rem;
-   
+    /* width: 103rem; */
     width: 100%;
     position: fixed;
     overflow: hidden;
@@ -33,7 +33,13 @@
 
     margin-left: auto;
 }
-
+/* .search-box {
+    position: relative;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 10px;
+  } */
   
   input[type="search"] {
     padding: 8px 12px 8px 30px; 
@@ -55,7 +61,7 @@
   }
   
 .menu-btn {
- 
+    /* position: absolute; */
     left: 30px;
     padding: 10px 20px;
     background-color: #23275c;
@@ -68,21 +74,21 @@
 .side-nav {
     margin-top:4rem;
     width: 70px;
- 
+    /* Collapsed width */
     height: 100%;
     background-color: #23275c;
     position: fixed;
     top: 0;
     left: 0;
     transition: width 0.3s ease;
-   
+    /* Animate width change */
     overflow: hidden;
-   
+    /* Hide overflowing icons */
 }
 
 .side-nav.open {
     width: 200px;
-   
+    /* Expanded width */
 }
 
 .side-nav ul {
@@ -147,4 +153,4 @@
 
 .submenu li:hover {
     background-color: #524f7d;
-} */
+}

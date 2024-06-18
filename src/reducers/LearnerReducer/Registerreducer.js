@@ -1,4 +1,4 @@
-import { USER_DATA_REQUEST,USER_DATA_SUCCESS,USER_DATA_FAILURE } from "../../actions/LearnerAction/RegisterAction";
+import { USER_DATA_REQUEST,USER_DATA_SUCCESS,USER_DATA_FAILURE } from "..//../actions/LearnerAction/RegisterAction";
 
 
 const initialState = {

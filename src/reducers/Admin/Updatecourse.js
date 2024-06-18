@@ -45,9 +45,7 @@ const initialState = {
   courses: [],
   loading: false,
   error: null,
-  message:null,
-  isUpdated: false
-
+  // isSubmitted: false,
 };
 
 const courseupdateReducer = (state = initialState, action) => {
@@ -61,20 +59,17 @@ const courseupdateReducer = (state = initialState, action) => {
         const updatedCourses = state.courses.map((course) =>
           course.courseId === action.payload.courseId ? { ...course, ...action.payload } : course
         );
-        console.log("updatereducer",action.payload);
       return {
         ...state,
         loading: false,
         courses: updatedCourses,
-        message:action.payload,
-        isUpdated: true, // This should match the initialState property name
+        // isSubmitted: true,
         error: null,
       };
     case UPDATE_COURSES_FAILURE:
       return {
         ...state,
         loading: false,
-        isUpdated: false, // This should match the initialState property name
         error: action.payload,
       };
     default:

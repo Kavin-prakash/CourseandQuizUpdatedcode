@@ -16,21 +16,21 @@ const PasswordChange = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const dispatch = useDispatch();
-
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+       
         const validationErrors = validatePassword(newPassword, oldPassword, confirmPassword);
         if (validationErrors.length > 0) {
             setError(validationErrors.join(' '));
-            return;
+            return; 
         }
-
+     
         try {
             dispatch(UpdatePasswordRequest(learnerId, oldPassword, newPassword));
         } catch (error) {
             console.error('Error updating password:', error);
-            setError('Old password is incorrect');
+            setError('Old password is incorrect'); 
         }
     };
 
