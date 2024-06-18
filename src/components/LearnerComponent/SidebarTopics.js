@@ -542,50 +542,14 @@ function SidebarTopics() {
                                 )}
                               </li>
                             ))}
-                            {/* <button
+                            <button
                               className="btn btn-success"
                               disabled={!areAllMaterialsOpened(topic.materials)}
                               onClick={() => completeTopic(topic.name, topic.topicid)
                               }
                             >
                               Take Quiz
-                            </button> */}
-
-                            {/* {learnerAttempt.isPassed ? <>h1</> : <h2>h2</h2>} */}
-                            {learnerAttempt.isPassed === false ? (
-                              <>
-                                <button
-                                  className="btn btn-success"
-                                  disabled={
-                                    !areAllMaterialsOpened(topic.materials)
-                                  }
-                                  onClick={() =>
-                                    completeTopic(topic.name, topic.topicid)
-                                  }
-                                >
-                                  {/* {topic.topicid} */}
-                                  Take Quiz
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  id="takebutton"
-                                  disabled
-                                  type="button"
-
-                                  title="Your attempt has been finished"
-
-
-                                  onClick={() =>
-                                    completeTopic(topic.name, topic.topicid)
-                                  }
-                                >
-                                  {/* {topic.topicid} */}
-                                  Take Quiz
-                                </button>
-                              </>
-                            )}
+                            </button>
 
 
                           </ul>
