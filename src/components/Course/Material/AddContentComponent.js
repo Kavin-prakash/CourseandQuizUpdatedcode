@@ -39,6 +39,7 @@ import {updateContentRequest} from '../../../actions/Course/Material/UpdateConte
 // import Video from './Video';
 import AudioViewer from './AudioViewer';
 import VideoViewer from './VideoViewer';
+import PptViewerComponent from './PptViewer';
 // IMPORT IMAGES FOR MATERIAL 
 // import Video from "../../../assets/Video.png"
 import Video from '../../../assets/Course/Video.png'
@@ -358,7 +359,7 @@ function AddContentComponent() {
         setSelectedComponent(<AudioViewer material={filePath} />)
         break;
       case 'PPT':
-        setSelectedComponent(<PDFViewer material={filePath} />);
+        setSelectedComponent(<PptViewerComponent material={filePath} />);
         break;
       case 'TEXT':
         setSelectedComponent(<PDFViewer material={filePath} />);
