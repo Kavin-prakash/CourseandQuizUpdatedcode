@@ -5,6 +5,8 @@ import { fetchReviewRequest } from "../../../../actions/Quiz And Feedback Module
 import { selectAnswerRequest } from "../../../../actions/Quiz And Feedback Module/Learner/SelectAnswerAction";
 import { useNavigate } from "react-router-dom";
 import "../../../../Styles/Quiz And Feedback Module/Learner/AttemptQuiz.css";
+// import LearnerNavbar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
+import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
 
 import Timer from "./Timer";
 const AttemptQuiz = () => {
@@ -113,6 +115,8 @@ const AttemptQuiz = () => {
   };
 
   return (
+    <div>
+      <TopBar/>
     <div className="learner-attemptquiz">
       {/* <AdminNavbar /> */}
       <Timer />
@@ -211,6 +215,7 @@ const AttemptQuiz = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
