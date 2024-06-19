@@ -143,7 +143,7 @@ export default function AdminNavbar() {
   };
 
   return (
-    <>
+  <div id="admin_Navbar">
       <CssBaseline />
       {/* <AppBar position="fixed" open={showSideNav}>
         <Toolbar className="top-nav">
@@ -267,7 +267,7 @@ export default function AdminNavbar() {
                 <DrawerHeader />
                 <Home />
             </Box> */}
-    </>
+   </div>
     // </Box>
   );
 }

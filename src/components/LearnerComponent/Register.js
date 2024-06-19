@@ -453,7 +453,7 @@ export default function Register() {
 
     const dispatch = useDispatch();
 
-    const success = useSelector((state) => state.email.email)
+    const success = useSelector((state) => state.verifyemail.email)
     console.log("otp", success);
 
     useEffect(() => {

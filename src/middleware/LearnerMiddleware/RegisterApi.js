@@ -15,6 +15,7 @@ const RegisterApi = ({ dispatch }) => (next) => async (action) => {
       console.log('API Response:', response.data);
       debugger
       dispatch(userDataSuccess(response.data.data));
+      window.location.href = "/";
     } catch (error) {
       dispatch(userDataFailure(error))
     }

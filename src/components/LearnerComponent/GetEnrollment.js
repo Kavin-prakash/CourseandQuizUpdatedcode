@@ -307,7 +307,7 @@ const GetEnrollment = () => {
     e.preventDefault();
     dispatch(unenrollRequest(enrollid));
     handleClose();
-    window.location.reload();
+    // window.location.reload();
  
   }
  
