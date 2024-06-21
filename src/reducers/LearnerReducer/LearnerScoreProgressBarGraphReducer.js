@@ -19,7 +19,7 @@ const LearnerScoreProgressBarGraphReducer = (state = initialState, action) => {
                 loading: true,
             };
         case FETCH_COURSES_TOPICS_SCORES_SUCCESS:
-            console.log("Success", action.payload);
+            
             return {
                 ...state,
                 loading: false,

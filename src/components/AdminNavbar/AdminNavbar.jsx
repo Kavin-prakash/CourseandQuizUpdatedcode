@@ -14,13 +14,15 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { FaUserGraduate, FaHome, FaChartBar } from "react-icons/fa";
+import logo from "../../assets/Admin/logo.png";
 import "../../Styles/Admin/AdminNavbar.css";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button,Modal } from "react-bootstrap";
-import Z from "../../assets/Admin/Images/ZWhite.jfif";
-import relevantzzzedited from "../../assets/Admin/Images/relevantzedited.png"
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import { UseDispatch, useDispatch } from "react-redux";
-import { successdata } from "../../actions/Admin/loginAction";
+// import { AppBar, CssBaseline, Divider, Drawer, IconButton, Toolbar } from "@mui/material";
+// import { FaBookOpenReader, FaUserGraduate, FaHome, FaChartBar } from "react-icons/fa";
+import Toast from 'react-bootstrap/Toast';
 
 
 const drawerWidth = 240;
@@ -90,9 +92,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function AdminNavbar() {
-
-  const dispatch=useDispatch();
-
   const [activePage, setActivePage] = useState("home");
 
   const [showReportDropdown, setShowReportDropdown] = useState(false);
@@ -131,11 +130,8 @@ export default function AdminNavbar() {
 
   const handleLogout = () => {
     // Clear session ID from storage
-    // debugger
     sessionStorage.removeItem("AdmminSessionId"); // Replace "sessionId" with your actual session ID key
     sessionStorage.removeItem("Role");
-    dispatch(successdata(false));
-     
     // Navigate to login page or home page
     navigate("/"); // Replace "/login" with the path to your login page
     setShowLogoutConfirmation(false); // Hide the confirmation toast
@@ -147,7 +143,7 @@ export default function AdminNavbar() {
   };
 
   return (
-    <div id="admin_navbar">
+  <div id="admin_Navbar">
       <CssBaseline />
       {/* <AppBar position="fixed" open={showSideNav}>
         <Toolbar className="top-nav">
@@ -172,7 +168,7 @@ export default function AdminNavbar() {
       </AppBar> */}
       <AppBar position="fixed" open={showSideNav}>
         <Toolbar className="top-nav">
-          <IconButton
+        <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -182,33 +178,18 @@ export default function AdminNavbar() {
               ...(showSideNav && { display: "none" }),
             }}
           >
-            <img src={Z} style={{ width: "5vw", height: "5vh" }} />
-            <MenuIcon style={{ fontSize: "140%" }} />
+          <MenuIcon />
           </IconButton>
           <Box component="div">
-            {/* <img src={logo} alt="logo" /> */}
-            <Button
-              style={{
-                position: "absolute",
-                marginLeft: "75%",
-                marginTop: "-22px",
-              }}
-              onClick={handleLogoutClick}
-            >
-              <h6>Logout</h6>
-            </Button>
+            <img src={logo} alt="logo" />
+            <Button style={{ position: 'absolute', marginLeft: '72%', marginTop: '10px' }} onClick={handleLogoutClick}>Logout</Button>
           </Box>
         </Toolbar>
       </AppBar>
       {/* ... Drawer and other components */}
 
       {/* Logout Confirmation Modal */}
-      <Modal
-        className="mt-2"
-        show={showLogoutModal}
-        onHide={() => setShowLogoutModal(false)}
-        animation={false}
-      >
+      <Modal  className="mt-5" show={showLogoutModal} onHide={() => setShowLogoutModal(false)} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Logout Confirmation</Modal.Title>
         </Modal.Header>
@@ -223,17 +204,13 @@ export default function AdminNavbar() {
         </Modal.Footer>
       </Modal>
 
-      <Drawer variant="permanent" open={showSideNav}>
+      <Drawer variant="permanent" open={showSideNav} >
         <DrawerHeader className="drawerheader">
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
-              <img src={Z} className="iconDrawer" />
+              <ChevronRightIcon className="iconDrawer" />
             ) : (
-              <img
-                src={relevantzzzedited}
-                style={{ width: "13vw" }}
-                className="iconDrawer"
-              />
+              <ChevronLeftIcon className="iconDrawer" />
             )}
           </IconButton>
         </DrawerHeader>
@@ -268,41 +245,19 @@ export default function AdminNavbar() {
                   {showSideNav && <span>Learner</span>}
                 </li>
               </Link>
-              <li
-                className="reports"
-                onClick={() => handlePageChange("reports")}
-              >
-                <Link
-                  style={{ textDecoration: "none", color: "black" }}
-                  to="/report"
-                >
-                  {" "}
-                  <FaChartBar className="icon" />
-                </Link>
+              <li className="reports" onClick={() => handlePageChange("reports")}>
+                <Link style={{ textDecoration: 'none', color: 'black' }} to='/report'> <FaChartBar className="icon" /></Link>
                 {showSideNav && <span>Reports</span>}
               </li>
             </ul>
             <ul className={`submenu ${showReportDropdown ? "open" : ""}`}>
-              <Link style={{ textDecoration: "none" }} to="/learnerreport">
-                <li onClick={() => setActivePage("learnerreport")}>
-                  {" "}
-                  Learner Report
-                </li>
-              </Link>
-              <Link style={{ textDecoration: "none" }} to="/coursereport">
-                <li onClick={() => setActivePage("coursereport")}>
-                  Course Report
-                </li>
-              </Link>
-              <Link style={{ textDecoration: "none" }} to="/enrollreport">
+              <Link style={{ textDecoration: "none" }} to='/learnerreport'><li onClick={() => setActivePage("learnerreport")}>
                 {" "}
-                <li onClick={() => setActivePage("enroll")}>
-                  Enrollment Report
-                </li>
-              </Link>
-              <Link style={{ textDecoration: "none" }} to="/quizreport">
-                <li onClick={() => setActivePage("quiz")}>Quiz Report</li>
-              </Link>
+                Learner Report
+              </li></Link>
+              <Link style={{ textDecoration: "none" }} to='/coursereport'><li onClick={() => setActivePage("coursereport")}>Course Report</li></Link>
+              <Link style={{ textDecoration: "none" }} to='/enrollreport'> <li onClick={() => setActivePage("enroll")}>Enrollment Report</li></Link>
+              <Link style={{ textDecoration: "none" }} to='/quizreport'><li onClick={() => setActivePage("quiz")}>Quiz Report</li></Link>
             </ul>
           </div>
         </div>
@@ -312,7 +267,7 @@ export default function AdminNavbar() {
                 <DrawerHeader />
                 <Home />
             </Box> */}
-    </div>
+   </div>
     // </Box>
   );
 }

@@ -374,7 +374,11 @@ import { FaInfoCircle } from 'react-icons/fa';
 import { userEmailRequest } from '../..//actions/LearnerAction/Fetchemail';
 import { userOTPRequest } from '../../actions/LearnerAction/OTPAction';
 import Modal from 'react-modal';
-import { fetchCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction'
+import { getCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction'
+import fetchEmailApi from '../../middleware/LearnerMiddleware/FetchEmailApi';
+import { Tooltip } from 'react-tooltip';
+import { fetchallCoursesRequest } from '../../actions/Admin/Adnimviewcourse';
+import { Alert } from '@mui/material';
 
 // const options = [
 //     { value: 'C++', label: 'C++' },
@@ -391,6 +395,8 @@ export default function Register() {
     const [errors, setErrors] = useState({});
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
+    const [recievedOTP, setRecievedOTP] = useState('');
+
     const [showOTP, setShowOTP] = useState(false);
     const [enteredOTP, setEnteredOTP] = useState('');
     const [emailVerified, setEmailVerified] = useState(false);
@@ -399,7 +405,9 @@ export default function Register() {
     const [errorMessage, setErrorMessage] = useState('');
     const [ageError, setAgeError] = useState(false);
     const minutes = Math.floor(timer / 60);
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    // const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [altermessage, setAlertmessage] = useState(false);
+
     const learnerId = sessionStorage.getItem("UserSessionID")
     const seconds = timer % 60;
     // const [registrationStatus,setRegistrationStatus]= useState(null);
@@ -422,8 +430,8 @@ export default function Register() {
 
 
     // const pdf = useSelector((state) => state.fetchPdf.material);
-    const streamCourses = useSelector((state) => state.fetchcourse.courses)
-    console.log("scourse", streamCourses)
+    const streamCourses = useSelector((state) => state.allcourse.courses)
+    // console.log("scourse", streamCourses)
 
 
 
@@ -436,6 +444,7 @@ export default function Register() {
         value: course.title,
         label: course.title
     }));
+    // console.log("options",options)
 
 
 
@@ -447,14 +456,14 @@ export default function Register() {
         setShowPasswordRules(false);
     };
 
-    const dismissAlert = () => {
-        setShowSuccessAlert(false);
-    };
+    // const dismissAlert = () => {
+    //     setShowSuccessAlert(false);
+    // };
 
     const dispatch = useDispatch();
 
-    const success = useSelector((state) => state.verifyemail.email)
-    console.log("otp", success);
+    // const success = useSelector((state) => state.verifyemail.email)
+    // console.log("otp", success);
 
     useEffect(() => {
         let interval;
@@ -478,7 +487,7 @@ export default function Register() {
     //     setErrors({ ...errors, selectedOptions: '' });
     // };
 
-    const handleSendOTP = () => {
+    const handleSendOTP = async () => {
 
         console.log("userEmail", userData.email);
         if (!/\S+@\S+\.\S+/.test(email)) {
@@ -491,10 +500,14 @@ export default function Register() {
         setTimer(120);
         handleOTPSubmit();
         //sendOTP(email);
-
-        dispatch(userEmailRequest(userData.email));
+        const data = await fetchEmailApi(userData.email);
+        console.log("recieved", data);
+        setRecievedOTP(data)
+        // dispatch(userEmailRequest(userData.email));
 
     };
+    // console.log("recieved otp",recievedOTP);
+
 
     const handleOTPChange = (event) => {
         setEnteredOTP(event.target.value);
@@ -504,7 +517,7 @@ export default function Register() {
     const handleOTPSubmit = (otpp) => {
         setUserData({ ...userData, otp: otpp });
         // console.log("otp handle:",enteredOTP);
-        const expectedOTP = success;
+        const expectedOTP = recievedOTP;
         console.log("expected otp", expectedOTP);
         setVerifyOTP(expectedOTP);
     };
@@ -512,7 +525,7 @@ export default function Register() {
     const SubmitOtp = (event) => {
         event.preventDefault();
         console.log("handle:", userData.otp);
-        if (enteredOTP === success) {
+        if (enteredOTP === recievedOTP) {
             setEmailVerified(true);
             setShowOTP(false);
             setErrors({ ...errors, otp: '' });
@@ -541,8 +554,9 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         console.log("userData", userData)
-        dispatch(userDataRequest(userData))
+        dispatch(userDataRequest(userData));
         const today = new Date();
         const birthDate = new Date(userData.dob);
         let age = today.getFullYear() - birthDate.getFullYear();
@@ -578,18 +592,17 @@ export default function Register() {
             };
 
 
-            console.log("in handle submit", updatedUserData);
 
             // Dispatch the action with the updated user data
             dispatch(userDataRequest(updatedUserData));
 
             console.log("in handle submit", updatedUserData);
             //    registerUser(userDataStringStream);
-            setShowModal(true);
-            setShowSuccessAlert(true);
-            setTimeout(() => {
-                setShowSuccessAlert(false);
-            }, 5000);
+            // setShowModal(true);
+            // setShowSuccessAlert(true);
+            // setTimeout(() => {
+            //     setShowSuccessAlert(false);
+            // }, 5000);
 
         } else {
 
@@ -609,8 +622,8 @@ export default function Register() {
 
     useEffect(() => {
         console.log("effect");
-        dispatch(fetchCoursesRequest(learnerId));
-    }, [learnerId]);
+        dispatch(fetchallCoursesRequest());
+    }, []);
 
 
     return (
@@ -630,6 +643,17 @@ export default function Register() {
                         <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
 
                             <h3 class="register-heading">Registration</h3>
+                            <Modal
+                                isOpen={showModal}
+                                onRequestClose={closeModal}
+                                contentLabel='Registration Success'
+                                className='Modal'
+                                overlayClassName='Overlay'
+                            >
+                                <h2>Registration successfully!</h2>
+                                <button onClick={closeModal} >close</button>
+
+                            </Modal>
                             <div class="row register-form">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -643,7 +667,7 @@ export default function Register() {
                                         {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
                                     </div>
                                     <div class="form-group d-flex">
-                                        <input type="email" class="form-control" placeholder="Your Email *" value={userData.email} name="email" onChange={handleChange} disabled={showOTP || emailVerified} />
+                                        <input type="email" class="form-control" placeholder="Email *" value={userData.email} name="email" onChange={handleChange} disabled={showOTP || emailVerified} />
                                         {emailVerified && <span className="text-success">&#10004;</span>}
                                         {!showOTP && !emailVerified && email.trim() !== '' && (<button className='btn btn-primary ms-1 otp' onClick={handleSendOTP}><a>Send OTP</a></button>)}
                                     </div >
@@ -656,11 +680,14 @@ export default function Register() {
 
                                     </div>
                                     )}
-                                    <div style={{ marginTop: "-2%" }} class="form-group">
-                                        <input style={{ width: "375px" }} type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
-                                        <FaInfoCircle style={{ marginLeft: "95%", marginTop: "-21%" }} className='password-icon Red-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
-                                        {errors.password && <div className="text-danger">{errors.password}</div>}
+                                    <div style={{ marginTop: "-5%" }} class="form-group">
+                                        <input type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
+                                        <FaInfoCircle data-tip data-for='passwordTooltip' className='password-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
+                                        <Tooltip id='passwordTooltip' place='right' effect='solid'>
+                                            Password must be between 8 to 14 characters, must contain one uppercase, one lowercase, and one special character.
+                                        </Tooltip>
                                     </div>
+                                    {errors.password && <div className="text-danger">{errors.password}</div>}
                                     {showPasswordRules && <div className='password-rules'>
                                         <p style={{ marginLeft: "6%", marginTop: "-10%" }} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
                                     </div>}
@@ -708,12 +735,13 @@ export default function Register() {
                                             placeholder="Choose your stream"
                                             value={userData.stream}
                                             onChange={(selectedOption) => handleChange({ target: { name: "stream", value: selectedOption } })}
+                                            isDisabled={showOTP}
 
                                         />
                                         {errors.selectedOptions && <div className="text-danger">{errors.selectedOptions}</div>}
 
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group ">
                                         <input type="password" class="form-control" placeholder="Confirm Password *" value={userData.confirmPassword} name="confirmPassword" onChange={handleChange} disabled={showOTP} />
                                         {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
                                     </div>
@@ -724,10 +752,9 @@ export default function Register() {
 
                                     {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
                                 </div>
-                                {showSuccessAlert && (
-                                    <div className='alert alert-success all' role='alert'>Registered successfully!!
-                                    </div>
-                                )}
+                                {altermessage && <Alert variant="outlined" severity="success">
+                  Registered successful! Redirecting...
+                </Alert>}
 
                             </div>
 
@@ -735,17 +762,7 @@ export default function Register() {
                     </div>
                 </div>
             </div>
-            <Modal
-                isOpen={showModal}
-                onRequestClose={closeModal}
-                contentLabel='Registration Success'
-                className='Modal'
-                overlayClassName='Overlay'
-            >
-                <h2>Registration successfully!</h2>
-                <button onClick={closeModal} >close</button>
 
-            </Modal>
         </div>
     );
 }

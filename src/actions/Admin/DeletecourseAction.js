@@ -1,7 +1,7 @@
 export const DELETE_COURSES_REQUEST = 'DELETE_COURSES_REQUEST';
 export const DELETE_COURSES_SUCCESS = 'DELETE_COURSES_SUCCESS';
 export const DELETE_COURSES_FAILURE = 'DELETE_COURSES_FAILURE';
-export const DELETE_COURSES_FAILURE_MESSAGE = 'DELETE_COURSES_FAILURE_MESSAGE'
+export const DELETE_COURSES_FAILURE_MESSAGE='DELETE_COURSES_FAILURE_MESSAGE'
 
 export const deleteCoursesRequest = (id) => ({
   type: DELETE_COURSES_REQUEST,
@@ -13,9 +13,9 @@ export const deleteCoursesSuccess = (courses) => ({
   payload: courses,
 });
 
-export const delteCoursesFailureMessage = (courses) => ({
-  types: DELETE_COURSES_FAILURE_MESSAGE,
-  payload: courses,
+export const delteCoursesFailureMessage=(courses)=>({
+    types:DELETE_COURSES_FAILURE_MESSAGE,
+    payload:courses,
 })
 
 export const deleteCoursesFailure = (error) => ({
@@ -24,4 +24,3 @@ export const deleteCoursesFailure = (error) => ({
 });
 
 
-export const RESET_DELETE_SUCCESS_COURSES_MESSAGE = 'RESET_DELETE_SUCCESS_COURSES_MESSAGE ';

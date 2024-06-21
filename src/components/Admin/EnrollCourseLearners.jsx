@@ -113,9 +113,6 @@ export default function EnrollCourseLearners() {
             const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
             const imgX = (pdfWidth - imgWidth * ratio) / 2;
             const imgY = 30;
-            pdf.text('Enrolled User Report', 75, 12);
-            pdf.setFontSize(5);
-            pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
             pdf.addImage(
                 imgData,
                 "PNG",
@@ -198,7 +195,7 @@ export default function EnrollCourseLearners() {
                     }),
                 }}
             >
-                {/* {numSelected > 0 ? (
+                {numSelected > 0 ? (
                     <Typography
                         sx={{ flex: "1 1 100%" }}
                         color="inherit"
@@ -217,7 +214,7 @@ export default function EnrollCourseLearners() {
                     >
                       Enrolled User List
                     </Typography>
-                )} */}
+                )}
             </Toolbar>
         );
     }
@@ -316,15 +313,6 @@ export default function EnrollCourseLearners() {
                             <ArrowDownwardIcon />
                         </button>
                     </div>
-                    <Typography
-                        sx={{ flex: "1 1 100%" }}
-                        variant="h4"
-                        id="tableTitle"
-                        component="div"
-                        align="center"
-                    >
-                        Enrolled User List
-                    </Typography>
                     <div id="learnersreport" className="m-2">
                         <TableContainer ref={pdfRef}>
 

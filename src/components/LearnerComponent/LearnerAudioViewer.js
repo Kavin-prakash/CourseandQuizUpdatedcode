@@ -34,7 +34,7 @@ const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
   const elapsedSecond = Math.floor(elapsedSec % 60);
 
   return (
-    <Flex align="center" fontWeight="600" gap="4px" style={{ position: 'relative', top: '1vh' }}>
+    <Flex align="center" fontWeight="600" gap="4px">
       <Text fontWeight={600} color="white">
         {elapsedMin}:
       </Text>
@@ -53,22 +53,20 @@ const PlaybackRateControlButton = React.forwardRef(
   ({ onClick, playbackRate }, ref) => (
     <div ref={ref}>
       <Flex
-        // alignItems="center"
+        alignItems="center"
         cursor="pointer"
-        h="25px"
-        // justifyContent="center"
-        rounded="2px"
+        h="40px"
+        justifyContent="center"
+        rounded="12px"
         w="45px"
-        bg="white"
-        // _hover={{
-        //   bg: "rgba(255, 255, 255, 0.08)",
-        // }}
+        _hover={{
+          bg: "rgba(255, 255, 255, 0.08)",
+        }}
         onClick={onClick}
-        //transition="500ms opacity"
-        style={{ position: 'relative', top: '1vh', right: '3vw' }}
+        transition="500ms opacity"
       >
         <Text
-          color="black"
+          color="white"
           fontWeight={700}
           letterSpacing="0.5px"
           pos="relative"
@@ -144,7 +142,7 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
   );
 });
 
-const LearnerAudioViewer = ({ material, materialId, materialName }) => {
+const LearnerAudioViewer = ({ material, materialId }) => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -357,112 +355,102 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
   };
 
   return (
-    <>
-      <h2 style={{ marginLeft: '2vw', position: 'relative', top: '1vh' }} >{materialName}</h2>
-      <hr style={{ marginLeft: '2vw', width: '80vw', position: 'relative', top: '1vh' }} />
-      <Box ref={containerRef} position="relative" width="80%" left="110px" style={{ backgroundColor: 'grey' }}>
-        <Audio
-          ref={videoRef}
-          src={src}
-          onClick={handleVideoClick}
-          controls={false}
+    <Box ref={containerRef} position="relative" width="80%">
+      <Audio
+        ref={videoRef}
+        src={src}
+        onClick={handleVideoClick}
+        controls={false}
+      />
+      <Flex
+        position="absolute"
+        bottom="0"
+        left="0"
+        right="0"
+        padding="10px"
+        alignItems="center"
+        justifyContent="space-between"
+        background="rgba(0, 0, 0, 0.5)"
+      >
+        <Button onClick={handlePlayPauseClick}>
+          {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+        </Button>
+        <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
+        <PlaybackRateControl
+          playbackRate={playbackRate}
+          setPlaybackRate={setPlaybackRate}
         />
-        <Flex
-          position="absolute"
-          bottom="0"
-          left="0"
-          right="0"
-          padding="10px"
-          alignItems="center"
-          justifyContent="space-between"
-          background="rgba(0, 0, 0, 0.5)"
-        >
-          <div className="d-flex flex-row gap-2" style={{ height: '25px' }}>
-            <Button onClick={handlePlayPauseClick}>
-              {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-            </Button>
-            <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
-          </div>
-          <div>
-            <PlaybackRateControl
-
-              playbackRate={playbackRate}
-              setPlaybackRate={setPlaybackRate}
-            />
-            <Button onClick={handleFullscreenClick} style={{ position: 'relative', bottom: '2vh' }}>
-              {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-            </Button>
-          </div>
-        </Flex>
+        <Button onClick={handleFullscreenClick}>
+          {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+        </Button>
+      </Flex>
+      <Box
+        position="absolute"
+        bottom="0"
+        left="0"
+        right="0"
+        height="5px"
+        background="rgba(255, 255, 255, 0.2)"
+        cursor="pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          const rect = e.currentTarget.getBoundingClientRect();
+          const pos = (e.clientX - rect.left) / rect.width;
+          seekToPosition(pos);
+        }}
+      >
         <Box
+          ref={bufferRef}
           position="absolute"
+          top="0"
           bottom="0"
           left="0"
-          right="0"
-          height="5px"
-          background="rgba(255, 255, 255, 0.2)"
           cursor="pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            const rect = e.currentTarget.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            seekToPosition(pos);
-          }}
-        >
-          <Box
-            ref={bufferRef}
-            position="absolute"
-            top="0"
-            bottom="0"
-            left="0"
-            cursor="pointer"
-            height="100%"
-            background="rgba(255, 255, 255, 0.5)"
-          />
-          <Box
-            ref={progressRef}
-            position="absolute"
-            top="0"
-            bottom="0"
-            cursor="pointer"
-            left="0"
-            height="100%"
-            background="red"
-          />
-        </Box>
-
-
-
-        {isWaiting && (
-          <Spinner
-            position="absolute"
-            left="50%"
-            top="50%"
-            transform="translate(-50%, -50%)"
-            color="white"
-          />
-        )}
-
-
-        {showTranscript && (
-          <Box
-            pos="absolute"
-            bottom="50px"
-            left="0"
-            right="0"
-            p="10px"
-            // bg="rgba(0, 0, 0, 0.8)"
-            color="white"
-            borderRadius="10px"
-            textAlign="center"
-          >
-            <Text color="white">{transcript}</Text>
-          </Box>
-        )}
+          height="100%"
+          background="rgba(255, 255, 255, 0.5)"
+        />
+        <Box
+          ref={progressRef}
+          position="absolute"
+          top="0"
+          bottom="0"
+          cursor="pointer"
+          left="0"
+          height="100%"
+          background="red"
+        />
       </Box>
-    </>
+
+
+
+      {isWaiting && (
+        <Spinner
+          position="absolute"
+          left="50%"
+          top="50%"
+          transform="translate(-50%, -50%)"
+          color="white"
+        />
+      )}
+
+
+      {showTranscript && (
+        <Box
+          pos="absolute"
+          bottom="50px"
+          left="0"
+          right="0"
+          p="10px"
+          bg="rgba(0, 0, 0, 0.8)"
+          color="white"
+          borderRadius="10px"
+          textAlign="center"
+        >
+          <Text color="white">{transcript}</Text>
+        </Box>
+      )}
+    </Box>
   );
 };
 
 export default LearnerAudioViewer;
-

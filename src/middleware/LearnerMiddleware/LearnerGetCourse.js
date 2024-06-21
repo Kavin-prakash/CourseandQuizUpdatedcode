@@ -31,7 +31,7 @@
 
 
 import axios from 'axios';
-import { FETCH_COURSES_REQUEST, fetchCoursesFailure, fetchCoursesSuccess } from '../../actions/LearnerAction/LearnerGetCourseAction';
+import { GET_COURSES_REQUEST, getCoursesFailure, getCoursesSuccess } from '../../actions/LearnerAction/LearnerGetCourseAction';
 
 // const LearnerGetCourse = ({ dispatch }) => (next) => async (action) => {
 //   next(action);
@@ -52,10 +52,10 @@ import { FETCH_COURSES_REQUEST, fetchCoursesFailure, fetchCoursesSuccess } from 
 
 const LearnerGetCourse = ({ dispatch }) => (next) => async (action) => {
   next(action);
-  // console.log("coursegetapi", action)
+  console.log("coursegetapi", action)
   const API_URL = `http://localhost:5199/lxp/view/Getallcoursebylearnerid/${action.payload}`;
 
-  if (action.type === FETCH_COURSES_REQUEST) {
+  if (action.type === GET_COURSES_REQUEST) {
     try {
       console.log("learnerapicomponent:", action);
       const response = await axios.get(`${API_URL}`);
@@ -65,14 +65,14 @@ const LearnerGetCourse = ({ dispatch }) => (next) => async (action) => {
       if (response.status === 200 && response.data && response.data.data && response.data.data.result) {
         const courses = response.data.data.result.result; // Extract the courses array
         console.log(courses);
-        dispatch(fetchCoursesSuccess(courses));
+        dispatch(getCoursesSuccess(courses));
       } else {
         console.error('No valid data received from API');
-        dispatch(fetchCoursesFailure('No valid data received from API'));
+        dispatch(getCoursesFailure('No valid data received from API'));
       }
     } catch (error) {
       console.error('API Error:', error.message);
-      dispatch(fetchCoursesFailure(error.message));
+      dispatch(getCoursesFailure(error.message));
     }
   }
 };

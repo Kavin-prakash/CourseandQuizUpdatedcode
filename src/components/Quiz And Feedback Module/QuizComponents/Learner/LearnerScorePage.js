@@ -48,7 +48,6 @@ export const LearnerScorePage = () => {
   useEffect(() => {
     dispatch(fetchQuizInstructionRequest(topicId));
     dispatch(fetchlearneridRequest(learnerId));
-    debugger;
     dispatch(fetchlearnerscoreRequest(learnersAttemptId));
   }, [dispatch]);
 

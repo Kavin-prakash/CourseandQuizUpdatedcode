@@ -270,7 +270,7 @@ const LearnerReduxView = ({ fetchLearners, learners }) => {
             <input
               className="form-control mr-sm-2"
               type="search"
-              placeholder="Search learners"
+              placeholder="Search"
               aria-label="Search"
               value={searchTerm}
               style={{ width: "30vw" }}

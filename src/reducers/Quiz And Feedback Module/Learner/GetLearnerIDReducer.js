@@ -17,7 +17,7 @@ const initialState = {
           loading: true,
         };
       case FETCH_LEARNERID_SUCCESS:
-        console.log("Learner Details:", action.payload);
+        // console.log("Learner Details:", action.payload);
  
         // Add the new course to the existing courses array
         return {

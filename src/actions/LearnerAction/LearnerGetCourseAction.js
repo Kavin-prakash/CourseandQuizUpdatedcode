@@ -1,17 +1,18 @@
-export const FETCH_COURSES_REQUEST = 'FETCH_COURSES_REQUEST';
-export const FETCH_COURSES_SUCCESS = 'FETCH_COURSES_SUCCESS';
-export const FETCH_COURSES_FAILURE = 'FETCH_COURSES_FAILURE';
+export const GET_COURSES_REQUEST = 'GET_COURSES_REQUEST';
+export const GET_COURSES_SUCCESS = 'GET_COURSES_SUCCESS';
+export const GET_COURSES_FAILURE = 'GET_COURSES_FAILURE';
  
-export const fetchCoursesRequest = () => ({
-  type: FETCH_COURSES_REQUEST,
+export const getCoursesRequest = (learnerId) => ({
+  type: GET_COURSES_REQUEST,
+  payload:learnerId,
 });
  
-export const fetchCoursesSuccess = (courses) => ({
-  type: FETCH_COURSES_SUCCESS,
+export const getCoursesSuccess = (courses) => ({
+  type: GET_COURSES_SUCCESS,
   payload: courses,
 });
  
-export const fetchCoursesFailure = (error) => ({
-  type: FETCH_COURSES_FAILURE,
+export const getCoursesFailure = (error) => ({
+  type: GET_COURSES_FAILURE,
   payload: error,
 });

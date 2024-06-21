@@ -1,9 +1,8 @@
 #timerclass{
-  margin-left: 85%;  
+  margin-left: 80%;  
   border: 2px solid red;
   width: 15%;
   height: 35px;
   text-align: center;
-  /* margin-top: 10%; */
-  /* align-items: center; */
+  align-items: center;
 }

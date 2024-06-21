@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState  } from "react";
 import { useDispatch } from 'react-redux';
 import styled from "@emotion/styled";
@@ -36,7 +37,7 @@ const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
   const elapsedSecond = Math.floor(elapsedSec % 60);
 
   return (
-    <Flex  fontWeight="600" gap="4px"  >
+    <Flex align="center" fontWeight="600" gap="4px">
       <Text fontWeight={600} color="white">
         {elapsedMin}:
       </Text>
@@ -55,25 +56,20 @@ const PlaybackRateControlButton = React.forwardRef(
   ({ onClick, playbackRate }, ref) => (
     <div ref={ref}>
       <Flex
-          // alignItems="center"
+        alignItems="center"
         cursor="pointer"
-        h="25px"
-       // justifyContent="center"
-        rounded="2px"
+        h="40px"
+        justifyContent="center"
+        rounded="12px"
         w="45px"
-        bg="white"
-
-
-        // _hover={{
-        //   bg: "rgba(255, 255, 255, 0.08)",
-        // }}
+        _hover={{
+          bg: "rgba(255, 255, 255, 0.08)",
+        }}
         onClick={onClick}
-        // transition="500ms opacity"
-        style={{position:'relative',top:'1vh',right:'3vw'}}
-       
+        transition="500ms opacity"
       >
         <Text
-          color="black"
+          color="white"
           fontWeight={700}
           letterSpacing="0.5px"
           pos="relative"
@@ -105,7 +101,7 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
     <Menu autoSelect={false} placement="top-start">
       <MenuButton as={PlaybackRateControlButton} playbackRate={playbackRate} />
       <MenuList
-        bg="black"
+        bg="#1D253F"
         border="none"
         pl="8px"
         pr="8px"
@@ -129,14 +125,14 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
                 setPlaybackRate(rate);
               }}
 
-              // _hover={{
-              //   bg: "rgba(0, 0, 0, 0.4)",
-              // }}
+              _hover={{
+                bg: "rgba(0, 0, 0, 0.4)",
+              }}
               _focus={{
                 bg: "rgba(0, 0, 0, 0.4)",
               }}
             >
-              <Text fontWeight={600} size="sm" color="black">
+              <Text fontWeight={600} size="sm" color="white">
                 {rate.toFixed(1)}x
               </Text>
               {playbackRate === rate && (
@@ -150,7 +146,7 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
   );
 });
 
-const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
+const LearnerVideoViewer = ({ material,materialId }) => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -343,10 +339,7 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
   };
 
   return (
-    <>
-    <h2 style={{ marginLeft: '2vw',position:'relative',top:'1vh'}} >{materialName}</h2>
-    <hr style={{ marginLeft: '2vw',width:'80vw',position:'relative',top:'1vh'}}/>
-    <Box ref={containerRef} position="relative" width="76%" left="170" top="30" style={{backgroundColor:'grey'}}>
+    <Box ref={containerRef} position="relative" width="80%">
       <Video
         ref={videoRef}
         src={src}
@@ -363,22 +356,17 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
         justifyContent="space-between"
         background="rgba(0, 0, 0, 0.5)"
       >
-        <div className="d-flex flex-row gap-2" style={{height:'25px'}}>
         <Button onClick={handlePlayPauseClick}>
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </Button>
         <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
-        </div>
-        <div>
         <PlaybackRateControl
-          
           playbackRate={playbackRate}
           setPlaybackRate={setPlaybackRate}
         />
-        <Button onClick={handleFullscreenClick} style={{position:'relative',bottom:'2vh'}}>
+        <Button onClick={handleFullscreenClick}>
           {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
         </Button>
-        </div>
       </Flex>
       <Box
         position="absolute"
@@ -429,7 +417,6 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
         />
       )}
     </Box>
-    </>
   );
 };
 

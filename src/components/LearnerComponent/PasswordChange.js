@@ -11,6 +11,7 @@ import '../../Styles/Learner/Password.css';
 
 const PasswordChange = () => {
     const [learnerId] = useState(sessionStorage.getItem('UserSessionID'));
+    console.log("learnerid",learnerId );
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

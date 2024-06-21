@@ -11,11 +11,12 @@ const BASE_URL = 'http://localhost:5199/lxp/learner/registration';
 const RegisterApi = ({ dispatch }) => (next) => async (action) => {
   if (action.type === USER_DATA_REQUEST) {
     try {
+      console.log("asdads",action.payload);
       const response = await axios.post(BASE_URL, action.payload);
       console.log('API Response:', response.data);
-      debugger
+     
       dispatch(userDataSuccess(response.data.data));
-      window.location.href = "/";
+      // window.location.href = "/";
     } catch (error) {
       dispatch(userDataFailure(error))
     }

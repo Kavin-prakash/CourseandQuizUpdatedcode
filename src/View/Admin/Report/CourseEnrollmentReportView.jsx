@@ -139,9 +139,6 @@ const CourseEnrollmentReportView = ({
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = 30;
-      pdf.text('Course Enrollment Report', 75, 12);
-      pdf.setFontSize(5);
-      pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
       pdf.addImage(
         imgData,
         "PNG",
@@ -211,7 +208,7 @@ const CourseEnrollmentReportView = ({
     return (
       <Toolbar
         sx={{
-          mt: 5,
+          mt: 10,
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
@@ -233,8 +230,8 @@ const CourseEnrollmentReportView = ({
             {numSelected} selected
           </Typography>
         ) : (
-          <>
-          </>
+         <>
+         </>
         )}
       </Toolbar>
     );
@@ -334,19 +331,18 @@ const CourseEnrollmentReportView = ({
               <ArrowDownwardIcon />
             </button>
           </div>
-          <Typography
+          <div id="learnersreport" className="m-2">
+            <TableContainer ref={pdfRef}>
+            <Typography
             sx={{ flex: "1 1 100%" }}
             variant="h4"
             id="tableTitle"
             component="div"
             align="center"
-            style={{ marginBottom: "15px" }}
+            style={{marginBottom:"15px"}}
           >
             Course Enrollment Report
           </Typography>
-          <div id="learnersreport" className="m-2">
-            <TableContainer ref={pdfRef}>
-
               <Table
                 sx={{ width: "100%" }}
                 aria-labelledby="tableTitle"
@@ -375,7 +371,7 @@ const CourseEnrollmentReportView = ({
                         sx={{ cursor: "pointer" }}
                       >
                         <TableCell align="left">{index + 1}</TableCell>
-
+                        
                         <TableCell
                           component="th"
                           id={row.courseId}
@@ -416,7 +412,7 @@ const CourseEnrollmentReportView = ({
                                 {row.inprogressUsers}
                               </Tooltip>
                             </TableCell>
-                        }
+                        } 
 
                         {/* <TableCell align="left"
                           component={Link}

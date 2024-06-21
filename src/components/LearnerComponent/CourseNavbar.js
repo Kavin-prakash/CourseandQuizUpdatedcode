@@ -35,8 +35,9 @@ import { useSelector,useDispatch } from "react-redux";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FetchuserDataRequest } from "../../actions/LearnerAction/FetchRegisterAction";
+import '../../Styles/Learner/LearnerNavbar.css';
 
 const learnerId = sessionStorage.getItem("UserSessionID");
 
@@ -189,6 +190,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [search, setSearch] = useState(""); // State for search query
   // const [courses, setCourses] = useState([]);
   const courses = useSelector((state) => state.fetchcourse.courses);
@@ -253,6 +255,15 @@ export default function MiniDrawer() {
     setSearch(suggestion.title);
     setSuggestions([]);
   };
+
+  const Logout = () => {
+    handleMenuClose();
+    navigate('/')
+    sessionStorage.removeItem("UserSessionID")
+    sessionStorage.removeItem("userData")
+
+  }
+
 
   return (
     <Box sx={{ display: "flex" }} className="bar">
@@ -358,7 +369,9 @@ export default function MiniDrawer() {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem onClick={handleMenuClose}>Close</MenuItem>
+                 <MenuItem onClick={handleMenuClose}> <Link to='/updateuserprofile' style={{ color: 'inherit', textDecoration: 'inherit' }}>    Edit Profile  </Link></MenuItem>
+                  <MenuItem onClick={handleMenuClose} >     <Link to='/passwordchange' style={{ color: 'inherit', textDecoration: "inherit" }}>Password Update</Link> </MenuItem>
+                  <MenuItem onClick={Logout}>Log Out</MenuItem>
               </Menu>
             </Stack>
           </Toolbar>
@@ -376,6 +389,7 @@ export default function MiniDrawer() {
         </DrawerHeader>
 
         <List>
+        <Link to='/LearnerDashboard'>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
@@ -384,7 +398,7 @@ export default function MiniDrawer() {
                 px: 2.5,
               }}
             >
-              <Link to="/LearnerDashboard">
+              
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -394,10 +408,12 @@ export default function MiniDrawer() {
                 >
                   <HomeOutlinedIcon />
                 </ListItemIcon>
-              </Link>
+             
               <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
+          </Link>
+          <Link to='/LearnerPage'>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
@@ -406,7 +422,7 @@ export default function MiniDrawer() {
                 px: 2.5,
               }}
             >
-              <Link to="/LearnerPage">
+             
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -416,10 +432,12 @@ export default function MiniDrawer() {
                 >
                   <MenuBookIcon />
                 </ListItemIcon>
-              </Link>
+           
               <ListItemText primary="Courses" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
+          </Link>
+          <Link to='/LearnerenrolledCourse'>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
@@ -428,7 +446,7 @@ export default function MiniDrawer() {
                 px: 2.5,
               }}
             >
-              <Link to="/LearnerenrolledCourse">
+             
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -438,13 +456,15 @@ export default function MiniDrawer() {
                 >
                   <SchoolOutlinedIcon />
                 </ListItemIcon>
-              </Link>
+            
               <ListItemText
                 primary="My Course"
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>
           </ListItem>
+          </Link>
+          <Link to='/ViewScore'>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
@@ -453,7 +473,7 @@ export default function MiniDrawer() {
                 px: 2.5,
               }}
             >
-              <Link to="/LearnerScorePage">
+             
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -463,10 +483,11 @@ export default function MiniDrawer() {
                 >
                   <EmojiEventsOutlinedIcon />
                 </ListItemIcon>
-              </Link>
+            
               <ListItemText primary="Scores" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
+          </Link>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
