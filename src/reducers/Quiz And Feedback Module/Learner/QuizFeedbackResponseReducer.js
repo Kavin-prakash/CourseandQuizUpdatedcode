@@ -1,9 +1,10 @@
-import { QUIZFEEDBACKRESPONSE_REQUEST,QUIZFEEDBACKRESPONSE_SUCCESS,QUIZFEEDBACKRESPONSE_FAILURE } from '../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction';
+import { QUIZFEEDBACKRESPONSE_REQUEST,QUIZFEEDBACKRESPONSE_SUCCESS,QUIZFEEDBACKRESPONSE_FAILURE,QUIZFEEDBACKRESPONSE_STATUS } from '../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction';
  
 const initialState = {
   quizfeedbackquestions:[],
   loading: false,
   error: null,
+  isRequesting:false,
  
 };
  
@@ -26,6 +27,12 @@ const QuizFeedbackResponseReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+     case QUIZFEEDBACKRESPONSE_STATUS:
+      return{
+        ...state,
+        isRequesting:action.payload,
+      };
+   
  
     default:
       return state;

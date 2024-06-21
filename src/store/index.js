@@ -205,6 +205,10 @@ import LearnerdashboardReducer from '../reducers/LearnerReducer/Learnerdashboard
 import LearnerdashboardApi from '../middleware/LearnerMiddleware/LearnerdashboardApi';
 import { CoursebyScoreApi } from '../middleware/LearnerMiddleware/CoursebyScoreApi';
 import CoursebyScoreReducer from '../reducers/LearnerReducer/CoursebyScoreReducer';
+import GetResultByLearnerIDReducer from '../reducers/Quiz And Feedback Module/Learner/GetResultByLearnerIDReducer';
+import GetResultByLearnerIDApi from '../middleware/Quiz And Feedback Module/Learner/GetResultByLearnerIDApi';
+import LearnerFeedbackResultReducer from '../reducers/Quiz And Feedback Module/LearnerFeedbackResultReducer';
+import LearnerFeedbackResultApi from '../middleware/Quiz And Feedback Module/Learner/LearnerFeedbackResultApi';
 
 const rootReducer = combineReducers({
   forgotPassword: ForgotPasswordreducer,
@@ -254,7 +258,7 @@ const rootReducer = combineReducers({
   enroll: enrollmentReducer,
   fetchlearner: FetchRegisterReducer,
 
-  //learner 
+  //learner
   unenroll: UnEnrollReducer,
   scoreProgressBarGraph: LearnerScoreProgressBarGraphReducer,
   watchTime: addWatchTimeReducer,
@@ -281,7 +285,8 @@ const rootReducer = combineReducers({
   TopicFeedbackResponse: TopicFeedbackResponseReducer,
   fetchquizfeedbackquestion: FetchQuizFeedbackQuestionReducer,
   QuizFeedbackResponse: QuizFeedbackResponseReducer,
-
+  learnersresult: GetResultByLearnerIDReducer,
+  learnerfeedbackresult : LearnerFeedbackResultReducer,
 
   // COURSE TEAM  REDUCER
   level: fetchLevelReducer,
@@ -302,8 +307,6 @@ const rootReducer = combineReducers({
   fetchContentUrl: fetchContentUrlReducer,
   addcourse: AddCourseReducer,
   fetchindividualCourse: fetchCourseReducer,
-
-
 });
 
 const store = createStore(
@@ -335,6 +338,8 @@ const store = createStore(
     QuizFeedbackResponseApi,
     QuizInstructionApi,
     LearnerAttemptQuizIdApi,
+    GetResultByLearnerIDApi,
+    LearnerFeedbackResultApi,
     //course
     addCourse, addCategory, fetchcategoryApi, fetchlevelApi,
     fetchcourseApi, addTopic, fetchTopicsApi, fetchEditTopicsApi,

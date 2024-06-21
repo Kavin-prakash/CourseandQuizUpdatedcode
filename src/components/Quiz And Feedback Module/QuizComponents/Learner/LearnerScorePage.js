@@ -63,15 +63,7 @@ export const LearnerScorePage = () => {
     <Container style={{ marginTop: "100px", width: "90%", marginLeft: "15%" }}>
       <div id="scorepages">
         <div class="containersco">
-          <Container
-            fluid
-            id="containers"
-            // style={{
-            //   boxShadow: "0px 4px 8px #23275c",
-            //   marginTop: "100px",
-            //   width: "100%",
-            // }}
-          >
+          <Container fluid id="containers">
             <Box
               id="instructions"
               sx={{
@@ -84,7 +76,7 @@ export const LearnerScorePage = () => {
               }}
               style={{}}
             >
-           <Card
+              <Card
                 id="scorepage-topic"
                 style={{
                   height: "50px",
@@ -107,16 +99,7 @@ export const LearnerScorePage = () => {
                 style={{ width: "500%", height: "105%" }}
               >
                 <CardContent>
-                  <Divider inset="none" id="divider" />
-                  <Typography level="title-md">
-                    Duration : {quizinstructions.duration}{" "}
-                  </Typography>
-                  <Typography level="title-md">
-                    Pass Mark : {quizinstructions.passMark}{" "}
-                  </Typography>
-                  <Typography level="title-md">
-                    Attempts Allowed : {quizinstructions.attemptsAllowed}
-                  </Typography>
+ 
                   <Divider inset="none" id="divider" />
                   <Typography>
                     <b>Score Card</b>
@@ -133,8 +116,16 @@ export const LearnerScorePage = () => {
                   <Typography>
                     {learnerAttempt ? (
                       <div className="scorecard">
+                        <h6>Start Time : {learnerAttempt.startTime}</h6>
+                        <h6>Start Time : {learnerAttempt.endTime}</h6>
                         <h1>
-                          {learnerAttempt.timeTaken > 60 ? `The time taken : ${Math.round((learnerAttempt.timeTaken / 60) * 100) / 100} minutes` : `The time taken : ${learnerAttempt.timeTaken} seconds`}
+                          {learnerAttempt.timeTaken > 60
+                            ? `The time taken : ${
+                                Math.round(
+                                  (learnerAttempt.timeTaken / 60) * 100
+                                ) / 100
+                              } minutes`
+                            : `The time taken : ${learnerAttempt.timeTaken} seconds`}
                         </h1>
                         {learnerAttempt.isPassed === true ? (
                           <>
@@ -146,68 +137,26 @@ export const LearnerScorePage = () => {
                               You Passed the {quizinstructions.nameOfQuiz}
                               Assessment
                             </h1>
-
                             <h1>Your Score is {learnerAttempt.score} </h1>
 
+                            <></>
                             <div>
-                              <div class="emoji emoji--haha">
-                                <div class="emoji__face">
-                                  <div class="emoji__eyes"></div>
-                                  <div class="emoji__mouth">
-                                    <div class="emoji__tongue"></div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="emoji emoji--yay">
-                                <div class="emoji__face">
-                                  <div class="emoji__eyebrows"></div>
-                                  <div class="emoji__mouth"></div>
-                                </div>
-                              </div>
-                              <div class="emoji emoji--wow">
-                                <div class="emoji__face">
-                                  <div class="emoji__eyebrows"></div>
-                                  <div class="emoji__eyes"></div>
-                                  <div class="emoji__mouth"></div>
-                                </div>
-                              </div>
+                              <Button
+                                variant="default"
+                                style={{
+                                  backgroundColor: "#365486",
+                                  color: "whitesmoke",
+                                  width: "180px",
+                                  marginLeft: "70%",
+                                  marginBottom: "55px",
+                                }}
+                                onClick={() => {
+                                  handleQuizGiveFeedback(quizId);
+                                }}
+                              >
+                                Give Quiz Feedback
+                              </Button>
                             </div>
-                            <>
-                              {/* <div>
-                                <Button
-                                  variant="default"
-                                  style={{
-                                    backgroundColor: "#365486",
-                                    color: "whitesmoke",
-                                    width: "150px",
-                                    marginLeft: "10%",
-                                  }}
-                                  onClick={() => {
-                                    navigate("/quizengine");
-                                  }}
-                                  >
-                                    Go To Course
-                                  </Button>
-                                </div> */}
-                            </>
-                            <div>
-                                <Button
-                                  variant="default"
-                                  style={{
-                                    backgroundColor: "#365486",
-                                    color: "whitesmoke",
-                                    width: "180px",
-                                    marginLeft: "70%",
-                                    marginBottom: "55px"
-                                  }}
-                                  onClick={() => {
-                                    handleQuizGiveFeedback(quizId);
-                                  }}
-                                >
-                                  Give Quiz Feedback
-                                </Button>
-                              </div>
                           </>
                         ) : (
                           <>
@@ -218,16 +167,9 @@ export const LearnerScorePage = () => {
 
                             <h5>Your Score is {learnerAttempt.score} </h5>
 
-                            <div class="emoji emoji--sad">
-                              <div class="emoji__face">
-                                <div class="emoji__eyebrows"></div>
-                                <div class="emoji__eyes"></div>
-                                <div class="emoji__mouth"></div>
-                              </div>
-                            </div>
                             {quizinstructions.attemptsAllowed -
                               learnerAttempt.currentAttempt ===
-                              0 ? (
+                            0 ? (
                               <>
                                 <h5>Your Attempt is over...</h5>
                               </>

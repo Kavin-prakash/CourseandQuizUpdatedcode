@@ -115,6 +115,7 @@ const AttemptQuiz = () => {
   return (
     <div className="learner-attemptquiz">
       {/* <AdminNavbar /> */}
+      
       <Timer />
       <div className="attempt-quiz-page">
         <h1 className="quiz-title">Attempt Quiz</h1>

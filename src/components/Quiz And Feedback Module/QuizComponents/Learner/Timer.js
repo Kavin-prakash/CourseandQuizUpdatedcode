@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
- import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
+import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
+import LearnerScorePage from "./LearnerScorePage";
+import { useNavigate } from "react-router-dom";
 
 function DynamicTimer() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
   const dispatch = useDispatch();
+
   const learnersAttemptId = sessionStorage.getItem("learnerAttemptId");
 
   useEffect(() => {
@@ -47,6 +50,16 @@ const Timer = ({ startTime, endTime }) => {
   const [timeLeft, setTimeLeft] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
 
+  const navigate = useNavigate();
+  function goto() {
+    console.log(isRunning);
+    debugger;
+    if (timeLeft === 0) {
+      window.location.href = "/learnerscorepage";
+      // navigate("/learnerscorepage");
+    }
+    // navigate("/learnerscorepage");
+  }
   useEffect(() => {
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -84,13 +97,16 @@ const Timer = ({ startTime, endTime }) => {
 
   return (
     <div>
-      {/* {isRunning ? (
-        <h5 className="timerclass">Time Left: {formatTime(timeLeft)}</h5>
+      {isRunning ? (
+        <h5 id="timerclass">Time Left: {formatTime(timeLeft)}</h5>
       ) : (
-        // <h2>Timer stopped</h2>
-        <h2> </h2>
-      )} */}
-      <h5 id="timerclass">Time Left: {formatTime(timeLeft)}</h5>
+        <>
+          {timeLeft}
+          {goto()}
+        </>
+
+        // <></>
+      )}
     </div>
   );
 };
