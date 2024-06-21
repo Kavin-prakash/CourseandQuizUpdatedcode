@@ -26,7 +26,7 @@ function LearnerScoreProgressBarGraph() {
     const chartWidth = 100 * courses.length * topics.length;
 
     return (
-        <div style={{ marginLeft: "-10%", marginTop: "-12%", width: `650px`, height: '400px' }}>
+        <div style={{ width: `350px`, height: '350px' }}>
             <VictoryChart domainPadding={55} padding={{ top: 20, bottom: 60, left: 100, right: 80 }}>
                 <VictoryAxis tickValues={courses} tickFormat={courses} />
                 <VictoryAxis dependentAxis />

@@ -109,8 +109,10 @@
     align-items: center;
     margin-top: 18px;
     margin-left: 20px;
- 
+   
 }
+
+
  
 .gender {
     margin-right: 20px;
@@ -143,4 +145,57 @@
 .all {
     margin-top: 25px;
     margin-left: 0%;
+}
+.field {
+width: 100%;
+margin-bottom: 20px;
+padding: 10px;
+box-sizing: border-box;
+}
+
+.form-control {
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+}
+
+/* .password-field-container {
+position: relative;
+width: 100%;
+}
+
+.password-icon {
+position: absolute;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+cursor: pointer;
+}
+
+.password-rules {
+background-color: #f8d7da;
+padding: 10px;
+border-radius: 5px;
+margin-top: 10px;
+color: #721c24;
+font-size: 14px;
+} */
+
+.gender-container {
+display: flex;
+justify-content: space-between;
+width: 100%;
+}
+
+.gender {
+margin-right: 15px;
+}
+
+.age-error-message, .text-danger {
+color: red;
+margin-top: 5px;
+}
+
+.alert {
+margin-top: 20px;
 }

@@ -102,6 +102,7 @@
 
 .tree li:hover {
   /* background-color: #1565C0; */
+  
 }
 
 .tree li.folder::before,
@@ -128,6 +129,7 @@
   cursor: pointer;
   border-radius: 2px;
   margin-bottom: 5px;
+  color: black;
 }
 
 .selected-component-wrapper {
@@ -153,4 +155,13 @@
   font-weight: bold;
   width: 50%;
   height: 50%;
+}
+.quizbutton_Learner
+{
+  background-color: #fff;
+  font-weight: bold;
+  width: 50%;
+  height: 50%;
+  border-radius:12%;
+  color: #27235C;
 }

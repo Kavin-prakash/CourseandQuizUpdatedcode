@@ -1,12 +1,710 @@
+
+
+// import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import "../../Styles/Learner/Navbarone.css";
+// import logo from "../../../src/Images/logo.png";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+// import PDFViewer from "./PDFViewer";
+// import { CiMusicNote1 } from "react-icons/ci";
+// import { BsFiletypePdf, BsFiletypePpt } from "react-icons/bs";
+// import { FaFileAlt, FaCheck } from "react-icons/fa";
+// import { CiYoutube } from "react-icons/ci";
+// import CourseDescription from "./CourseDescription";
+// import LearnerAudioViewer from "./LearnerAudioViewer";
+// import LearnerVideoViewer from "./LearnerVideoViewer";
+// import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
+// import PptViewerComponent from "./Pptxday";
+
+
+// function SidebarTopics() {
+
+//   const selectedCourse = useSelector((state) => state.enroll.selectedCourse);
+//   const viewcourse = useSelector((state) => state.enroll.course[0]);
+//   const userId = sessionStorage.getItem("UserSessionID");
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+ 
+//   const pdf = useSelector((state) => state.fetchPdf.material);
+ 
+//   useEffect(() => {
+//     console.log(selectedCourse);
+//   }, [selectedCourse]);
+ 
+//   const [folders, setFolders] = useState([
+//     {
+//       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
+//       isOpen: false,
+//       topics:
+//         selectedCourse && selectedCourse.topics
+//           ? selectedCourse.topics.map((topic) => ({
+//             name: topic.topicName,
+//             topicid:topic.topicId,
+//               isOpen: false,
+//               materials: topic.materials
+//                 ? topic.materials.map((material) => ({
+//                     materialId: material.materialId,
+//                     materialname: material.materialName,
+//                     materiallink: material.material,
+//                     materialType: material.materialType,
+//                   }))
+//                 : [],
+//             }))
+//           : [],
+//     },
+//   ]);
+ 
+//   useEffect(() => {
+//     console.log(folders);
+//   }, [folders]);
+ 
+//   const [selectedComponent, setSelectedComponent] = useState(
+//     <CourseDescription course={selectedCourse} />
+//   );
+ 
+//   const [openedMaterials, setOpenedMaterials] = useState(new Set());
+ 
+//   const [completedTopics, setCompletedTopics] = useState(() => {
+//     const storedCompletedTopics = sessionStorage.getItem(
+//       `completedTopics_${userId}`
+//     );
+//     return storedCompletedTopics
+//       ? new Set(JSON.parse(storedCompletedTopics))
+//       : new Set();
+//   });
+ 
+//   useEffect(() => {
+//     const storedOpenedMaterials = sessionStorage.getItem(
+//       `openedMaterials_${userId}`
+//     );
+//     if (storedOpenedMaterials) {
+//       setOpenedMaterials(new Set(JSON.parse(storedOpenedMaterials)));
+//     }
+//   }, [userId]);
+ 
+//   const saveOpenedMaterials = (openedMaterials) => {
+//     sessionStorage.setItem(
+//       `openedMaterials_${userId}`,
+//       JSON.stringify(Array.from(openedMaterials))
+//     );
+//   };
+ 
+//   const saveCompletedTopics = (completedTopics) => {
+//     sessionStorage.setItem(
+//       `completedTopics_${userId}`,
+//       JSON.stringify(Array.from(completedTopics))
+//     );
+//   };
+ 
+//   const toggleFolder = (index) => {
+//     const updatedFolders = [...folders];
+//     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
+//     setFolders(updatedFolders);
+//   };
+ 
+//   const toggleTopic = (folderIndex, topicIndex, e) => {
+//     e.stopPropagation();
+ 
+//     // Prevent the next topic from opening unless the previous topic's quiz has been completed
+//     if (
+//       topicIndex > 0 &&
+//       !completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name)
+//     ) {
+//       alert("Please complete the quiz for the previous topic before proceeding.");
+//       return;
+//     }
+ 
+//     const updatedFolders = [...folders];
+//     updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
+//       (topic, index) => ({
+//         ...topic,
+//         isOpen: index === topicIndex ? !topic.isOpen : topic.isOpen,
+//       })
+//     );
+//     setFolders(updatedFolders);
+//   };
+ 
+//   const opencontent = (type, materiallink, materialId) => {
+//     console.log("io" + type);
+//     console.log("link" + materiallink);
+ 
+//     setOpenedMaterials((prevOpenedMaterials) => {
+//       const updatedMaterials = new Set(prevOpenedMaterials);
+//       updatedMaterials.add(materialId);
+//       saveOpenedMaterials(updatedMaterials);
+//       return updatedMaterials;
+//     });
+ 
+//     switch (type) {
+//       case "PPT":
+//         setSelectedComponent(<PptViewerComponent material={materiallink} materialId={materialId}/>);
+//         break;
+//       case "PDF":
+//         setSelectedComponent(<PDFViewer  material={materiallink} materialId={materialId} />);
+//         break;
+//       // case "TEXT":
+//       //   setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
+//       //   break;
+//       case "AUDIO":
+//         setSelectedComponent(<LearnerAudioViewer  material={materiallink} materialId={materialId} />);
+//         break;
+//       case "VIDEO":
+//         setSelectedComponent(<LearnerVideoViewer  material={materiallink} materialId={materialId} />);
+//         break;
+//       default:
+//         break;
+//     }
+//   };
+ 
+//   const areAllMaterialsOpened = (materials) => {
+//     return materials.every((material) =>
+//       openedMaterials.has(material.materialId)
+//     );
+//   };
+//   // const quizId = useSelector(
+//   //   (state) => state.fetchquizinstruction.quizinstructiondetails
+//   // );
+ 
+//   const completeTopic = (topicName,topicId) => {
+//     debugger;
+//         // dispatch(fetchQuizIdRequest(topicId));
+//     setCompletedTopics((prevCompletedTopics) => {
+//       const updatedCompletedTopics = new Set(prevCompletedTopics);
+//       updatedCompletedTopics.add(topicName);
+//       saveCompletedTopics(updatedCompletedTopics);
+//       sessionStorage.setItem("topicId", topicId);    
+//     // sessionStorage.setItem("quizId",quizId.quizId);
+//       navigate("/instruction");
+      
+//       return updatedCompletedTopics;
+//     });
+//   };
+// //  console.log(quizId);
+//   return (
+//     <div>
+//       <nav className="navbar navbar-expand-sm navbar-default navbar-fixed-top" style={{height:'15px',backgroundColor:'#27235C'}}>
+//         <div className="container-fluid">
+//           <a className="navbar-brand" href="#">
+//             <div className="logo">
+//               <img src={logo} alt="Logo" className="rounded-pill" />
+//             </div>
+//           </a>
+//           <div style={{marginLeft:'450%'}}>
+//           <Link className="btn btn-secondary" to={`/LearnerenrolledCourse`} style={{textAlign:'center', marginTop:'-45%'}} >
+//             Back
+//           </Link>
+//           </div>
+//         </div>
+//       </nav>
+//       <div className="d-flex">
+//         <div className="side">
+//           <ul className="tree" style={{ width: 250 }}>
+//             {folders.map((folder, folderIndex) => (
+//               <li
+//                 key={folderIndex}
+//                 className={`folder ${folder.isOpen ? "open" : ""}`}
+//                 onClick={() => toggleFolder(folderIndex)}
+//               >
+//                 {folder.isOpen ? "-" : "+"} {folder.name}
+//                 {folder.isOpen && (
+//                   <ul>
+//                     {folder.topics?.map((topic, topicIndex) => (
+//                       <li
+//                         key={topicIndex}
+//                         className={`folder ${topic.isOpen ? "open" : ""}`}
+//                         onClick={(e) =>
+//                           toggleTopic(folderIndex, topicIndex, e)
+//                         }
+//                       >
+//                         {topic.isOpen ? "-" : "+"} {topic.name}
+//                         {topic.isOpen && (
+//                           <ul type="none">
+//                             {topic.materials.map((content, contentIndex) => (
+//                               <li
+//                                 key={contentIndex}
+//                                 className="file"
+//                                 onClick={(e) => {
+//                                   e.stopPropagation(); // Prevent the topic from toggling
+//                                   opencontent(
+//                                     content.materialType,
+//                                     content.materiallink,
+//                                     content.materialId
+//                                   );
+//                                 }}
+//                               >
+//                                 {content.materialType === "VIDEO" ? (
+//                                   <>
+//                                     <CiYoutube
+//                                       className="icon"
+//                                       style={{
+//                                         color: "blue",
+//                                         fontSize: "20px",
+//                                       }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "AUDIO" ? (
+//                                   <>
+//                                     <CiMusicNote1
+//                                       className="icon"
+//                                       style={{ color: "blue" }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "TEXT" ? (
+//                                   <>
+//                                     <FaFileAlt
+//                                       className="icon"
+//                                       style={{ color: "red" }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "PDF" ? (
+//                                   <>
+//                                     <BsFiletypePdf
+//                                       className="icon"
+//                                       style={{ color: "red" }}
+//                                     />
+//                                   </>
+//                                 ) : (
+//                                   <>
+//                                     <BsFiletypePpt
+//                                       className="icon"
+//                                       style={{ color: "red" }}
+//                                     />
+//                                   </>
+//                                 )}
+//                                 {content.materialname}
+//                                 {openedMaterials.has(content.materialId) && (
+//                                   <FaCheck
+//                                     className="icon"
+//                                     style={{
+//                                       color: "green",
+//                                       marginLeft: "5px",
+//                                     }}
+//                                   />
+//                                 )}
+//                               </li>
+//                             ))}
+//                             <button
+//                               className="quizbutton_Learner"
+//                               disabled={!topic.materials.length || !areAllMaterialsOpened(topic.materials)}
+//                               onClick={() => completeTopic(topic.name,topic.topicid)}
+//                             >
+//                               Take Quiz
+//                             </button>
+
+//                           </ul>
+//                         )}
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 )}
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//         <div className="content">{selectedComponent}</div>
+//         <a href="">{pdf.length > 0 && pdf[0].name}</a>
+//       </div>
+//     </div>
+//   );
+// }
+ 
+// export default SidebarTopics;
+
+
+
+
+
+
+
+
+
+//New topics for quiz disable
+
+
+// import React, { useState, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import "../../Styles/Learner/Navbarone.css";
+// import logo from "../../../src/Images/logo.png";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+// import PDFViewer from "./PDFViewer";
+// import { CiMusicNote1 } from "react-icons/ci";
+// import { BsFiletypePdf, BsFiletypePpt } from "react-icons/bs";
+// import { FaFileAlt, FaCheck } from "react-icons/fa";
+// import { CiYoutube } from "react-icons/ci";
+// import CourseDescription from "./CourseDescription";
+// import LearnerAudioViewer from "./LearnerAudioViewer";
+// import LearnerVideoViewer from "./LearnerVideoViewer";
+// import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
+// import PptViewerComponent from "./Pptxday";
+// import { selectCourse, } from "../../actions/LearnerAction/EnrolledCourseAction";
+// //  import {fetchTopicsRequest} from '../../actions/Course/Topic/FetchTopicsAction'
+// import { getIndividualEnrollCourseRequest } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
+ 
+// function SidebarTopics() {
+//   const {courseId}= useParams();
+//   const [topicId, settopicId]=useState();
+//   const selectedCourseSelector = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse[0]);
+//   const [selectedCourse,setselectedCourse]= useState();
+//   const quizId = useSelector((state) => state.quizId.quizId);
+//   console.log("one",quizId);
+//   // const id = sessionStorage.getItem('UserSessionID')
+//   // const viewcourse = useSelector((state) => state.enroll.course[0]);
+//   const userId = sessionStorage.getItem("UserSessionID");
+ 
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+//   const pdf = useSelector((state) => state.fetchPdf.material);
+ 
+//  useEffect(()=>{
+//   dispatch(getIndividualEnrollCourseRequest(courseId));
+ 
+//  },[courseId])
+ 
+//  useEffect(()=>{
+//   setselectedCourse(selectedCourseSelector);
+//  },[selectedCourseSelector])
+ 
+ 
+//   useEffect(() => {
+//     console.log("ssss",selectedCourse);
+//   }, [selectedCourse]);
+//   const [folders, setFolders] = useState([
+//     {
+//       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
+//       isOpen: false,
+//       topics: selectedCourse && selectedCourse.topics
+//         ? selectedCourse.topics.map((topic) => ({
+//             name: topic.topicName,
+//             topicid: topic.topicId,
+//             isOpen: false,
+//             materials: topic.materials
+//               ? topic.materials.map((material) => ({
+//                   materialId: material.materialId,
+//                   materialname: material.materialName,
+//                   materiallink: material.material,
+//                   materialType: material.materialType,
+//                 }))
+//               : [],
+//           }))
+//         : [],
+//     },
+//   ]);
+ 
+//   useEffect(()=>{
+//     setFolders([
+//       {
+//         name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
+//         isOpen: false,
+//         topics: selectedCourse && selectedCourse.topics
+//           ? selectedCourse.topics.map((topic) => ({
+//               name: topic.topicName,
+//               topicid: topic.topicId,
+//               isOpen: false,
+//               materials: topic.materials
+//                 ? topic.materials.map((material) => ({
+//                     materialId: material.materialId,
+//                     materialname: material.materialName,
+//                     materiallink: material.material,
+//                     materialType: material.materialType,
+//                   }))
+//                 : [],
+//             }))
+//           : [],
+//       },
+//     ])
+//   },[selectedCourse])
+ 
+//   useEffect(() => {
+//     console.log(folders);
+//   }, [folders]);
+ 
+//   const [selectedComponent, setSelectedComponent] = useState(
+//     <CourseDescription courseId={courseId} />
+//   );
+//   const [openedMaterials, setOpenedMaterials] = useState(new Set());
+//   const [completedTopics, setCompletedTopics] = useState(() => {
+//     const storedCompletedTopics = sessionStorage.getItem(
+//       `completedTopics_${userId}`
+//     );
+//     return storedCompletedTopics
+//       ? new Set(JSON.parse(storedCompletedTopics))
+//       : new Set();
+//   });
+ 
+//   useEffect(() => {
+//     const storedOpenedMaterials = sessionStorage.getItem(
+//       `openedMaterials_${userId}`
+//     );
+//     if (storedOpenedMaterials) {
+//       setOpenedMaterials(new Set(JSON.parse(storedOpenedMaterials)));
+//     }
+//   }, [userId]);
+ 
+//   const saveOpenedMaterials = (openedMaterials) => {
+//     sessionStorage.setItem(
+//       `openedMaterials_${userId}`,
+//       JSON.stringify(Array.from(openedMaterials))
+//     );
+//   };
+ 
+//   const saveCompletedTopics = (completedTopics) => {
+//     sessionStorage.setItem(
+//       `completedTopics_${userId}`,
+//       JSON.stringify(Array.from(completedTopics))
+//     );
+//   };
+ 
+//   // useEffect(() => {
+//   // fetchquizid()
+//   // }, [topicId]);
+ 
+//   const fetchquizid = (topicindex) => {
+//     console.log("handleAddQuiz called with topicId:", folders[0].topics[topicindex].topicid);
+//     settopicId(folders[0].topics[topicindex].topicid)
+//     dispatch(fetchQuizIdRequest(folders[0].topics[topicindex].topicid));
+//     sessionStorage.setItem("topicId", topicId);
+//   };  //change
+ 
+ 
+ 
+//   const toggleFolder = (index) => {
+//     const updatedFolders = [...folders];
+//     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
+//     setFolders(updatedFolders);
+//   };
+ 
+//   const toggleTopic = (folderIndex, topicIndex, e) => {
+//     e.stopPropagation();
+ 
+//     // Prevent the next topic from opening unless the previous topic's quiz has been completed
+//     if (
+//       topicIndex > 0 &&
+//       !completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name)
+//     ) {
+//       alert("Please complete the quiz for the previous topic before proceeding.");
+//       return;
+//     }
+ 
+//     const updatedFolders = [...folders];
+//     updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
+//       (topic, index) => ({
+//         ...topic,
+//         isOpen: index === topicIndex ? !topic.isOpen : false,
+//       })
+//     );
+//     setFolders(updatedFolders);
+//   };
+ 
+//   const opencontent = (type, materiallink, materialId) => {
+//     console.log("io" + type);
+//     console.log("link" + materiallink);
+//     setOpenedMaterials((prevOpenedMaterials) => {
+//       const updatedMaterials = new Set(prevOpenedMaterials);
+//       updatedMaterials.add(materialId);
+//       saveOpenedMaterials(updatedMaterials);
+//       return updatedMaterials;
+//     });
+//     switch (type) {
+//       case "PPT":
+//         setSelectedComponent(
+//           <PptViewerComponent material={materiallink} materialId={materialId} />
+//         );
+//         break;
+//       case "PDF":
+//         setSelectedComponent(
+//           <PDFViewer material={materiallink} materialId={materialId} />
+//         );
+//         break;
+//       case "AUDIO":
+//         setSelectedComponent(
+//           <LearnerAudioViewer material={materiallink} materialId={materialId} />
+//         );
+//         break;
+//       case "VIDEO":
+//         setSelectedComponent(
+//           <LearnerVideoViewer material={materiallink} materialId={materialId} />
+//         );
+//         break;
+//       default:
+//         break;
+//     }
+//   };
+ 
+//   const areAllMaterialsOpened = (materials) => {
+//     return materials.every((material) => openedMaterials.has(material.materialId));
+//   };
+ 
+//   const [feedbackGiven, setFeedbackGiven] = useState(false);
+ 
+//   const completeTopic = (topicName, topicId) => {
+//     debugger;
+//     setCompletedTopics((prevCompletedTopics) => {
+//       const updatedCompletedTopics = new Set(prevCompletedTopics);
+//       updatedCompletedTopics.add(topicName);
+//       saveCompletedTopics(updatedCompletedTopics);
+//       sessionStorage.setItem("topicId", topicId);
+//       navigate("/instruction");
+//       return updatedCompletedTopics;
+//     });
+//   };
+ 
+//   const giveFeedback = () => {
+//     setFeedbackGiven(true);
+//   };
+ 
+//   return (
+//     <div>
+//       <nav
+//         className="navbar navbar-expand-sm navbar-default navbar-fixed-top"
+//         style={{ height: "15px", backgroundColor: "#27235C" }}
+//       >
+//         <div className="container-fluid">
+//           <a className="navbar-brand" href="#">
+//             <div className="logo">
+//               <img src={logo} alt="Logo" className="rounded-pill" />
+//             </div>
+//           </a>
+//           <div style={{ marginLeft: "450%" }}>
+//             <Link
+//               className="btn btn-secondary"
+//               to={`/LearnerenrolledCourse`}
+//               style={{ textAlign: "center", marginTop: "-45%" }}
+//             >
+//               Back
+//             </Link>
+//           </div>
+//         </div>
+//       </nav>
+//       <div className="d-flex">
+//         <div className="side">
+//           <ul className="tree" style={{ width: 250 }}>
+//             {folders.map((folder, folderIndex) => (
+//               <li
+//                 key={folderIndex}
+//                 className={`folder ${folder.isOpen ? "open" : ""}`}
+//                 onClick={() => {toggleFolder(folderIndex);console.log("hihi", folder.topics);}}
+ 
+//               >
+//                 {folder.isOpen ? "-" : "+"}
+//                 {folder.name}
+//                 {folder.isOpen && (
+//                   <ul>
+//                     {folder.topics?.map((topic, topicIndex) => (
+//                       <li
+//                         key={topicIndex}
+//                         className={`folder ${topic.isOpen ? "open" : ""}`}
+//                         onClick={(e) => {toggleTopic(folderIndex, topicIndex,  e);console.log("topicinddex", topicIndex);fetchquizid(topicIndex)}}
+                       
+//                       >
+//                         {topic.isOpen ? "-" : "+"}
+//                         {topic.name}
+//                         {topic.isOpen && (
+//                           <ul type="none">
+//                             {topic.materials.map((content, contentIndex) => (
+//                               <li
+//                                 key={contentIndex}
+//                                 className="file"
+//                                 onClick={(e) => {
+//                                   e.stopPropagation();
+//                                   opencontent(
+//                                     content.materialType,
+//                                     content.materiallink,
+//                                     content.materialId
+//                                   );
+//                                 }}
+//                               >
+//                                 {content.materialType === "VIDEO" ? (
+//                                   <>
+//                                     <CiYoutube
+//                                       className="icon"
+//                                       style={{ color: "blue", fontSize: "20px" }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "AUDIO" ? (
+//                                   <>
+//                                     <CiMusicNote1 className="icon" style={{ color: "blue" }} />
+//                                   </>
+//                                 ) : content.materialType === "TEXT" ? (
+//                                   <>
+//                                     <FaFileAlt className="icon" style={{ color: "red" }} />
+//                                   </>
+//                                 ) : content.materialType === "PDF" ? (
+//                                   <>
+//                                     <BsFiletypePdf className="icon" style={{ color: "red" }} />
+//                                   </>
+//                                 ) : (
+//                                   <>
+//                                     <BsFiletypePpt className="icon" style={{ color: "red" }} />
+//                                   </>
+//                                 )}
+//                                 {content.materialname}
+//                                 {openedMaterials.has(content.materialId) && (
+//                                   <FaCheck
+//                                     className="icon"
+//                                     style={{ color: "green", marginLeft: "5px" }}
+//                                   />
+//                                 )}
+//                               </li>
+//                             ))}
+//                             <button
+//                               className="btn btn-primary"
+//                               disabled={
+//                                 !topic.materials.length || !areAllMaterialsOpened(topic.materials)
+//                               }
+//                               onClick={giveFeedback}
+//                             >
+//                               Give Feedback
+//                             </button>
+//                             {quizId? <button
+//                               className="btn btn-success"
+//                               //disabled={!feedbackGiven}
+//                               onClick={() => completeTopic(topic.name, topic.topicid)}
+//                             >
+//                               Take Quiz
+//                             </button>:<button
+//                               className="btn btn-success"
+//                               disabled={true}
+                             
+//                             >
+//                               No Quiz available
+//                             </button>}
+//                           </ul>
+//                         )}
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 )}
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//         <div className="content">{selectedComponent}</div>
+//         <a href="">{pdf.length >0 && pdf[0].name}</a>
+//         </div>
+//       </div>
+//     );
+//   }
+   
+//   export default SidebarTopics;
+ 
+
+
+
+//kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+
+
+
 // import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import "../../Styles/Learner/Navbarone.css";
 // // import logo from '../Images/logo.png';
 // import logo from "../../../src/Images/logo.png";
-
+ 
 // import { Document, Page } from "react-pdf";
 // import { useSelector } from "react-redux";
-
+ 
 // import { Link, Route } from "react-router-dom";
 // import PDFViewer from "./PDFViewer";
 // import PptViewerComponent from "./Pptxday";
@@ -15,15 +713,15 @@
 // import {  FaFileAlt} from 'react-icons/fa';
 // import { CiYoutube } from "react-icons/ci";
 // import CourseDescription from "./CourseDescription";
-
-
-
+ 
+ 
+ 
 // function SidebarTopics() {
 //   const selectedCourse = useSelector((state) => state.enroll.selectedCourse);
 //   const [numPages, setNumPages] = useState(null);
 //   const [pageNumber, setPageNumber] = useState(1);
 //   const viewcourse = useSelector((state) => state.enroll.course[0]);
-
+ 
 //   const pdf = useSelector((state) => state.fetchPdf.material);
 //  useEffect(()=>{
 //   console.log(selectedCourse);
@@ -37,17 +735,17 @@
 //           ? selectedCourse.topics.map((topic) => ({
 //               name: topic.topicName,
 //               isOpen: false,
-              
+             
 //                 materials: topic.materials? topic.materials.map((material)=>(
 //                   {
 //                     materialId:material.materialId,
 //                     materialname:material.materialName,
 //                     materiallink:material.material,
 //                     materialType:material.materialType
-                    
+                   
 //                   }
 //                 )):<>loading...</>
-
+ 
 //             }))
 //           : [],
 //     },
@@ -55,22 +753,22 @@
 //   useEffect(()=>{
 //     console.log(folders);
 //   },[])
-
+ 
 //   const [selectedComponent, setSelectedComponent] = useState(<CourseDescription course={selectedCourse}/>);
-
+ 
 //   const toggleFolder = (index) => {
 //     const updatedFolders = [...folders];
 //     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
 //     setFolders(updatedFolders);
 //   };
-
+ 
 //   const toggleTopic = (folderIndex, topicIndex, e) => {
 //     e.stopPropagation();
 //     const updatedFolders = [...folders];
 //     if (updatedFolders[folderIndex].topics[topicIndex].isOpen) {
 //       updatedFolders[folderIndex].topics[topicIndex].isOpen = false;
 //     } else {
-
+ 
 //       updatedFolders[folderIndex].topics.forEach((topic) => {
 //         topic.isOpen = false;
 //       });
@@ -82,7 +780,7 @@
 //     e.stopPropagation();
 //     console.log("oo")
 //     const updatedFolders = [...folders];
-    
+   
 //     if (updatedFolders[folderIndex].topics[topicIndex].materialType[typeIndex].isOpen) {
 //         updatedFolders[folderIndex].topics[topicIndex].materialType[typeIndex].isOpen = false;
 //     } else {
@@ -91,7 +789,7 @@
 //         });
 //         updatedFolders[folderIndex].topics[topicIndex].materialType[typeIndex].isOpen = true;
 //     }
-    
+   
 //     setFolders(updatedFolders);
 // };
 //    const navigate = useNavigate();
@@ -107,9 +805,9 @@
 //   //       break;
 //   //     case "PDF":
 //   //       setSelectedComponent(<PDFViewer Document={"k"}/>);
-
+ 
 //   //       // setSelectedComponent( <a href="">{pdf.length > 0 && pdf[0].name}</a>);
-
+ 
 //   //       // navigate('/PDF');
 //   //       // setSelectedComponent(
 //   //       //   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -128,7 +826,7 @@
 //   //       break;
 //   //   }
 //   // };
-
+ 
 //   function onDocumentLoadSuccess({ numPages }) {
 //     setNumPages(numPages);
 //   }
@@ -139,13 +837,13 @@
 //   case "PPT":
 //         setSelectedComponent(<PDFViewer material={materiallink}/>);
    
-    
+   
 //     break;
 //   case "PDF":
 //     setSelectedComponent(<PDFViewer material={materiallink}/>);
-
+ 
 //     // setSelectedComponent( <a href="">{pdf.length > 0 && pdf[0].name}</a>);
-
+ 
 //     // navigate('/PDF');
 //     // setSelectedComponent(
 //     //   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -158,7 +856,7 @@
 //     break;
 //     case "TEXT":
 //       setSelectedComponent(<PDFViewer material={materiallink}/>);
-  
+ 
 //   default:
 //     // setSelectedComponent(<CourseDescription course={selectedCourse}/>);         for emg
 //     break;
@@ -179,7 +877,7 @@
 //             </div>
 //           </a>
 //           {/* <button type="button" class="btn btn-primary">Back</button> */}
-
+ 
 //           <Link className="btn btn-primary" to={`/LearnerenrolledCourse`}>
 //             Back
 //           </Link>
@@ -187,14 +885,14 @@
        
 //       </nav>
 //       <div className="d-flex">
-
-
-    
-      
-//       <div className="side">
-
+ 
+ 
+   
      
-        
+//       <div className="side">
+ 
+     
+       
 //     <ul className="tree" style={{ width: 250 }}>
 //         {folders.map((folder, folderIndex) => (
 //             <li key={folderIndex} className={`folder ${folder.isOpen ? "open" : ""}`} onClick={() => toggleFolder(folderIndex)}>
@@ -207,7 +905,7 @@
 //                                 {topic.isOpen && (
 //                                     <ul type="none">
 //                                                         {topic.materials.map((content, contentIndex) => (
-
+ 
 //                                                             <li key={contentIndex} className="file" onClick={(e)=>{opencontent(content.materialType,content.materiallink)}}>
 //                                         {content.materialType==='VIDEO'?<><CiYoutube className="icon" style={{ color: 'blue', fontSize: '20px' }} /></>:content.materialType=='AUDIO'?<><CiMusicNote1 className="icon" style={{ color: 'blue' }} /></>:content.materialType=='TEXT'?<><FaFileAlt className="icon" style={{ color: 'red' }} /></>:content.materialType=='PDF'?<><BsFiletypePdf className="icon" style={{ color: 'red' }} /></>:<><BsFiletypePpt className="icon" style={{ color: 'red' }} /></>}
 //                                                                 {content.materialname}
@@ -229,27 +927,353 @@
 //           {selectedComponent}
 //           {/* <a href="">{pdf.length > 0 && pdf[0].name}</a> */}
 //         </div>
-
+ 
 //         {/* <div class="scroll" style={{width:10000}}>
-
+ 
 //             <PDFViewer/>                  
 //         </div> */}
 //         <div></div>
-
+ 
 //         <a href="">{pdf.length > 0 && pdf[0].name}</a>
 //       </div>
 //     </div>
 //   );
 // }
-
+ 
 // export default SidebarTopics;
-
-
+ 
+ 
 //before change
-
-
+ 
+ 
+// import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import "../../Styles/Learner/Navbarone.css";
+// import logo from "../../../src/Images/logo.png";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+// import PDFViewer from "./PDFViewer";
+// import { CiMusicNote1 } from "react-icons/ci";
+// import { BsFiletypePdf, BsFiletypePpt } from "react-icons/bs";
+// import { FaFileAlt, FaCheck } from "react-icons/fa";
+// import { CiYoutube } from "react-icons/ci";
+// import CourseDescription from "./CourseDescription";
+// import LearnerAudioViewer from "./LearnerAudioViewer";
+// import LearnerVideoViewer from "./LearnerVideoViewer";
+// import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
+// import PptViewerComponent from "./Pptxday";
+ 
+ 
+// function SidebarTopics() {
+ 
+//   const selectedCourse = useSelector((state) => state.enroll.selectedCourse);
+//   const viewcourse = useSelector((state) => state.enroll.course[0]);
+//   const userId = sessionStorage.getItem("UserSessionID");
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+ 
+//   const pdf = useSelector((state) => state.fetchPdf.material);
+ 
+//   useEffect(() => {
+//     console.log(selectedCourse);
+//   }, [selectedCourse]);
+ 
+//   const [folders, setFolders] = useState([
+//     {
+//       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
+//       isOpen: false,
+//       topics:
+//         selectedCourse && selectedCourse.topics
+//           ? selectedCourse.topics.map((topic) => ({
+//             name: topic.topicName,
+//             topicid:topic.topicId,
+//               isOpen: false,
+//               materials: topic.materials
+//                 ? topic.materials.map((material) => ({
+//                     materialId: material.materialId,
+//                     materialname: material.materialName,
+//                     materiallink: material.material,
+//                     materialType: material.materialType,
+//                   }))
+//                 : [],
+//             }))
+//           : [],
+//     },
+//   ]);
+ 
+//   useEffect(() => {
+//     console.log(folders);
+//   }, [folders]);
+ 
+//   const [selectedComponent, setSelectedComponent] = useState(
+//     <CourseDescription course={selectedCourse} />
+//   );
+ 
+//   const [openedMaterials, setOpenedMaterials] = useState(new Set());
+ 
+//   const [completedTopics, setCompletedTopics] = useState(() => {
+//     const storedCompletedTopics = sessionStorage.getItem(
+//       `completedTopics_${userId}`
+//     );
+//     return storedCompletedTopics
+//       ? new Set(JSON.parse(storedCompletedTopics))
+//       : new Set();
+//   });
+ 
+//   useEffect(() => {
+//     const storedOpenedMaterials = sessionStorage.getItem(
+//       `openedMaterials_${userId}`
+//     );
+//     if (storedOpenedMaterials) {
+//       setOpenedMaterials(new Set(JSON.parse(storedOpenedMaterials)));
+//     }
+//   }, [userId]);
+ 
+//   const saveOpenedMaterials = (openedMaterials) => {
+//     sessionStorage.setItem(
+//       `openedMaterials_${userId}`,
+//       JSON.stringify(Array.from(openedMaterials))
+//     );
+//   };
+ 
+//   const saveCompletedTopics = (completedTopics) => {
+//     sessionStorage.setItem(
+//       `completedTopics_${userId}`,
+//       JSON.stringify(Array.from(completedTopics))
+//     );
+//   };
+ 
+//   const toggleFolder = (index) => {
+//     const updatedFolders = [...folders];
+//     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
+//     setFolders(updatedFolders);
+//   };
+ 
+//   const toggleTopic = (folderIndex, topicIndex, e) => {
+//     e.stopPropagation();
+ 
+//     // Prevent the next topic from opening unless the previous topic's quiz has been completed
+//     if (
+//       topicIndex > 0 &&
+//       !completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name)
+//     ) {
+//       alert("Please complete the quiz for the previous topic before proceeding.");
+//       return;
+//     }
+ 
+//     const updatedFolders = [...folders];
+//     updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
+//       (topic, index) => ({
+//         ...topic,
+//         isOpen: index === topicIndex ? !topic.isOpen : topic.isOpen,
+//       })
+//     );
+//     setFolders(updatedFolders);
+//   };
+ 
+//   const opencontent = (type, materiallink, materialId) => {
+//     console.log("io" + type);
+//     console.log("link" + materiallink);
+ 
+//     setOpenedMaterials((prevOpenedMaterials) => {
+//       const updatedMaterials = new Set(prevOpenedMaterials);
+//       updatedMaterials.add(materialId);
+//       saveOpenedMaterials(updatedMaterials);
+//       return updatedMaterials;
+//     });
+ 
+//     switch (type) {
+//       case "PPT":
+//         setSelectedComponent(<PptViewerComponent material={materiallink} materialId={materialId}/>);
+//         break;
+//       case "PDF":
+//         setSelectedComponent(<PDFViewer  material={materiallink} materialId={materialId} />);
+//         break;
+//       // case "TEXT":
+//       //   setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
+//       //   break;
+//       case "AUDIO":
+//         setSelectedComponent(<LearnerAudioViewer  material={materiallink} materialId={materialId} />);
+//         break;
+//       case "VIDEO":
+//         setSelectedComponent(<LearnerVideoViewer  material={materiallink} materialId={materialId} />);
+//         break;
+//       default:
+//         break;
+//     }
+//   };
+ 
+//   const areAllMaterialsOpened = (materials) => {
+//     return materials.every((material) =>
+//       openedMaterials.has(material.materialId)
+//     );
+//   };
+//   // const quizId = useSelector(
+//   //   (state) => state.fetchquizinstruction.quizinstructiondetails
+//   // );
+ 
+//   const completeTopic = (topicName,topicId) => {
+//     debugger;
+//         // dispatch(fetchQuizIdRequest(topicId));
+//     setCompletedTopics((prevCompletedTopics) => {
+//       const updatedCompletedTopics = new Set(prevCompletedTopics);
+//       updatedCompletedTopics.add(topicName);
+//       saveCompletedTopics(updatedCompletedTopics);
+//       sessionStorage.setItem("topicId", topicId);    
+//     // sessionStorage.setItem("quizId",quizId.quizId);
+//       navigate("/instruction");
+     
+//       return updatedCompletedTopics;
+//     });
+//   };
+// //  console.log(quizId);
+//   return (
+//     <div>
+//       <nav className="navbar navbar-expand-sm navbar-default navbar-fixed-top" style={{height:'15px',backgroundColor:'#27235C'}}>
+//         <div className="container-fluid">
+//           <a className="navbar-brand" href="#">
+//             <div className="logo">
+//               <img src={logo} alt="Logo" className="rounded-pill" />
+//             </div>
+//           </a>
+//           <div style={{marginLeft:'450%'}}>
+//           <Link className="btn btn-secondary" to={`/LearnerenrolledCourse`} style={{textAlign:'center', marginTop:'-45%'}} >
+//             Back
+//           </Link>
+//           </div>
+//         </div>
+//       </nav>
+//       <div className="d-flex">
+//         <div className="side">
+//           <ul className="tree" style={{ width: 250 }}>
+//             {folders.map((folder, folderIndex) => (
+//               <li
+//                 key={folderIndex}
+//                 className={`folder ${folder.isOpen ? "open" : ""}`}
+//                 onClick={() => toggleFolder(folderIndex)}
+//               >
+//                 {folder.isOpen ? "-" : "+"} {folder.name}
+//                 {folder.isOpen && (
+//                   <ul>
+//                     {folder.topics?.map((topic, topicIndex) => (
+//                       <li
+//                         key={topicIndex}
+//                         className={`folder ${topic.isOpen ? "open" : ""}`}
+//                         onClick={(e) =>
+//                           toggleTopic(folderIndex, topicIndex, e)
+//                         }
+//                       >
+//                         {topic.isOpen ? "-" : "+"} {topic.name}
+//                         {topic.isOpen && (
+//                           <ul type="none">
+//                             {topic.materials.map((content, contentIndex) => (
+//                               <li
+//                                 key={contentIndex}
+//                                 className="file"
+//                                 onClick={(e) => {
+//                                   e.stopPropagation(); // Prevent the topic from toggling
+//                                   opencontent(
+//                                     content.materialType,
+//                                     content.materiallink,
+//                                     content.materialId
+//                                   );
+//                                 }}
+//                               >
+//                                 {content.materialType === "VIDEO" ? (
+//                                   <>
+//                                     <CiYoutube
+//                                       className="icon"
+//                                       style={{
+//                                         color: "blue",
+//                                         fontSize: "20px",
+//                                       }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "AUDIO" ? (
+//                                   <>
+//                                     <CiMusicNote1
+//                                       className="icon"
+//                                       style={{ color: "blue" }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "TEXT" ? (
+//                                   <>
+//                                     <FaFileAlt
+//                                       className="icon"
+//                                       style={{ color: "red" }}
+//                                     />
+//                                   </>
+//                                 ) : content.materialType === "PDF" ? (
+//                                   <>
+//                                     <BsFiletypePdf
+//                                       className="icon"
+//                                       style={{ color: "red" }}
+//                                     />
+//                                   </>
+//                                 ) : (
+//                                   <>
+//                                     <BsFiletypePpt
+//                                       className="icon"
+//                                       style={{ color: "red" }}
+//                                     />
+//                                   </>
+//                                 )}
+//                                 {content.materialname}
+//                                 {openedMaterials.has(content.materialId) && (
+//                                   <FaCheck
+//                                     className="icon"
+//                                     style={{
+//                                       color: "green",
+//                                       marginLeft: "5px",
+//                                     }}
+//                                   />
+//                                 )}
+//                               </li>
+//                             ))}
+ 
+                           
+//                             {/* <button
+//                               className="btn btn-success"
+//                               disabled={!areAllMaterialsOpened(topic.materials)}
+//                               onClick={() => completeTopic(topic.name,topic.topicid)
+//                               }
+//                             >
+//                               {/* {topic.topicid} */}
+//                               {/* Take Quiz */}
+//                             {/* </button>  */}
+ 
+ 
+//                             <button
+//                               className="btn btn-success"
+//                               disabled={!topic.materials.length || !areAllMaterialsOpened(topic.materials)}
+//                               onClick={() => completeTopic(topic.name,topic.topicid)}
+//                             >
+//                               Take Quiz
+//                             </button>
+ 
+//                           </ul>
+//                         )}
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 )}
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//         <div className="content">{selectedComponent}</div>
+//         <a href="">{pdf.length > 0 && pdf[0].name}</a>
+//       </div>
+//     </div>
+//   );
+// }
+ 
+// export default SidebarTopics;
+ 
+ 
+ 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../Styles/Learner/Navbarone.css";
 import logo from "../../../src/Images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -264,31 +1288,69 @@ import LearnerAudioViewer from "./LearnerAudioViewer";
 import LearnerVideoViewer from "./LearnerVideoViewer";
 import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
 import PptViewerComponent from "./Pptxday";
-
-
+import { selectCourse, } from "../../actions/LearnerAction/EnrolledCourseAction";
+//  import {fetchTopicsRequest} from '../../actions/Course/Topic/FetchTopicsAction'
+import { getIndividualEnrollCourseRequest } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
+ 
 function SidebarTopics() {
-
-  const selectedCourse = useSelector((state) => state.enroll.selectedCourse);
-  const viewcourse = useSelector((state) => state.enroll.course[0]);
+  const {courseId}= useParams();
+  const [topicId, settopicId]=useState();
+  const selectedCourseSelector = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse[0]);
+  const [selectedCourse,setselectedCourse]= useState();
+  const quizId = useSelector((state) => state.quizId.quizId);
+  console.log("one",quizId);
+  // const id = sessionStorage.getItem('UserSessionID')
+  // const viewcourse = useSelector((state) => state.enroll.course[0]);
   const userId = sessionStorage.getItem("UserSessionID");
+ 
   const navigate = useNavigate();
   const dispatch = useDispatch();
- 
   const pdf = useSelector((state) => state.fetchPdf.material);
  
-  useEffect(() => {
-    console.log(selectedCourse);
-  }, [selectedCourse]);
+ useEffect(()=>{
+  dispatch(getIndividualEnrollCourseRequest(courseId));
  
+ },[courseId])
+ 
+ useEffect(()=>{
+  setselectedCourse(selectedCourseSelector);
+ },[selectedCourseSelector])
+ 
+ 
+  useEffect(() => {
+    console.log("ssss",selectedCourse);
+  }, [selectedCourse]);
   const [folders, setFolders] = useState([
     {
       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
       isOpen: false,
-      topics:
-        selectedCourse && selectedCourse.topics
-          ? selectedCourse.topics.map((topic) => ({
+      topics: selectedCourse && selectedCourse.topics
+        ? selectedCourse.topics.map((topic) => ({
             name: topic.topicName,
-            topicid:topic.topicId,
+            topicid: topic.topicId,
+            isOpen: false,
+            materials: topic.materials
+              ? topic.materials.map((material) => ({
+                  materialId: material.materialId,
+                  materialname: material.materialName,
+                  materiallink: material.material,
+                  materialType: material.materialType,
+                }))
+              : [],
+          }))
+        : [],
+    },
+  ]);
+ 
+  useEffect(()=>{
+    setFolders([
+      {
+        name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
+        isOpen: false,
+        topics: selectedCourse && selectedCourse.topics
+          ? selectedCourse.topics.map((topic) => ({
+              name: topic.topicName,
+              topicid: topic.topicId,
               isOpen: false,
               materials: topic.materials
                 ? topic.materials.map((material) => ({
@@ -300,19 +1362,18 @@ function SidebarTopics() {
                 : [],
             }))
           : [],
-    },
-  ]);
+      },
+    ])
+  },[selectedCourse])
  
   useEffect(() => {
     console.log(folders);
   }, [folders]);
  
   const [selectedComponent, setSelectedComponent] = useState(
-    <CourseDescription course={selectedCourse} />
+    <CourseDescription courseId={courseId} />
   );
- 
   const [openedMaterials, setOpenedMaterials] = useState(new Set());
- 
   const [completedTopics, setCompletedTopics] = useState(() => {
     const storedCompletedTopics = sessionStorage.getItem(
       `completedTopics_${userId}`
@@ -345,6 +1406,19 @@ function SidebarTopics() {
     );
   };
  
+  // useEffect(() => {
+  // fetchquizid()
+  // }, [topicId]);
+ 
+  const fetchquizid = (topicindex) => {
+    console.log("handleAddQuiz called with topicId:", folders[0].topics[topicindex].topicid);
+    settopicId(folders[0].topics[topicindex].topicid)
+    dispatch(fetchQuizIdRequest(folders[0].topics[topicindex].topicid));
+    sessionStorage.setItem("topicId", topicId);
+  };  //change
+ 
+ 
+ 
   const toggleFolder = (index) => {
     const updatedFolders = [...folders];
     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
@@ -367,38 +1441,41 @@ function SidebarTopics() {
     updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
       (topic, index) => ({
         ...topic,
-        isOpen: index === topicIndex ? !topic.isOpen : topic.isOpen,
+        isOpen: index === topicIndex ? !topic.isOpen : false,
       })
     );
     setFolders(updatedFolders);
   };
  
-  const opencontent = (type, materiallink, materialId,materialName) => {
+  const opencontent = (type, materiallink, materialId) => {
     console.log("io" + type);
     console.log("link" + materiallink);
- 
     setOpenedMaterials((prevOpenedMaterials) => {
       const updatedMaterials = new Set(prevOpenedMaterials);
       updatedMaterials.add(materialId);
       saveOpenedMaterials(updatedMaterials);
       return updatedMaterials;
     });
- 
     switch (type) {
       case "PPT":
-        setSelectedComponent(<PptViewerComponent material={materiallink} materialId={materialId}/>);
+        setSelectedComponent(
+          <PptViewerComponent material={materiallink} materialId={materialId} />
+        );
         break;
       case "PDF":
-        setSelectedComponent(<PDFViewer  material={materiallink} materialId={materialId} />);
+        setSelectedComponent(
+          <PDFViewer material={materiallink} materialId={materialId} />
+        );
         break;
-      // case "TEXT":
-      //   setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
-      //   break;
       case "AUDIO":
-        setSelectedComponent(<LearnerAudioViewer  material={materiallink} materialId={materialId} materialName={materialName}  />);
+        setSelectedComponent(
+          <LearnerAudioViewer material={materiallink} materialId={materialId} />
+        );
         break;
       case "VIDEO":
-        setSelectedComponent(<LearnerVideoViewer  material={materiallink} materialId={materialId} materialName={materialName} />);
+        setSelectedComponent(
+          <LearnerVideoViewer material={materiallink} materialId={materialId} />
+        );
         break;
       default:
         break;
@@ -406,42 +1483,47 @@ function SidebarTopics() {
   };
  
   const areAllMaterialsOpened = (materials) => {
-    return materials.every((material) =>
-      openedMaterials.has(material.materialId)
-    );
+    return materials.every((material) => openedMaterials.has(material.materialId));
   };
-  // const quizId = useSelector(
-  //   (state) => state.fetchquizinstruction.quizinstructiondetails
-  // );
  
-  const completeTopic = (topicName,topicId) => {
+  const [feedbackGiven, setFeedbackGiven] = useState(false);
+ 
+  const completeTopic = (topicName, topicId) => {
     debugger;
-        // dispatch(fetchQuizIdRequest(topicId));
     setCompletedTopics((prevCompletedTopics) => {
       const updatedCompletedTopics = new Set(prevCompletedTopics);
       updatedCompletedTopics.add(topicName);
       saveCompletedTopics(updatedCompletedTopics);
-      sessionStorage.setItem("topicId", topicId);    
-    // sessionStorage.setItem("quizId",quizId.quizId);
+      sessionStorage.setItem("topicId", topicId);
       navigate("/instruction");
-      
       return updatedCompletedTopics;
     });
   };
-//  console.log(quizId);
+ 
+  const giveFeedback = () => {
+    setFeedbackGiven(true);
+  };
+ 
   return (
     <div>
-      <nav className="navbar navbar-expand-sm navbar-default navbar-fixed-top" style={{height:'15px',backgroundColor:'#27235C'}}>
+      <nav
+        className="navbar navbar-expand-sm navbar-default navbar-fixed-top"
+        style={{ height: "15px", backgroundColor: "#27235C" }}
+      >
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <div className="logo">
               <img src={logo} alt="Logo" className="rounded-pill" />
             </div>
           </a>
-          <div style={{marginLeft:'450%'}}>
-          <Link className="btn btn-secondary" to={`/LearnerenrolledCourse`} style={{textAlign:'center', marginTop:'-45%'}} >
-            Back
-          </Link>
+          <div style={{ marginLeft: "450%" }}>
+            <Link
+              className="btn btn-secondary"
+              to={`/LearnerenrolledCourse`}
+              style={{ textAlign: "center", marginTop: "-45%" }}
+            >
+              Back
+            </Link>
           </div>
         </div>
       </nav>
@@ -452,20 +1534,22 @@ function SidebarTopics() {
               <li
                 key={folderIndex}
                 className={`folder ${folder.isOpen ? "open" : ""}`}
-                onClick={() => toggleFolder(folderIndex)}
+                onClick={() => {toggleFolder(folderIndex);console.log("hihi", folder.topics);}}
+ 
               >
-                {folder.isOpen ? "-" : "+"} {folder.name}
+                {folder.isOpen ? "-" : "+"}
+                {folder.name}
                 {folder.isOpen && (
                   <ul>
                     {folder.topics?.map((topic, topicIndex) => (
                       <li
                         key={topicIndex}
                         className={`folder ${topic.isOpen ? "open" : ""}`}
-                        onClick={(e) =>
-                          toggleTopic(folderIndex, topicIndex, e)
-                        }
+                        onClick={(e) => {toggleTopic(folderIndex, topicIndex,  e);console.log("topicinddex", topicIndex);fetchquizid(topicIndex)}}
+                       
                       >
-                        {topic.isOpen ? "-" : "+"} {topic.name}
+                        {topic.isOpen ? "-" : "+"}
+                        {topic.name}
                         {topic.isOpen && (
                           <ul type="none">
                             {topic.materials.map((content, contentIndex) => (
@@ -473,12 +1557,11 @@ function SidebarTopics() {
                                 key={contentIndex}
                                 className="file"
                                 onClick={(e) => {
-                                  e.stopPropagation(); // Prevent the topic from toggling
+                                  e.stopPropagation();
                                   opencontent(
                                     content.materialType,
                                     content.materiallink,
-                                    content.materialId,
-                                    content.materialname
+                                    content.materialId
                                   );
                                 }}
                               >
@@ -486,74 +1569,57 @@ function SidebarTopics() {
                                   <>
                                     <CiYoutube
                                       className="icon"
-                                      style={{
-                                        color: "blue",
-                                        fontSize: "20px",
-                                      }}
+                                      style={{ color: "blue", fontSize: "20px" }}
                                     />
                                   </>
                                 ) : content.materialType === "AUDIO" ? (
                                   <>
-                                    <CiMusicNote1
-                                      className="icon"
-                                      style={{ color: "blue" }}
-                                    />
+                                    <CiMusicNote1 className="icon" style={{ color: "blue" }} />
                                   </>
                                 ) : content.materialType === "TEXT" ? (
                                   <>
-                                    <FaFileAlt
-                                      className="icon"
-                                      style={{ color: "red" }}
-                                    />
+                                    <FaFileAlt className="icon" style={{ color: "red" }} />
                                   </>
                                 ) : content.materialType === "PDF" ? (
                                   <>
-                                    <BsFiletypePdf
-                                      className="icon"
-                                      style={{ color: "red" }}
-                                    />
+                                    <BsFiletypePdf className="icon" style={{ color: "red" }} />
                                   </>
                                 ) : (
                                   <>
-                                    <BsFiletypePpt
-                                      className="icon"
-                                      style={{ color: "red" }}
-                                    />
+                                    <BsFiletypePpt className="icon" style={{ color: "red" }} />
                                   </>
                                 )}
                                 {content.materialname}
                                 {openedMaterials.has(content.materialId) && (
                                   <FaCheck
                                     className="icon"
-                                    style={{
-                                      color: "green",
-                                      marginLeft: "5px",
-                                    }}
+                                    style={{ color: "green", marginLeft: "5px" }}
                                   />
                                 )}
                               </li>
                             ))}
-
-                            
-                            {/* <button
-                              className="btn btn-success"
-                              disabled={!areAllMaterialsOpened(topic.materials)}
-                              onClick={() => completeTopic(topic.name,topic.topicid)
-                              }
-                            >
-                              {/* {topic.topicid} */}
-                              {/* Take Quiz */}
-                            {/* </button>  */}
-
-
                             <button
+                              className="btn btn-primary"
+                              disabled={
+                                !topic.materials.length || !areAllMaterialsOpened(topic.materials)
+                              }
+                              onClick={giveFeedback}
+                            >
+                              Give Feedback
+                            </button>
+                            {quizId? <button
                               className="btn btn-success"
-                              disabled={!topic.materials.length || !areAllMaterialsOpened(topic.materials)}
-                              onClick={() => completeTopic(topic.name,topic.topicid,topic.materialName)}
+                              //disabled={!feedbackGiven}
+                              onClick={() => completeTopic(topic.name, topic.topicid)}
                             >
                               Take Quiz
-                            </button>
-
+                            </button>:<button
+                              className="btn btn-success"
+                              disabled={true}
+                             
+                            >
+                              No Quiz available
+                            </button>}
                           </ul>
                         )}
                       </li>
@@ -565,10 +1631,10 @@ function SidebarTopics() {
           </ul>
         </div>
         <div className="content">{selectedComponent}</div>
-        <a href="">{pdf.length > 0 && pdf[0].name}</a>
+        <a href="">{pdf.length >0 && pdf[0].name}</a>
+        </div>
       </div>
-    </div>
-  );
-}
- 
-export default SidebarTopics;
+    );
+  }
+   
+  export default SidebarTopics;

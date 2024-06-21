@@ -83,9 +83,9 @@ function Routing() {
         {/* <Route path='/LearnerNavbar' element={<LearnerNavbar />}></Route> */}
         <Route path='/LearnerPage' element={<CourseNavbar />}></Route>
         <Route path="/LearnerenrolledCourse" element={<GetEnrollment />}></Route>
-        <Route path="/ViewTopics" element={<SidebarTopics />}></Route>
+        {/* <Route path="/ViewTopics" element={<SidebarTopics />}></Route> */}
         <Route path="/ViewScore" element={<TopicScore />}></Route>
-
+        <Route path="/ViewTopics/:courseId" element={<SidebarTopics />}></Route>
         {/* <Route path="/PDF" element={<PDFViewer />}></Route>
         <Route path="/PPT" element={<PptViewerComponent />}></Route> */}
         <Route element={<Adminrouting />}>

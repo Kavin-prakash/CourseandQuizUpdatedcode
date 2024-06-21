@@ -1,304 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import '../../Styles/Learner/LearnerCourse.css';
-import { fetchCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction';
-import { enrollRequest } from '../../actions/LearnerAction/LearnerPostEnrollAction';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import Stack from '@mui/material/Stack';
-import LearnerNavbar from '../LearnerComponent/LearnerNavbar';
-
-const CourseComponent = ({ enrolledCourses, loading, error, search }) => {
-  const courses = useSelector((state) => state.fetchcourse.courses);
-  const dispatch = useDispatch();
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const learnerId = sessionStorage.getItem('UserSessionID'); // Retrieve learner ID from session storage
-console.log("enrolled course length",enrolledCourses);
-  useEffect(() => {
-    dispatch(fetchCoursesRequest(learnerId));
-  }, [dispatch, learnerId]);
-
-  useEffect(() => {
-    setFilteredCourses(
-      courses.filter(course =>
-        course.title.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search, courses]);
-
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = (course) => {
-    setOpen(true);
-    setSelectedCourse(course);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleEnrollCourse = (courseId) => {
-    const maxCourses = 2;
-    const learnerCourses = enrolledCourses.filter(course => course.learnerId === learnerId);
-console.log("enroll course length",learnerCourses);
-    if (learnerCourses.length > maxCourses) {
-      alert('You have reached the course enrollment limit!');
-      return;
-    }
-
-    // const alreadyEnrolled = enrolledCourses.some(course => course.courseId === courseId && course.learnerId === learnerId);
-
-    // if (alreadyEnrolled) {
-    //   alert('You have already enrolled in this course!');
-    //   return;
-    // }
-
-    dispatch(enrollRequest(courseId, learnerId));
-  };
-
-  const isEnrolled = (courseId) => {
-    if (!Array.isArray(enrolledCourses)) {
-            console.error("enrolledCourses is not an array", enrolledCourses);
-            return false;
-          }
-    return enrolledCourses.some(course => course.courseId === courseId && course.learnerId === learnerId);
-  };
-
-  useEffect(() => {
-    if (selectedCourse && enrolledCourses.some(course => course.courseId === selectedCourse.courseId && course.learnerId === learnerId)) {
-      alert('Enrollment successful!');
-      handleClose(); // Close the modal after enrollment
-    }
-  }, [enrolledCourses, learnerId, selectedCourse]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (filteredCourses.length === 0) {
-    return <div><h3>No results found.</h3></div>;
-  }
-
-  return (
-    <div>
-      <LearnerNavbar />
-      <div className="container-fluid" id="Servicemain">
-        <div className="row" id="course-container">
-          {filteredCourses.map((course, index) => (
-            <div className="col-sm-6" key={index}>
-              <Card sx={{ display: 'flex', width: 480, marginLeft: 10, marginTop: 15, height: 150 }}>
-                <CardMedia
-                  component="img"
-                  sx={{ width: 120, marginLeft: 1 }}
-                  image={course.thumbnailimage}
-                  alt={course.title}
-                />
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <CardContent sx={{ flex: '1 0 auto', marginLeft: 10 }}>
-                    <Typography component="div" variant="h5">
-                      Course: {course.title}
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary" component="div">
-                      Level: {course.level}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" component="div">
-                      Category: {course.catagory}
-                    </Typography>
-                    <Button onClick={() => handleOpen(course)}>View More</Button>
-                  </CardContent>
-                </Box>
-              </Card>
-              <Modal
-                open={open && selectedCourse && selectedCourse.courseId === course.courseId}
-                onClose={handleClose}
-                aria-labelledby="course-modal-title"
-                aria-describedby="course-modal-description"
-              >
-                <Box sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 400,
-                  bgcolor: 'background.paper',
-                  border: '2px solid #000',
-                  boxShadow: 24,
-                  pt: 2,
-                  px: 4,
-                  pb: 3,
-                }}>
-                  <Typography id="course-modal-title" variant="h6" component="h2">{course.title}</Typography>
-                  <Typography id="course-modal-description" variant="body1" color="text.secondary">
-                    {course.description}
-                  </Typography>
-                  <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                    <Button onClick={handleClose}>Close</Button>
-                    <Button
-                      className="btn btn-lg"
-                      onClick={() => handleEnrollCourse(course.courseId)}
-                      disabled={isEnrolled(course.courseId)} // Disable if already enrolled
-                    >
-                      {isEnrolled(course.courseId) ? 'Enrolled' : 'Enroll'}
-                    </Button>
-                  </Stack>
-                </Box>
-              </Modal>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const mapStateToProps = (state) => ({
-  enrolledCourses: state.enrolledCourses.enrolledCourses || [], // Ensure it's an array
-  loading: state.enrolledCourses.loading,
-  error: state.enrolledCourses.error,
-});
-
-export default connect(mapStateToProps)(CourseComponent);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import React, { useEffect, useState } from 'react';
 // import { connect, useDispatch, useSelector } from 'react-redux';
 // import '../../Styles/Learner/LearnerCourse.css';
-// import { fetchCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction';
+// import { getCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction';
 // import { enrollRequest } from '../../actions/LearnerAction/LearnerPostEnrollAction';
+// import enrollmentMiddleware from '../../middleware/LearnerMiddleware/LearnerPostEnroll';
+// import { fetchenrollCourse, selectCourse, } from "../../actions/LearnerAction/EnrolledCourseAction";
+// import Swal from 'sweetalert2';
 // import Box from '@mui/material/Box';
 // import Card from '@mui/material/Card';
 // import CardContent from '@mui/material/CardContent';
 // import CardMedia from '@mui/material/CardMedia';
-// import IconButton from '@mui/material/IconButton';
 // import Typography from '@mui/material/Typography';
 // import Button from '@mui/material/Button';
 // import Modal from '@mui/material/Modal';
 // import Stack from '@mui/material/Stack';
-// import LearnerNavbar from '../LearnerComponent/LearnerNavbar';
-
-// const CourseComponent = ({ enrolledCourses, loading, error, search }) => {
+ 
+ 
+// const CourseComponent = ({  loading, error, search }) => {
 //   const courses = useSelector((state) => state.fetchcourse.courses);
-//   console.log("courses = useSelector",courses);
+//   const Enrolledcourseslength = useSelector((state) => state.enroll.course[0]);
 //   const dispatch = useDispatch();
 //   const [filteredCourses, setFilteredCourses] = useState([]);
 //   const [selectedCourse, setSelectedCourse] = useState(null);
+//   const [isEnrolled, setIsEnrolled] = useState(new Set());
 //   const learnerId = sessionStorage.getItem('UserSessionID'); // Retrieve learner ID from session storage
-
+//   const [open, setOpen] = useState(false);
+ 
+// const alertdisplayenrollment =() =>{
+//   const Toast = Swal.mixin({   toast: true,  background:'#5e55df', position: "top",
+//     showConfirmButton: false,   timer: 3000,   timerProgressBar: true,
+//       didOpen: (toast) => {     toast.onmouseenter = Swal.stopTimer;
+//             toast.onmouseleave = Swal.resumeTimer;   } });
+//             Toast.fire({   icon: "success", iconColor:'white' , title: "Enrolled successfully",customClass:{
+//               popup:'custom-toast'
+//             }});
+//           }
+ 
+// useEffect(() => {
+//     dispatch(getCoursesRequest(learnerId));
+//   }, [dispatch, learnerId]);
+ 
 //   useEffect(() => {
-//     console.log("effect");
-//     dispatch(fetchCoursesRequest(learnerId));
+//     dispatch(fetchenrollCourse(learnerId));
 //   }, [learnerId]);
-
+ 
 //   useEffect(() => {
 //     setFilteredCourses(
 //       courses.filter(course =>
@@ -306,102 +51,90 @@ export default connect(mapStateToProps)(CourseComponent);
 //       )
 //     );
 //   }, [search, courses]);
-
-
-//   const [open, setOpen] = React.useState(false);
-
+ 
+ 
+//   useEffect(() => {
+//     if (Enrolledcourseslength) {
+//       const enrolledCourseIds = new Set();
+//       Enrolledcourseslength.forEach(enrolledCourse => {
+//         enrolledCourseIds.add(enrolledCourse.enrolledCourseId);
+//       });
+//       setIsEnrolled(enrolledCourseIds);
+//     }
+//   }, [Enrolledcourseslength]);
+ 
 //   const handleOpen = (course) => {
 //     setOpen(true);
 //     setSelectedCourse(course);
 //   };
-
+ 
 //   const handleClose = () => {
 //     setOpen(false);
 //   };
-
-
+ 
 //   const handleEnrollCourse = (courseId) => {
-    
 //     const maxCourses = 3;
-//     const learnerCourses = enrolledCourses.filter(course => course.learnerId === learnerId);
-
+//  // const learnercourses = enrollmentMiddleware.filter(course => course.learnerId === learnerId);
+ 
 //     // if (learnerCourses.length >= maxCourses) {
-     
 //     //   alert('You have reached the course enrollment limit!');
 //     //   return;
 //     // }
-
-//     const alreadyEnrolled = enrolledCourses.some(course => course.courseId === courseId && course.learnerId === learnerId);
-
-//     if (alreadyEnrolled) {
-//       alert('You have already enrolled in this course!');
-//       return;
+//     if (Enrolledcourseslength && typeof Enrolledcourseslength.length === 'number') {
+//       //console.log("enrolled course length in coursecomponent", Enrolledcourseslength.length);
+//       if (Enrolledcourseslength.length >= maxCourses) {
+//         alert('You have reached the course enrollment limit!');
+//         return;
+//       }
+//     } else {
+//       console.log("Enrolledcourseslength is undefined or does not have a length property");
 //     }
-
-//     dispatch(enrollRequest(courseId, learnerId));
-
-//     setTimeout((function() {
-//       window.location.reload(1);
-    
-//     }), 1000);
-    
-//   };
-
-//   const isEnrolled = (courseId) => {
-//     if (!Array.isArray(enrolledCourses)) {
-//       console.error("enrolledCourses is not an array", enrolledCourses);
-//       return false;
-//     }
-//     return enrolledCourses.some(course => course.courseId === courseId && course.learnerId === learnerId);
-//   };
-
-//   useEffect(() => {
-//         if (enrolledCourses.length > 0) {
-//             alert('Enrollment successful!');
-        
-//         }
-
-//         else if(enrolledCourses.length >= 3){
-//           alert('you have reached enrollment limit!');
-//         }
-//     }, [enrolledCourses]);
+//     enrollmentMiddleware(courseId, learnerId).then(() => {
+//       // alert('Enrollment successful!');
+//       alertdisplayenrollment();
+//        setIsEnrolled(prevIsEnrolled => new Set([...prevIsEnrolled, courseId]));
+//        handleClose();
+//      });
 
 //   if (loading) {
 //     return <div>Loading...</div>;
 //   }
-
+ 
 //   if (filteredCourses.length === 0) {
 //     return <div><h3>No results found.</h3></div>;
 //   }
+ 
+// }
+ 
 //   return (
 //     <div>
      
-//       <div className="container-fluid " id='Servicemain'>
-//         <div className="row "  id='course-container'>
+//       <div className="container-fluid" id="Servicemain">
+//         <div className="row" id="course-container">
 //           {filteredCourses.map((course, index) => (
-//             <div className="col-sm-6" key={index} >
-//               <Card sx={{ display: 'flex', width:480, marginLeft:10, marginTop:15 ,height:150}} >
+//             <div className="col-sm-3 allcourse" key={index}>
+//               <Card id='course-card_Learner'>
 //                 <CardMedia
-                 
+//                   id='coure-inside_Learner'
 //                   component="img"
-//                   sx={{ width: 120,marginLeft:1 }}
+//                   sx={{ width: 150, marginLeft: 0 }}
 //                   image={course.thumbnailimage}
 //                   alt={course.title}
 //                 />
-//                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
-//                   <CardContent sx={{ flex: '1 0 auto' , marginLeft:10}}>
-//                     <Typography component="div" variant="h5" >
-//                      Course: {course.title}
+//                 <Box >
+//                   <CardContent id='course-content_Learner' >
+//                   <div id='course-typo_Learner'>
+//                     <Typography component="div" variant="h5" id='course-name_Learner'>
+//                       Course: {course.title}
 //                     </Typography>
-//                     <Typography variant="subtitle1" color="text.secondary" component="div">
-//                      Level: {course.level}
+//                     <Typography variant="subtitle1" color="text.secondary" component="div" id='course-name_Learner'>
+//                       Level: {course.level}
 //                     </Typography>
-//                     <Typography variant="body2" color="text.secondary" component="div">
-//                      Category: {course.catagory}
+//                     <Typography variant="body2" color="text.secondary" component="div" >
+//                       Category: {course.catagory}
 //                     </Typography>
-
-                    
 //                     <Button onClick={() => handleOpen(course)}>View More</Button>
+//                     </div>
 //                   </CardContent>
 //                 </Box>
 //               </Card>
@@ -424,19 +157,19 @@ export default connect(mapStateToProps)(CourseComponent);
 //                   px: 4,
 //                   pb: 3,
 //                 }}>
-//                   <Typography id="course-modal-title" variant='h6' component='h2'>{course.title}</Typography>
+//                   <Typography id="course-modal-title" variant="h6" component="h2">{course.title}</Typography>
 //                   <Typography id="course-modal-description" variant="body1" color="text.secondary">
 //                     {course.description}
 //                   </Typography>
 //                   <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
 //                     <Button onClick={handleClose}>Close</Button>
-//                     <button
-//                     className="btn btn-lg"
-//                     onClick={() => handleEnrollCourse(course.courseId)}
-//                     disabled={course.enrollStatus} // Disable if already enrolled
-//                   >
-//                     {course.enrollStatus ? 'Enrolled' : 'Enroll'}
-//                   </button>
+//                     <Button
+//                       className="btn btn-lg"
+//                       onClick={() => handleEnrollCourse(course.courseId)}
+//                       disabled={isEnrolled.has(course.courseId)} // Disable if course is in the enrolledCourseIds set
+//                     >
+//                       {isEnrolled.has(course.courseId) ? 'Enrolled' : 'Enroll'}
+//                     </Button>
 //                   </Stack>
 //                 </Box>
 //               </Modal>
@@ -445,141 +178,273 @@ export default connect(mapStateToProps)(CourseComponent);
 //         </div>
 //       </div>
 //     </div>
-//   )
-// };
-
-// const mapStateToProps = (state) => ({
-//   enrolledCourses: state.enrolledCourses.enrolledCourses || [], // Ensure it's an array
-//   loading: state.enrolledCourses.loading,
-//   error: state.enrolledCourses.error,
-// });
-
-// export default connect(mapStateToProps)(CourseComponent);
-
-
-
-// //Raj
-
-// import React, { useEffect, useState } from 'react';
-// import { connect, useDispatch, useSelector } from 'react-redux';
-// import '../../Styles/Learner/LearnerCourse.css';
-// import { fetchCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction';
-// import { enrollRequest } from '../../actions/LearnerAction/LearnerPostEnrollAction';
-// import { fetchenrollCourse } from '../../actions/LearnerAction/EnrolledCourseAction';
- 
-// const CourseComponent = ({ enrolledCourses, loading, error, search }) => {
-//   const courses = useSelector((state) => state.fetchcourse.courses);
-//   const selectedstore= useSelector((state)=>state.fetchcourse.courses);
-//   const dispatch = useDispatch();
-//   const [filteredCourses, setFilteredCourses] = useState([]);
-//   const learnerId = sessionStorage.getItem('UserSessionID'); // Retrieve learner ID from session storage
- 
-//   // useEffect(() => {
-//   //   dispatch(fetchCoursesRequest());
-//   // }, [dispatch]);
- 
-//   useEffect(() => {
-//     debugger
-//     dispatch(fetchCoursesRequest(learnerId));
-//     console.log("selectedstore courses",selectedstore);
-//     // if (learnerId) {
-//     //   dispatch(fetchenrollCourse(learnerId)); // Fetch enrolled courses on mount
-   
-//   }, [learnerId]);
-// console.log("learnercoursecomponent:",learnerId)
-//   useEffect(() => {
-//     console.log(courses)
-//     setFilteredCourses(
-//       courses.filter(course =>
-//         course.title.toLowerCase().includes(search.toLowerCase())
-//       )
-//     );
-//   }, [search, courses]);
- 
-//   const handleEnrollCourse = (courseId) => {
-//     const maxCourses = 3;
-//     const learnerCourses = enrolledCourses.filter(course => course.learnerId === learnerId);
- 
-//     if (learnerCourses.length >= maxCourses) {
-//       alert('You have reached the course enrollment limit!');
-//       return;
-//     }
- 
-//     const alreadyEnrolled = enrolledCourses.some(course => course.courseId === courseId && course.learnerId === learnerId);
- 
-//     if (alreadyEnrolled) {
-//       alert('You have already enrolled in this course!');
-//       return;
-//     }
- 
-//     dispatch(enrollRequest(courseId, learnerId)); // Pass learnerId to the enrollRequest action
-//   };
- 
-//   const isEnrolled = (courseId) => {
-//     if (!Array.isArray(enrolledCourses)) {
-//       console.error("enrolledCourses is not an array", enrolledCourses);
-//       return false;
-//     }
-//     return enrolledCourses.some(course => course.courseId === courseId && course.learnerId === learnerId);
-//   };
- 
-//   useEffect(() => {
-//     if (enrolledCourses.length > 0) {
-//         alert('Enrollment successful!');
- 
-//     }
-// }, [enrolledCourses]);
- 
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
- 
-//   if (filteredCourses.length === 0) {
-//     return <div><h3>No results found.</h3></div>;
-//   }
- 
-//   return (
-//     <div>
-//       <div className="container-fluid Servicemain">
-//         <div className="text-center">
-//           {/* Your other components or content */}
-//         </div>
-//         <div className="row">
-//           {filteredCourses.map((course, index) => (
-//             <div className="col-sm-4" key={index}>
-//               <div className="panel panel-default text-center">
-//                 <div className="panel-heading">
-//                   <img src={course.thumbnailimage} style={{ width: 100 }} alt={course.title} />
-//                 </div>
-//                 <div className="panel-body">
-//                   <h3>{course.title}</h3>
-//                   <p>{course.description}</p>
-//                 </div>
-//                 <div className="panel-footer">
-//                   <p>Advanced Level</p>
-//                   <h5>{course.duration} months</h5>
-//                   <button
-//                     className="btn btn-lg"
-//                     onClick={() => handleEnrollCourse(course.courseId)}
-//                     disabled={course.enrollStatus} // Disable if already enrolled
-//                   >
-//                     {course.enrollStatus ? 'Enrolled' : 'Enroll'}
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
 //   );
 // };
  
-// const mapStateToProps = (state) => ({
-//   enrolledCourses: state.enrolledCourses.enrolledCourses || [], // Ensure it's an array
-//   loading: state.enrolledCourses.loading,
-//   error: state.enrolledCourses.error,
-// });
  
-// export default connect(mapStateToProps)(CourseComponent);
+ 
+// export default CourseComponent;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import '../../Styles/Learner/LearnerCourse.css';
+// import {  } from '../../actions/LearnerAction/LearnerGetCourseAction';
+ import { getCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction';
+import { enrollRequest } from '../../actions/LearnerAction/LearnerPostEnrollAction';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Stack from '@mui/material/Stack';
+import LearnerNavbar from '../LearnerComponent/LearnerNavbar';
+import enrollmentMiddleware from '../../middleware/LearnerMiddleware/LearnerPostEnroll';
+import { fetchenrollCourse, selectCourse, } from "../../actions/LearnerAction/EnrolledCourseAction";
+import Alert from '@mui/material/Alert';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import Skeleton from '@mui/material/Skeleton'; 
+import CircularProgress from '@mui/material/CircularProgress';
+
+const CourseComponent = ({ loading, error, search }) => {
+  const courses = useSelector((state) => state.fetchcourse.courses);
+  const Enrolledcourseslength = useSelector((state) => state.enroll.course[0]);
+  const dispatch = useDispatch();
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [isEnrolled, setIsEnrolled] = useState(new Set());
+  const learnerId = sessionStorage.getItem('UserSessionID'); // Retrieve learner ID from session storage
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const alertsuccess = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const alertdisplayenrollment = () => {
+    const Toast = Swal.mixin({
+      toast: true,
+      background: '#21903d',
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+
+    Toast.fire({
+      icon: "success",
+      iconColor: 'white',
+      title: "Enrolled successfully",
+      customClass: {
+        popup: 'custom-toast'
+      }
+    });
+
+    // Set a flag in localStorage indicating the user has just enrolled
+    localStorage.setItem('justEnrolled', 'true');
+
+    // Reload the page after 2 seconds
+    setIsLoading(true);
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
+  useEffect(() => {
+    dispatch(getCoursesRequest(learnerId));
+  }, [dispatch, learnerId]);
+
+  useEffect(() => {
+    dispatch(fetchenrollCourse(learnerId));
+  }, [learnerId]);
+
+  useEffect(() => {
+    setFilteredCourses(courses.filter(course => course.title.toLowerCase().includes(search.toLowerCase())));
+  }, [search, courses]);
+
+  useEffect(() => {
+    if (Enrolledcourseslength) {
+      const enrolledCourseIds = new Set();
+      Enrolledcourseslength.forEach(enrolledCourse => {
+        enrolledCourseIds.add(enrolledCourse.enrolledCourseId);
+      });
+      setIsEnrolled(enrolledCourseIds);
+    }
+  }, [Enrolledcourseslength]);
+
+  // On the page that's being reloaded
+  useEffect(() => {
+    // Check if the user has just enrolled
+    if (localStorage.getItem('justEnrolled') === 'true') {
+      // Clear the flag
+      localStorage.removeItem('justEnrolled');
+      setIsLoading(false);
+
+      // Navigate to "/LearnerenrolledCourse" after a delay
+      setTimeout(() => {
+        navigate("/LearnerenrolledCourse");
+      }, 1000);
+    }
+  }, []);
+
+  const handleOpen = (course) => {
+    setOpen(true);
+    setSelectedCourse(course);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleEnrollCourse = (courseId) => {
+    const maxCourses = 3;
+  
+    if (Enrolledcourseslength && typeof Enrolledcourseslength.length === 'number') {
+      if (Enrolledcourseslength.length >= maxCourses) {
+        const Toast = Swal.mixin({
+          toast: true,
+          background: 'red',
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+  
+        Toast.fire({
+          icon: "error",
+          iconColor: 'white',
+          title: "You have reached the course enrollment limit!",
+          customClass: {
+            popup: 'custom-toast'
+          }
+        });
+  
+        return;
+      }
+    }
+  
+    // Show the loader
+    setIsLoading(true);
+  
+    enrollmentMiddleware(courseId, learnerId).then(() => {
+      alertdisplayenrollment();
+      setIsEnrolled(prevIsEnrolled => new Set([...prevIsEnrolled, courseId]));
+      handleClose();
+    });
+  };
+  
+
+  if (isLoading) {
+    return <CircularProgress />; // Return a CircularProgress component when isLoading is true
+  }
+
+
+  if (filteredCourses.length === 0) {
+    return <div><h3>No results found.</h3></div>;
+  }
+return (
+  <div>
+   
+    <div className="container-fluid" id="Servicemain">
+      <div className="row" id="course-container">
+        {filteredCourses.map((course, index) => (
+          <div className="col-sm-3 allcourse" key={index}>
+            <Card id='course-card_Learner'>
+              <CardMedia
+                id='coure-inside_Learner'
+                component="img"
+                sx={{ width: 150, marginLeft: 0 }}
+                image={course.thumbnailimage}
+                alt={course.title}
+              />
+              <Box >
+                <CardContent id='course-content_Learner' >
+                <div id='course-typo_Learner'>
+                  <Typography component="div" variant="h5" id='course-name_Learner'>
+                    Course: {course.title}
+                  </Typography>
+                  <Typography variant="subtitle1" color="text.secondary" component="div" id='course-name_Learner'>
+                    Level: {course.level}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" component="div" >
+                    Category: {course.catagory}
+                  </Typography>
+                  <Button onClick={() => handleOpen(course)}>View More</Button>
+                  </div>
+                </CardContent>
+              </Box>
+            </Card>
+            <Modal
+              open={open && selectedCourse && selectedCourse.courseId === course.courseId}
+              onClose={handleClose}
+              aria-labelledby="course-modal-title"
+              aria-describedby="course-modal-description"
+            >
+              <Box sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                pt: 2,
+                px: 4,
+                pb: 3,
+              }}>
+                <Typography id="course-modal-title" variant="h6" component="h2">{course.title}</Typography>
+                <Typography id="course-modal-description" variant="body1" color="text.secondary">
+                  {course.description}
+                </Typography>
+                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                  <Button onClick={handleClose}>Close</Button>
+                  <Button
+                    className="btn btn-lg"
+                    onClick={() => handleEnrollCourse(course.courseId)}
+                    disabled={isEnrolled.has(course.courseId)} // Disable if course is in the enrolledCourseIds set
+                  >
+                    {isEnrolled.has(course.courseId) ? 'Enrolled' : 'Enroll'}
+                  </Button>
+                </Stack>
+              </Box>
+            </Modal>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+};
+
+export default CourseComponent;
+
 
