@@ -242,7 +242,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   course: courseReducer,
   allcourse: AllcourseReducer,
-  deletecourse: DeletecourseReducer,
+  // deletecourse: DeletecourseReducer,  
   updatecourse: courseupdateReducer,
   learner: LearnerReducer,
   verifyemail: fetchEmailReducer,

@@ -24,3 +24,6 @@ export const deleteCoursesFailure = (error) => ({
 });
 
 
+export const RESET_DELETE_SUCCESS_COURSES_MESSAGE = 'RESET_DELETE_SUCCESS_COURSES_MESSAGE ';
+
+

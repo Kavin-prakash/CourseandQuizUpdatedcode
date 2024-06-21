@@ -23,7 +23,8 @@ import { Button,Modal } from "react-bootstrap";
 // import { AppBar, CssBaseline, Divider, Drawer, IconButton, Toolbar } from "@mui/material";
 // import { FaBookOpenReader, FaUserGraduate, FaHome, FaChartBar } from "react-icons/fa";
 import Toast from 'react-bootstrap/Toast';
-
+import { successdata } from "../../actions/Admin/loginAction";
+import { UseDispatch, useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -128,10 +129,15 @@ export default function AdminNavbar() {
     setShowLogoutConfirmation(true);
   };
 
+  const dispatch=useDispatch();
+
   const handleLogout = () => {
     // Clear session ID from storage
+    // debugger
     sessionStorage.removeItem("AdmminSessionId"); // Replace "sessionId" with your actual session ID key
     sessionStorage.removeItem("Role");
+    dispatch(successdata(false));
+     
     // Navigate to login page or home page
     navigate("/"); // Replace "/login" with the path to your login page
     setShowLogoutConfirmation(false); // Hide the confirmation toast

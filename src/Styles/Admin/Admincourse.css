@@ -39,3 +39,19 @@
     align-items: center;
     margin-top: 250px;
 }
+
+.updatecourse-toast
+{
+    margin-top: 80px;
+  box-shadow: 0 0 10px #000;
+  color:white;
+  background-color:#5e55df;
+}
+
+.deletecourse-toast
+{
+    margin-top: 80px;
+  box-shadow: 0 0 10px #000;
+  color:white;
+  background-color:#5e55df;
+}

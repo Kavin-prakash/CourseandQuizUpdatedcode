@@ -1,47 +1,9 @@
-// import { DELETE_COURSES_REQUEST,DELETE_COURSES_SUCCESS,DELETE_COURSES_FAILURE } from "../../actions/Admin/DeletecourseAction";
-
-// const initialState = {
-//     courses: [],
-//     loading: false,
-//     error: null,
-//   };
-
-
-
-//   const DeletecourseReducer = (state = initialState, action) => {
-//     switch (action.type) {
-//       case DELETE_COURSES_REQUEST:
-//         return {
-//           ...state,
-//           loading: true,
-//         };
-//       case DELETE_COURSES_SUCCESS:
-//         console.log("Success",action.payload);
-//         return {
-//           ...state,
-//           loading: false,
-//           courses: action.payload,
-//           error: null,
-//         };
-//       case DELETE_COURSES_FAILURE:
-//         return {
-//           ...state,
-//           loading: false,
-//           error: action.payload,
-//         };
-//       default:
-//         return state;
-//     }
-//   };
-  
-//   export default DeletecourseReducer;
-
-
 import {
     DELETE_COURSES_REQUEST,
     DELETE_COURSES_SUCCESS,
     DELETE_COURSES_FAILURE,
     DELETE_COURSES_FAILURE_MESSAGE,
+    RESET_DELETE_SUCCESS_COURSES_MESSAGE
   } from '../../actions/Admin/DeletecourseAction';
   
   const initialState = {
@@ -72,12 +34,11 @@ import {
           error: null,
         };
         case DELETE_COURSES_FAILURE_MESSAGE:
-            console.log("Failure Message",action.payload);
+            console.log("Failure Message",action.payload); 
            return{
                 ...state,
                 loading: false,
                 message: action.payload,
-                isdeleted:false,
                 isnotdelete:true,
                 error:null,
             };
@@ -87,7 +48,13 @@ import {
           ...state,
           loading: false,
           error: action.payload,
-        };
+        };  
+        case RESET_DELETE_SUCCESS_COURSES_MESSAGE:     // SETTING FLAG OF THE DELETE SUCCESS MESSAGE
+          return {
+            ...state,
+            isdeleted:false,
+            isnotdelete:false,
+          }
       default:
         return state;
     }
