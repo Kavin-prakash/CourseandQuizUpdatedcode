@@ -4,6 +4,7 @@ import {
   CREATE_TOPICS_FAILURE,
   CREATE_TOPICS_EXISTS,
   SET_TOPICS_STATUS,
+  RESET_THE_SUBMITTED_MESSGAE,
 
 } from '../../../actions/Course/Topic/AddTopicAction';
 
@@ -51,15 +52,17 @@ const addTopicReducer = (state = initialState, action) => {
               isExisted:true,
               isSubmitted:false,
               isError:false,
-             
-              
-    
             };
             case SET_TOPICS_STATUS:
               return{
                 ...state,
                 isRequesting:action.payload,
               };
+            case RESET_THE_SUBMITTED_MESSGAE:
+              return{
+                ...state,
+                isSubmitted:false,
+              }
       default:
           return state;
   }

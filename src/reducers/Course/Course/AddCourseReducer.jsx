@@ -12,6 +12,12 @@ import {
  
 const initialState = {
   isRequesting:false,
+  loading: false,
+  course_id: null,
+  isSubmitted:false,
+  isError:false,
+  isExists:false,
+  error: null,
   // course_id:null,
  
 };
@@ -47,6 +53,7 @@ const AddCourseReducer = (state = initialState, action) => {
       };
  
       case CREATE_COURSES_EXISTS:
+        console.log("Create_course_Exists");
         return {
           ...state,
           loading: false,

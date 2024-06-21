@@ -117,7 +117,8 @@ const AddCourse = () => {
   }, [InternalError])
 
   //If course is already exists
-  const isExist = useSelector((state) => state.course.isExists);
+  const isExist = useSelector((state) => state.addcourse.isExists);
+  console.log("isExist",isExist);
   const [existMsg, setExistMsg] = useState('');
   useEffect(() => {
     if (isExist) {
@@ -306,7 +307,7 @@ const AddCourse = () => {
           <Col xs={12} sm={12} md={9} lg={6}>
             <Card className="mt-5" id="Course-custom-card" >
               <Card.Header style={{ backgroundColor: '#23275C', color: 'white' }} className="Course-header">
-                Create Course
+                CREATE COURSE
               </Card.Header>
               <CardContent className="Course-scrollable-body">
                 <Form onSubmit={handleSubmit}>

@@ -61,6 +61,7 @@ export const createCoursesFailure = (error) => ({
 
 export const createCoursesExists = () => ({
   type: CREATE_COURSES_EXISTS,
+ 
 })
 
 export const createcontent = (course) => ({
