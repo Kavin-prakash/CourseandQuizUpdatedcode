@@ -53,7 +53,7 @@ const Adminviewcourse = ({
     category: "",
     description: "",
     duration: "",
-    modifiedby: "Kavin",
+    modifiedby: sessionStorage.getItem("Role"),
     thumbnailimage: "null",
     levelId: "",
     categoryId: "",
@@ -116,7 +116,7 @@ const Adminviewcourse = ({
       category: course.categoryId, //
       description: course.description,
       duration: course.duration,
-      modifiedby: "Kavin",
+      modifiedby: sessionStorage.getItem("Role"),
       thumbnailimage: course.thumbnailimage,
     });
 
