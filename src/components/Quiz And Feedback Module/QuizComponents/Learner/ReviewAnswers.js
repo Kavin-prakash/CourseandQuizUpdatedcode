@@ -123,7 +123,8 @@ return (
         <Container fluid style={{ marginTop: "700px" }}>
             <div className="review-answers-container">
                 <br />
-                <div className="question-navigation-bar">
+                {/* <div className="question-navigation-bar"> */}
+                <div>
                     <QuestionNavigationBar
                         questions={localQuestions}
                         selectedOptions={data.questionResponses.reduce((acc, response) => {
@@ -133,7 +134,8 @@ return (
                         currentQuestionIndex={selectedQuestion}
                         onQuestionClick={handleSelectQuestion}
                     />
-                </div>
+                    </div>
+                {/* </div> */}
 
                 <div className="review-answers-content">
                     {localQuestions.map((question, index) => {
