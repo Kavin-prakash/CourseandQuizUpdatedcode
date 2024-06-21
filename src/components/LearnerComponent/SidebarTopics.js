@@ -1000,9 +1000,9 @@ function SidebarTopics() {
                             <button
                               className="btn btn-success"
                               disabled={
-                                learnerfeedback.isTopicFeedbackGiven==="false" ||
-                                learnersresult.isLearnerPassed==="true" ||
-                                learnersresult.hasAttemptsRemaining==="false"
+                                learnerfeedback.isTopicFeedbackGiven === "false" ||
+                                learnersresult.isLearnerPassed === "true" ||
+                                learnersresult.hasAttemptsRemaining === "false"
                               }
                               onClick={() =>
                                 completeTopic(topic.name, topic.topicid)
@@ -1010,8 +1010,8 @@ function SidebarTopics() {
                             >
                               Take Quiz
                             </button>
-                            <>
-                              {/* {learnerfeedback.isTopicFeedbackGiven ? (
+                            {/* <>
+                              {learnerfeedback.isTopicFeedbackGiven ? (
         <>
           <button
             className="btn btn-primary"
@@ -1047,8 +1047,8 @@ function SidebarTopics() {
         </>
       )}
     </> */}
-
-                              {/* {learnerfeedback.isTopicFeedbackGiven ? (
+{/* 
+                              {learnerfeedback.isTopicFeedbackGiven ? (
                               <>
                                 <button
                                   className="btn btn-primary"
@@ -1091,9 +1091,9 @@ function SidebarTopics() {
                                 >
                                   Take Quiz
                                 </button>
-                              </> */}
+                             
                             </>
-                            )}
+                            )} */}
                           </ul>
                         )}
                       </li>
