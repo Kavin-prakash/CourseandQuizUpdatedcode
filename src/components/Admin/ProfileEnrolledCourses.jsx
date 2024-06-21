@@ -48,6 +48,12 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
               >
                 Enrollment date
               </TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: "white", fontWeight: "bold" }}
+              >
+                Completion Percentage
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -68,6 +74,9 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
                 <TableCell align="right">{row.enrolledCourselevels}</TableCell>
                 <TableCell align="center">
                   {row.enrollmentdate.replace("T", " ")}
+                </TableCell>
+                <TableCell align="center">
+                  {row.courseCompletionPercentage}%
                 </TableCell>
               </TableRow>
             ))}

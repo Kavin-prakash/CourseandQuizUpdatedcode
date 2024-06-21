@@ -3,6 +3,7 @@ import { LOGIN_REQUEST, loginSuccessadmin, loginSuccessuser, loginError,loginPas
 import axios from "axios";
  
  import { baseUrl } from "./api";
+import LearnerIdbyProfileId from '../LearnerMiddleware/LearnerIdbyProfileId';
  
  
 const loginUser = ({ dispatch }) => (next) => async (action) => {
@@ -42,11 +43,13 @@ const loginUser = ({ dispatch }) => (next) => async (action) => {
         sessionStorage.setItem('UserSessionID', learnerId);
  
         dispatch(loginSuccessuser(response.data))
+
       }
  
       else if(response.data.email !==true && response.data.password===false)
       {
         dispatch(loginEmaildMessage(response.data))
+        LearnerIdbyProfileId(); //change l
       }
       else {
         console.error('No data received from API');

@@ -317,7 +317,7 @@ const store = createStore(
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
     FetchQuizById,
     DeleteQuizQuestionsApi,
-    PutQuizDetails,
+    PutQuizDetails, updateUserData,
 
     UpdateQuizFeedbackApi,
     DeleteQuizFeedbackApi,

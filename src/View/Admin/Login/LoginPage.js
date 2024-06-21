@@ -168,7 +168,7 @@ const Loginpage = () => {
                   {...register('password', {
                     required: validationMessages.password.required,
                     minLength: {
-                      value: 14,
+                      value: passwordRegex,
                       message: validationMessages.password.minLength
                     },
                     pattern: {

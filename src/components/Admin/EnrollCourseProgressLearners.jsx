@@ -61,31 +61,36 @@ export default function EnrollCourseProgressLearners() {
 
     //Header for table
     const headCells = [
-        {
-            id: "sno",
-            numeric: true,
-            disablePadding: false,
-            label: "S.No",
-        },
-        // {
-        //     id: "profilePhoto",
-        //     numeric: false,
-        //     disablePadding: false,
-        //     label: "Profile Photo",
-        // },
-        {
-            id: "learnerName",
-            numeric: false,
-            disablePadding: false,
-            label: "Name",
-        },
-        {
-            id: "email",
-            numeric: false,
-            disablePadding: false,
-            label: "Email",
-        },
-
+      {
+        id: "sno",
+        numeric: true,
+        disablePadding: false,
+        label: "S.No",
+      },
+      // {
+      //     id: "profilePhoto",
+      //     numeric: false,
+      //     disablePadding: false,
+      //     label: "Profile Photo",
+      // },
+      {
+        id: "learnerName",
+        numeric: false,
+        disablePadding: false,
+        label: "Name",
+      },
+      {
+        id: "email",
+        numeric: false,
+        disablePadding: false,
+        label: "Email",
+      },
+      {
+        id: "Completion Percentage",
+        numeric: false,
+        disablePadding: false,
+        label: "percentage",
+      },
     ];
 
     //Component for Head in Table
@@ -286,35 +291,43 @@ export default function EnrollCourseProgressLearners() {
                                     const isItemSelected = isSelected(row.learnerID);
 
                                     return (
-                                        <TableRow
-                                            hover
-                                            // onClick={(event) => handleClick(event, row.id)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.index}
-                                            selected={isItemSelected}
-                                            sx={{ cursor: "pointer" }}
-                                            style={{ textDecoration: 'none' }}
-                                            component={Link} to={'/individuallearner/' + row.learnerId}
-                                        >
-                                            <TableCell align="left">{index + 1}</TableCell>
-                                            {/* <TableCell align="center">
+                                      <TableRow
+                                        hover
+                                        // onClick={(event) => handleClick(event, row.id)}
+                                        role="checkbox"
+                                        aria-checked={isItemSelected}
+                                        tabIndex={-1}
+                                        key={row.index}
+                                        selected={isItemSelected}
+                                        sx={{ cursor: "pointer" }}
+                                        style={{ textDecoration: "none" }}
+                                        component={Link}
+                                        to={
+                                          "/individuallearner/" + row.learnerId
+                                        }
+                                      >
+                                        <TableCell align="left">
+                                          {index + 1}
+                                        </TableCell>
+                                        {/* <TableCell align="center">
                                                 <Avatar alt="Remy Sharp" src={row.profilePhoto} />
                                             </TableCell> */}
-                                            <TableCell
-                                                component="th"
-                                                id={row.learnerID}
-                                                scope="row"
-                                                align="left"
-                                                padding="none"
-                                            >
-                                                {row.learnerName}
-                                            </TableCell>
-                                            <TableCell align="left">{row.emailId}</TableCell>
-
-
-                                        </TableRow>
+                                        <TableCell
+                                          component="th"
+                                          id={row.learnerID}
+                                          scope="row"
+                                          align="left"
+                                          padding="none"
+                                        >
+                                          {row.learnerName}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                          {row.emailId}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                          {row.courseCompletionPercentage}%
+                                        </TableCell>
+                                      </TableRow>
                                     );
                                 })}
                                 {emptyRows > 0 && (
