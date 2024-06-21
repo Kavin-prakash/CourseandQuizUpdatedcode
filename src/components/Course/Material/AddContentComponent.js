@@ -230,19 +230,6 @@ function AddContentComponent() {
 
   }
 
-  // const handleMaterial = (event) => {
-  //   if (event.target.files && event.target.files[0]) {
-  //     setMaterial((material) => ({
-  //       ...material,
-  //       material: event.target.files[0],
-  //     }));
-  //     const file = event.target.files[0];
-  //     console.log("po", file)
-  //     setselectedContent(file.name);
-  //     console.log("filename", selectedContent);
-  //   }
-  // };
-
   const handleMaterial = (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -340,9 +327,12 @@ function AddContentComponent() {
 
   }
   const divStyle = {
-    width: '50vw',
+    width: '70vw',
     boxShadow: '0px 4px 8px #23275c',
     borderRadius: '20px',
+    marginTop:'30px',
+    marginLeft:'135px',
+    backgroundColor:'#DDDDDD'
   };
 
   const handlePreview = (filePath, materialType, materialName, materialId) => {
@@ -400,7 +390,7 @@ function AddContentComponent() {
         
 
       </section> */}
-      <Container style={{ ...divStyle, overflowy: "auto", maxHeight: '100vh', marginTop: '15vh' }}>
+      <Container style={{ ...divStyle, overflowy: "auto", maxHeight: '150vh', marginTop: '5vh',marginLeft:'140px' ,backgroundColor:'#DDDDDD',fontSize:'18px'}}>
         <Row>
           <Col></Col>
           <Col>
@@ -424,12 +414,13 @@ function AddContentComponent() {
           <Col></Col>
         </Row>
         <Row>
-          <Col md={3}></Col>
+          {/* <Col md={3}></Col> */}
           <Col md={6}>
             {/* fetch material type */}
-            <section className='pt-5' >
-              <Form onSubmit={handleSubmit}>
-                <Form.Label>Material Type</Form.Label>
+            <section className='pt-5'>
+              <Form onSubmit={handleSubmit} style={{marginBottom:'80px', width:'120%',marginLeft:'200px'}}>
+                <h3><b>Add Content</b></h3><hr/>
+                <Form.Label><b>Material Type</b></Form.Label>
 
                 <Form.Select aria-label="Default select example" disabled={isDisableType} value={materialType} onChange={(e) => handleMaterialType(e)}>
                   <option>Select Material Type</option>
@@ -442,7 +433,7 @@ function AddContentComponent() {
                   {/* content form */}
                 </Form.Select>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Content Name</Form.Label>
+                  <Form.Label><b>Content Name</b></Form.Label>
                   <Form.Control type="text" placeholder="Content Name"
                     name="name"
 
@@ -452,16 +443,22 @@ function AddContentComponent() {
                 {errors.name && <p className="error">{errors.name}</p>}
 
                 <Form.Group>
-                  <Form.Label>Content Upload</Form.Label>
+                  <Form.Label><b>Content Upload</b></Form.Label>
 
                   <Card {...getRootProps()} className="dropzone">
                     <Card.Body className="text-center">
                       <input {...getInputProps()} type='file' />
                       {selectedContent ? (
-                        <p>{isDragActive ? " Drag & Drop the Material here ..." : "click to select Material"}</p>
+                        <p> {isDragActive
+                          ? "Drag the course thumbnail here ..."
+                          : <span>Click to select Material<br/> or <br/><span className="upload-link">Click to upload</span></span>
+                        }</p>
 
                       ) : (
-                        <p>{isDragActive ? " Drag & Drop the Material here ..." : "click to select Material"}</p>
+                        <p>{isDragActive
+                          ? "Drag the course thumbnail here ..."
+                          : <span>Click to select Material<br/> or <br/><span className="upload-link">Click to upload</span></span>
+                        }</p>
                       )}
 
                     </Card.Body>
@@ -497,8 +494,8 @@ function AddContentComponent() {
           <ListGroup className='overflow-auto'>
 
             <>
-              <ListGroup.Item>
-                <div>
+              <ListGroup.Item  style={{backgroundColor:'#DDDDDD'}}>
+                <div style={{backgroundColor:'#DDDDDD'}}>
                   <div class="row">
                     <div class="col">
                       <MaterialImage materialType={content.materialType} />  {/*Modified line */}
