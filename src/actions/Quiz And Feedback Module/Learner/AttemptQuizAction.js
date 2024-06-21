@@ -21,6 +21,7 @@ export const fetchQuestionsFailure = (error) => ({
 export const CREATE_ATTEMPT_REQUEST = "CREATE_ATTEMPT_REQUEST";
 export const CREATE_ATTEMPT_SUCCESS = "CREATE_ATTEMPT_SUCCESS";
 export const CREATE_ATTEMPT_FAILURE = "CREATE_ATTEMPT_FAILURE";
+export const CREATE_ATTEMPT_STATUS = "CREATE_ATTEMPT_STATUS";
 
 export const CreateAttemptRequest = (learner) => ({
   type:CREATE_ATTEMPT_REQUEST,
@@ -35,6 +36,11 @@ export const CreateAttemptSuccess = (takequiz) => ({
 export const CreateAttemptFailure = (error) => ({
   type:CREATE_ATTEMPT_FAILURE,
   payload: error,
+});
+
+export const CreateAttemptStatus = (isRequesting) => ({
+  type:CREATE_ATTEMPT_STATUS,
+  payload: isRequesting,
 });
 
 

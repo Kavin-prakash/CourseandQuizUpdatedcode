@@ -84,12 +84,13 @@ const Timer = ({ startTime, endTime }) => {
 
   return (
     <div>
-      {isRunning ? (
-        <h4 className="timerclass">Time Left: {formatTime(timeLeft)}</h4>
+      {/* {isRunning ? (
+        <h5 className="timerclass">Time Left: {formatTime(timeLeft)}</h5>
       ) : (
         // <h2>Timer stopped</h2>
         <h2> </h2>
-      )}
+      )} */}
+      <h5 id="timerclass">Time Left: {formatTime(timeLeft)}</h5>
     </div>
   );
 };

@@ -9,13 +9,11 @@
 
 // const QuizPassedUsers = ({ fetchpassedusers, quizpassedusers }) => {
 
-
-//     // Search Users states 
+//     // Search Users states
 
 //     const [searchpassedusers, setSearchpassedusers] = useState('');
 
 //     const [filtersearchpassedusers, setFilteredsearchpassedusers] = useState([]);
-
 
 //     console.log(searchpassedusers);
 
@@ -31,20 +29,14 @@
 //         );
 //     }, [quizpassedusers, searchpassedusers]);
 
-
-
 //     const quizid = useParams();
 //     console.log("Checking the Quiz Id for the Quiz Passed Users", quizid);
 
-
 //     // Use the UseSelector for the Mesagge
-
-
 
 //     const DisplayMessageZeroPassedUsers=useSelector((state)=>state.quizpassedusers.message)
 
 //     console.log("check_the_message",DisplayMessageZeroPassedUsers);
-
 
 //     // UseEffect for the Displaying the data
 
@@ -53,7 +45,6 @@
 //     useEffect(() => {
 //         fetchpassedusers(quizid);
 //     }, [fetchpassedusers, quizid]);
-
 
 //     return (
 //         <>
@@ -115,19 +106,15 @@
 //     );
 // };
 
-
 // const mapStateToProps = (state) => ({
 //     quizpassedusers: state.quizpassedusers.quizpasseduser
 // });
-
 
 // const mapDispatchToProps = (dispatch) => ({
 //     fetchpassedusers: (quizid) => dispatch(fetchquizpassedusersRequest(quizid))
 // });
 
 // export default connect(mapStateToProps, mapDispatchToProps)(QuizPassedUsers);
-
-
 
 // import React, { useEffect, useState } from 'react';
 // import { Container, Row, Col } from 'react-bootstrap';
@@ -143,8 +130,6 @@
 
 //     console.log(searchpassedusers);
 
-
-
 //     const quizid = useParams();
 //     console.log("Checking the Quiz Id for the Quiz Passed Users", quizid);
 
@@ -155,13 +140,11 @@
 //         fetchpassedusers(quizid);
 //     }, [fetchpassedusers, quizid]);
 
-
-
 //     useEffect(() => {
 //         // if (quizpassedusers.length === 0) {
 
 //         //     fetchpassedusers(quizid);
-            
+
 //         // } else {
 
 //             setFilteredsearchpassedusers(
@@ -172,9 +155,8 @@
 //                 )
 //             );
 //         // }
-        
-//     }, [quizpassedusers, searchpassedusers]);
 
+//     }, [quizpassedusers, searchpassedusers]);
 
 //     return (
 //         <>
@@ -224,18 +206,16 @@
 //                                 ))}
 //                             </div>
 //                         </>
-                    
+
 //                 </Row>
 //             </Container>
 //         </>
 //     );
 // };
 
-
 // const mapStateToProps = (state) => ({
 //     quizpassedusers: state.quizpassedusers.quizpasseduser
 // });
-
 
 // const mapDispatchToProps = (dispatch) => ({
 //     fetchpassedusers: (quizid) => dispatch(fetchquizpassedusersRequest(quizid))
@@ -243,9 +223,9 @@
 
 // export default connect(mapStateToProps, mapDispatchToProps)(QuizPassedUsers);
 
-import * as React from 'react';
-import { useEffect } from 'react';
-import Box from '@mui/material/Box';
+import * as React from "react";
+import { useEffect } from "react";
+import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
@@ -261,8 +241,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import Avatar from '@mui/material/Avatar';
+import { useDispatch, useSelector } from "react-redux";
+import Avatar from "@mui/material/Avatar";
 import { fetchquizpassedusersRequest } from "../../../actions/Admin/QuizPassedUserAction";
 // import { fetchEnrollCourseLearnerRequest } from "../../actions/Admin/EnrollmentCourseLearners";
 import html2canvas from "html2canvas";
@@ -438,7 +418,7 @@ export default function QuizPassedUsers() {
     return (
       <Toolbar
         sx={{
-          mt: 10,
+          mt: 5,
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
@@ -664,4 +644,4 @@ export default function QuizPassedUsers() {
       <EnhancedTable />
     </>
   );
-};
+}

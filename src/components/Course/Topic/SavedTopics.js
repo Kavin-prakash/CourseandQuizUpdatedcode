@@ -53,7 +53,8 @@ import { fetchQuizIdRequest } from '../../../actions/Quiz And Feedback Module/Ad
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
 import { VscFeedback } from "react-icons/vsc";
-import { IconButton,Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
+import { IconButton, Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
+import PptViewerComponent from '../Material/PptViewer';
 //stop mano changes
 export default function SavedTopics(props) {
 
@@ -239,7 +240,7 @@ export default function SavedTopics(props) {
                 setSelectedComponent(<AudioViewer material={filePath} />)
                 break;
             case 'PPT':
-                setSelectedComponent(<PDFViewer material={filePath} />);
+                setSelectedComponent(<PptViewerComponent material={filePath} />);
                 break;
             case 'TEXT':
                 setSelectedComponent(<PDFViewer material={filePath} />);
@@ -300,10 +301,10 @@ export default function SavedTopics(props) {
         dispatch(fetchQuizIdRequest(topicId));
         sessionStorage.setItem('topicId', topicId);
     }
-    const handleAddQuizFeedBackButton=(topicId)=>{
-        sessionStorage.setItem('topicId',topicId);
+    const handleAddQuizFeedBackButton = (topicId) => {
+        sessionStorage.setItem('topicId', topicId);
         navigate('/quizfeedback')
-        }
+    }
 
     return (
         <Container fluid className='mt-5' style={divStyle}>
@@ -326,28 +327,28 @@ export default function SavedTopics(props) {
                         ><div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <span>  {topic.topicName}</span>
                                 <div>
-                                    
 
 
-{/* mano changes */}
 
-                                     <Tooltip title="Add Quiz"> <IconButton aria-label="Addquiz"  onClick={()=>{handleAddQuizButton(topic.topicId)}}><QuizOutlinedIcon style={{color:"#0074D9"}}/></IconButton> </Tooltip>
-                                      <Tooltip title="Add QuizFeedback"><IconButton aria-label="Addquizfeedback"  onClick={()=>{handleAddQuizFeedBackButton(topic.topicId)}}><FeedbackOutlinedIcon style={{color:"#FF851B"}}/></IconButton></Tooltip>
-                                      <Tooltip title="Add Feedback"><IconButton aria-label="Addfeedback"  onClick={()=>{handleAddFeedBackButton(topic.topicId)}} ><VscFeedback style={{color:"#FFDC00"}}/></IconButton></Tooltip>
-                                      <Tooltip title="Edit topics"><IconButton aria-label="Edittopics"  onClick={() => handleEditClickOpen(topic.topicId)}  ><EditIcon style={{ color:"604CC3" }} variant="outlined" /> </IconButton></Tooltip>
-                                      <Tooltip title="Delete topics"><IconButton aria-label="deletetopics"  onClick={() => handleDeleteClickOpen(topic.topicId)}  ><DeleteIcon style={{color:"C80036"}} /></IconButton></Tooltip>
+                                    {/* mano changes */}
 
-                                  
+                                    <Tooltip title="Add Quiz"> <IconButton aria-label="Addquiz" onClick={() => { handleAddQuizButton(topic.topicId) }}><QuizOutlinedIcon style={{ color: "#0074D9" }} /></IconButton> </Tooltip>
+                                    {/* <Tooltip title="Add QuizFeedback"><IconButton aria-label="Addquizfeedback" onClick={() => { handleAddQuizFeedBackButton(topic.topicId) }}><FeedbackOutlinedIcon style={{ color: "#FF851B" }} /></IconButton></Tooltip> */}
+                                    <Tooltip title="Add Feedback"><IconButton aria-label="Addfeedback" onClick={() => { handleAddFeedBackButton(topic.topicId) }} ><VscFeedback style={{ color: "#FFDC00" }} /></IconButton></Tooltip>
+                                    <Tooltip title="Edit topics"><IconButton aria-label="Edittopics" onClick={() => handleEditClickOpen(topic.topicId)}  ><EditIcon style={{ color: "604CC3" }} variant="outlined" /> </IconButton></Tooltip>
+                                    <Tooltip title="Delete topics"><IconButton aria-label="deletetopics" onClick={() => handleDeleteClickOpen(topic.topicId)}  ><DeleteIcon style={{ color: "C80036" }} /></IconButton></Tooltip>
 
-                                   {/* // <EditIcon style={{ marginRight: 16 }} variant="outlined" onClick={() => handleEditClickOpen(topic.topicId)} /> */}
+
+
+                                    {/* // <EditIcon style={{ marginRight: 16 }} variant="outlined" onClick={() => handleEditClickOpen(topic.topicId)} /> */}
                                     {/* //<DeleteIcon onClick={() => handleDeleteClickOpen(topic.topicId)} /></div></div> */}
-                            {/* added button for quiz teams */}
-                            {/* //<button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddFeedBackButton(topic.topicId) }}>Add  Feedback</button> */}
+                                    {/* added button for quiz teams */}
+                                    {/* //<button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddFeedBackButton(topic.topicId) }}>Add  Feedback</button> */}
 
-                            {/* //<button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddQuizButton(topic.topicId) }}>Add Quiz</button> */}
-                            {/* <DeleteIcon onClick={() => handleDelete(topic.topicId)} />/ */}
-                              {/* stop mano changes */}
-                            </div></div>
+                                    {/* //<button class="btn btn-primary" style={{ marginLeft: '250px' }} onClick={() => { handleAddQuizButton(topic.topicId) }}>Add Quiz</button> */}
+                                    {/* <DeleteIcon onClick={() => handleDelete(topic.topicId)} />/ */}
+                                    {/* stop mano changes */}
+                                </div></div>
 
                         </AccordionSummary>
 
