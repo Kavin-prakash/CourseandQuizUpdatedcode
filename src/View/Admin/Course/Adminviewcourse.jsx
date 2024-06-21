@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { TableContainer, Switch } from "@mui/material";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchallCoursesRequest } from "../../../actions/Admin/Adnimviewcourse";
-import { deleteCoursesRequest } from "../../../actions/Admin/DeletecourseAction";
+import { RESET_DELETE_SUCCESS_COURSES_MESSAGE, deleteCoursesRequest } from "../../../actions/Admin/DeletecourseAction";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import GridViewIcon from "@mui/icons-material/GridView";
@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import { enableDisableCourseRequest } from "../../../actions/Admin/EnableDisableAction";
+import Swal from "sweetalert2";
 import {
   Dialog,
   DialogActions,
@@ -32,7 +33,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
-import { updateCoursesRequest } from "../../../actions/Admin/Updatecourse";
+import { RESET_UPDATE_COURSES, updateCoursesRequest, updateCoursesSuccess } from "../../../actions/Admin/Updatecourse";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const Adminviewcourse = ({
@@ -53,11 +54,14 @@ const Adminviewcourse = ({
     category: "",
     description: "",
     duration: "",
-    modifiedby: sessionStorage.getItem("Role"),
+    modifiedby: "Kavin",
     thumbnailimage: "null",
     levelId: "",
     categoryId: "",
   });
+
+  // DISPATCH FUNCTION 
+  const dispatch = useDispatch();
 
   console.log("selected courses", selectedcourse);
   console.log(selectedcourse.category);
@@ -116,7 +120,7 @@ const Adminviewcourse = ({
       category: course.categoryId, //
       description: course.description,
       duration: course.duration,
-      modifiedby: sessionStorage.getItem("Role"),
+      modifiedby: "Kavin",
       thumbnailimage: course.thumbnailimage,
     });
 
@@ -265,13 +269,23 @@ const Adminviewcourse = ({
   const [open, setOpen] = React.useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
+
+
   const istrue = useSelector((state) => state.deletecourse.isdeleted);
+
   const mes = useSelector((state) => state.deletecourse.message);
 
-  const isfalse = useSelector((state) => state.deletecourse.isnotdelete);
-  const failuremessage = useSelector((state) => state.deletecourse.message);
 
-  // Update successfull Message-----//
+  const isfalse = useSelector((state) => state.deletecourse.isnotdelete);
+
+  console.log("isfalse", isfalse);
+
+  const failuremessage = "Cannot Delete the course,User Enrolled In";
+
+
+
+
+  // Update successfull Message-----//  
 
   const isUpdated = useSelector((state) => state.updatecourse.isUpdated);
   console.log("check the updatestatues", isUpdated);
@@ -280,35 +294,116 @@ const Adminviewcourse = ({
   );
   console.log("message", courseupdatesuccessfullmessage);
 
-  const updatefailuremessage = "Updated was not successfull";
+
+
 
   useEffect(() => {
     if (isUpdated) {
-      setOpen(true);
-      setDialogMessage(courseupdatesuccessfullmessage);
-      fetchCourses();
-      // window.location.reload();
+      // setOpen(true);
+      // setDialogMessage(courseupdatesuccessfullmessage);
+
+      const Toast = Swal.mixin({
+        toast: true, background: 'green', position: "top",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success", iconColor: 'white', title: "Updated Successfully", customClass: {
+          popup: 'updatecourse-toast'
+        }
+      });
+
+      fetchCourses().then(() => {
+        dispatch({ type: RESET_UPDATE_COURSES })
+      });
     }
     // setOpen(false);
-  }, [isUpdated, courseupdatesuccessfullmessage]);
+  }, [isUpdated, dispatch]);
 
   ////
+
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  // DELETE COURSE HANDLING
+
+  // useEffect(() => {
+  //   if (istrue) {
+  //     // setOpen(true);
+
+  //     // Tostify Alert Message for the successmessage
+
+  // const Toast = Swal.mixin({
+  //   toast: true, background: 'green', position: "top",
+  //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
+  //   didOpen: (toast) => {
+  //     toast.onmouseenter = Swal.stopTimer;
+  //     toast.onmouseleave = Swal.resumeTimer;
+  //   }
+  // });
+  // Toast.fire({
+  //   icon: "success", iconColor: 'white', title: "Deleted Successfully", customClass: {
+  //     popup: 'deletecourse-toast'
+  //   }
+  // });
+
+
+  //     fetchCourses().then(()=>
+  //     {
+  //       dispatch({type:RESET_DELETE_SUCCESS_COURSES_MESSAGE});  
+  //     });
+  //   }
+  //    else if (isfalse) {
+  //     setOpen(true);
+  //     setDialogMessage(failuremessage);
+  //   }
+  // }, [istrue, mes, isfalse, failuremessage, fetchCourses ,dispatch]);
+
+
+
+  // OLD useEffect Mock Data
+
+  // debugger
   useEffect(() => {
+    let message = '';
     if (istrue) {
-      setOpen(true);
-      setDialogMessage(mes);
-      setOpen(true);
-      fetchCourses();
+      message = mes ;
+      // const Toast = Swal.mixin({
+      //   toast: true, background: 'red', position: "top",
+      //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   }
+      // });
+      // Toast.fire({
+      //   icon: "success", iconColor: 'white', title: "Deleted Successfully", customClass: {
+      //     popup: 'updatecourse-toast'
+      //   }
+      // });
+      
+      fetchCourses().then(() => {
+        dispatch({ type: RESET_DELETE_SUCCESS_COURSES_MESSAGE });
+      });
     } else if (isfalse) {
-      setOpen(true);
-      setDialogMessage(failuremessage);
+      // message = failuremessage;
+      message="llla"
     }
-  }, [istrue, mes, isfalse, failuremessage, fetchCourses]);
+
+    if (message) {
+      setOpen(true);
+      setDialogMessage(message);
+    }
+  }, [istrue, mes, isfalse, failuremessage, fetchCourses, dispatch]);
+
+
+
+
 
   useEffect(() => {
     setFilteredCourses(
@@ -321,7 +416,7 @@ const Adminviewcourse = ({
   }, [courses, searchTerm]);
 
 
-  const dispatch = useDispatch();
+  //  DELETE COURSE - HANDLING 
 
   const handleDeleteClick = (courseId) => {
     setSelectedCourseId(courseId);
@@ -332,6 +427,7 @@ const Adminviewcourse = ({
     deleteCourse(selectedCourseId);
     setShowModal(false);
   };
+
 
   //const for Enable & Disable Pop up
   const [showEnableModal, setShowEnableModal] = useState(false);
@@ -530,11 +626,9 @@ const Adminviewcourse = ({
                           <TableCell>{course.level}</TableCell>
                           <TableCell>{course.createdAt}</TableCell>
                           <TableCell align="right">
-                            <Link to={'/coursecontent/' + course.courseId}>
-                              <Button>
-                                <GridViewIcon />
-                              </Button>
-                            </Link>
+                            <Button>
+                              <GridViewIcon />
+                            </Button>
                           </TableCell>
                           <TableCell align="right">
                             <Button
@@ -579,8 +673,8 @@ const Adminviewcourse = ({
               </Paper>
             </Row>
           </Col>
-        </Row >
-      </Container >
+        </Row>
+      </Container>
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Delete Confirmation</Modal.Title>

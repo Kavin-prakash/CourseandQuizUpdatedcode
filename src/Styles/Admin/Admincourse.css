@@ -1,11 +1,9 @@
-
 /* .sidebar
 {
     background-color: #272356;
 } */
-          
-#admin_recentcourse .landingcoursepage
-{
+
+#admin_recentcourse .landingcoursepage {
     /* background-color:rgb(248, 242, 242);  */
     /* padding-left: 200px;
     padding-right: 200px; */
@@ -13,11 +11,10 @@
     flex-wrap: wrap;   */
     padding-left: 50px;
     padding-right: 50px;
-    
+
 }
 
-#admin_recentcourse .scrollable-content 
-{
+#admin_recentcourse .scrollable-content {
     display: flex;
     flex-wrap: wrap;
     row-gap: 30px;
@@ -26,16 +23,36 @@
     padding-top: 20px;
     overflow-y: auto;
 }
-#admin_recentcourse .contentbody
-{
+
+#admin_recentcourse .contentbody {
     height: 100vh;
     width: 100%vw;
 }
 
-#admin_recentcourse .spinnerclass
-{
+#admin_recentcourse .spinnerclass {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 250px;
+}
+
+.recentaddedcourse {
+    background-color: #f0f5f9;
+    border: 1px solid #85d3f7;
+    border-radius: 15PX;
+    margin-top: 15px;
+}
+
+.updatecourse-toast {
+    margin-top: 80px;
+    box-shadow: 0 0 10px #000;
+    color: white;
+    background-color: #5e55df;
+}
+
+.deletecourse-toast {
+    margin-top: 80px;
+    box-shadow: 0 0 10px #000;
+    color: white;
+    background-color: #5e55df;
 }
