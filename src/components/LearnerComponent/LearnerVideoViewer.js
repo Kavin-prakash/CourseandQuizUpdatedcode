@@ -19,24 +19,24 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
-import { watchTimeRequest } from "../../actions/LearnerAction/WatchTimeAction";
+// import { watchTimeRequest } from "../../actions/LearnerAction/WatchTimeAction";
 //import watchTimeRequest from '../../actions/LearnerAction/WatchTimeAction';
 // import { updateWatchTimeRequest } from "../../actions/LearnerAction/UpdateWatchTimeAction";
 //import updateWatchTimeRequest from '../../actions/LearnerAction/UpdateWatchTimeAction';
-
+ 
 const Video = styled.video`
   flex-shrink: 1;
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
   `;
-
+ 
 const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
   const elapsedMin = Math.floor(elapsedSec / 60);
   const elapsedSecond = Math.floor(elapsedSec % 60);
-
+ 
   return (
-    <Flex  fontWeight="600" gap="4px"  >
+    <Flex align="center" fontWeight="600" gap="4px">
       <Text fontWeight={600} color="white">
         {elapsedMin}:
       </Text>
@@ -50,30 +50,25 @@ const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
     </Flex>
   );
 };
-
+ 
 const PlaybackRateControlButton = React.forwardRef(
   ({ onClick, playbackRate }, ref) => (
     <div ref={ref}>
       <Flex
-          // alignItems="center"
+        alignItems="center"
         cursor="pointer"
-        h="25px"
-       // justifyContent="center"
-        rounded="2px"
+        h="40px"
+        justifyContent="center"
+        rounded="12px"
         w="45px"
-        bg="white"
-
-
-        // _hover={{
-        //   bg: "rgba(255, 255, 255, 0.08)",
-        // }}
+        _hover={{
+          bg: "rgba(255, 255, 255, 0.08)",
+        }}
         onClick={onClick}
-        // transition="500ms opacity"
-        style={{position:'relative',top:'1vh',right:'3vw'}}
-       
+        transition="500ms opacity"
       >
         <Text
-          color="black"
+          color="white"
           fontWeight={700}
           letterSpacing="0.5px"
           pos="relative"
@@ -96,7 +91,7 @@ const PlaybackRateControlButton = React.forwardRef(
     </div>
   )
 );
-
+ 
 const PlaybackRateControl = React.memo(function PlaybackRateControl({
   playbackRate,
   setPlaybackRate,
@@ -105,7 +100,7 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
     <Menu autoSelect={false} placement="top-start">
       <MenuButton as={PlaybackRateControlButton} playbackRate={playbackRate} />
       <MenuList
-        bg="black"
+        bg="#1D253F"
         border="none"
         pl="8px"
         pr="8px"
@@ -128,15 +123,15 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
                 if (playbackRate === rate) return;
                 setPlaybackRate(rate);
               }}
-
-              // _hover={{
-              //   bg: "rgba(0, 0, 0, 0.4)",
-              // }}
+ 
+              _hover={{
+                bg: "rgba(0, 0, 0, 0.4)",
+              }}
               _focus={{
                 bg: "rgba(0, 0, 0, 0.4)",
               }}
             >
-              <Text fontWeight={600} size="sm" color="black">
+              <Text fontWeight={600} size="sm" color="white">
                 {rate.toFixed(1)}x
               </Text>
               {playbackRate === rate && (
@@ -149,8 +144,8 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
     </Menu>
   );
 });
-
-const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
+ 
+const LearnerVideoViewer = ({ material,materialId, topicsId,coursesId }) => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -163,68 +158,60 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
   const bufferRef = useRef(null);
   const containerRef = useRef(null);
   const dispatch = useDispatch();
-
-  const formatTime=(seconds) =>{
-    const hours=Math.floor(seconds/3600).toString().padStart(2,'0');
-    const minutes=Math.floor((seconds % 3600) /60).toString().padStart(2,'0');
-    const secs=Math.floor(seconds % 60).toString().padStart(2,'0');
-    return `${hours}:${minutes}:${secs}`;
-
-  }
-
+ 
   useEffect(() => {
     const savedTime = localStorage.getItem("video-current-time");
     if (savedTime && videoRef.current) {
-
+ 
       videoRef.current.currentTime = parseFloat(savedTime);
-      const learnerprogressdata={
-        
-        materialId: materialId,
-        learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime: "00:00:00"
-      }
-      
-     dispatch(watchTimeRequest(learnerprogressdata));
+    //   const learnerprogressdata={
+    //     courseId: coursesId,
+    //     topicId: topicsId,
+    //     materialId: materialId,
+    //     learnerId: sessionStorage.getItem("UserSessionID"),
+    //     watchTime: "00:00:00"
+    //   }
+    //   dispatch(watchTimeRequest(learnerprogressdata));
     }
   }, []);
-
-
-
  
-
+  // useEffect(() => {
+   
+  // });
+ 
+ 
+ 
   useEffect(() => {
     if (!videoRef.current) return;
-
+ 
     const onWaiting = () => {
       if (isPlaying) setIsPlaying(false);
       setIsWaiting(true);
     };
-
+ 
     const onPlay = () => {
       if (isWaiting) setIsWaiting(false);
       setIsPlaying(true);
     };
-
+ 
     const onPause = () => {
       setIsPlaying(false);
       setIsWaiting(false);
       if (videoRef.current) {
-        
+       
         localStorage.setItem(
           "video-current-time",
           videoRef.current.currentTime
         );
       }
-      const learnerprogressdata={
-        
-        materialId: materialId,
-        learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime:formatTime(videoRef.current.currentTime)
-      }
-      
-      dispatch(watchTimeRequest(learnerprogressdata));
+    //   const formdata={
+    //     learnerId: sessionStorage.getItem("UserSessionID"),
+    //     watchtime: videoRef.current.currentTime,
+    //     materialId: materialId
+    //   }
+    //   dispatch(updateWatchTimeRequest(formdata));
     };
-
+ 
     const onProgress = () => {
       if (!videoRef.current || !videoRef.current.buffered || !bufferRef.current)
         return;
@@ -237,7 +224,7 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
         bufferRef.current.style.width = (bufferedEnd / duration) * 100 + "%";
       }
     };
-
+ 
     const onTimeUpdate = () => {
       setIsWaiting(false);
       if (
@@ -254,14 +241,14 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
           (videoRef.current.currentTime / duration) * 100 + "%";
       }
     };
-
+ 
     videoRef.current.addEventListener("progress", onProgress);
     videoRef.current.addEventListener("timeupdate", onTimeUpdate);
     videoRef.current.addEventListener("waiting", onWaiting);
     videoRef.current.addEventListener("play", onPlay);
     videoRef.current.addEventListener("playing", onPlay);
     videoRef.current.addEventListener("pause", onPause);
-
+ 
     return () => {
       if (!videoRef.current) return;
       videoRef.current.removeEventListener("progress", onProgress);
@@ -272,46 +259,45 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
       videoRef.current.removeEventListener("pause", onPause);
     };
   }, [isPlaying, isWaiting]);
-
+ 
   useEffect(() => {
     if (!videoRef.current) return;
     if (videoRef.current.playbackRate === playbackRate) return;
     videoRef.current.playbackRate = playbackRate;
   }, [playbackRate]);
-
+ 
   const handlePlayPauseClick = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
-        
       } else {
         videoRef.current.play();
       }
     }
   };
-
+ 
   // const seekToPosition = (pos) => {
   //   if (!videoRef.current) return;
   //   if (pos < 0 || pos > 1) return;
-
+ 
   //   const durationMs = videoRef.current.duration * 1000 || 0;
   //   const newElapsedMs = durationMs * pos;
   //   const newTimeSec = newElapsedMs / 1000;
   //   videoRef.current.currentTime = newTimeSec;
   // };
-
-
+ 
+ 
   const seekToPosition = (pos) => {
     if (!videoRef.current) return;
     if (pos < 0 || pos > 1) return;
-
+ 
     const duration = videoRef.current.duration;
     const newTimeSec = duration * pos;
     videoRef.current.currentTime = newTimeSec;
     setElapsedSec(newTimeSec); // Update the elapsedSec state
   };
-
-
+ 
+ 
   const handleFullscreenClick = () => {
     if (!containerRef.current) return;
     if (!isFullscreen) {
@@ -337,16 +323,13 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
     }
     setIsFullscreen(!isFullscreen);
   };
-
+ 
   const handleVideoClick = () => {
     handlePlayPauseClick();
   };
-
+ 
   return (
-    <>
-    <h2 style={{ marginLeft: '2vw',position:'relative',top:'1vh'}} >{materialName}</h2>
-    <hr style={{ marginLeft: '2vw',width:'80vw',position:'relative',top:'1vh'}}/>
-    <Box ref={containerRef} position="relative" width="76%" left="170" top="30" style={{backgroundColor:'grey'}}>
+    <Box ref={containerRef} position="relative" width="80%">
       <Video
         ref={videoRef}
         src={src}
@@ -363,22 +346,17 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
         justifyContent="space-between"
         background="rgba(0, 0, 0, 0.5)"
       >
-        <div className="d-flex flex-row gap-2" style={{height:'25px'}}>
         <Button onClick={handlePlayPauseClick}>
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </Button>
         <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
-        </div>
-        <div>
         <PlaybackRateControl
-          
           playbackRate={playbackRate}
           setPlaybackRate={setPlaybackRate}
         />
-        <Button onClick={handleFullscreenClick} style={{position:'relative',bottom:'2vh'}}>
+        <Button onClick={handleFullscreenClick}>
           {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
         </Button>
-        </div>
       </Flex>
       <Box
         position="absolute"
@@ -416,9 +394,9 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
           background="red"
         />
       </Box>
-
-
-
+ 
+ 
+ 
       {isWaiting && (
         <Spinner
           position="absolute"
@@ -429,8 +407,7 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
         />
       )}
     </Box>
-    </>
   );
 };
-
+ 
 export default LearnerVideoViewer;

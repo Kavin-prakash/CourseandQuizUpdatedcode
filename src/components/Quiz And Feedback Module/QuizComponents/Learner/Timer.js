@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
- import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
+//  import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
 
 function DynamicTimer() {
   const [startTime, setStartTime] = useState("");
@@ -84,13 +84,12 @@ const Timer = ({ startTime, endTime }) => {
 
   return (
     <div>
-      {/* {isRunning ? (
-        <h5 className="timerclass">Time Left: {formatTime(timeLeft)}</h5>
+      {isRunning ? (
+        <h4 className="timerclass">Time Left: {formatTime(timeLeft)}</h4>
       ) : (
         // <h2>Timer stopped</h2>
         <h2> </h2>
-      )} */}
-      <h5 id="timerclass" style={{marginRight:"30px"}}>Time Left: {formatTime(timeLeft)}</h5>
+      )}
     </div>
   );
 };

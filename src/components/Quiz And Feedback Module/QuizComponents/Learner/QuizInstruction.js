@@ -14,34 +14,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchQuizInstructionRequest } from "../../../../actions/Quiz And Feedback Module/Learner/QuizInstructionAction";
 import { CreateAttemptRequest } from "../../../../actions/Quiz And Feedback Module/Learner/AttemptQuizAction";
 import { fetchlearneridRequest } from "../../../../actions/Quiz And Feedback Module/Learner/GetLearnerIDAction";
-import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
-
 
 function QuizInstruction() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const topicId = sessionStorage.getItem("topicId");
-
+  
   const LearnerId = sessionStorage.getItem("UserSessionID");
   // const AttemptId = sessionStorage.getItem("AttemptId");
   const quizinstructions = useSelector(
     (state) => state.fetchquizinstruction.quizinstructiondetails
   );
   // const quizId = sessionStorage.getItem("quizId");
-  const quizId = quizinstructions.quizId;
+  const quizId=quizinstructions.quizId;
   console.log(quizinstructions)
 
   const learnerId = sessionStorage.getItem("UserSessionID");
   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
   console.log(getlearners);
   const divStyle = {
-    // boxShadow: "0px 4px 8px #23275c",
+    boxShadow: "0px 4px 8px #23275c",
   };
   console.log("quizid", quizId);
   console.log("learnerid", LearnerId);
   const [TakeQuiz, setTakeQuiz] = useState({
     learnerId: LearnerId,
-    quizId: sessionStorage.getItem('quizId'),
+    quizId: quizId,
     // attemptId: AttemptId,
   });
 
@@ -59,20 +57,16 @@ function QuizInstruction() {
     sessionStorage.removeItem("selectedOptions");
     sessionStorage.removeItem("reviewData");
     sessionStorage.removeItem("answeredQuestions");
-    sessionStorage.removeItem("currentQuestionIndex");
 
     sessionStorage.setItem("quizId", quizId);
     sessionStorage.setItem("LearnerId", LearnerId);
+
     dispatch(CreateAttemptRequest(TakeQuiz));
     navigate("/attemptquiz");
   };
 
   return (
-    <div>
-      <TopBar/>
-    <Container fluid
-    // style={{marginTop:"700px"}}
-    >
+    <Container fluid style={{ marginTop: "700px" }}>
       <div>
         <div>
           <button
@@ -92,9 +86,9 @@ function QuizInstruction() {
           </button>
         </div>
         {/* <AdminNavbar /> */}
-        <Container fluid id="instructionpage-container" style={divStyle}>
+        <Container fluid id="container" style={divStyle}>
           <Box
-            id="quizinstructionpage"
+            id="instruction"
             sx={{
               width: "100%",
               maxWidth: 500,
@@ -103,15 +97,7 @@ function QuizInstruction() {
               gap: 2,
             }}
           >
-            <Card
-              style={{
-                height: "50px",
-                width: "440%",
-                marginLeft: "108%",
-                marginBottom: "2%",
-                marginTop: "-20%",
-              }}
-              variant="soft" id="instruction-topic">
+            <Card style={{ height: "50px", marginLeft: "-13%" }} variant="soft">
               <CardContent>
                 <Typography level="title-md">
                   {quizinstructions.nameOfQuiz} Assessment
@@ -119,13 +105,11 @@ function QuizInstruction() {
               </CardContent>
             </Card>
 
-            <Card id="instruction-content" variant="soft"
-              style={{ width: "440%", height: "115%" }}
-            >
+            <Card id="card" variant="soft">
               <CardContent>
                 <Divider inset="none" id="divider" />
                 <Typography level="title-md">
-                  Duration : {quizinstructions.duration}{" "} (In Minutes)
+                  Duration : {quizinstructions.duration} (In Minutes)
                 </Typography>
                 <Typography level="title-md">
                   Pass Mark : {quizinstructions.passMark}{" "}
@@ -139,7 +123,8 @@ function QuizInstruction() {
                 </Typography>
                 <Typography>
                   <b>
-                    Dear {getlearners.learnerFirstName} {getlearners.learnerLastName},
+                    Dear {getlearners.learnerFirstName}{" "}
+                    {getlearners.learnerLastName},
                   </b>
                 </Typography>
                 <Typography>
@@ -159,52 +144,37 @@ function QuizInstruction() {
                 </Typography>
                 <Typography>
                   <li>
-                    In "multi-select question(MSQ)" , You have to choose more than
-                    one option. If your chosen answer is partially correct means
-                    you will get half mark{" "}
+                    In "multi-select question(MSQ)" , You have to choose more
+                    than one option. If your chosen answer is partially correct
+                    means you will get half mark{" "}
                   </li>
                 </Typography>
                 <Typography>
                   <b>All the Best !</b>
                 </Typography>
-
-                <br />
-                <Button
-                  onClick={handleTakeQuiz}
-                  variant="default"
-                  style={{
-                    backgroundColor: "#365486",
-                    color: "whitesmoke",
-                    width: "150px",
-                  }}
-                >
-                  Attempt Quiz
-                </Button>
               </CardContent>
             </Card>
-            {/* <div style={{ marginLeft: "100%" }}>
-            <Button
-              onClick={handleTakeQuiz}
-              variant="default"
-              style={{
-                backgroundColor: "#365486",
-                color: "whitesmoke",
-                width: "150px",
-              }}
-            >
-              Attempt Quiz
-            </Button>
-          </div> */}
+            <div style={{ marginLeft: "100%" }}>
+              <Button
+                onClick={handleTakeQuiz}
+                variant="default"
+                style={{
+                  backgroundColor: "#365486",
+                  color: "whitesmoke",
+                  width: "150px",
+                }}
+              >
+                Attempt Quiz
+              </Button>
+            </div>
           </Box>
         </Container>
       </div>
     </Container>
-    </div>
   );
 }
 
 export default QuizInstruction;
-
 
 
 

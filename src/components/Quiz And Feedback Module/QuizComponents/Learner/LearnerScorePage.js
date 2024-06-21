@@ -14,26 +14,15 @@ import { fetchQuizInstructionRequest } from "../../../../actions/Quiz And Feedba
 import { fetchlearneridRequest } from "../../../../actions/Quiz And Feedback Module/Learner/GetLearnerIDAction";
 import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
 import "../../../../Styles/Quiz And Feedback Module/Learner/LearnerScorePage.css";
-import { fetchQuizIdRequest } from "../../../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
-
 
 export const LearnerScorePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isSuccess = useSelector((state) => state.fetchquizinstruction.isSubmitted);
-
 
   const topicId = sessionStorage.getItem("topicId");
   const quizinstructions = useSelector(
     (state) => state.fetchquizinstruction.quizinstructiondetails
   );
-
-  // const quizId = sessionStorage.getItem("quizId");
-  const quizId = useSelector(
-    (state) => state.fetchquizinstruction.quizinstructiondetails
-  );
-
-  console.log("FB- quizId", quizId, isSuccess);
 
   const learnerId = sessionStorage.getItem("UserSessionID");
   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
@@ -52,13 +41,6 @@ export const LearnerScorePage = () => {
     dispatch(fetchlearnerscoreRequest(learnersAttemptId));
   }, [dispatch]);
 
-  const handleQuizGiveFeedback = async (topicId) => {
-    dispatch(fetchQuizIdRequest(topicId));
-    // sessionStorage.setItem("quizId", quizId);
-    sessionStorage.setItem("quizId", quizId.quizId);
-    navigate("/quizfeedbackquestion");
-  };
-
   return (
     <Container style={{ marginTop: "100px", width: "90%", marginLeft: "15%" }}>
       <div id="scorepages">
@@ -66,11 +48,11 @@ export const LearnerScorePage = () => {
           <Container
             fluid
             id="containers"
-            // style={{
-            //   boxShadow: "0px 4px 8px #23275c",
-            //   marginTop: "100px",
-            //   width: "100%",
-            // }}
+            style={{
+              boxShadow: "0px 4px 8px #23275c",
+              marginTop: "100px",
+              width: "100%",
+            }}
           >
             <Box
               id="instructions"
@@ -84,14 +66,14 @@ export const LearnerScorePage = () => {
               }}
               style={{}}
             >
-           <Card
-                id="scorepage-topic"
+              <Card
+                id="cards"
                 style={{
                   height: "50px",
-                  width: "500%",
-                  marginLeft: "108%",
+                  width: "650%",
+                  marginLeft: "-8%",
                   marginBottom: "2%",
-                  marginTop: "-20%",
+                  marginTop: "5%",
                 }}
                 variant="soft"
               >
@@ -102,9 +84,9 @@ export const LearnerScorePage = () => {
                 </CardContent>
               </Card>
               <Card
-                id="scorepage-content"
+                id="card"
                 variant="soft"
-                style={{ width: "500%", height: "105%" }}
+                style={{ width: "650%", height: "85%" }}
               >
                 <CardContent>
                   <Divider inset="none" id="divider" />
@@ -174,40 +156,23 @@ export const LearnerScorePage = () => {
                               </div>
                             </div>
                             <>
-                              {/* <div>
+                              <div>
                                 <Button
                                   variant="default"
                                   style={{
                                     backgroundColor: "#365486",
                                     color: "whitesmoke",
                                     width: "150px",
-                                    marginLeft: "10%",
+                                    marginLeft: "50%",
                                   }}
                                   onClick={() => {
                                     navigate("/quizengine");
                                   }}
-                                  >
-                                    Go To Course
-                                  </Button>
-                                </div> */}
-                            </>
-                            <div>
-                                <Button
-                                  variant="default"
-                                  style={{
-                                    backgroundColor: "#365486",
-                                    color: "whitesmoke",
-                                    width: "180px",
-                                    marginLeft: "70%",
-                                    marginBottom: "55px"
-                                  }}
-                                  onClick={() => {
-                                    handleQuizGiveFeedback(quizId);
-                                  }}
                                 >
-                                  Give Quiz Feedback
+                                  Go To Course
                                 </Button>
                               </div>
+                            </>
                           </>
                         ) : (
                           <>
@@ -256,7 +221,7 @@ export const LearnerScorePage = () => {
                                       color: "whitesmoke",
                                       width: "150px",
                                       marginLeft: "80%",
-                                      marginTop: "-170px",
+                                      marginTop: "-221px",
                                     }}
                                     onClick={() => {
                                       navigate("/instruction");

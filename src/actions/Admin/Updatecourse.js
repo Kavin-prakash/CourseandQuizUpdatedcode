@@ -18,4 +18,3 @@ export const updateCoursesFailure = (error) => ({
   payload: error,
 });
 
-export const RESET_UPDATE_COURSES = 'RESET_UPDATE_COURSES';

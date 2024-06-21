@@ -17,29 +17,28 @@ import { FaRegEdit } from "react-icons/fa";
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 // import { deleteContentRequest } from '../../../action/Course/Material/DeleteContentAction'
-import { deleteContentRequest } from '../../../actions/Course/Material/DeleteContentAction'
+import {deleteContentRequest} from '../../../actions/Course/Material/DeleteContentAction'
 import { useSelector } from 'react-redux';
 import { IoEyeOutline } from "react-icons/io5";
-import IconButton from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton'; 
 import Box from '@mui/material/Box';
 // import { fetchMaterialTypeRequest } from '../../../action/Course/Material/FetchMaterialTypeAction';
-import { fetchMaterialTypeRequest } from '../../../actions/Course/Material/FetchMaterialTypeAction'
+import {fetchMaterialTypeRequest} from '../../../actions/Course/Material/FetchMaterialTypeAction'
 // import { fetchContentRequest } from '../../../action/Course/Material/FetchContentAction';
-import { fetchContentRequest } from '../../../actions/Course/Material/FetchContentAction'
+import {fetchContentRequest} from '../../../actions/Course/Material/FetchContentAction'
 // import { createContentRequest } from '../../../action/Course/Material/AddContentAction';
-import { createContentRequest } from '../../../actions/Course/Material/AddContentAction';
+import {createContentRequest} from '../../../actions/Course/Material/AddContentAction';
 import { validateContentForm } from "../../../utils/Course/Material/AddContentValidation";
 // import { fetchIndividualContentRequest } from '../../../action/Course/Material/FetchIndividualContentByIdAction'
-import { fetchIndividualContentRequest } from '../../../actions/Course/Material/FetchIndividualContentByIdAction'
+import {fetchIndividualContentRequest} from '../../../actions/Course/Material/FetchIndividualContentByIdAction'
 // import { fetchContentUrlRequest } from '../../action/Course/FetchContentUrlAction';
 // import { updateContentRequest } from '../../../action/Course/Material/UpdateContentAction';
 
-import { updateContentRequest } from '../../../actions/Course/Material/UpdateContentAction';
-import PDFViewer from './PDFViewer';
+import {updateContentRequest} from '../../../actions/Course/Material/UpdateContentAction';
+ import PDFViewer from './PDFViewer';
 // import Video from './Video';
 import AudioViewer from './AudioViewer';
 import VideoViewer from './VideoViewer';
-import PptViewerComponent from './PptViewer';
 // IMPORT IMAGES FOR MATERIAL 
 // import Video from "../../../assets/Video.png"
 import Video from '../../../assets/Course/Video.png'
@@ -64,7 +63,7 @@ function AddContentComponent() {
   const [isDisableType, setIsDisableType] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState();
   const [viewerModelHeader, setViewerModelHeader] = useState();
-  const [duration, setDuration] = useState();
+  const [duration,setDuration]=useState();
   const [material, setMaterial] = useState({
     topicId: id,
     materialTypeId: materialType,
@@ -82,20 +81,20 @@ function AddContentComponent() {
   const selectorContent = useSelector((state) => state.fetchContent.content)
   console.log("material", selectorContent);
   const [openDelete, setOpenDelete] = React.useState(false);
-  const [updateExist, setExistsUpdateMsg] = useState('');
-  const updateExists = useSelector((state) => state.updateContent.isExists);
-  console.log("updateExists", updateExists);
+  const[updateExist,setExistsUpdateMsg]=useState('');
+  const updateExists=useSelector((state)=>state.updateContent.isExists);
+  console.log("updateExists",updateExists);
 
-  useEffect(() => {
-    if (updateExists) {
+  useEffect(()=>{
+    if(updateExists){
       setExistsUpdateMsg("Material already exists");
-      const timer = setTimeout(() => {
-        setExistsUpdateMsg('');
-      }, 5000);
+    const timer = setTimeout(() => {
+      setExistsUpdateMsg('');
+    }, 5000);
 
-      return () => clearTimeout(timer);
+    return () => clearTimeout(timer);
     }
-  }, [updateExists])
+  },[updateExists])
   useEffect(() => {
     dispatch(fetchMaterialTypeRequest());
     // console.log(TopicId)
@@ -251,7 +250,7 @@ function AddContentComponent() {
         material: file,
       }));
       setselectedContent(file.name);
-
+ 
       // Check if the file is audio or video
       if (file.type.includes('audio') || file.type.includes('video')) {
         // Create a temporary HTML5 media element (audio or video) to fetch duration
@@ -263,11 +262,11 @@ function AddContentComponent() {
           let hours = Math.floor(duration / 3600);
           let minutes = Math.floor((duration - (hours * 3600)) / 60);
           let seconds = Math.floor(duration - (hours * 3600) - (minutes * 60));
-
+ 
           hours = hours < 10 ? '0' + hours : hours;
           minutes = minutes < 10 ? '0' + minutes : minutes;
           seconds = seconds < 10 ? '0' + seconds : seconds;
-
+ 
           setDuration(`${hours}:${minutes}:${seconds}`);
           // Revoke the object URL to avoid memory leaks
           URL.revokeObjectURL(media.src);
@@ -309,7 +308,7 @@ function AddContentComponent() {
     if (isFormValid) {
       try {
         if (material.materialId == undefined || material.materialId == "") {
-          console.log("materialadd", material);
+          console.log("materialadd",material);
           await dispatch(createContentRequest(material));
 
         } else {
@@ -325,7 +324,7 @@ function AddContentComponent() {
           name: "",
           material: null,
           createdBy: sessionStorage.getItem("userName"),
-          duration: duration
+          duration:  duration
 
 
         })
@@ -340,12 +339,12 @@ function AddContentComponent() {
 
   }
   const divStyle = {
-    width: '50vw',
+    width:'50vw',
     boxShadow: '0px 4px 8px #23275c',
     borderRadius: '20px',
   };
 
-  const handlePreview = (filePath, materialType, materialName, materialId) => {
+  const handlePreview = (filePath, materialType, materialName,materialId) => {
     setViewerModelHeader(materialName);
     switch (materialType) {
       case 'PDF':
@@ -359,7 +358,7 @@ function AddContentComponent() {
         setSelectedComponent(<AudioViewer material={filePath} />)
         break;
       case 'PPT':
-        setSelectedComponent(<PptViewerComponent material={filePath} />);
+        setSelectedComponent(<PDFViewer material={filePath} />);
         break;
       case 'TEXT':
         setSelectedComponent(<PDFViewer material={filePath} />);
@@ -373,21 +372,20 @@ function AddContentComponent() {
   }
 
 
-  {/*images based on material type */ }
+  {/*images based on material type */}
 
-  const MaterialImage = ({ materialType }) => {
-    {/*Modified line */ }
+  const MaterialImage = ({ materialType }) => {                                                          {/*Modified line */}
     switch (materialType) {
       case 'VIDEO':
-        return <img src={Video} alt="Video" width="70" height="70" />;
+        return <img src={Video} alt="Video" width="70" height="70"  />;
       case 'AUDIO':
-        return <img src={Audio} alt="Audio" width="70" height="70" />;
-      case 'PDF':
-        return <img src={Pdf} alt="pdf" width="70" height="70" />;
-      case 'PPT':
-        return <img src={Ppt} alt="ppt" width="70" height="70" />;
-      case 'TEXT':
-        return <img src={Txt} alt="text" width="70" height="70" />;
+        return <img src={Audio} alt="Audio"   width="70" height="70" />;
+        case 'PDF':
+          return <img src={Pdf} alt="pdf"  width="70" height="70"  />;
+        case 'PPT':
+          return <img src={Ppt} alt="ppt"   width="70" height="70" />;
+          case 'TEXT':
+            return <img src={Txt} alt="text"  width="70" height="70"  />;
       // Add more cases as needed
       default:
         return null;
@@ -400,7 +398,7 @@ function AddContentComponent() {
         
 
       </section> */}
-      <Container style={{ ...divStyle, overflowy: "auto", maxHeight: '100vh', marginTop: '15vh' }}>
+      <Container style={{...divStyle, overflowy: "auto", maxHeight: '100vh',marginTop:'15vh'}}>
         <Row>
           <Col></Col>
           <Col>
@@ -415,10 +413,10 @@ function AddContentComponent() {
             )}
 
             {!open && updateExist && (
-              <Alert severity="warning" className="mt-3">
-                {updateExist}
-              </Alert>
-            )}
+        <Alert severity="warning" className="mt-3">
+          {updateExist}
+        </Alert>
+         )}
 
           </Col>
           <Col></Col>
@@ -492,40 +490,40 @@ function AddContentComponent() {
       </Container>
 
       {/* fetch contents  */}
-      {selectorContent == undefined ? <>Loading...</> : selectorContent.map((content) => (
-        <Container style={divStyle}>                                    {/*Modified line */}
-          <ListGroup className='overflow-auto'>
+ {selectorContent == undefined ? <>Loading...</> : selectorContent.map((content) => (     
+      <Container style={divStyle}>                                    {/*Modified line */}
+              <ListGroup className='overflow-auto'>
+               
+                  <>
+                    <ListGroup.Item>
+                      <div>
+                        <div class="row">
+                          <div class="col">
+                          <MaterialImage materialType={content.materialType}   />  {/*Modified line */}
+                          </div>
+                          <div class="col-8">
+                            <h4>{content.name}</h4>
+                            <h6>{content.topicName}</h6>
+                          </div>
+                          <div className="col">
+                              <Box display="flex" alignItems="center">
+                                      <IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name,content.materialId)}><IoEyeOutline fontSize={20} color="#5dbea3"   /></IconButton>
+                                      <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit fontSize={20} color="#27235c" /></IconButton>
+                                      <IconButton className='ms-1' onClick={() => handleDeleteClickOpen(content.materialId)}><MdOutlineDelete fontSize={20} color="FF0000" /></IconButton>
+                               </Box>
+                          </div>
+                        </div>
+                      </div>
+                      
 
-            <>
-              <ListGroup.Item>
-                <div>
-                  <div class="row">
-                    <div class="col">
-                      <MaterialImage materialType={content.materialType} />  {/*Modified line */}
-                    </div>
-                    <div class="col-8">
-                      <h4>{content.name}</h4>
-                      <h6>{content.topicName}</h6>
-                    </div>
-                    <div className="col">
-                      <Box display="flex" alignItems="center">
-                        <IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name, content.materialId)}><IoEyeOutline fontSize={20} color="#5dbea3" /></IconButton>
-                        <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit fontSize={20} color="#27235c" /></IconButton>
-                        <IconButton className='ms-1' onClick={() => handleDeleteClickOpen(content.materialId)}><MdOutlineDelete fontSize={20} color="FF0000" /></IconButton>
-                      </Box>
-                    </div>
-                  </div>
-                </div>
+                    </ListGroup.Item>
 
-
-              </ListGroup.Item>
-
-            </>
-
-          </ListGroup>
-
-        </Container>
-      ))}
+                  </>
+             
+              </ListGroup>
+             
+            </Container>
+            ))}
 
       {/*-----------PDF viewer Model -------------------- */}
 
@@ -555,7 +553,7 @@ function AddContentComponent() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={() => handleDelete(deleteId)}>
+        <Button autoFocus onClick={() => handleDelete(deleteId)}>
             Delete
           </Button>
           <Button autoFocus onClick={handleDeleteClose}>
@@ -574,3 +572,4 @@ function AddContentComponent() {
 }
 
 export default AddContentComponent;
+

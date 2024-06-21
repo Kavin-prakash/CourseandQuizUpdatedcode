@@ -1,15 +1,13 @@
 import {
     CREATE_ATTEMPT_REQUEST,
     CREATE_ATTEMPT_SUCCESS,
-    CREATE_ATTEMPT_FAILURE,
-    CREATE_ATTEMPT_STATUS
+    CREATE_ATTEMPT_FAILURE
   } from '../../../actions/Quiz And Feedback Module/Learner/AttemptQuizAction';
  
 const initialState = {
   attemptId:null,
   loading: false,
   error: null,
-  isRequesting:false,
 };
  
 const LearnerAttemptQuizIdReducer = (state = initialState, action) => {
@@ -21,11 +19,6 @@ const LearnerAttemptQuizIdReducer = (state = initialState, action) => {
       return { ...state, loading: false, attemptId: action.payload };
     case CREATE_ATTEMPT_FAILURE:
       return { ...state, loading: false, error: action.payload };
-      case CREATE_ATTEMPT_STATUS:
-        return{
-          ...state,
-          isRequesting:action.payload,
-        }
     default:
       return state;
   }

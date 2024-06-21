@@ -245,7 +245,7 @@
 // export default SidebarTopics;
 
 
-//before change
+
 
 
 import React, { useState, useEffect } from "react";
@@ -263,7 +263,6 @@ import CourseDescription from "./CourseDescription";
 import LearnerAudioViewer from "./LearnerAudioViewer";
 import LearnerVideoViewer from "./LearnerVideoViewer";
 import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
-import PptViewerComponent from "./Pptxday";
 
 
 function SidebarTopics() {
@@ -373,7 +372,7 @@ function SidebarTopics() {
     setFolders(updatedFolders);
   };
  
-  const opencontent = (type, materiallink, materialId,materialName) => {
+  const opencontent = (type, materiallink, materialId) => {
     console.log("io" + type);
     console.log("link" + materiallink);
  
@@ -386,19 +385,19 @@ function SidebarTopics() {
  
     switch (type) {
       case "PPT":
-        setSelectedComponent(<PptViewerComponent material={materiallink} materialId={materialId}/>);
+        setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
         break;
       case "PDF":
-        setSelectedComponent(<PDFViewer  material={materiallink} materialId={materialId} />);
+        setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
         break;
-      // case "TEXT":
-      //   setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
-      //   break;
+      case "TEXT":
+        setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
+        break;
       case "AUDIO":
-        setSelectedComponent(<LearnerAudioViewer  material={materiallink} materialId={materialId} materialName={materialName}  />);
+        setSelectedComponent(<LearnerAudioViewer key={materiallink} material={materiallink} />);
         break;
       case "VIDEO":
-        setSelectedComponent(<LearnerVideoViewer  material={materiallink} materialId={materialId} materialName={materialName} />);
+        setSelectedComponent(<LearnerVideoViewer key={materiallink} material={materiallink} />);
         break;
       default:
         break;
@@ -431,18 +430,16 @@ function SidebarTopics() {
 //  console.log(quizId);
   return (
     <div>
-      <nav className="navbar navbar-expand-sm navbar-default navbar-fixed-top" style={{height:'15px',backgroundColor:'#27235C'}}>
+      <nav className="navbar navbar-expand-sm navbar-default navbar-fixed-top">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <div className="logo">
               <img src={logo} alt="Logo" className="rounded-pill" />
             </div>
           </a>
-          <div style={{marginLeft:'450%'}}>
-          <Link className="btn btn-secondary" to={`/LearnerenrolledCourse`} style={{textAlign:'center', marginTop:'-45%'}} >
+          <Link className="btn btn-primary" to={`/LearnerenrolledCourse`}>
             Back
           </Link>
-          </div>
         </div>
       </nav>
       <div className="d-flex">
@@ -477,8 +474,7 @@ function SidebarTopics() {
                                   opencontent(
                                     content.materialType,
                                     content.materiallink,
-                                    content.materialId,
-                                    content.materialname
+                                    content.materialId
                                   );
                                 }}
                               >
@@ -533,27 +529,15 @@ function SidebarTopics() {
                                 )}
                               </li>
                             ))}
-
-                            
-                            {/* <button
+                            <button
                               className="btn btn-success"
                               disabled={!areAllMaterialsOpened(topic.materials)}
                               onClick={() => completeTopic(topic.name,topic.topicid)
                               }
                             >
                               {/* {topic.topicid} */}
-                              {/* Take Quiz */}
-                            {/* </button>  */}
-
-
-                            <button
-                              className="btn btn-success"
-                              disabled={!topic.materials.length || !areAllMaterialsOpened(topic.materials)}
-                              onClick={() => completeTopic(topic.name,topic.topicid,topic.materialName)}
-                            >
                               Take Quiz
                             </button>
-
                           </ul>
                         )}
                       </li>
@@ -572,3 +556,4 @@ function SidebarTopics() {
 }
  
 export default SidebarTopics;
+

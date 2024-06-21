@@ -48,8 +48,7 @@ import LearnerPostEnroll from "../middleware/LearnerMiddleware/LearnerPostEnroll
 import enrollCourseApi from "../middleware/LearnerMiddleware/EnrollCourseApi";
 import enrollmentReducer from "../reducers/LearnerReducer/EnrollmentReducer";
 import fetchPdfReducer from '../reducers/LearnerReducer/FetchPdfReducer';
-import addWatchTimeReducer from '../reducers/LearnerReducer/WatchTimeReducer';
-import watchTimeApi from '../middleware/LearnerMiddleware/WatchTimeMiddleware';
+
 
 import FetchRegisterReducer from '../reducers/LearnerReducer/FetchRegisterReducer';
 import { FetchRegisterApi } from '../middleware/LearnerMiddleware/FetchRegisterApi';
@@ -257,7 +256,6 @@ const rootReducer = combineReducers({
   //learner 
   unenroll: UnEnrollReducer,
   scoreProgressBarGraph: LearnerScoreProgressBarGraphReducer,
-  watchTime: addWatchTimeReducer,
   learnerdashboard: LearnerdashboardReducer,
   coursebyscore: CoursebyScoreReducer,
   //quizmodule
@@ -317,7 +315,7 @@ const store = createStore(
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
     FetchQuizById,
     DeleteQuizQuestionsApi,
-    PutQuizDetails, updateUserData,
+    PutQuizDetails,
 
     UpdateQuizFeedbackApi,
     DeleteQuizFeedbackApi,
@@ -342,7 +340,7 @@ const store = createStore(
     fetchContentApi, deleteContentApi, fetchIndividualContentApi,
     updateContentApi, fetchContentUrlApi, fetchcourseApi,
     //learner
-    UnenrollCourseApi, LearnerScoreProgressBarGraphApi, LearnerdashboardApi, watchTimeApi,
+    UnenrollCourseApi, LearnerScoreProgressBarGraphApi, LearnerdashboardApi,
   )
 );
 

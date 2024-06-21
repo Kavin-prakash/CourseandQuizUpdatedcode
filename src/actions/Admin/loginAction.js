@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS_ADMIN = 'LOGIN_SUCCESS_ADMIN';
@@ -7,12 +6,6 @@ export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_PASSWORD_MESSAGE ='LOGIN_PASSWORD_MESSAGE'
  
 export const LOGIN_EMAIL_MESSAGE='LOGIN_EMAIL_MESSAGE'
-
-export const SUCCESS_DATA="SUCCESS_DATA"
-
-export const LOGOUT = 'LOGOUT';
-
-
  
 export const loginRequest = (login) =>
 ({
@@ -20,14 +13,6 @@ export const loginRequest = (login) =>
   payload: login
  
 });
-
-export const successdata=(data)=>
-(
-{
-  type:SUCCESS_DATA,
-  payload:data
-
-})
  
  
 export const loginSuccessuser = (user) => ({

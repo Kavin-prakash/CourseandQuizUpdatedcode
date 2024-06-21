@@ -15,9 +15,6 @@ const UnenrollCourseApi = ({ dispatch }) => (next) => async (action) => {
 
             dispatch(unenrollSuccess(response.data.data));
             console.log('courselist', response.data);
-            // setTimeout(function () {
-            //     window.location.reload(1);
-            // }, 2000);
         }
         catch (error) {
             console.log(error);

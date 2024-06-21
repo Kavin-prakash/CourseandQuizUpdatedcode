@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from 'react-redux';
 import styled from "@emotion/styled";
 import {
   Box,
@@ -19,22 +18,22 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
-import { watchTimeRequest } from "../../actions/LearnerAction/WatchTimeAction";
-//import { useDispatch, useSelector } from "react-redux";
-
+// import { useDispatch, useSelector } from "react-redux";
+// import { fetchContentUrlRequest } from '../../action/Course/FetchContentUrlAction';
+ 
 const Audio = styled.video`
   flex-shrink: 1;
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
 `;
-
+ 
 const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
   const elapsedMin = Math.floor(elapsedSec / 60);
   const elapsedSecond = Math.floor(elapsedSec % 60);
-
+ 
   return (
-    <Flex align="center" fontWeight="600" gap="4px" style={{ position: 'relative', top: '1vh' }}>
+    <Flex align="center" fontWeight="600" gap="4px">
       <Text fontWeight={600} color="white">
         {elapsedMin}:
       </Text>
@@ -48,27 +47,25 @@ const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
     </Flex>
   );
 };
-
+ 
 const PlaybackRateControlButton = React.forwardRef(
   ({ onClick, playbackRate }, ref) => (
     <div ref={ref}>
       <Flex
-        // alignItems="center"
+        alignItems="center"
         cursor="pointer"
-        h="25px"
-        // justifyContent="center"
-        rounded="2px"
+        h="40px"
+        justifyContent="center"
+        rounded="12px"
         w="45px"
-        bg="white"
-        // _hover={{
-        //   bg: "rgba(255, 255, 255, 0.08)",
-        // }}
+        _hover={{
+          bg: "rgba(255, 255, 255, 0.08)",
+        }}
         onClick={onClick}
-        //transition="500ms opacity"
-        style={{ position: 'relative', top: '1vh', right: '3vw' }}
+        transition="500ms opacity"
       >
         <Text
-          color="black"
+          color="white"
           fontWeight={700}
           letterSpacing="0.5px"
           pos="relative"
@@ -91,7 +88,7 @@ const PlaybackRateControlButton = React.forwardRef(
     </div>
   )
 );
-
+ 
 const PlaybackRateControl = React.memo(function PlaybackRateControl({
   playbackRate,
   setPlaybackRate,
@@ -123,6 +120,7 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
                 if (playbackRate === rate) return;
                 setPlaybackRate(rate);
               }}
+              // rounded="8px"
               _hover={{
                 bg: "rgba(0, 0, 0, 0.4)",
               }}
@@ -143,8 +141,8 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
     </Menu>
   );
 });
-
-const LearnerAudioViewer = ({ material, materialId, materialName }) => {
+ 
+const LearnerAudioViewer = ({ material }) => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -152,103 +150,43 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
   const [elapsedSec, setElapsedSec] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [src, setSrc] = useState(material);
-  const [transcript, setTranscript] = useState("");
-  const [showTranscript, setShowTranscript] = useState(false);
   const videoRef = useRef(null);
   const progressRef = useRef(null);
   const bufferRef = useRef(null);
   const containerRef = useRef(null);
-  const recognition = useRef(null);
-  const dispatch = useDispatch();
-
-  const initSpeechRecognition = () => {
-    recognition.current = new window.webkitSpeechRecognition();
-    recognition.current.onresult = (event) => {
-      const newTranscript = event.results[0][0].transcript;
-      console.log("Speech recognition result:", newTranscript);
-      setTranscript(newTranscript);
-    };
-    recognition.current.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-    recognition.current.start();
-  };
-
-  useEffect(() => {
-    if ("webkitSpeechRecognition" in window) {
-      initSpeechRecognition();
-    } else {
-      console.error("Speech recognition not supported in this browser");
-    }
-
-    return () => {
-      if (recognition.current) {
-        recognition.current.stop();
-        recognition.current = null;
-      }
-    };
-  }, []);
-
-
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600).toString().padStart(2, '0');
-    const minutes = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-    const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
-    return `${hours}:${minutes}:${secs}`;
-
-  }
-
-  useEffect(() => {
-    const savedTime = localStorage.getItem("video-current-time");
-    if (savedTime && videoRef.current) {
-
-      videoRef.current.currentTime = parseFloat(savedTime);
-      const learnerprogressdata = {
-
-        materialId: materialId,
-        learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime: "00:00:00"
-      }
-
-      dispatch(watchTimeRequest(learnerprogressdata));
-    }
-  }, []);
-
+ 
+  //   const dispatch = useDispatch();
+  //   const selectorVideoView = useSelector((state) => state.fetchContentUrl.content);
+  //   const storeselector = useSelector((state) => state);
+ 
+  //   useEffect(() => {
+  //     dispatch(fetchContentUrlRequest(material));
+  //   }, [material, dispatch]);
+ 
+  //   useEffect(() => {
+  //     setSrc(selectorVideoView.filePath);
+  //     console.log("src", src);
+  //     console.log("storeselector", storeselector);
+  //   }, [selectorVideoView]);
+ 
   useEffect(() => {
     if (!videoRef.current) return;
-
+ 
     const onWaiting = () => {
       if (isPlaying) setIsPlaying(false);
       setIsWaiting(true);
     };
-
+ 
     const onPlay = () => {
       if (isWaiting) setIsWaiting(false);
       setIsPlaying(true);
-      setShowTranscript(true);
     };
-
+ 
     const onPause = () => {
       setIsPlaying(false);
       setIsWaiting(false);
-      setShowTranscript(false);
-      if (videoRef.current) {
-
-        localStorage.setItem(
-          "video-current-time",
-          videoRef.current.currentTime
-        );
-      }
-      const learnerprogressdata = {
-
-        materialId: materialId,
-        learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime: formatTime(videoRef.current.currentTime)
-      }
-
-      dispatch(watchTimeRequest(learnerprogressdata));
     };
-
+ 
     const onProgress = () => {
       if (!videoRef.current || !videoRef.current.buffered || !bufferRef.current) return;
       if (!videoRef.current.buffered.length) return;
@@ -260,7 +198,7 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
         bufferRef.current.style.width = (bufferedEnd / duration) * 100 + "%";
       }
     };
-
+ 
     const onTimeUpdate = () => {
       setIsWaiting(false);
       if (!videoRef.current || !videoRef.current.buffered || !progressRef.current) return;
@@ -272,14 +210,14 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
           (videoRef.current.currentTime / duration) * 100 + "%";
       }
     };
-
+ 
     videoRef.current.addEventListener("progress", onProgress);
     videoRef.current.addEventListener("timeupdate", onTimeUpdate);
     videoRef.current.addEventListener("waiting", onWaiting);
     videoRef.current.addEventListener("play", onPlay);
     videoRef.current.addEventListener("playing", onPlay);
     videoRef.current.addEventListener("pause", onPause);
-
+ 
     return () => {
       if (!videoRef.current) return;
       videoRef.current.removeEventListener("progress", onProgress);
@@ -290,13 +228,13 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
       videoRef.current.removeEventListener("pause", onPause);
     };
   }, [isPlaying, isWaiting]);
-
+ 
   useEffect(() => {
     if (!videoRef.current) return;
     if (videoRef.current.playbackRate === playbackRate) return;
     videoRef.current.playbackRate = playbackRate;
   }, [playbackRate]);
-
+ 
   const handlePlayPauseClick = () => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -306,20 +244,20 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
       }
     }
   };
-
+ 
   const seekToPosition = (pos) => {
     if (!videoRef.current) return;
     if (pos < 0 || pos > 1) return;
-
+ 
     const durationMs = videoRef.current.duration * 1000 || 0;
     const newElapsedMs = durationMs * pos;
     const newTimeSec = newElapsedMs / 1000;
     videoRef.current.currentTime = newTimeSec;
   };
-
-
+ 
   const handleFullscreenClick = () => {
     if (!containerRef.current) return;
+ 
     if (!isFullscreen) {
       if (containerRef.current.requestFullscreen) {
         containerRef.current.requestFullscreen();
@@ -343,126 +281,81 @@ const LearnerAudioViewer = ({ material, materialId, materialName }) => {
     }
     setIsFullscreen(!isFullscreen);
   };
-
-  // const handleSeekBarClick = (e) => {
-
-  //   const { left, width } = e.currentTarget.getBoundingClientRect();
-  //   const clickPos = (e.clientX - left) / width;
-  //   seekToPosition(clickPos);
-  // };
-
-
-  const handleVideoClick = () => {
-    handlePlayPauseClick();
-  };
-
+ 
   return (
-    <>
-      <h2 style={{ marginLeft: '2vw', position: 'relative', top: '1vh' }} >{materialName}</h2>
-      <hr style={{ marginLeft: '2vw', width: '80vw', position: 'relative', top: '1vh' }} />
-      <Box ref={containerRef} position="relative" width="80%" left="110px" style={{ backgroundColor: 'grey' }}>
-        <Audio
-          ref={videoRef}
-          src={src}
-          onClick={handleVideoClick}
-          controls={false}
-        />
-        <Flex
-          position="absolute"
-          bottom="0"
-          left="0"
-          right="0"
-          padding="10px"
-          alignItems="center"
-          justifyContent="space-between"
-          background="rgba(0, 0, 0, 0.5)"
-        >
-          <div className="d-flex flex-row gap-2" style={{ height: '25px' }}>
-            <Button onClick={handlePlayPauseClick}>
-              {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-            </Button>
-            <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
-          </div>
-          <div>
-            <PlaybackRateControl
-
-              playbackRate={playbackRate}
-              setPlaybackRate={setPlaybackRate}
-            />
-            <Button onClick={handleFullscreenClick} style={{ position: 'relative', bottom: '2vh' }}>
-              {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-            </Button>
-          </div>
+    <Box ref={containerRef} position="relative">
+      <Audio ref={videoRef} src={src} />
+ 
+      <Box position="absolute" bottom="10px" left="10px" right="10px" bg="black" >
+        <Flex alignItems="center" justifyContent="space-between">
+          <Button onClick={handlePlayPauseClick} variant="ghost" size="sm">
+            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+          </Button>
+ 
+          <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
+ 
+          <PlaybackRateControl
+            playbackRate={playbackRate}
+            setPlaybackRate={setPlaybackRate}
+          />
+ 
+          <Button onClick={handleFullscreenClick} variant="ghost" size="sm">
+            {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+          </Button>
         </Flex>
+ 
         <Box
-          position="absolute"
-          bottom="0"
-          left="0"
-          right="0"
+          mt="10px"
           height="5px"
-          background="rgba(255, 255, 255, 0.2)"
+          bg="rgba(255, 255, 255, 0.5)"
+          borderRadius="5px"
           cursor="pointer"
+          position="relative"
           onClick={(e) => {
-            e.stopPropagation();
-            const rect = e.currentTarget.getBoundingClientRect();
+            const rect = e.target.getBoundingClientRect();
             const pos = (e.clientX - rect.left) / rect.width;
             seekToPosition(pos);
           }}
         >
           <Box
-            ref={bufferRef}
+            ref={progressRef}
+            height="5px"
+            bg="red"
+            cursor="pointer"
+            borderRadius="5px"
             position="absolute"
             top="0"
-            bottom="0"
             left="0"
-            cursor="pointer"
-            height="100%"
-            background="rgba(255, 255, 255, 0.5)"
+            width="0%"
           />
           <Box
-            ref={progressRef}
+            ref={bufferRef}
+            height="5px"
+            bg="rgba(255, 255, 255, 0.3)"
+            borderRadius="5px"
             position="absolute"
             top="0"
-            bottom="0"
-            cursor="pointer"
             left="0"
-            height="100%"
-            background="red"
+            width="0%"
           />
         </Box>
-
-
-
-        {isWaiting && (
-          <Spinner
-            position="absolute"
-            left="50%"
-            top="50%"
-            transform="translate(-50%, -50%)"
-            color="white"
-          />
-        )}
-
-
-        {showTranscript && (
-          <Box
-            pos="absolute"
-            bottom="50px"
-            left="0"
-            right="0"
-            p="10px"
-            // bg="rgba(0, 0, 0, 0.8)"
-            color="white"
-            borderRadius="10px"
-            textAlign="center"
-          >
-            <Text color="white">{transcript}</Text>
-          </Box>
-        )}
       </Box>
-    </>
+ 
+      {isWaiting && (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+        />
+      )}
+    </Box>
   );
 };
-
+ 
 export default LearnerAudioViewer;
-

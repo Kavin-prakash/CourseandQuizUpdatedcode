@@ -1,4 +1,4 @@
-import { enrollRequest, enrollSuccess, enrollFailure ,ENROLL_REQUEST,SET_IS_ENROLL_COURSE} from '..//../actions/LearnerAction/LearnerPostEnrollAction';
+import { enrollRequest, enrollSuccess, enrollFailure } from '..//../actions/LearnerAction/LearnerPostEnrollAction';
  
 export default function LearnerPostEnroll({ dispatch, getState }) {
     return (next) => (action) => {
@@ -26,7 +26,6 @@ export default function LearnerPostEnroll({ dispatch, getState }) {
                 .then((response) => {
                     if (response.ok) {
                         return response.json().then((data) => {
-                            console.log("enroll success");
                             dispatch(enrollSuccess(courseId, learnerId)); // Include learnerId
                             return data;
                         });
@@ -44,44 +43,3 @@ export default function LearnerPostEnroll({ dispatch, getState }) {
         }
     };
 }
-
-
-
-
-
-
-
-
-
-// import  { useState } from 'react';
-// import axios from 'axios';
-// import { ENROLL_REQUEST,enrollSuccess,enrollFailure,SET_IS_ENROLL_COURSE,setIsEnrollCourse } from '../../actions/LearnerAction/LearnerPostEnrollAction';
-
-// const API = 'http://localhost:5199/lxp/enroll';
- 
-// const LearnerPostEnroll = ({ dispatch, getState }) => (next) => async (action) => {
-//   if (action.type === ENROLL_REQUEST) {
-//     const { isRequestingenrolledCourse } = getState().enrolledCourses;
-//     if (!isRequestingenrolledCourse) {
-//       dispatch({ type: SET_IS_ENROLL_COURSE, payload: true });
-//       try {
-//         console.log("request payload", action.payload);
-//         const response = await axios.post(API,action.payload, {
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//         });
- 
-//         console.log('API Response:', response.data);
-//         dispatch(enrollSuccess(response.data));
-//       } catch (error) {
-//         dispatch(enrollFailure(error));
-//       } finally {
-//         dispatch({ type: SET_IS_ENROLL_COURSE, payload: false });
-//       }
-//     }
-//   }
-//   return next(action);
-// };
- 
-// export default LearnerPostEnroll;

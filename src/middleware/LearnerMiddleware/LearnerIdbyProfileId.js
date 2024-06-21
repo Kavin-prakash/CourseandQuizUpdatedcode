@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export default function LearnerIdbyProfileId() {
+    console.log("vanakama alll");
     const sessionLearnerId = sessionStorage.getItem('UserSessionID');
     // const [data, setData] = useState();
     // Only make the API call if sessionLearnerId is not null

@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import Spinner from "../../../components/Loading/Spinner";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import AddIcon from '@mui/icons-material/Add';
 
 const Admincourse = ({ fetchCourses, courses }) => {
   const [loading, setLoading] = useState(true);
@@ -35,39 +34,33 @@ const Admincourse = ({ fetchCourses, courses }) => {
   // }
   return (
     <div id="admin_recentcourse">
-
+      {courses.length > 0 ? (
         <Container fluid className="coursepagebody">
+          {/* <Row className='mb-5'>
+                        </Row> */}
           <Row className="pt-3 contentbody">
-            {/* <Col>
+            <Col>
               <Col className="text-end mt-5">
                 <Link to="/addcourse">
                   <Button>Add Course</Button>
                 </Link>
               </Col>
-            </Col> */}
-            <Row>
-                  <Col className="mt-5">
-                    <h3 style={{fontWeight:"bold",color:"#27235C"}}>Recently Added Courses</h3>
-                  </Col>
-              
-                  <Col className="text-end  mt-5" >
-                  <Link to="/addcourse">
-                  <Button >
-                    <AddIcon/>
-                    Add Course</Button>
-                </Link> 
-                  </Col>
-                </Row>
-            <Container className="recentaddedcourse">
+            </Col>
+            <Container>
               <Col xs={12} md={12} className="landingcoursepage  mb-5">
                 <Row>
+                  <Col className="mt-2">
+                    <h4>Recently Added Courses</h4>
+                  </Col>
                   <Col className="text-end  mt-2">
-                    <Link to="/adminviewallcourse" style={{color:"#27235C"}}>
-                        View All courses  
+                    <Link to="/adminviewallcourse">
+                      <Button variant="outline-primary">
+                        View All courses
+                      </Button>
                     </Link>
                   </Col>
                 </Row>
-                <div className="scrollable-content" >
+                <div className="scrollable-content">
                   {courses.map((course) => (
                     // <Card key={index} sx={{ maxWidth: 250, maxHeight: 250, mb:5,borderRadius:1}}>
 
@@ -123,6 +116,58 @@ const Admincourse = ({ fetchCourses, courses }) => {
             </Container>
           </Row>
         </Container>
+      ) : (
+        <div>
+          <Box
+            sx={{
+              height: 300,
+              flexGrow: 1,
+              minWidth: 300,
+              // transform: 'translateZ(0)',
+              // The position fixed scoping doesn't work in IE11.
+              // Disable this demo to preserve the others.
+              "@media all and (-ms-high-contrast: none)": {
+                display: "none",
+              },
+            }}
+            ref={rootRef}
+          >
+            <Modal
+              disablePortal
+              disableEnforceFocus
+              disableAutoFocus
+              open
+              aria-labelledby="server-modal-title"
+              aria-describedby="server-modal-description"
+              sx={{
+                display: "flex",
+                p: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              container={() => rootRef.current}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: 400,
+                  bgcolor: "background.paper",
+                  border: "2px solid #000",
+                  boxShadow: (theme) => theme.shadows[5],
+                  p: 4,
+                }}
+              >
+                <Typography id="server-modal-title" variant="h6" component="h2">
+                  404 Error
+                </Typography>
+                <Typography id="server-modal-description" sx={{ pt: 2 }}>
+                  Faliled to Load Resource
+                </Typography>
+              </Box>
+            </Modal>
+          </Box>
+        </div>
+      )}
     </div>
   );
 };
