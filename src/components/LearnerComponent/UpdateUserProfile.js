@@ -644,7 +644,8 @@ function UpdateUserProfileComponent() {
  
                   <Select
                     // disabled={true}
-                    disabled={!isEditable}
+                    // disabled={!isEditable}
+                    isDisabled={!isEditable}
                     isMulti
                     name="stream"
                     options={options}

@@ -15,6 +15,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import LoginUser from '../../../middleware/Admin/apiLogin';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LearnerIdbyProfileId from '../../../middleware/LearnerMiddleware/LearnerIdbyProfileId';
 const Loginpage = () => {
 
 
@@ -196,6 +197,7 @@ const Loginpage = () => {
 
 
       dispatch(successdata(false));
+      LearnerIdbyProfileId();
 
       setTimeout(() => {
         navigate('/LearnerDashboard');
