@@ -230,8 +230,8 @@ export default function QuizFailedReport() {
   const Exportreport = () => {
     const input = pdfRef.current;
     html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4", true);
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4', true);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       const imgWidth = canvas.width;
@@ -239,14 +239,10 @@ export default function QuizFailedReport() {
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = 30;
-      pdf.addImage(
-        imgData,
-        "PNG",
-        imgX,
-        imgY,
-        imgWidth * ratio,
-        imgHeight * ratio
-      );
+      pdf.text('Failed Learner Details', 85, 12);
+      pdf.setFontSize(5);
+      pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save(`Quiz_Failed_User_List_${Dates}.pdf`);
     });
   };
@@ -321,7 +317,7 @@ export default function QuizFailedReport() {
           }),
         }}
       >
-        {numSelected > 0 ? (
+        {/* {numSelected > 0 ? (
           <Typography
             sx={{ flex: "1 1 100%" }}
             color="inherit"
@@ -340,7 +336,7 @@ export default function QuizFailedReport() {
           >
             Failed Learner Details
           </Typography>
-        )}
+        )} */}
       </Toolbar>
     );
   }
@@ -439,6 +435,15 @@ export default function QuizFailedReport() {
               <ArrowDownwardIcon />
             </button>
           </div>
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h4"
+            id="tableTitle"
+            component="div"
+            align="center"
+          >
+            Failed Learner Details
+          </Typography>
           <div id="learnersreport" className="m-2">
             <TableContainer ref={pdfRef}>
 

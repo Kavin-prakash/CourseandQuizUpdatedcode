@@ -140,6 +140,9 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = 30;
+      pdf.text('Course Report', 75, 12);
+      pdf.setFontSize(5);
+      pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
       pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save(`CourseReports_${Dates}.pdf`);
     })
@@ -318,18 +321,19 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
             </form>
             <button className="btn btn-success" onClick={Exportreport} style={{ marginLeft: '48%' }}>Download Report<ArrowDownwardIcon /></button>
           </div>
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h4"
+            id="tableTitle"
+            component="div"
+            align="center"
+            style={{ marginBottom: "15px" }}
+          >
+            Course Report
+          </Typography>
           <div id="learnersreport">
             <TableContainer ref={pdfRef}>
-              <Typography
-                sx={{ flex: "1 1 100%" }}
-                variant="h4"
-                id="tableTitle"
-                component="div"
-                align="center"
-                style={{ marginBottom: "15px" }}
-              >
-                Course Report
-              </Typography>
+
               <Table
                 sx={{ width: '100%' }}
                 aria-labelledby="tableTitle"

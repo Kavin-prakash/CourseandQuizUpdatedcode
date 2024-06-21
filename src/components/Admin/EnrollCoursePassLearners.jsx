@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchEnrollPassCourseLearnerRequest } from '../../actions/Admin/EnrolledCoursePassedLearners';
 import Box from '@mui/material/Box';
 import PropTypes from "prop-types";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { alpha } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
 import Table from "@mui/material/Table";
@@ -19,7 +21,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
 import { Link, useParams } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
-
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 export default function EnrollCoursePassLearners() {
     const courseId = useParams();
     const dispatch = useDispatch();
@@ -47,6 +49,39 @@ export default function EnrollCoursePassLearners() {
             ? (a, b) => descendingComparator(a, b, orderBy)
             : (a, b) => -descendingComparator(a, b, orderBy);
     }
+
+    const pdfRef = React.useRef();
+    let today = new Date();
+    today.setDate(today.getDate());
+    let month = String(today.getMonth() + 1).padStart(2, "0");
+    let day = String(today.getDate()).padStart(2, "0");
+    let Dates = day + "-" + month + "-" + today.getFullYear();
+    const Exportreport = () => {
+        const input = pdfRef.current;
+        html2canvas(input).then((canvas) => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4", true);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 30;
+            pdf.text('Enrolled User Report', 75, 12);
+            pdf.setFontSize(5);
+            pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
+            pdf.addImage(
+                imgData,
+                "PNG",
+                imgX,
+                imgY,
+                imgWidth * ratio,
+                imgHeight * ratio
+            );
+            pdf.save(`Enrolled_User_List_${Dates}.pdf`);
+        });
+    };
 
     //Stable Sort for table
     function stableSort(array, comparator) {
@@ -159,7 +194,7 @@ export default function EnrollCoursePassLearners() {
                     }),
                 }}
             >
-                {numSelected > 0 ? (
+                {/* {numSelected > 0 ? (
                     <Typography
                         sx={{ flex: "1 1 100%" }}
                         color="inherit"
@@ -178,7 +213,7 @@ export default function EnrollCoursePassLearners() {
                     >
                         Completed User List
                     </Typography>
-                )}
+                )} */}
             </Toolbar>
         );
     }
@@ -256,78 +291,98 @@ export default function EnrollCoursePassLearners() {
                     }}
                 >
                     <EnhancedTableToolbar numSelected={selected.length} />
-                    <form className="form-inline my-2 my-lg-0">
-                        <input
-                            className="form-control mr-sm-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                            value={searchTerm}
-                            style={{ width: "30vw" }}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </form>
-
-                    <TableContainer>
-                        <Table
-                            sx={{ minWidth: 100 }}
-                            aria-labelledby="tableTitle"
-                            size={dense ? "medium" : "medium"}
-                        >
-                            <EnhancedTableHead
-                                numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
-                                onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
-                                rowCount={rows.length}
+                    <div style={{ display: "flex", padding: "10px" }}>
+                        <form className="form-inline my-2 my-lg-0">
+                            <input
+                                className="form-control mr-sm-2"
+                                type="search"
+                                placeholder="Search"
+                                aria-label="Search"
+                                value={searchTerm}
+                                style={{ width: "30vw" }}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                            <TableBody>
-                                {filteredUser.map((row, index) => {
-                                    const isItemSelected = isSelected(row.learnerID);
+                        </form>
+                        <button
+                            className="btn btn-success"
+                            onClick={Exportreport}
+                            style={{ marginLeft: "48%" }}
+                        >
+                            Download Report
+                            <ArrowDownwardIcon />
+                        </button>
+                    </div>
+                    <Typography
+                        sx={{ flex: "1 1 100%" }}
+                        variant="h4"
+                        id="tableTitle"
+                        component="div"
+                        align="center"
+                    >
+                        Completed User List
+                    </Typography>
+                    <div id="learnersreport" className="m-2">
+                        <TableContainer ref={pdfRef}>
+                            <Table
+                                sx={{ minWidth: 100 }}
+                                aria-labelledby="tableTitle"
+                                size={dense ? "medium" : "medium"}
+                            >
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={handleSelectAllClick}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={rows.length}
+                                />
+                                <TableBody>
+                                    {filteredUser.map((row, index) => {
+                                        const isItemSelected = isSelected(row.learnerID);
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            // onClick={(event) => handleClick(event, row.id)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.index}
-                                            selected={isItemSelected}
-                                            sx={{ cursor: "pointer" }}
-                                            style={{ textDecoration: 'none' }}
-                                            component={Link} to={'/individuallearner/' + row.learnerId}
-                                        >
-                                            <TableCell align="left">{index + 1}</TableCell>
-                                            {/* <TableCell align="center">
+                                        return (
+                                            <TableRow
+                                                hover
+                                                // onClick={(event) => handleClick(event, row.id)}
+                                                role="checkbox"
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.index}
+                                                selected={isItemSelected}
+                                                sx={{ cursor: "pointer" }}
+                                                style={{ textDecoration: 'none' }}
+                                                component={Link} to={'/individuallearner/' + row.learnerId}
+                                            >
+                                                <TableCell align="left">{index + 1}</TableCell>
+                                                {/* <TableCell align="center">
                                                 <Avatar alt="Remy Sharp" src={row.profilePhoto} />
                                             </TableCell> */}
-                                            <TableCell
-                                                component="th"
-                                                id={row.learnerID}
-                                                scope="row"
-                                                align="left"
-                                                padding="none"
-                                            >
-                                                {row.learnerName}
-                                            </TableCell>
-                                            <TableCell align="left">{row.emailId}</TableCell>
+                                                <TableCell
+                                                    component="th"
+                                                    id={row.learnerID}
+                                                    scope="row"
+                                                    align="left"
+                                                    padding="none"
+                                                >
+                                                    {row.learnerName}
+                                                </TableCell>
+                                                <TableCell align="left">{row.emailId}</TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (dense ? 33 : 53) * emptyRows,
+                                            }}
+                                        >
+                                            <TableCell colSpan={6} />
                                         </TableRow>
-                                    );
-                                })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
                     <TablePagination
                         rowsPerPageOptions={[
                             { label: '5 Rows', value: 5 },
