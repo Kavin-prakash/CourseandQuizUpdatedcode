@@ -635,7 +635,13 @@ function SidebarTopics() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const pdf = useSelector((state) => state.fetchPdf.material);
-
+  const [learnerfeedbacks, setlearnerfeedbacks] = useState([
+    {
+      
+      isQuizFeedbackGiven: false,
+      isTopicFeedbackGiven: true,
+    },
+  ]);
   useEffect(() => {
     console.log(selectedCourse);
   }, [selectedCourse]);
@@ -695,6 +701,7 @@ function SidebarTopics() {
       JSON.stringify(Array.from(openedMaterials))
     );
   };
+
 
   const saveCompletedTopics = (completedTopics) => {
     sessionStorage.setItem(
@@ -802,12 +809,23 @@ function SidebarTopics() {
   const learnerfeedback = useSelector(
     (state) => state.learnerfeedbackresult.learnersfeedbackresultdetails
   );
+
+
+
+  useEffect(() => {setlearnerfeedbacks(learnerfeedback);}, [learnerfeedback]);
   console.log("hellooo", learnerfeedback);
+
+  // setlearnerfeedbacks({
+  //   isQuizFeedbackGiven: false,
+  //   isTopicFeedbackGiven: false,
+  // });
 
   useEffect(() => {
     dispatch(fetchlearnerfeedbackresultRequest(learneridresult));
     dispatch(fetchlearnersresultRequest(learneridresult));
   }, []);
+
+
 
   return (
     <div>
@@ -919,16 +937,26 @@ function SidebarTopics() {
                                 )}
                               </li>
                             ))}
-                            {/* <button
+                            
+
+                     
+
+                             <button
                               className="btn btn-primary"
                               disabled={
                                 !topic.materials.length ||
-                                !areAllMaterialsOpened(topic.materials)
+                                !areAllMaterialsOpened(topic.materials) //||
+                                // (learnerfeedbacks!=undefined
+                                //   ? learnerfeedbacks[0].isTopicFeedbackGiven
+                                //   : "false")
                               }
                               onClick={() => giveFeedback(topic.topicid)}
                             >
                               Give Feedback
-                            </button> */}
+                            </button>
+ 
+                          
+                          
                             {/* {learnerfeedback.length > 1 ? (
                               <>Take quiz</>
                             ) : (
@@ -1000,7 +1028,10 @@ function SidebarTopics() {
                             <button
                               className="btn btn-success"
                               disabled={
-                                learnerfeedback.isTopicFeedbackGiven === "false" ||
+                                // (learnerfeedbacks!=undefined
+                                //   ? !learnerfeedbacks[0].isTopicFeedbackGiven
+
+                                //   : "false") ||
                                 learnersresult.isLearnerPassed === "true" ||
                                 learnersresult.hasAttemptsRemaining === "false"
                               }
@@ -1047,7 +1078,7 @@ function SidebarTopics() {
         </>
       )}
     </> */}
-{/* 
+                            {/* 
                               {learnerfeedback.isTopicFeedbackGiven ? (
                               <>
                                 <button

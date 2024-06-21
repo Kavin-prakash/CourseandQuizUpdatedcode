@@ -9,6 +9,7 @@ import { fetchtopicfeedbackquestionrequest } from '../../../../actions/Quiz And 
  
  
 const TopicFeedbackquestion = () => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const topicfeedbackquestionfetch = useSelector(
@@ -25,7 +26,7 @@ const TopicFeedbackquestion = () => {
 //   const [desc, setDesc] = useState("");
 //   const [quiztext, setQuiztext] = useState("")
   // Initialize answers state as an array of objects
-  const [answers, setAnswers] = useState(
+  const [answerss, setAnswerss] = useState(
     topicfeedbackquestionfetch.map((question) => ({
       topicFeedbackQuestionId: question.topicFeedbackQuestionId,
       topicId: question.topicId,
@@ -34,30 +35,64 @@ const TopicFeedbackquestion = () => {
       optionText: "",
     }))
   );
-  console.log("uestate", answers);
+  console.log("uestate", answerss);
  
   // Handle change for both MCQ and text responses
+  // const onhandleChange = (questionId, optionType, optionValue) => {
+  //   setAnswers(answers.map(answer =>
+  //     answer.topicFeedbackQuestionId === questionId ?
+  //       { ...answer, [optionType]: optionValue } :
+  //       answer
+  //   ));
+  // };
+  // const onhandleResponse = (questionId, optionType) => (e) => {
+  //   const { value } = e.target;
+  //   setAnswers(answers.map(answer =>
+  //     answer.topicFeedbackQuestionId === questionId ?
+  //       { ...answer, [optionType]: value } :
+  //       answer
+  //   ));
+  // };
+
   const onhandleChange = (questionId, optionType, optionValue) => {
-    setAnswers(answers.map(answer =>
-      answer.topicFeedbackQuestionId === questionId ?
-        { ...answer, [optionType]: optionValue } :
-        answer
-    ));
+    setAnswerss(
+    topicfeedbackquestionfetch.map((question) => ({
+      topicFeedbackQuestionId: question.topicFeedbackQuestionId,
+      topicId: question.topicId,
+      learnerId:learnerId,
+      response: "",
+      optionText: "",
+    }))
+  );
+    setAnswerss((prevAnswers) =>
+      prevAnswers.map((answer) =>
+        answer.topicFeedbackQuestionId === questionId
+          ? { ...answer, [optionType]: optionValue }
+          : answer
+      )
+    );
   };
+
   const onhandleResponse = (questionId, optionType) => (e) => {
     const { value } = e.target;
-    setAnswers(answers.map(answer =>
-      answer.topicFeedbackQuestionId === questionId ?
-        { ...answer, [optionType]: value } :
-        answer
-    ));
+    setAnswerss((prevAnswers) =>
+      prevAnswers.map((answer) =>
+        answer.topicFeedbackQuestionId === questionId
+          ? { ...answer, [optionType]: value }
+          : answer
+      )
+    );
   };
   // Submit all answers
   const handleSubmit = (e) => {
     e.preventDefault();
     // Replace with your actual submit logic
-    console.log("Submitting answers:", answers);
-    dispatch(topicfeedbackresponserequest(answers))
+    console.log("Submitting answers:", answerss);
+    dispatch(topicfeedbackresponserequest(answerss));
+
+
+    // This is where you want to set isTopicFeedbackGiven to true after feedback submission
+
   };
  
   const handleNavigate = () => {
@@ -70,7 +105,7 @@ const TopicFeedbackquestion = () => {
      backgroundColor: "#F9F5F6",
   };
   
-    const allAnswered = answers.every(
+    const allAnswered = answerss.every(
       (answer) => answer.optionText || answer.response
     );
 
@@ -79,7 +114,12 @@ const topicId=sessionStorage.getItem("topicId")
   useEffect(() => {
 dispatch(fetchtopicfeedbackquestionrequest(topicId))
 
-  },[dispatch])
+  }, [dispatch])
+
+
+  //feedback button disable
+  
+
  
   return (
     <div>
@@ -132,7 +172,7 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
                                       onChange={() =>
                                         onhandleChange(
                                           topicfeedbackquestions.topicFeedbackQuestionId,
-                                          "optionText",
+                                          'optionText',
                                           option.optionText
                                         )
                                       }
@@ -147,17 +187,16 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
                               <textarea
                                 onChange={onhandleResponse(
                                   topicfeedbackquestions.topicFeedbackQuestionId,
-                                  "response"
+                                  'response'
                                 )}
                                 value={
-                                  answers.find(
-                                    (answer) =>
+                                  answerss.find(
+                                    answer =>
                                       answer.topicFeedbackQuestionId ===
                                       topicfeedbackquestions.topicFeedbackQuestionId
                                   )?.response
                                 }
-                                name="response"
-                                className="form-control"
+                                name='response' className="form-control"
                               />
                             )}
                           </div>
@@ -178,7 +217,7 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
                 marginLeft: "45%",
               }}
               disabled={
-                !answers.every((answer) => answer.optionText || answer.response)
+                !answerss.every((answer) => answer.optionText || answer.response)
               }
             >
               Submit
