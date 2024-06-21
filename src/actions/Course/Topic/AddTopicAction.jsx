@@ -28,3 +28,4 @@ export const setTopicsStatus = (isRequesting) => ({
     payload: isRequesting,
   });
   
+  export const RESET_THE_SUBMITTED_MESSGAE='RESET_THE_SUBMITTED_MESSGAE';

@@ -9,24 +9,26 @@ import {
   CREATE_COURSES_EXISTS,
   SET_COURSE_STATUS
 } from '../../../actions/Course/Course/AddCourseAction';
-
+ 
 const initialState = {
-  isRequesting: false,
-  isSubmitted: false,
-  isError: false,
-  isExists: false,
+  isRequesting:false,
+  loading: false,
+  course_id: null,
+  isSubmitted:false,
+  isError:false,
+  isExists:false,
   error: null,
   // course_id:null,
-
+ 
 };
-
+ 
 const AddCourseReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_COURSES_REQUEST:
+     case CREATE_COURSES_REQUEST:
       return {
         ...state,
         // course_id:null,
-
+ 
       };
     case CREATE_COURSES_SUCCESS:
       console.log('Coursecaa', action.payload);
@@ -34,38 +36,41 @@ const AddCourseReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         course_id: action.payload,
-        isSubmitted: true,
-        // isError:false,
-        // isExists:false,
-        // error: null,
+        isSubmitted:true,
+        isError:false,
+        isExists:false,
+        error: null,
       };
-
+     
     case CREATE_COURSES_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload,
-        // isSubmitted:false,
-        // isExists:false,
-        isError: true,
+        isSubmitted:false,
+        isExists:false,
+        isError:true,
       };
-
-    case CREATE_COURSES_EXISTS:
-      return {
-        ...state,
-        loading: false,
-        isExists: true,
-
-      };
-    case SET_COURSE_STATUS:
-      return {
-        ...state,
-        isRequesting: action.payload,
-      };
-
+ 
+      case CREATE_COURSES_EXISTS:
+        console.log("Create_course_Exists");
+        return {
+          ...state,
+          loading: false,
+          isExists:true,
+          isSubmitted:false,
+          isError:false,
+        };
+        case SET_COURSE_STATUS:
+          return{
+            ...state,
+            isRequesting:action.payload,
+          };
+   
     default:
       return state;
   }
 };
-
+ 
 export default AddCourseReducer;
+ 

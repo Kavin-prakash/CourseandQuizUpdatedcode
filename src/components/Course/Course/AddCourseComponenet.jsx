@@ -73,7 +73,7 @@ const AddCourse = () => {
   useEffect(() => {
     if (isSubmit) {
       // console.log("oppp",courseid);
-  // const courseid = useSelector((state) => state.addcourse.course_id);
+      // const courseid = useSelector((state) => state.addcourse.course_id);
       navigate(`/coursecontent/${courseid}`); // Navigate to the next page on success
     }
   }, [isSubmit, navigate]);
@@ -87,15 +87,19 @@ const AddCourse = () => {
       handleClose();
 
 
-      const Toast = Swal.mixin({   toast: true,   position: "top-end",   
-      showConfirmButton: false,   timer: 3000,   timerProgressBar: true,  
-       didOpen: (toast) => {     toast.onmouseenter = Swal.stopTimer;     toast.onmouseleave = Swal.resumeTimer;   } });
-      Toast.fire({   icon: "success",   title: "Category added successfully",customClass:{
-        popup:'custom-toast'
-      }});
-      
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "success", title: "Category added successfully", customClass: {
+          popup: 'custom-toast'
+        }
+      });
+
       // setSuccessMsg('Category added successfully');
-      
+
       // const timer = setTimeout(() => {
       //   setSuccessMsg('');
       // }, 7000);
@@ -119,12 +123,16 @@ const AddCourse = () => {
       // // Clear the timeout if the component unmounts
       // return () => clearTimeout(timer);
 
-      const Toast = Swal.mixin({   toast: true,   position: "top-end",   
-      showConfirmButton: false,   timer: 3000,   timerProgressBar: true,  
-       didOpen: (toast) => {     toast.onmouseenter = Swal.stopTimer;     toast.onmouseleave = Swal.resumeTimer;   } });
-      Toast.fire({   icon: "warning",   title: "Category already exists",customClass:{
-        popup:'custom-toast'
-      }});
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "warning", title: "Category already exists", customClass: {
+          popup: 'custom-toast'
+        }
+      });
 
     }
   }, [addCategoryFailureState])
@@ -141,28 +149,36 @@ const AddCourse = () => {
 
       // // Clear the timeout if the component unmounts
       // return () => clearTimeout(timer);
-      const Toast = Swal.mixin({   toast: true,   position: "top-end",   
-      showConfirmButton: false,   timer: 3000,   timerProgressBar: true,  
-       didOpen: (toast) => {     toast.onmouseenter = Swal.stopTimer;     toast.onmouseleave = Swal.resumeTimer;   } });
-      Toast.fire({   icon: "error",   title: "Internal Server error occured",customClass:{
-        popup:'custom-toast'
-      }});
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "error", title: "Internal Server error occured", customClass: {
+          popup: 'custom-toast'
+        }
+      });
     }
   }, [InternalError])
 
   //If course is already exists
   const isExist = useSelector((state) => state.addcourse.isExists);
-  console.log("isEx",isExist);
+  console.log("isEx", isExist);
 
   const [existMsg, setExistMsg] = useState('');
   useEffect(() => {
     if (isExist) {
-      const Toast = Swal.mixin({   toast: true,   position: "top-end",   
-      showConfirmButton: false,   timer: 3000,   timerProgressBar: true,  
-       didOpen: (toast) => {     toast.onmouseenter = Swal.stopTimer;     toast.onmouseleave = Swal.resumeTimer;   } });
-      Toast.fire({   icon: "warning",   title: "Course already exists",customClass:{
-        popup:'custom-toast'
-      }});
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "warning", title: "Course already exists", customClass: {
+          popup: 'custom-toast'
+        }
+      });
 
     }
   }, [isExist])
@@ -173,12 +189,16 @@ const AddCourse = () => {
   useEffect(() => {
     if (isFailure) {
       // setFailure('Internal Server error occured');
-      const Toast = Swal.mixin({   toast: true,   position: "top-end",   
-      showConfirmButton: false,   timer: 3000,   timerProgressBar: true,  
-       didOpen: (toast) => {     toast.onmouseenter = Swal.stopTimer;     toast.onmouseleave = Swal.resumeTimer;   } });
-      Toast.fire({   icon: "error",   title: "Internal Server error occured",customClass:{
-        popup:'custom-toast'
-      }});
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "error", title: "Internal Server error occured", customClass: {
+          popup: 'custom-toast'
+        }
+      });
 
     }
   }, [isFailure])
@@ -259,16 +279,16 @@ const AddCourse = () => {
   //     window.alert("Error occured in adding category", error);
   //   }
   // };
-  
+
   const handleCategory = async (e) => {
     e.preventDefault();
     const isCategoryValid = validateCategory(category, setCategoryErrors);
-        
+
     if (isCategoryValid) {
-        // fetchData();
-        handleClose(); // This will close the modal
-        
-      
+      // fetchData();
+      handleClose(); // This will close the modal
+
+
       try {
         console.log("category add", category);
         dispatch(createCategoryrequest(category));
@@ -276,16 +296,16 @@ const AddCourse = () => {
         window.alert("Error occurred in adding category", error);
       }
 
-    
+
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, [category]); // Dependency array with category to re-run fetchData when category changes
-  
 
-  
+
+
 
   const handleThumbnailChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -321,53 +341,53 @@ const AddCourse = () => {
     <>
       <Container fluid>
         <Row>
-          <Col  xs={2} sm={3} md={3}></Col>
-          <Col  xs={12} sm={12} md={6}>
-            
-              {/* <Col xs={12} sm={10} md={8} lg={12}> */}
-                {!open && successMsg && (
-                  <Alert severity="success" className="mt-5">
-                    {successMsg}
-                  </Alert>
-                )}
+          <Col xs={2} sm={3} md={3}></Col>
+          <Col xs={12} sm={12} md={6}>
 
-                {!open && failurMsg && (
-                  <Alert severity="error" className="mt-5">
-                    {failurMsg}
-                  </Alert>
-                )}
+            {/* <Col xs={12} sm={10} md={8} lg={12}> */}
+            {!open && successMsg && (
+              <Alert severity="success" className="mt-5">
+                {successMsg}
+              </Alert>
+            )}
 
-                {!open && servererror && (
-                  <Alert severity="error" className="mt-5">
-                    {servererror}
-                  </Alert>
-                )}
+            {!open && failurMsg && (
+              <Alert severity="error" className="mt-5">
+                {failurMsg}
+              </Alert>
+            )}
 
-                {!open && failure && (
-                  <Alert severity="error" className="mt-5">
-                    {failure}
-                  </Alert>
-                )}
+            {!open && servererror && (
+              <Alert severity="error" className="mt-5">
+                {servererror}
+              </Alert>
+            )}
 
-                {!open && existMsg && (
-                  <Alert severity="warning" className="mt-5">
-                    {existMsg}
-                  </Alert>
-                )}
+            {!open && failure && (
+              <Alert severity="error" className="mt-5">
+                {failure}
+              </Alert>
+            )}
 
-              {/* </Col> */}
-            
+            {!open && existMsg && (
+              <Alert severity="warning" className="mt-5">
+                {existMsg}
+              </Alert>
+            )}
+
+            {/* </Col> */}
+
 
           </Col>
           <Col xs={0} sm={1} md={1}></Col>
         </Row>
 
         <Row>
-          <Col  xs={2} sm={3} md={3} ></Col>
-          <Col  xs={12} sm={12} md={6} >
+          <Col xs={2} sm={3} md={3} ></Col>
+          <Col xs={12} sm={12} md={6} >
             <Card className="mt-5" id="Course-custom-card" >
               <Card.Header style={{ backgroundColor: '#23275C', color: 'white' }} className="Course-header">
-                Create Course
+                CREATE COURSE
               </Card.Header>
               <CardContent className="Course-scrollable-body">
                 <Form onSubmit={handleSubmit}>
@@ -610,36 +630,36 @@ const AddCourse = () => {
         </Dialog>
       </React.Fragment> */}
       <Modal show={open} onHide={handleClose} centered>
-      <Form onSubmit={handleCategory}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Category</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group className="mb-3" controlId="category" >
-            <Form.Label>Enter new category</Form.Label>
-            <Form.Control
-              name="category"
-              type="text"
-              autoFocus
-              value={category.category}
-              onChange={handleInputCategory}
-              isInvalid={!!categoryErrors.category}
-            />
-            <Form.Control.Feedback type="invalid">
-              {categoryErrors.category}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" type="submit">
-            Add
-          </Button>
-        </Modal.Footer>
-      </Form>
-    </Modal>
+        <Form onSubmit={handleCategory}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Category</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3" controlId="category" >
+              <Form.Label>Enter new category</Form.Label>
+              <Form.Control
+                name="category"
+                type="text"
+                autoFocus
+                value={category.category}
+                onChange={handleInputCategory}
+                isInvalid={!!categoryErrors.category}
+              />
+              <Form.Control.Feedback type="invalid">
+                {categoryErrors.category}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit">
+              Add
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </>
   );
 };
