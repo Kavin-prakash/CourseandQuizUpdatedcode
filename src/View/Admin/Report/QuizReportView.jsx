@@ -208,7 +208,7 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
     return (
       <Toolbar
         sx={{
-          mt: 10,
+          mt: 5,
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
@@ -455,4 +455,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizReportView);
-

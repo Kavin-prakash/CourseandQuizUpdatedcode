@@ -1,13 +1,12 @@
-
-#admin_Navbar .dashboard {
+#admin_navbar .dashboard {
     display: flex;
     flex-direction: column;
 }
-#admin_Navbar .ssss{
+#admin_navbar .ssss{
     background: #23275c;
   }
 
-  #admin_Navbar .top-nav {
+#admin_navbar .top-nav {
     display: flex;
     position: fixed;
     /* justify-content: flex-end; */
@@ -18,27 +17,27 @@
     width: 100vw;
 }
 
-#admin_Navbar .top-nav img {
+#admin_navbar .top-nav img {
     width: 12vw;
     height: 5vh;
 }
 
-#admin_Navbar .nav-img {
+#admin_navbar .nav-img {
     margin-left: 10px;
     padding: 10px;
 }
 
-#admin_Navbar .user-info {
+#admin_navbar .user-info {
     position: relative;
 
     margin-left: auto;
 }
-#admin_Navbar .side-nav {
+#admin_navbar .side-nav {
     margin-top: 4rem;
     /* width: 50%; */
     /* Collapsed width */
     height: 100%;
-    /* background-color: #f4f6fc; */
+
     position: fixed;
     top: 0;
     left: 0;
@@ -47,27 +46,28 @@
     overflow: hidden;
     /* Hide overflowing icons */
 }
-#admin_Navbar .drawerheader{
-    background-color: #f4f6fc;
+#admin_navbar .drawerheader{
+    /* background-color: #f4f6fc; */
   
 }
-#admin_Navbar .iconDrawer
+#admin_navbar .iconDrawer
 {
   color: #23275c;
 }
 
-#admin_Navbar .side-nav.open {
-    width: 15.7%;
+#admin_navbar .side-nav.open {
+    width: 14.4%;
+  
     /* Expanded width */
 }
 
-#admin_Navbar .side-nav ul {
+#admin_navbar .side-nav ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-#admin_Navbar .side-nav ul li {
+#admin_navbar .side-nav ul li {
     padding: 15px;
     color: #23275c;
     cursor: pointer;
@@ -75,40 +75,40 @@
     align-items: center;
     
 }
-#admin_Navbar .side-nav ul .icon{
+#admin_navbar .side-nav ul .icon{
     margin-right: 6px;
     color: #23275c;
-} 
-
-#admin_Navbar .side-nav ul li:hover {
-    background-color: #CCCCCC;
-}
-#admin_Navbar .side-nav ul li.active {
-    background-color: #CCCCCC;
 }
 
+#admin_navbar .side-nav ul li:hover {
+    background-color: #CCCCCC;
+}
+.side-nav ul li.active {
+    background-color: #CCCCCC;
+}
 
 
-#admin_Navbar .submenu {
+
+#admin_navbar .submenu {
     list-style-type: none;
     padding: 0;
     margin: 0;
     display: none;
 }
 
-#admin_Navbar .submenu.open {
+#admin_navbar .submenu.open {
     display: block;
     padding-left: 2vw;
     font-size: 0.9rem;
 }
 
-#admin_Navbar .submenu li {
+#admin_navbar .submenu li {
     padding: 10px;
     cursor: pointer;
     color: #fff;
    
 }
-#admin_Navbar .submenu.active {
+
+#admin_navbar .submenu.active {
     background-color: #8b2222;
 }
-

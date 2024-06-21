@@ -202,7 +202,7 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
     return (
       <Toolbar
         sx={{
-          mt: 10,
+          mt: 5,
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
@@ -299,6 +299,7 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
       <Box sx={{ width: "100%" }}>
         <Paper
           sx={{
+
             width: "100%",
             mb: 2,
           }}
