@@ -1,13 +1,14 @@
 .review-answer-page {
-  margin-top: -46%;
+  margin-top: -56%;
 }
-
-
 
 .review-container {
   padding: 20px;
   border-radius: 8px;
-  margin-top: 10%;
+  /* margin-top: 10%; */
+  position: relative;
+  /* margin-top: 800px; */
+  /* margin-top: 80px; */
 }
 
 .review-question-container {
@@ -90,6 +91,7 @@ ul {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   height: 210px;
   width: 400px;
+  z-index: 2000; /* Ensure it is above other elements */
 }
 
 .popup-content button {
@@ -101,14 +103,11 @@ ul {
 }
 
 .popup-content button:first-child {
-  /* background-color: #007bff; */
-  /* color: white; */
   color: black;
   padding: 6px;
 }
 
 .popup-content button:first-child:hover {
-  /* background-color: #0056b3; */
   background-color: #0057b319;
 }
 
@@ -138,17 +137,26 @@ ul {
 
 
 
-/* @media (max-width: 768px) {
+
+@media (max-width: 768px) {
     .review-container {
         flex-direction: column;
     }
 
-    .question-grid-container {
-        width: 100%;
-        margin-bottom: 20px;
+    .review-question-container {
+        width: 90%;
+        margin-left: 5%;
     }
 
-    .question-content {
-        padding-left: 0;
+    .button-container {
+        width: 90%;
+        margin-left: 5%;
     }
-} */
+
+    .question-navigation-bar {
+        top: 70px; /* Adjust based on your navbar height for smaller screens */
+        left: 10px;
+        width: 90%; /* Adjust as needed */
+        max-height: 60vh; /* Adjust as needed */
+    }
+}

@@ -3,7 +3,7 @@
 }
  
  
-.review-container {
+.review-answers-container {
   padding: 20px;
   border-radius: 8px;
   margin-top: -32%;
@@ -78,7 +78,7 @@ ul {
   background-color: #5a6268;
 }
  
-.popup {
+.reviewanswers-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -88,7 +88,7 @@ ul {
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  /* z-index: 2000; */
 }
  
 .popup-content {
@@ -175,14 +175,15 @@ ul {
   /* background-color: red; */
   color: white;
 }
- 
+
+
 .question-number.active {
   /* border: 2px solid blue; */
 }
  
  
 /* @media (max-width: 768px) {
-    .review-container {
+    .review-answers-container {
         flex-direction: column;
     }
  

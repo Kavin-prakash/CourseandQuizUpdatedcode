@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchQuizInstructionRequest } from "../../../../actions/Quiz And Feedback Module/Learner/QuizInstructionAction";
 import { CreateAttemptRequest } from "../../../../actions/Quiz And Feedback Module/Learner/AttemptQuizAction";
 import { fetchlearneridRequest } from "../../../../actions/Quiz And Feedback Module/Learner/GetLearnerIDAction";
+import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
+
 
 function QuizInstruction() {
   const dispatch = useDispatch();
@@ -57,6 +59,7 @@ function QuizInstruction() {
     sessionStorage.removeItem("selectedOptions");
     sessionStorage.removeItem("reviewData");
     sessionStorage.removeItem("answeredQuestions");
+    sessionStorage.removeItem("currentQuestionIndex");
 
     sessionStorage.setItem("quizId", quizId);
     sessionStorage.setItem("LearnerId", LearnerId);
@@ -65,6 +68,8 @@ function QuizInstruction() {
   };
 
   return (
+    <div>
+      <TopBar/>
     <Container fluid
     // style={{marginTop:"700px"}}
     >
@@ -194,6 +199,7 @@ function QuizInstruction() {
         </Container>
       </div>
     </Container>
+    </div>
   );
 }
 
