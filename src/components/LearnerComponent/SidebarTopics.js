@@ -373,7 +373,7 @@ function SidebarTopics() {
     setFolders(updatedFolders);
   };
  
-  const opencontent = (type, materiallink, materialId) => {
+  const opencontent = (type, materiallink, materialId,materialName) => {
     console.log("io" + type);
     console.log("link" + materiallink);
  
@@ -395,10 +395,10 @@ function SidebarTopics() {
       //   setSelectedComponent(<PDFViewer key={materiallink} material={materiallink} />);
       //   break;
       case "AUDIO":
-        setSelectedComponent(<LearnerAudioViewer  material={materiallink} materialId={materialId} />);
+        setSelectedComponent(<LearnerAudioViewer  material={materiallink} materialId={materialId} materialName={materialName}  />);
         break;
       case "VIDEO":
-        setSelectedComponent(<LearnerVideoViewer  material={materiallink} materialId={materialId} />);
+        setSelectedComponent(<LearnerVideoViewer  material={materiallink} materialId={materialId} materialName={materialName} />);
         break;
       default:
         break;
@@ -477,7 +477,8 @@ function SidebarTopics() {
                                   opencontent(
                                     content.materialType,
                                     content.materiallink,
-                                    content.materialId
+                                    content.materialId,
+                                    content.materialname
                                   );
                                 }}
                               >
@@ -548,7 +549,7 @@ function SidebarTopics() {
                             <button
                               className="btn btn-success"
                               disabled={!topic.materials.length || !areAllMaterialsOpened(topic.materials)}
-                              onClick={() => completeTopic(topic.name,topic.topicid)}
+                              onClick={() => completeTopic(topic.name,topic.topicid,topic.materialName)}
                             >
                               Take Quiz
                             </button>
@@ -571,4 +572,3 @@ function SidebarTopics() {
 }
  
 export default SidebarTopics;
-
