@@ -283,6 +283,7 @@ const rootReducer = combineReducers({
   TopicFeedbackResponse: TopicFeedbackResponseReducer,
   fetchquizfeedbackquestion: FetchQuizFeedbackQuestionReducer,
   QuizFeedbackResponse: QuizFeedbackResponseReducer,
+  updateuserprofilereducer: UpdateUserProfileReducer,
 
 
   // COURSE TEAM  REDUCER

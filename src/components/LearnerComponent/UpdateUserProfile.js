@@ -402,9 +402,11 @@ function UpdateUserProfileComponent() {
     const errors = ValidationUpdateUserProfile(editInfo);
     if (Object.keys(errors).length > 0) {
       if (errors.contactNumber) {
-        alert(errors.contactNumber);
+        // alert(errors.contactNumber);
+        alertdisplaywarning(errors.contactNumber);
       } else {
-        alert("Please insert all the required fields.");
+        // alert("Please insert all the required fields.");
+        alertmessage();
       }
       console.error("Validation errors", errors);
       return;
@@ -515,7 +517,57 @@ function UpdateUserProfileComponent() {
 }, [LearnerId]);
  
  
+const alertdisplaywarning = (errorMessage) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    background: '#FFDB00',
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
+
+  Toast.fire({
+    icon: "warning",
+    iconColor: 'black',
+    title: errorMessage  ,   // Display the error message here
+    customClass: {
+      popup: 'custom-toast-alert'
+    }
+  });
+};
+
+
+
+const alertmessage = () => {
+  const Toast = Swal.mixin({
+    toast: true,
+    background: '#d7ba03',
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
+
+  Toast.fire({
+    icon: "warning",
+    iconColor: 'black',
+    title: "All the fields are required", // Display the error message here
+    customClass: {
+      popup: 'custom-toast-alert'
+    }
+  });
+};
  
+
   return (
     <>
  

@@ -1,5 +1,11 @@
 export const validatePassword = (newPassword, oldPassword,confirmPassword) => {
-    const errors = [];
+  
+  if (!newPassword && !oldPassword && !confirmPassword) {
+    return ["All the fields are required to change the password."];
+  }
+  
+  
+  const errors = [];
    
     if (!newPassword ) {
       errors.push("New password is required.");

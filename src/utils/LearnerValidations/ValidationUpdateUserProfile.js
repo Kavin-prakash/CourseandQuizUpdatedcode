@@ -51,6 +51,13 @@ export const ValidationUpdateUserProfile = (editInfo) => {
   // }
 
 
+  // if (editInfo.contactNumber) {
+  //   // Check if the phone number is exactly 10 digits long and does not start with 1 to 5
+  //   if (!/^[6-9]\d{9}$/.test(editInfo.contactNumber)) {
+  //     errors.contactNumber = 'Invalid phone number';
+  //   }
+  // }
+
   if (editInfo.contactNumber) {
     // Check if the phone number is exactly 10 digits long and does not start with 1 to 5
     if (!/^[6-9]\d{9}$/.test(editInfo.contactNumber)) {

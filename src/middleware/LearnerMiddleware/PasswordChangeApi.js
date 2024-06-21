@@ -103,7 +103,7 @@ const alertDisplayPasswordFailure = () => {
  
  
   setTimeout(() => {
-    // window.location.reload();
+    window.location.reload();
   }, 3000);
 }
  
