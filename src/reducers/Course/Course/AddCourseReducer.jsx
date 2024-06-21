@@ -12,6 +12,10 @@ import {
  
 const initialState = {
   isRequesting:false,
+  isSubmitted:false,
+  isError:false,
+  isExists:false,
+  error: null,
   // course_id:null,
  
 };
@@ -31,9 +35,9 @@ const AddCourseReducer = (state = initialState, action) => {
         loading: false,
         course_id: action.payload,
         isSubmitted:true,
-        isError:false,
-        isExists:false,
-        error: null,
+        // isError:false,
+        // isExists:false,
+        // error: null,
       };
      
     case CREATE_COURSES_FAILURE:
@@ -41,18 +45,17 @@ const AddCourseReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload,
-        isSubmitted:false,
-        isExists:false,
+        // isSubmitted:false,
+        // isExists:false,
         isError:true,
       };
- 
+    
       case CREATE_COURSES_EXISTS:
         return {
           ...state,
           loading: false,
           isExists:true,
-          isSubmitted:false,
-          isError:false,
+          
         };
         case SET_COURSE_STATUS:
           return{

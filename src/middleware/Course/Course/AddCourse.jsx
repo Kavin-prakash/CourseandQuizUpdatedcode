@@ -15,7 +15,7 @@ const addCourse = ({ dispatch, getState }) => (next) => async (action) => {
     if (!ReducerData.isRequesting) {
       dispatch({ type: SET_COURSE_STATUS, payload: true });
       try {
-        debugger
+        
         console.log("post", action.payload)
         // Assuming 'action.payload' contains the data you want to senda
         const response = await axios.post(API_URL, action.payload, {
@@ -23,12 +23,15 @@ const addCourse = ({ dispatch, getState }) => (next) => async (action) => {
             'Content-Type': 'multipart/form-data'
           }
         });
-        console.log('API Response:', response.data); // Log the response data
+        console.log('API Response:', response.data.statusCode); // Log the response data
 
         console.log("aaa", response.data.data.courseId)
 
 
-        if (response.data.statusCode == 412) {
+        console.log("statudoce",response.status);
+        
+        if (response.data.statusCode === 412) {
+          console.log("notnotnotnotnotnot");
           dispatch(createCoursesExists());
         }
         else {

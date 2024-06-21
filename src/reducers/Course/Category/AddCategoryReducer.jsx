@@ -1,4 +1,4 @@
-import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_INTERNALFAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS } from "../../../actions/Course/Category/AddCategoryAction";
+import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_INTERNALFAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS,SET_CATEGORY_STATUS } from "../../../actions/Course/Category/AddCategoryAction";
   
   const initialState = {
     
@@ -9,6 +9,7 @@ import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_INTERNALFAILURE, CREATE_CATEGO
     isSuccess:false,
     isFailure:false,
     isError:false,
+    isRequesting:false,
     
   };
   
@@ -38,6 +39,12 @@ import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_INTERNALFAILURE, CREATE_CATEGO
           return{
               isError:true,
           }
+        case SET_CATEGORY_STATUS:
+            return{
+              ...state,
+              isRequesting:action.payload,
+              
+            };
       
       default:
         return state;
