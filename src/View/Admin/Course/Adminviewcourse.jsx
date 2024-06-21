@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { TableContainer, Switch } from "@mui/material";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { fetchallCoursesRequest } from "../../../actions/Admin/Adnimviewcourse";
-import { deleteCoursesRequest } from "../../../actions/Admin/DeletecourseAction";
+import { RESET_DELETE_SUCCESS_COURSES_MESSAGE, deleteCoursesRequest } from "../../../actions/Admin/DeletecourseAction";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import GridViewIcon from "@mui/icons-material/GridView";
@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { styled } from "@mui/material/styles";
 import { enableDisableCourseRequest } from "../../../actions/Admin/EnableDisableAction";
+import Swal from "sweetalert2";
 import {
   Dialog,
   DialogActions,
@@ -32,7 +33,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
-import { updateCoursesRequest } from "../../../actions/Admin/Updatecourse";
+import { RESET_UPDATE_COURSES, updateCoursesRequest, updateCoursesSuccess } from "../../../actions/Admin/Updatecourse";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const Adminviewcourse = ({
@@ -53,11 +54,14 @@ const Adminviewcourse = ({
     category: "",
     description: "",
     duration: "",
-    modifiedby: sessionStorage.getItem("Role"),
+    modifiedby: "Kavin",
     thumbnailimage: "null",
     levelId: "",
     categoryId: "",
   });
+
+  // DISPATCH FUNCTION 
+  const dispatch = useDispatch();
 
   console.log("selected courses", selectedcourse);
   console.log(selectedcourse.category);
@@ -79,6 +83,10 @@ const Adminviewcourse = ({
     },
   });
 
+
+
+
+
   console.log("thumbnailimageinuput", thumbnail);
 
   // Remove image .......
@@ -91,14 +99,19 @@ const Adminviewcourse = ({
     setRemoveImage(true);
   };
 
+  /////
+
   const handleupdatecourse = (course) => {
+
     console.log("check and check", course);
+
 
     const blob = new Blob([course.thumbnailimage]);
 
-    console.log("caadasd", blob);
+    console.log("caadasd", blob)
 
     const objecturl = URL.createObjectURL(blob);
+
 
     setSelectedcourse({
       courseId: course.courseId,
@@ -107,7 +120,7 @@ const Adminviewcourse = ({
       category: course.categoryId, //
       description: course.description,
       duration: course.duration,
-      modifiedby: sessionStorage.getItem("Role"),
+      modifiedby: "Kavin",
       thumbnailimage: course.thumbnailimage,
     });
 
@@ -124,7 +137,7 @@ const Adminviewcourse = ({
       category: "",
       description: "",
       duration: "",
-      modifiedby: sessionStorage.getItem("Role"),
+      modifiedby: "Kavin",
       thumbnailimage: "",
     });
     setThumbnail("");
@@ -209,20 +222,26 @@ const Adminviewcourse = ({
     //   selectedcourse.thumbnailimage
     // );
 
+
     if (thumbnail && thumbnail.preview) {
+
       formData.append("Thumbnailimage", selectedcourse.thumbnailimage);
     } else {
+
       formData.append("Thumbnailimage", selectedcourse.thumbnailimage);
     }
 
     try {
       console.log("updatecourse", formData);
 
+
+
       // Debugging: Log the formData contents
 
       for (let [key, value] of formData.entries()) {
-        console.log("key", `${key}: ${value}`);
-      }
+        console.log("kkakakakaakakaa", `${key}: ${value}`)
+      };
+
 
       console.log("Action payload:", {
         courseId: selectedcourse.courseId,
@@ -238,6 +257,7 @@ const Adminviewcourse = ({
     }
   };
 
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCourses, setFilteredCourses] = useState([]);
 
@@ -249,13 +269,23 @@ const Adminviewcourse = ({
   const [open, setOpen] = React.useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
 
+
+
   const istrue = useSelector((state) => state.deletecourse.isdeleted);
+
   const mes = useSelector((state) => state.deletecourse.message);
 
-  const isfalse = useSelector((state) => state.deletecourse.isnotdelete);
-  const failuremessage = useSelector((state) => state.deletecourse.message);
 
-  // Update successfull Message-----//
+  const isfalse = useSelector((state) => state.deletecourse.isnotdelete);
+
+  console.log("isfalse", isfalse);
+
+  const failuremessage = "Cannot Delete the course,User Enrolled In";
+
+
+
+
+  // Update successfull Message-----//  
 
   const isUpdated = useSelector((state) => state.updatecourse.isUpdated);
   console.log("check the updatestatues", isUpdated);
@@ -264,49 +294,129 @@ const Adminviewcourse = ({
   );
   console.log("message", courseupdatesuccessfullmessage);
 
-  const updatefailuremessage = "Updated was not successfull";
+
+
 
   useEffect(() => {
     if (isUpdated) {
-      setOpen(true);
-      setDialogMessage(courseupdatesuccessfullmessage);
-      fetchCourses();
-      // window.location.reload();
+      // setOpen(true);
+      // setDialogMessage(courseupdatesuccessfullmessage);
+
+      const Toast = Swal.mixin({
+        toast: true, background: 'green', position: "top",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success", iconColor: 'white', title: "Updated Successfully", customClass: {
+          popup: 'updatecourse-toast'
+        }
+      });
+
+      fetchCourses().then(() => {
+        dispatch({ type: RESET_UPDATE_COURSES })
+      });
     }
     // setOpen(false);
-  }, [isUpdated, courseupdatesuccessfullmessage]);
+  }, [isUpdated, dispatch]);
 
   ////
+
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  // DELETE COURSE HANDLING
+
+  // useEffect(() => {
+  //   if (istrue) {
+  //     // setOpen(true);
+
+  //     // Tostify Alert Message for the successmessage
+
+  // const Toast = Swal.mixin({
+  //   toast: true, background: 'green', position: "top",
+  //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
+  //   didOpen: (toast) => {
+  //     toast.onmouseenter = Swal.stopTimer;
+  //     toast.onmouseleave = Swal.resumeTimer;
+  //   }
+  // });
+  // Toast.fire({
+  //   icon: "success", iconColor: 'white', title: "Deleted Successfully", customClass: {
+  //     popup: 'deletecourse-toast'
+  //   }
+  // });
+
+
+  //     fetchCourses().then(()=>
+  //     {
+  //       dispatch({type:RESET_DELETE_SUCCESS_COURSES_MESSAGE});  
+  //     });
+  //   }
+  //    else if (isfalse) {
+  //     setOpen(true);
+  //     setDialogMessage(failuremessage);
+  //   }
+  // }, [istrue, mes, isfalse, failuremessage, fetchCourses ,dispatch]);
+
+
+
+  // OLD useEffect Mock Data
+
+  // debugger
   useEffect(() => {
+    let message = '';
     if (istrue) {
-      setOpen(true);
-      setDialogMessage(mes);
-      setOpen(true);
-      fetchCourses();
+      message = mes ;
+      // const Toast = Swal.mixin({
+      //   toast: true, background: 'red', position: "top",
+      //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   }
+      // });
+      // Toast.fire({
+      //   icon: "success", iconColor: 'white', title: "Deleted Successfully", customClass: {
+      //     popup: 'updatecourse-toast'
+      //   }
+      // });
+      
+      fetchCourses().then(() => {
+        dispatch({ type: RESET_DELETE_SUCCESS_COURSES_MESSAGE });
+      });
     } else if (isfalse) {
-      setOpen(true);
-      setDialogMessage(failuremessage);
+      // message = failuremessage;
+      message="llla"
     }
-  }, [istrue, mes, isfalse, failuremessage, fetchCourses]);
+
+    if (message) {
+      setOpen(true);
+      setDialogMessage(message);
+    }
+  }, [istrue, mes, isfalse, failuremessage, fetchCourses, dispatch]);
+
+
+
+
 
   useEffect(() => {
     setFilteredCourses(
       courses.filter((course) =>
-        Object.values(course).some(
-          (value) =>
-            value !== null &&
-            value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        Object.values(course).some((value) =>
+          value !== null && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
       )
     );
   }, [courses, searchTerm]);
 
-  const dispatch = useDispatch();
+
+  //  DELETE COURSE - HANDLING 
 
   const handleDeleteClick = (courseId) => {
     setSelectedCourseId(courseId);
@@ -317,6 +427,7 @@ const Adminviewcourse = ({
     deleteCourse(selectedCourseId);
     setShowModal(false);
   };
+
 
   //const for Enable & Disable Pop up
   const [showEnableModal, setShowEnableModal] = useState(false);
@@ -334,9 +445,8 @@ const Adminviewcourse = ({
 
   //Event for Enable And Disable
 
-  const Enablesuccessage = useSelector(
-    (state) => state.enabledisablecourse.successfullmessage
-  );
+  const Enablesuccessage = useSelector((state) => state.enabledisablecourse.successfullmessage);
+
 
   const EnableOrDisable = () => {
     enableordisable(enabledisablecourseId, !coursestatus);
@@ -344,6 +454,7 @@ const Adminviewcourse = ({
     setTimeout(() => {
       document.location.reload();
     }, 500);
+
   };
 
   //Style for Disable And Enable Modal
@@ -468,14 +579,6 @@ const Adminviewcourse = ({
       </Modal>
       <Container fluid>
         <Row className="mt-5">
-          <h3
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            Courses 
-          </h3>
           <Col xs={12} md={12} className="mt-2">
             <Row>
               <Col xs={12} md={6}>
@@ -483,7 +586,7 @@ const Adminviewcourse = ({
                   <input
                     className="form-control mr-sm-2"
                     type="search"
-                    placeholder="Search course..."
+                    placeholder="Search"
                     aria-label="Search"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -500,92 +603,16 @@ const Adminviewcourse = ({
                     style={{ backgroundColor: "#f3f3f3" }}
                   >
                     <TableHead>
-                      <TableRow>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                          }}
-                        >
-                          Title
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                          }}
-                        >
-                          Category
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                          }}
-                        >
-                          Duration
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                          }}
-                        >
-                          Level
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                          }}
-                        >
-                          Created Date
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                            align: "right",
-                          }}
-                        >
-                          View
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                            align: "right",
-                          }}
-                        >
-                          Edit
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                            align: "right",
-                          }}
-                        >
-                          Delete
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "19px",
-                            color: "#23275c",
-                            align: "right",
-                          }}
-                        >
-                          Enable/Disable
-                        </TableCell>
+                      <TableRow sx={{ bgcolor: "#23275c" }}>
+                        <TableCell>Title</TableCell>
+                        <TableCell>Category</TableCell>
+                        <TableCell>Duration</TableCell>
+                        <TableCell>Level</TableCell>
+                        <TableCell>Created Date</TableCell>
+                        <TableCell align="right">View</TableCell>
+                        <TableCell align="right">Edit</TableCell>
+                        <TableCell align="right">Delete</TableCell>
+                        <TableCell align="right">Enable/Disable</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -599,11 +626,9 @@ const Adminviewcourse = ({
                           <TableCell>{course.level}</TableCell>
                           <TableCell>{course.createdAt}</TableCell>
                           <TableCell align="right">
-                            <Link to={"/coursecontent/" + course.courseId}>
-                              <Button>
-                                <GridViewIcon />
-                              </Button>
-                            </Link>
+                            <Button>
+                              <GridViewIcon />
+                            </Button>
                           </TableCell>
                           <TableCell align="right">
                             <Button

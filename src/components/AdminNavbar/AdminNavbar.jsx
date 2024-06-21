@@ -19,6 +19,9 @@ import { Button,Modal } from "react-bootstrap";
 import Z from "../../assets/Admin/Images/ZWhite.jfif";
 import relevantzzzedited from "../../assets/Admin/Images/relevantzedited.png"
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { UseDispatch, useDispatch } from "react-redux";
+import { successdata } from "../../actions/Admin/loginAction";
+
 
 const drawerWidth = 240;
 
@@ -87,6 +90,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function AdminNavbar() {
+
+  const dispatch=useDispatch();
+
   const [activePage, setActivePage] = useState("home");
 
   const [showReportDropdown, setShowReportDropdown] = useState(false);
@@ -125,8 +131,11 @@ export default function AdminNavbar() {
 
   const handleLogout = () => {
     // Clear session ID from storage
+    // debugger
     sessionStorage.removeItem("AdmminSessionId"); // Replace "sessionId" with your actual session ID key
     sessionStorage.removeItem("Role");
+    dispatch(successdata(false));
+     
     // Navigate to login page or home page
     navigate("/"); // Replace "/login" with the path to your login page
     setShowLogoutConfirmation(false); // Hide the confirmation toast
