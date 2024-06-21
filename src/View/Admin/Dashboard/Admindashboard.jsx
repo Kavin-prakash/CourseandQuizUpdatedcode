@@ -51,7 +51,7 @@ export default function AdminDashboard() {
   <div className="admindashboard">
     <Box sx={{ flexGrow: 1, mt: 10}} >
       <Grid container spacing={2}>
-        <Grid item sx={12} md={3}   >
+      <Grid item xs={12} md={3}>
           <Item style={{borderRadius:"15px"}}>
             <Card
               // style={{
@@ -60,13 +60,10 @@ export default function AdminDashboard() {
               // }}
               variant=""
             >
-              <Link
-                to={"/adminviewallcourse"}
-                style={{ textDecoration: "none" }}
-              >
+              <Link to={"/adminviewallcourse"} style={{ textDecoration: "none" }}>
                 <CardContent>
                   <Typography
-                    sx={{ fontSize: 18, fontWeight: "bold", color: "#97247e" }}
+                    sx={{ fontSize: 18, fontWeight: "bold", color: "#524F7D" }}
                     color="text.secondary"
                     gutterBottom
                   >
@@ -74,7 +71,7 @@ export default function AdminDashboard() {
                   </Typography>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Typography marginRight={"14% "}>
-                      <FaBookOpenReader className="rotatinganimation"
+                    <FaBookOpenReader className="rotatinganimation"
                         style={{ fontSize: "280%", color: "#97247e" }}
                       />
                     </Typography>
@@ -84,7 +81,7 @@ export default function AdminDashboard() {
                       gutterBottom
                       paddingRight={"40%"}
                     >
-                      <CountUp duration={8} end={dashboard.noOfCourse} />
+                      <CountUp duration={8} end={dashboard.noOfCourse}  />
                     </Typography>
                   </div>
                 </CardContent>
@@ -92,6 +89,8 @@ export default function AdminDashboard() {
             </Card>
           </Item>
         </Grid>
+
+
         <Grid item xs={12} md={3}>
           <Item style={{borderRadius:"15px"}}>
             <Card
@@ -144,7 +143,7 @@ export default function AdminDashboard() {
             >
               <Link to={"/learnerviewall"} style={{ textDecoration: "none" }}>
                 <CardContent>
-                  <Typography
+                    <Typography
                     sx={{ fontSize: 18, fontWeight: "bold", color: "#24A148" }}
                     color="text.secondary"
                     gutterBottom

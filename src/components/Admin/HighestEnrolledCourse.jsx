@@ -60,6 +60,10 @@ const HighestEnrolledCourse = ({
               { <Typography variant="h6" gutterBottom sx={{ fontSize: 15 }}>
                 <TransitionGroup>
                   {rows.map((enrolledcourse,index) => (
+                    <Link
+                    to={`/coursecontent/${enrolledcourse.courseid}`}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
                     <CSSTransition
                        key={index}
                       timeout={500}
@@ -73,6 +77,7 @@ const HighestEnrolledCourse = ({
                       }}
                     >
                       <ListItem alignItems="flex-start">
+                      
                         <ListItemAvatar>
                           <Avatar
                             alt="Learner profile"
@@ -94,9 +99,11 @@ const HighestEnrolledCourse = ({
                             </React.Fragment>
                           }
                         />
+                       
                       </ListItem>
                     </List>
                     </CSSTransition>
+                    </Link>
                   ))}
                 </TransitionGroup>
               </Typography> }

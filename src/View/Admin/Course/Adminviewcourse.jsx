@@ -148,7 +148,6 @@ const Adminviewcourse = ({
           "http://localhost:5199/lxp/course/category"
         );
         setCategory(categoryResponse.data.data);
-
         const levelResponse = await axios.get(
           "http://localhost:5199/lxp/course/courselevel/kavin"
         );
@@ -235,7 +234,7 @@ const Adminviewcourse = ({
       // Debugging: Log the formData contents
 
       for (let [key, value] of formData.entries()) {
-        console.log("kkakakakaakakaa", `${key}: ${value}`)
+        console.log("s", `${key}: ${value}`)
       };
 
 
@@ -500,7 +499,7 @@ const Adminviewcourse = ({
             </Row>
             <Row>
               <Paper style={{ width: "100%" }}>
-                <TableContainer style={{ maxHeight: 640 }}>
+                <TableContainer  className="hide-scrollbar" style={{ maxHeight: 640,overflowY:'scroll'}}>
                   <Table
                     stickyHeader
                     aria-label="sticky table"
@@ -521,20 +520,22 @@ const Adminviewcourse = ({
                     </TableHead>
                     <TableBody>
                       {filteredCourses.map((course) => (
-                        <TableRow key={course.courseId}>
+                        <TableRow key={course.courseId} >
+                    
                           <TableCell component="th" scope="row">
-                            {course.title}
+                            {course.title} 
                           </TableCell>
                           <TableCell>{course.category}</TableCell>
                           <TableCell>{course.duration}</TableCell>
                           <TableCell>{course.level}</TableCell>
-                          <TableCell>{course.createdAt}</TableCell>
+                          <TableCell> {course.createdAt.split('T')[0].split('-').reverse().join('-') + ' ' + course.createdAt.split('T')[1]}</TableCell>
+                        
                           <TableCell align="right">
-                            <Link to={'/coursecontent/' + course.courseId}>
-                              <Button>
-                                <GridViewIcon />
-                              </Button>
-                            </Link>
+                              <Link to={'/coursecontent/' + course.courseId}>
+                                <Button>
+                                  <GridViewIcon />
+                                </Button>
+                              </Link>
                           </TableCell>
                           <TableCell align="right">
                             <Button

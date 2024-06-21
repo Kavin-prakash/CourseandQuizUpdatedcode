@@ -108,9 +108,7 @@ const Loginpage = () => {
       emailmessgeclosingtime = setTimeout(() => {
         setEmailfailurealertmessage(false);
       }, 2000);
-
-
-
+  
     }
     return () => clearTimeout(emailmessgeclosingtime)
   }, [isEmailfailuremessage]);

@@ -63,14 +63,12 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
     }
     return 0;
   }
-
   //Comparator
   function getComparator(order, orderBy) {
     return order === "desc"
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
-
   //Stable Sort for table
   function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -136,7 +134,7 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
       const imgHeight = canvas.height;
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 30;
+      const imgY =  (pdfHeight - imgHeight * ratio) / 2;
       pdf.addImage(
         imgData,
         "PNG",
@@ -148,6 +146,8 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
       pdf.save(`Learnersreports_${Dates}.pdf`);
     });
   };
+
+ 
 
   //Component for Head in Table
   function EnhancedTableHead(props) {
@@ -389,7 +389,6 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
                         </TableCell>
                         <TableCell align="left">
                         {row.lastLogin.split('T')[0].split('-').reverse().join('-') + ' ' + row.lastLogin.split('T')[1]}
-                      
                         </TableCell>
                       </TableRow>
                     );

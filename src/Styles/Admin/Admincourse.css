@@ -39,3 +39,13 @@
     align-items: center;
     margin-top: 250px;
 }
+
+.recentaddedcourse{
+    background-color: #f0f5f9;
+    border: 1px solid #85d3f7;
+    border-radius: 15PX;
+    margin-top: 15px;
+
+
+
+}

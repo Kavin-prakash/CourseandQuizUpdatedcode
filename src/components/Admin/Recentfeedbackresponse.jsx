@@ -23,6 +23,7 @@ const RecentFeedbackCarousel = ({
 
   return (
     <div style={{ width: "100%", height: "300%" }}>
+    
       <Carousel>
         {recentFeedback.map((feedback, index) => (
           <Paper key={index} style={{ padding: "20px",marginLeft:"15px",borderRadius:"15px" }}>
