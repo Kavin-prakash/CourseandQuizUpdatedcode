@@ -34,7 +34,7 @@ const ElapsedTimeTracker = ({ elapsedSec, totalSec }) => {
   const elapsedSecond = Math.floor(elapsedSec % 60);
 
   return (
-    <Flex align="center" fontWeight="600" gap="4px">
+    <Flex align="center" fontWeight="600" gap="4px" style={{position:'relative',top:'1vh'}}>
       <Text fontWeight={600} color="white">
         {elapsedMin}:
       </Text>
@@ -53,20 +53,22 @@ const PlaybackRateControlButton = React.forwardRef(
   ({ onClick, playbackRate }, ref) => (
     <div ref={ref}>
       <Flex
-        alignItems="center"
+       // alignItems="center"
         cursor="pointer"
-        h="40px"
-        justifyContent="center"
-        rounded="12px"
+        h="25px"
+       // justifyContent="center"
+        rounded="2px"
         w="45px"
-        _hover={{
-          bg: "rgba(255, 255, 255, 0.08)",
-        }}
+        bg="white"
+        // _hover={{
+        //   bg: "rgba(255, 255, 255, 0.08)",
+        // }}
         onClick={onClick}
-        transition="500ms opacity"
+        //transition="500ms opacity"
+        style={{position:'relative',top:'1vh',right:'3vw'}}
       >
         <Text
-          color="white"
+          color="black"
           fontWeight={700}
           letterSpacing="0.5px"
           pos="relative"
@@ -142,7 +144,7 @@ const PlaybackRateControl = React.memo(function PlaybackRateControl({
   );
 });
 
-const LearnerAudioViewer = ({ material, materialId }) => {
+const LearnerAudioViewer = ({ material, materialId ,materialName }) => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -355,7 +357,10 @@ const LearnerAudioViewer = ({ material, materialId }) => {
   };
 
   return (
-    <Box ref={containerRef} position="relative" width="80%">
+    <>
+    <h2 style={{ marginLeft: '2vw',position:'relative',top:'1vh'}} >{materialName}</h2>
+    <hr style={{ marginLeft: '2vw',width:'80vw',position:'relative',top:'1vh'}}/>
+    <Box ref={containerRef} position="relative" width="80%" left="110px" style={{backgroundColor:'grey'}}>
       <Audio
         ref={videoRef}
         src={src}
@@ -372,17 +377,22 @@ const LearnerAudioViewer = ({ material, materialId }) => {
         justifyContent="space-between"
         background="rgba(0, 0, 0, 0.5)"
       >
+       <div className="d-flex flex-row gap-2" style={{height:'25px'}}>
         <Button onClick={handlePlayPauseClick}>
           {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
         </Button>
         <ElapsedTimeTracker elapsedSec={elapsedSec} totalSec={durationSec} />
+        </div>
+        <div>
         <PlaybackRateControl
+          
           playbackRate={playbackRate}
           setPlaybackRate={setPlaybackRate}
         />
-        <Button onClick={handleFullscreenClick}>
+        <Button onClick={handleFullscreenClick} style={{position:'relative',bottom:'2vh'}}>
           {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
         </Button>
+        </div>
       </Flex>
       <Box
         position="absolute"
@@ -441,7 +451,7 @@ const LearnerAudioViewer = ({ material, materialId }) => {
           left="0"
           right="0"
           p="10px"
-          bg="rgba(0, 0, 0, 0.8)"
+          // bg="rgba(0, 0, 0, 0.8)"
           color="white"
           borderRadius="10px"
           textAlign="center"
@@ -450,7 +460,9 @@ const LearnerAudioViewer = ({ material, materialId }) => {
         </Box>
       )}
     </Box>
+    </>
   );
 };
 
 export default LearnerAudioViewer;
+
