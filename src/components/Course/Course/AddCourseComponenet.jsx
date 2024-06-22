@@ -8,7 +8,7 @@ import {
   Card,
   Form,
   Modal,
-  
+
   Image,
   CloseButton,
   CardHeader,
@@ -21,22 +21,25 @@ import { useDispatch, connect, useSelector } from "react-redux";
 // } from "../../../action/Course/Course/AddCourseAction"; // Assuming this is your action creator
 
 
-import { createCoursesRequest,
-    createCoursesSuccess,
-    fetchLevelRequest} from '../../../actions/Course/Course/AddCourseAction'
+import {
+  createCoursesRequest,
+  createCoursesSuccess,
+  fetchLevelRequest
+} from '../../../actions/Course/Course/AddCourseAction'
 import { GiCancel } from "react-icons/gi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "../../../utils/Course/Course/AddCourseValidation";
 // import { createCategoryrequest } from "../../../action/Course/Category/AddCategoryAction";
-import {createCategoryrequest} from '../../../actions/Course/Category/AddCategoryAction';
+import { createCategoryrequest } from '../../../actions/Course/Category/AddCategoryAction';
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Dialog,TextField,DialogContent,DialogTitle,DialogActions,Button,Alert, Stack,Box,MenuItem,FormControl,FormHelperText,CardContent} from "@mui/material";
+import { Dialog, TextField, DialogContent, DialogTitle, DialogActions, Button, Alert, Stack, Box, MenuItem, FormControl, FormHelperText, CardContent } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
-import {  validateCategory } from "../../../utils/Course/Course/AddCourseValidation";
+import { validateCategory } from "../../../utils/Course/Course/AddCourseValidation";
 // import { fetchCategoryRequest } from "../../../action/Course/Category/FetchCategoryAction";
-import {fetchCategoryRequest} from '../../../actions/Course/Category/FetchCategoryAction';
+import { fetchCategoryRequest } from '../../../actions/Course/Category/FetchCategoryAction';
+import Swal from "sweetalert2";
 
 const AddCourse = () => {
   const navigate = useNavigate();
@@ -60,83 +63,150 @@ const AddCourse = () => {
     duration: "",
     thumbnailimage: null,
   });
- //If course is created then navigate to course creation  page\
- const courseid = useSelector((state) => state.addcourse.course_id);
+  //If course is created then navigate to course creation  page\
+  const courseid = useSelector((state) => state.addcourse.course_id);
 
-//  const isSubmits = useSelector((state) => state.addcourse);
- const isSubmit = useSelector((state) => state.addcourse.isSubmitted);
-//  const CourseId= useSelector((state)=>state.AddCourse.course_id)
-//  console.log("checkcoursecontent",isSubmits);
- useEffect(() => {
-   if (isSubmit) {
-    // console.log("oppp",courseid);
-     navigate("/coursecontent"); // Navigate to the next page on success
-   }
- }, [isSubmit, navigate]);
+  //  const isSubmits = useSelector((state) => state.addcourse);
+  const isSubmit = useSelector((state) => state.addcourse.isSubmitted);
+  //  const CourseId= useSelector((state)=>state.AddCourse.course_id)
+  //  console.log("checkcoursecontent",isSubmits);
+  useEffect(() => {
+    if (isSubmit) {
+      // console.log("oppp",courseid);
+      // const courseid = useSelector((state) => state.addcourse.course_id);
+      navigate(`/coursecontent/${courseid}`); // Navigate to the next page on success
+    }
+  }, [isSubmit, navigate]);
   //success message for adding category
-  const addCategorySuccessState=useSelector((state)=>state.addCategory.isSuccess);
-  const addCategoryFailureState=useSelector((state)=>state.addCategory.isFailure);
-//   const categorySuccessMsg=useSelector((state)=>state.addCategory.message)
-  const [successMsg,setSuccessMsg]=useState('')
-  useEffect(()=>{
-    if(addCategorySuccessState){
-       handleClose();
-       setSuccessMsg('Category added successfully');
-       fetchData();
-       const timer = setTimeout(() => {
-        setSuccessMsg('');
-      }, 7000);
+  const addCategorySuccessState = useSelector((state) => state.addCategory.isSuccess);
+  const addCategoryFailureState = useSelector((state) => state.addCategory.isFailure);
+  //   const categorySuccessMsg=useSelector((state)=>state.addCategory.message)
+  const [successMsg, setSuccessMsg] = useState('')
+  useEffect(() => {
+    if (addCategorySuccessState) {
+      handleClose();
 
-      // Clear the timeout if the component unmounts
-      return () => clearTimeout(timer);
-      
-       
-       
-    }
-  },[addCategorySuccessState])
-  const[failurMsg,setFailureMsg]=useState('');
-  useEffect(()=>{
-    if(addCategoryFailureState){
-       handleClose();
-       setFailureMsg('Category already exists');
-       
-    }
-  },[addCategoryFailureState])
 
-  const[servererror,setserverrError]=useState('');
-  const InternalError=useSelector((state)=>state.addCategory.isError);
-  useEffect(()=>{
-    if(InternalError){
-        handleClose();
-        setserverrError('Internal Server error occured');
-      
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "success", title: "Category added successfully", customClass: {
+          popup: 'custom-toast'
+        }
+      });
+
+      // setSuccessMsg('Category added successfully');
+
+      // const timer = setTimeout(() => {
+      //   setSuccessMsg('');
+      // }, 7000);
+
+      // // Clear the timeout if the component unmounts
+      // return () => clearTimeout(timer);
+
+
+
     }
-  },[InternalError])
-  
+  }, [addCategorySuccessState])
+  const [failurMsg, setFailureMsg] = useState('');
+  useEffect(() => {
+    if (addCategoryFailureState) {
+      handleClose();
+      // setFailureMsg('Category already exists');
+      // const timer = setTimeout(() => {
+      //   setFailureMsg('');
+      // }, 7000);
+
+      // // Clear the timeout if the component unmounts
+      // return () => clearTimeout(timer);
+
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "warning", title: "Category already exists", customClass: {
+          popup: 'custom-toast'
+        }
+      });
+
+    }
+  }, [addCategoryFailureState])
+
+  const [servererror, setserverrError] = useState('');
+  const InternalError = useSelector((state) => state.addCategory.isError);
+  useEffect(() => {
+    if (InternalError) {
+      handleClose();
+      // setserverrError('Internal Server error occured');
+      // const timer = setTimeout(() => {
+      //   setserverrError('');
+      // }, 7000);
+
+      // // Clear the timeout if the component unmounts
+      // return () => clearTimeout(timer);
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "error", title: "Internal Server error occured", customClass: {
+          popup: 'custom-toast'
+        }
+      });
+    }
+  }, [InternalError])
+
   //If course is already exists
-  const isExist=useSelector((state)=>state.course.isExists);
-  const [existMsg,setExistMsg]=useState('');
-  useEffect(()=>{
-    if(isExist){
-        setExistMsg('Course already exists');
-        
+  const isExist = useSelector((state) => state.addcourse.isExists);
+  console.log("isEx", isExist);
+
+  const [existMsg, setExistMsg] = useState('');
+  useEffect(() => {
+    if (isExist) {
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "warning", title: "Course already exists", customClass: {
+          popup: 'custom-toast'
+        }
+      });
+
     }
-  },[isExist])
-   
+  }, [isExist])
+
   //if internal message occurs for creating course
-  const[failure,setFailure]=useState('');
-  const isFailure=useSelector((state)=>state.course.isError);
-  useEffect(()=>{
-    if(isFailure){
-        setFailure('Internal Server error occured');
-       
+  const [failure, setFailure] = useState('');
+  const isFailure = useSelector((state) => state.course.isError);
+  useEffect(() => {
+    if (isFailure) {
+      // setFailure('Internal Server error occured');
+      const Toast = Swal.mixin({
+        toast: true, position: "top-end",
+        showConfirmButton: false, timer: 3000, timerProgressBar: true,
+        didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({
+        icon: "error", title: "Internal Server error occured", customClass: {
+          popup: 'custom-toast'
+        }
+      });
+
     }
-  },[isFailure])
-   
-  const fetchCategory=useSelector((state)=>state.category.courses);
-  
-  const fetchLevel=useSelector((state)=>state.level.courses);
-  
+  }, [isFailure])
+
+  const fetchCategory = useSelector((state) => state.category.courses);
+
+  const fetchLevel = useSelector((state) => state.level.courses);
+
 
   const fetchData = async () => {
     // try {
@@ -157,19 +227,19 @@ const AddCourse = () => {
 
     fetchData();
     dispatch(fetchLevelRequest());
-    
+
   }, []);
 
 
-  const handleClickOpen = async() => {
+  const handleClickOpen = async () => {
     setOpen(true);
- 
+
   };
- 
+
   const handleClose = () => {
     setOpen(false);
     setAddCategory('');
-    
+
   };
 
   const handleSubmit = async (event) => {
@@ -185,7 +255,7 @@ const AddCourse = () => {
       }
     }
   };
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -209,19 +279,33 @@ const AddCourse = () => {
   //     window.alert("Error occured in adding category", error);
   //   }
   // };
+
   const handleCategory = async (e) => {
     e.preventDefault();
     const isCategoryValid = validateCategory(category, setCategoryErrors);
 
     if (isCategoryValid) {
+      // fetchData();
+      handleClose(); // This will close the modal
+
+
       try {
         console.log("category add", category);
         dispatch(createCategoryrequest(category));
       } catch (error) {
         window.alert("Error occurred in adding category", error);
       }
+
+
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [category]); // Dependency array with category to re-run fetchData when category changes
+
+
+
 
   const handleThumbnailChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -235,7 +319,7 @@ const AddCourse = () => {
   };
 
   const removeThumbnail = () => {
-   
+
     setSelectedImage(null);
   };
 
@@ -257,52 +341,57 @@ const AddCourse = () => {
     <>
       <Container fluid>
         <Row>
-             <Col  xs={0} sm={1} md={2}></Col>
-            <Col xs={12} sm={10} md={8}>
+          <Col xs={2} sm={3} md={3}></Col>
+          <Col xs={12} sm={12} md={6}>
+
+            {/* <Col xs={12} sm={10} md={8} lg={12}> */}
             {!open && successMsg && (
-        <Alert  severity="success" className="mt-3">
-          {successMsg}
-        </Alert>
-      )}
+              <Alert severity="success" className="mt-5">
+                {successMsg}
+              </Alert>
+            )}
 
-{!open && failurMsg && (
-        <Alert severity="error" className="mt-3">
-          {failurMsg}
-        </Alert>
-      )}
+            {!open && failurMsg && (
+              <Alert severity="error" className="mt-5">
+                {failurMsg}
+              </Alert>
+            )}
 
-{!open && servererror && (
-        <Alert severity="error" className="mt-3">
-          {servererror}
-        </Alert>
-      )}
+            {!open && servererror && (
+              <Alert severity="error" className="mt-5">
+                {servererror}
+              </Alert>
+            )}
 
-{!open && failure && (
-        <Alert severity="error" className="mt-3">
-          {failure}
-        </Alert>
-      )}
+            {!open && failure && (
+              <Alert severity="error" className="mt-5">
+                {failure}
+              </Alert>
+            )}
 
-{!open && existMsg && (
-        <Alert severity="warning" className="mt-3">
-          {existMsg}
-        </Alert>
-      )}
-      
-      </Col>
-             <Col xs={0} sm={1} md={2}></Col>
+            {!open && existMsg && (
+              <Alert severity="warning" className="mt-5">
+                {existMsg}
+              </Alert>
+            )}
+
+            {/* </Col> */}
+
+
+          </Col>
+          <Col xs={0} sm={1} md={1}></Col>
         </Row>
-     
+
         <Row>
-           <Col  xs={2} sm={3} md={4} ></Col>
-          <Col xs={12} sm={12} md={9} lg={6}>
+          <Col xs={2} sm={3} md={3} ></Col>
+          <Col xs={12} sm={12} md={6} >
             <Card className="mt-5" id="Course-custom-card" >
-              <Card.Header style={{backgroundColor:'#23275C',color:'white'}} className="Course-header">
-                Create Course
+              <Card.Header style={{ backgroundColor: '#23275C', color: 'white' }} className="Course-header">
+                CREATE COURSE
               </Card.Header>
               <CardContent className="Course-scrollable-body">
-              <Form onSubmit={handleSubmit}>
-                <FormControl className="mb-3" fullWidth>
+                <Form onSubmit={handleSubmit}>
+                  <FormControl className="mb-3" fullWidth>
                     {/* <Form.Label>Course Title</Form.Label> */}
                     <TextField
                       type="text"
@@ -322,7 +411,7 @@ const AddCourse = () => {
                   <FormControl className="mb-3" fullWidth>
                     {/* <Form.Label required>Course Category</Form.Label> */}
 
-                    <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory"  placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
+                    <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
                       <b>Select Category</b>
                       {fetchCategory.map((category) => (
                         <MenuItem
@@ -332,16 +421,16 @@ const AddCourse = () => {
                           {category.category}
                         </MenuItem>
                       ))}
-                      <MenuItem value="Add category" style={{color:"#050C9C"}}>+ Add Category</MenuItem>
+                      <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
                     </TextField>
                     {/* {errors.category && (
                       <p className="error">{errors.category}</p>
                     )} */}
-                   
+
                   </FormControl>
                   <FormControl className="mb-3" fullWidth>
                     {/* <Form.Label>Course Level</Form.Label> */}
-                    <TextField name="level"select  onChange={handleInputChange}  label="Course Level"  fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
+                    <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
                       <MenuItem>Select Level</MenuItem>
                       {fetchLevel.map((level) => (
                         <MenuItem key={level.levelId} value={level.levelId}>
@@ -350,14 +439,14 @@ const AddCourse = () => {
                       ))}
                     </TextField>
                     {/* {errors.level && <p className="error">{errors.level}</p>} */}
-                    </FormControl>
+                  </FormControl>
 
                   <FormControl className="mb-3" fullWidth>
-                   
+
                     <TextField
-                        margin="dense"
-                       id="name"
-                       label="Course Duration (in hrs)"
+                      margin="dense"
+                      id="name"
+                      label="Course Duration (in hrs)"
                       fullWidth
                       type="time"
                       helperText={errors.duration}
@@ -372,43 +461,43 @@ const AddCourse = () => {
                     {/* {errors.duration && (
                       <p className="error">{errors.duration}</p>
                     )} */}
-                  
+
                   </FormControl>
 
                   <FormControl className="mb-3" fullWidth >
-      <TextField
-        type="text"
-        label="Description"
-        multiline
-        rows={3}
-        placeholder="Enter your description"
-        name="description"
-        value={course.description}
-        error={(errors.description)}
-        helperText={(errors.description)}
-        onChange={handleInputChange}
-      />
-      {/* {errors.description && (
+                    <TextField
+                      type="text"
+                      label="Description"
+                      multiline
+                      rows={3}
+                      placeholder="Enter your description"
+                      name="description"
+                      value={course.description}
+                      error={(errors.description)}
+                      helperText={(errors.description)}
+                      onChange={handleInputChange}
+                    />
+                    {/* {errors.description && (
                       <p className="error">{errors.description}</p>
                     )} */}
-    </FormControl>
+                  </FormControl>
 
                   <FormControl controlId="formFile" className="mb-3" fullWidth>
                     <Form.Label>Course Thumbnail</Form.Label>
-                  
+
                     <Box {...getRootProps()} className="course-thumbnail">
                       <Card.Body className="text-center">
-                        <input {...getInputProps()} type="file"/>
+                        <input {...getInputProps()} type="file" />
                         {selectedImage ? (
-                            
+
                           <Card >
                             {/* <Card.Header> */}
-                              <CloseButton
-                               className="position-absolute top-0 end-0"
-                               style={{color:'red'}}
-                                onClick={removeThumbnail}
-                                aria-label="Remove image"
-                              />
+                            <CloseButton
+                              className="position-absolute top-0 end-0"
+                              style={{ color: 'red' }}
+                              onClick={removeThumbnail}
+                              aria-label="Remove image"
+                            />
                             {/* </Card.Header> */}
 
                             <img
@@ -419,11 +508,11 @@ const AddCourse = () => {
                           </Card>
                         ) : (
                           <p >
-                          {isDragActive
-                            ? "Drag the course thumbnail here ..."
-                            : <span>Click to select thumbnail image or <span className="upload-link">Click to upload</span></span>
+                            {isDragActive
+                              ? "Drag the course thumbnail here ..."
+                              : <span>Click to select thumbnail image or <span className="upload-link">Click to upload</span></span>
                             }
-                        </p>
+                          </p>
                         )}
                       </Card.Body>
                     </Box>
@@ -445,18 +534,18 @@ const AddCourse = () => {
                   <Row className="mt-3">
                     <Col md={4} ></Col>
                     <Col md={8}>
-                    <Button type="submit" value="CREATE COURSE" style={{backgroundColor:'#23275C',color:'white'}} className="align-items-center justify-content-center">
-                      CREATE COURSE
-                    </Button></Col>
+                      <Button type="submit" value="CREATE COURSE" style={{ backgroundColor: '#23275C', color: 'white' }} className="align-items-center justify-content-center">
+                        CREATE COURSE
+                      </Button></Col>
                     <Col md={2}></Col>
-                    
+
                   </Row>
                 </Form>
               </CardContent>
-              
+
             </Card>
           </Col>
-         <Col xs={0} sm={1} md={2}></Col>
+          <Col xs={0} sm={1} md={1}></Col>
         </Row>
       </Container>
       {/* <React.Fragment>
@@ -504,7 +593,7 @@ const AddCourse = () => {
       </Dialog>
       </React.Fragment> */}
 
-<React.Fragment>
+      {/* <React.Fragment>
         <Dialog
           open={open}
           onClose={handleClose}
@@ -521,7 +610,7 @@ const AddCourse = () => {
           <DialogContent className='dialog-content'>
             <TextField
               autoFocus
-            
+
               margin="dense"
               id="name"
               name="category"
@@ -539,8 +628,39 @@ const AddCourse = () => {
             <Button type="submit">Add</Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
-   </>
+      </React.Fragment> */}
+      <Modal show={open} onHide={handleClose} centered>
+        <Form onSubmit={handleCategory}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Category</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-3" controlId="category" >
+              <Form.Label>Enter new category</Form.Label>
+              <Form.Control
+                name="category"
+                type="text"
+                autoFocus
+                value={category.category}
+                onChange={handleInputCategory}
+                isInvalid={!!categoryErrors.category}
+              />
+              <Form.Control.Feedback type="invalid">
+                {categoryErrors.category}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit">
+              Add
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+    </>
   );
 };
 

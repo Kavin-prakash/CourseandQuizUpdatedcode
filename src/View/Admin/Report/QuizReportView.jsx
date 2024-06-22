@@ -146,7 +146,10 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = 30;
-      pdf.addImage(imgData,'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      pdf.text('Quiz Report', 85, 12);
+      pdf.setFontSize(5);
+      pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save(`QuizReports_${Dates}.pdf`);
     })
   };
@@ -208,7 +211,7 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
     return (
       <Toolbar
         sx={{
-          mt: 10,
+          mt: 5,
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
@@ -230,8 +233,8 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
             {numSelected} selected
           </Typography>
         ) : (
-         <>
-         </>
+          <>
+          </>
         )}
       </Toolbar>
     );
@@ -312,7 +315,7 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
           }}
         >
           <EnhancedTableToolbar numSelected={selected.length} />
-          <div style={{ display: 'flex', paddingLeft:"20px"}}>
+          <div style={{ display: 'flex', paddingLeft: "20px" }}>
             <form className="form-inline my-2 my-lg-0">
               <input
                 className="form-control mr-sm-2"
@@ -326,18 +329,19 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
             </form>
             <button className="btn btn-success" onClick={Exportreport} style={{ marginLeft: '48%' }}>Download Report<ArrowDownwardIcon /></button>
           </div>
-          <div id="learnersreport">
-            <TableContainer ref={pdfRef}>
-            <Typography
+          <Typography
             sx={{ flex: "1 1 100%" }}
             variant="h4"
             id="tableTitle"
             component="div"
             align="center"
-              style={{marginBottom:"15px"}}
+            style={{ marginBottom: "15px" }}
           >
             Quiz Report
           </Typography>
+          <div id="learnersreport">
+            <TableContainer ref={pdfRef}>
+
               <Table
                 sx={{ width: '100%' }}
                 aria-labelledby="tableTitle"
@@ -394,10 +398,10 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
                           )}
                         </TableCell>
                         <TableCell align="left">
-                          {disableLinkFailedUsers ? (<span style={{pointerEvents:'none',color:'grey'}}>
+                          {disableLinkFailedUsers ? (<span style={{ pointerEvents: 'none', color: 'grey' }}>
                             {row.noOfFailedUsers}
                           </span>) : (
-                            <Link to={'/quizfailedusers/'+row.quizId} style={{color:'red',textDecoration:'none'}}>{row.noOfFailedUsers}</Link>
+                            <Link to={'/quizfailedusers/' + row.quizId} style={{ color: 'red', textDecoration: 'none' }}>{row.noOfFailedUsers}</Link>
                           )}
 
                         </TableCell>

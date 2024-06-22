@@ -10,8 +10,9 @@ import { TopicFeedbackApi } from '../../../../middleware/Quiz And Feedback Modul
 import { Container } from 'react-bootstrap';
 
 export const TopicFeedback = () => {
-
     const topicId = sessionStorage.getItem('topicId');
+    const courseId = sessionStorage.getItem('courseId');
+
     console.log("topic feed", topicId);
     const [errorfb, setErrorfb] = useState('');
     const [loading, setLoading] = useState('');
@@ -94,13 +95,15 @@ export const TopicFeedback = () => {
     };
 
     const handleNavigate = () => {
-        navigate(`/`);
+        sessionStorage.removeItem("topicId");
+        navigate(`/addtopic/${courseId}`)
+    
       };
 
 
     return (
         <>
-        <Container fluid style={{marginTop:'600px'}}>
+        <Container fluid style={{marginTop:'820px'}}>
         <div>
             <div>
         <button

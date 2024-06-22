@@ -45,7 +45,7 @@ const HighestEnrolledCourse = ({
   return (
     <>
       <Grid item xs={12} md={3}>
-        <Item  style={{borderRadius:"15px"}} >
+        <Item style={{ borderRadius: "15px" }} >
           <Card variant="">
             <CardContent sx={{ height: "360px" }}>
               <Typography
@@ -54,52 +54,55 @@ const HighestEnrolledCourse = ({
                 gutterBottom
               >
                 Highest Enrolled Courses
-                &nbsp; 
+                &nbsp;
                 <FaChartLine />
               </Typography>
-              { <Typography variant="h6" gutterBottom sx={{ fontSize: 15 }}>
+              {<Typography variant="h6" gutterBottom sx={{ fontSize: 15 }}>
                 <TransitionGroup>
-                  {rows.map((enrolledcourse,index) => (
+                  {rows.map((enrolledcourse, index) => (
                     <CSSTransition
-                       key={index}
+                      key={index}
                       timeout={500}
                       classNames="fade"
                     >
-                        <List
-                      sx={{
-                        width: "100%",
-                        maxWidth: 360,
-                        bgcolor: "background.paper",
-                      }}
-                    >
-                      <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                          <Avatar
-                            alt="Learner profile"
-                            src={enrolledcourse.thumbnailimage}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary= {<b>{enrolledcourse.courseName}</b>}
-                          secondary={
-                            <React.Fragment>
-                              <Typography
-                                sx={{ display: "inline" }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                              >
-                               Learners Enrolled:{<b>{enrolledcourse.learnerscount}</b>}
-                              </Typography>
-                            </React.Fragment>
-                          }
-                        />
-                      </ListItem>
-                    </List>
+                      <List
+                        sx={{
+                          width: "100%",
+                          maxWidth: 360,
+                          bgcolor: "background.paper",
+                        }}
+                      >
+                        <Link to={'/coursecontent/' + enrolledcourse.courseId} style={{ textDecoration: "none" }}>
+                          <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                              <Avatar
+                                alt="Learner profile"
+                                src={enrolledcourse.thumbnailimage}
+                              />
+                            </ListItemAvatar>
+
+                            <ListItemText
+                              primary={<b>{enrolledcourse.courseName}</b>}
+                              secondary={
+                                <React.Fragment>
+                                  <Typography
+                                    sx={{ display: "inline" }}
+                                    component="span"
+                                    variant="body2"
+                                    color="text.primary"
+                                  >
+                                    Learners Enrolled:{<b>{enrolledcourse.learnerscount}</b>}
+                                  </Typography>
+                                </React.Fragment>
+                              }
+                            />
+                          </ListItem>
+                        </Link>
+                      </List>
                     </CSSTransition>
                   ))}
                 </TransitionGroup>
-              </Typography> }
+              </Typography>}
             </CardContent>
           </Card>
         </Item>
@@ -115,4 +118,4 @@ const mapDispatchToProps = (dispatch) => ({
   fetchHighestenrolledRequest: () => dispatch(fetchHighestenrolledRequest()),
 });
 
-export default connect( mapStoreToProps,mapDispatchToProps)(HighestEnrolledCourse);
+export default connect(mapStoreToProps, mapDispatchToProps)(HighestEnrolledCourse);

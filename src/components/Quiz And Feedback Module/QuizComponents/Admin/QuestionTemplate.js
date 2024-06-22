@@ -10,22 +10,24 @@ import {
   UpdateQuizQuestionsApi,
 } from "../../../../middleware/Quiz And Feedback Module/Admin/QuestionApi";
 import { deleteQuizQuestionRequest } from "../../../../actions/Quiz And Feedback Module/Admin/DeleteQuizQuestionAction";
-import { fetchAllQuizQuestionRequest } from "../../../../actions/Quiz And Feedback Module/Admin/FetchQuizQuestionsAction";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-// import '../../../../Styles/Quiz And Feedback Module/QuizEditor.css';
 import { updateQuizQuestionRequest } from '../../../../actions/Quiz And Feedback Module/Admin/UpdateQuizQuestionAction';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Container } from 'react-bootstrap';
+import { set } from 'react-hook-form';
+import { FetchQuizQuestionsApi } from '../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizQuestionsApi';
 
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
 
   useEffect(() => {
     fetchQuestions(quizId);
-  }, [quizId]);
+  },[]);
 
   const dispatch = useDispatch();
+  const [questions, setQuestions] = useState([]);
+
   const [error, setError] = useState("");
   const [errors, setErrors] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,11 +56,15 @@ const QuestionTemplate = () => {
     correctOptions: ["", "", ""],
   });
 
-  const questions = useSelector((state) => state.quizQuestions.quizQuestions);
+  
+  // const questions = useSelector((state) => state.quizQuestions.quizQuestions);
 
-  const fetchQuestions = (quizId) => {
+  const fetchQuestions = async (quizId) => {
     try {
-      dispatch(fetchAllQuizQuestionRequest(quizId));
+      
+      // dispatch(fetchAllQuizQuestionRequest(quizId));
+      const data = await FetchQuizQuestionsApi(quizId);
+      setQuestions(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -233,6 +239,9 @@ const QuestionTemplate = () => {
       UpdateQuizQuestionsApi(requestBody)
       handleCloseEditQuestionModal();
     }
+    setTimeout(function(){
+      window.location.reload(1);
+   }, 1000);
   };
 
   const validateField = (fieldName, value, index = null) => {
@@ -275,7 +284,6 @@ const QuestionTemplate = () => {
 
     setErrors(tempErrors);
   };
-
   useEffect(() => {
     const newFilteredQuestions = questions.filter(
       (question) =>

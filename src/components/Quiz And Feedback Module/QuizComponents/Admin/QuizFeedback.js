@@ -12,6 +12,8 @@ import { Container } from "react-bootstrap";
 
 export const QuizFeedback = () => {
   const quizName = sessionStorage.getItem("quizName");
+  const courseId = sessionStorage.getItem('courseId');
+
   console.log("name", quizName);
   const [getallfeedback, setGetAllfeedback] = useState();
   const [errorfb, setErrorfb] = useState("");
@@ -117,7 +119,7 @@ export const QuizFeedback = () => {
 
   return (
     <>
-    <Container fluid style={{marginTop:'600px'}}>
+    <Container fluid style={{marginTop:'700px'}}>
     <div>
       <button
         class="btn btn-light"

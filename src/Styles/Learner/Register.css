@@ -1,15 +1,13 @@
-.register {
-    background: -webkit-linear-gradient(left, #27235C, #6d2243);
+.register{
+    background: -webkit-linear-gradient(left,  #27235C, #6d2243);
     /* margin-top: 3%; */
     padding: 3%;
 }
-
-.register-left {
+.register-left{
     text-align: center;
     color: #fff;
 }
-
-.register-left input {
+.register-left input{
     border: none;
     border-radius: 1.5rem;
     padding: 2%;
@@ -21,54 +19,37 @@
     margin-bottom: 3%;
     cursor: pointer;
 }
-
-.register-right {
+.register-right{
     background: #fff;
     border-top-left-radius: 10% 50%;
     border-bottom-left-radius: 10% 50%;
 }
-
-.register-left img {
+.register-left img{
     margin-top: 60%;
     /* margin-bottom: 5%; */
     width: 25%;
-    -webkit-animation: mover 2s infinite alternate;
-    animation: mover 1s infinite alternate;
+    -webkit-animation: mover 2s infinite  alternate;
+    animation: mover 1s infinite  alternate;
 }
-
 @-webkit-keyframes mover {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-20px);
-    }
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
 }
-
 @keyframes mover {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-20px);
-    }
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
 }
-
-.register-left h6 {
+.register-left h6{
     /* font-weight: ; */
     padding: 17%;
     margin-top: -9%;
 }
-
-.register .register-form {
+.register .register-form{
     padding: 10%;
     margin-top: 10%;
     height: 510px;
 }
-
-.btnRegister {
+.btnRegister{
     /* margin-left: -30px; */
     margin-right: 15px;
     float: right;
@@ -82,8 +63,7 @@
     width: 50%;
     cursor: pointer;
 }
-
-.register .nav-tabs {
+.register .nav-tabs{
     margin-top: 3%;
     border: none;
     background: #0062cc;
@@ -91,8 +71,7 @@
     width: 28%;
     float: right;
 }
-
-.register .nav-tabs .nav-link {
+.register .nav-tabs .nav-link{
     padding: 2%;
     height: 34px;
     font-weight: 600;
@@ -100,67 +79,123 @@
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
 }
-
-.register .nav-tabs .nav-link:hover {
+.register .nav-tabs .nav-link:hover{
     border: none;
 }
-
-.register .nav-tabs .nav-link.active {
+.register .nav-tabs .nav-link.active{
     width: 100px;
     color: #0062cc;
     border: 2px solid #0062cc;
     border-top-left-radius: 1.5rem;
     border-bottom-left-radius: 1.5rem;
 }
-
-.register-heading {
+.register-heading{
     text-align: center;
     margin-top: 8%;
     margin-bottom: -15%;
     color: #495057;
 }
-
+ 
 .form-group {
     margin: 15px;
 }
-
+ 
 .form-group button {
     width: 120px;
 }
-
-.gender {
-    margin: 15px;
+ 
+.gender-container {
+    display: flex;
+    align-items: center;
+    margin-top: 18px;
+    margin-left: 20px;
+   
 }
 
+
+ 
+.gender {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+ 
+.gender input[type="radio"] {
+    margin-right: 7px;
+    margin-left: -11px;
+}
+ 
 .btnRegister a {
-    /* text-shadow: 0px 0px 1px  rgb(216, 136, 162); */
     color: #080808;
     text-decoration: none;
-
 }
-
+ 
 .otp a {
     font-size: 15px;
 }
-
-/* .field::placeholder{
-    color: inherit;
-    content: '*';
-    color: red;
-}
-.field::placeholder::after{
-    content: '*';
-    color: red;
-} */
+ 
 .error-message {
     color: red;
 }
-
+ 
 .violet-icon {
     color: #c42136;
 }
-
+ 
 .all {
     margin-top: 25px;
     margin-left: 0%;
+}
+.field {
+width: 100%;
+margin-bottom: 20px;
+padding: 10px;
+box-sizing: border-box;
+}
+
+.form-control {
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+}
+
+/* .password-field-container {
+position: relative;
+width: 100%;
+}
+
+.password-icon {
+position: absolute;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+cursor: pointer;
+}
+
+.password-rules {
+background-color: #f8d7da;
+padding: 10px;
+border-radius: 5px;
+margin-top: 10px;
+color: #721c24;
+font-size: 14px;
+} */
+
+.gender-container {
+display: flex;
+justify-content: space-between;
+width: 100%;
+}
+
+.gender {
+margin-right: 15px;
+}
+
+.age-error-message, .text-danger {
+color: red;
+margin-top: 5px;
+}
+
+.alert {
+margin-top: 20px;
 }

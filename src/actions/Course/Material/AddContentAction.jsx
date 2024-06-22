@@ -28,3 +28,6 @@ export const setContentStatus=(isRequesting)=>({
     payload:isRequesting,
 })
 
+export const RESET_SUBMITTED_MESSAGE="RESET_SUBMITTED_MESSAGE";
+
+export const RESET_EXISTED_MESSAGE='RESER_EXISTED_MESSAGE';

@@ -61,7 +61,8 @@ import { CourseContent } from "../../View/Course/Course/CourseContentView";
 import Topics from "../../View/Course/Topic/Topics";
 import SavedTopics from "../../components/Course/Topic/SavedTopics";
 import AddMaterial from "../../View/Course/Material/AddMaterial";
-
+import CourseNavbar from "../../components/LearnerComponent/CourseNavbar";
+import TopicScore from "../../components/LearnerComponent/TopicScore";
 function Routing() {
 
   return (
@@ -80,13 +81,15 @@ function Routing() {
         <Route path='/RegisterView' element={<RegisterView />}></Route>
         <Route path='/LearnerDashboard' element={<LearnerDashboard />}></Route>
         {/* <Route path='/LearnerNavbar' element={<LearnerNavbar />}></Route> */}
-        {/* <Route path='/LearnerPage' element={<CourseNavbar />}></Route> */}
+        <Route path='/LearnerPage' element={<CourseNavbar />}></Route>
         <Route path="/LearnerenrolledCourse" element={<GetEnrollment />}></Route>
-        <Route path="/ViewTopics" element={<SidebarTopics />}></Route>
-
+        {/* <Route path="/ViewTopics" element={<SidebarTopics />}></Route> */}
+        <Route path="/ViewScore" element={<TopicScore />}></Route>
+        <Route path="/ViewTopics/:courseId" element={<SidebarTopics />}></Route>
         {/* <Route path="/PDF" element={<PDFViewer />}></Route>
         <Route path="/PPT" element={<PptViewerComponent />}></Route> */}
         <Route element={<Adminrouting />}>
+          <Route path='/LearnerPage' element={<CourseNavbar />}></Route>
           <Route path="/home" element={<Admindashboard />} />
           <Route path="/admincourse" element={<Admincourse />} />
           <Route path="/adminviewallcourse" element={<Adminviewcourse />} ></Route>
@@ -117,7 +120,10 @@ function Routing() {
 
           {/* course module */}
           <Route path="/addcourse" element={<AddCourseView />} />
-          <Route path="/coursecontent" element={<CourseContent />} />
+          {/* mano changes */}
+          <Route path="/coursecontent/:id" element={<CourseContent />} />/
+          {/* stop mano changes */}
+
           <Route path="/addtopic/:id" element={<Topics />} />
           <Route path="/savedtopics/:id" element={<SavedTopics />} />
           <Route path='/addcontent/:id' element={<AddMaterial />} />
@@ -134,7 +140,11 @@ function Routing() {
         {/* course team */}
 
         <Route path="/addcourse" element={<AddCourseView />} />
-        <Route path="/coursecontent" element={<CourseContent />} />
+        {/* mano changes */}
+
+        <Route path="/coursecontent/:id" element={<CourseContent />} />
+        {/* stop mano changes */}
+
         <Route path="/addtopic/:id" element={<Topics />} />
         <Route path="/savedtopics/:id" element={<SavedTopics />} />
         <Route path='/addcontent/:id' element={<AddMaterial />} />

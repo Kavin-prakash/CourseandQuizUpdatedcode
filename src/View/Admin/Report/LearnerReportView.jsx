@@ -36,6 +36,7 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
     return () => clearTimeout(timer);
   }, []);
 
+
   useEffect(() => {
     fetchlearnersreport();
   }, [fetchlearnersreport]);
@@ -125,6 +126,8 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
   let day = String(today.getDate()).padStart(2, "0");
   let Dates = day + "-" + month + "-" + today.getFullYear();
 
+
+
   const Exportreport = () => {
     const input = pdfRef.current;
     html2canvas(input).then((canvas) => {
@@ -137,14 +140,18 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = 30;
+      pdf.text('Learner Report', 75, 12);
+      pdf.setFontSize(5);
+      pdf.text("Project Name - LXP " + today.toLocaleDateString() + " " + today.toLocaleTimeString(), 2, 15);
       pdf.addImage(
         imgData,
         "PNG",
         imgX,
         imgY,
         imgWidth * ratio,
-        imgHeight * ratio
+        imgHeight * ratio,
       );
+
       pdf.save(`Learnersreports_${Dates}.pdf`);
     });
   };
@@ -229,8 +236,8 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
             {numSelected} selected
           </Typography>
         ) : (
-         <>
-         </>
+          <>
+          </>
         )}
       </Toolbar>
     );
@@ -330,19 +337,35 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
               <ArrowDownwardIcon />
             </button>
           </div>
-
-          <div id="learnersreport">
-            <TableContainer ref={pdfRef}>
-            <Typography
+          <Typography
             sx={{ flex: "1 1 100%" }}
             variant="h4"
             id="tableTitle"
             component="div"
             align="center"
-            style={{marginBottom:"15px"}}
+            style={{ marginBottom: "15px" }}
           >
             Learners Report
           </Typography>
+          <div id="learnersreport">
+            <TableContainer ref={pdfRef}>
+              {/* <Typography
+                sx={{ flex: "1 1 100%" }}
+                variant="h4"
+                id="tableTitle"
+                component="div"
+                align="center"
+                style={{ marginBottom: "15px" }}
+              >
+                Learners Report
+              </Typography>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}>
+                <h6>LXP - Project: {today.toLocaleDateString() + " " + today.toLocaleTimeString()}</h6>
+              </div> */}
               <Table
                 sx={{ width: "100%" }}
                 aria-labelledby="tableTitle"
@@ -384,12 +407,12 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
                         </TableCell>
                         <TableCell align="left">{row.enrolledCourse}</TableCell>
                         <TableCell align="left">
-                      
+
                           {row.completedCourse}
                         </TableCell>
                         <TableCell align="left">
-                        {row.lastLogin.split('T')[0].split('-').reverse().join('-') + ' ' + row.lastLogin.split('T')[1]}
-                      
+                          {row.lastLogin.split('T')[0].split('-').reverse().join('-') + ' ' + row.lastLogin.split('T')[1]}
+
                         </TableCell>
                       </TableRow>
                     );
@@ -405,7 +428,9 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
                   )}
                 </TableBody>
               </Table>
+
             </TableContainer>
+
           </div>
           <TablePagination
             rowsPerPageOptions={[
@@ -422,7 +447,7 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-      </Box>
+      </Box >
     );
   }
 

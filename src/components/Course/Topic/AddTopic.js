@@ -126,41 +126,24 @@ export default function AddTopic(props) {
   }
   return (
     <React.Fragment>
-       <Row>
+       {/* <Row> */}
             {/* <Col></Col>
             <Col> */}
-            {!open && successMsg && (
+            {/* {!open && successMsg && (
         <Alert  severity="success" className="mt-3">
           {successMsg}
         </Alert>
       )}
-
-{/* {!open && failurMsg && (
-        <Alert severity="error" className="mt-3">
-          {failurMsg}
-        </Alert>
-      )} */}
-
-
-
-{/* {!open && failure && (
-        <Alert severity="error" className="mt-3">
-          {failure}
-        </Alert>
-      )} */}
 
 {!open && existMsg && (
         <Alert severity="warning" className="mt-3">
           {existMsg}
         </Alert>
       )}
-      
-      {/* </Col>
-            <Col></Col> */}
-        </Row>
-      <Button className='mt-2' variant="outlined" onClick={handleClickOpen}>
-        Add Topic
-      </Button>
+   
+        </Row> */}
+
+       
       <Dialog
         open={open}
         onClose={handleClose}
