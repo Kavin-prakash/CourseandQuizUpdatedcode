@@ -379,7 +379,8 @@ import fetchEmailApi from '../../middleware/LearnerMiddleware/FetchEmailApi';
 import { Tooltip } from 'react-tooltip';
 import { fetchallCoursesRequest } from '../../actions/Admin/Adnimviewcourse';
 import { Alert } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 // const options = [
 //     { value: 'C++', label: 'C++' },
 //     { value: 'LINQ', label: 'LINQ' },
@@ -391,7 +392,35 @@ import { Alert } from '@mui/material';
 
 export default function Register() {
 
+    const navigate = useNavigate();
+    const alertdisplayregister = () => {
+        const Toast = Swal.mixin({
+            toast: true,
+            background: '#21903d',
+            position: "top",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
 
+        Toast.fire({
+            icon: "success",
+            iconColor: 'white',
+            title: "Registered successfully",
+            customClass: {
+                popup: 'custom-toast'
+            }
+        });
+
+        // Set a flag in localStorage indicating the user has just enrolled
+
+
+
+    };
     const [errors, setErrors] = useState({});
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
@@ -595,7 +624,10 @@ export default function Register() {
 
             // Dispatch the action with the updated user data
             dispatch(userDataRequest(updatedUserData));
-
+            alertdisplayregister();
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
             console.log("in handle submit", updatedUserData);
             //    registerUser(userDataStringStream);
             // setShowModal(true);
@@ -753,8 +785,8 @@ export default function Register() {
                                     {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
                                 </div>
                                 {altermessage && <Alert variant="outlined" severity="success">
-                  Registered successful! Redirecting...
-                </Alert>}
+                                    Registered successful! Redirecting...
+                                </Alert>}
 
                             </div>
 

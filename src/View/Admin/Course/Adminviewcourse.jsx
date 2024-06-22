@@ -372,7 +372,7 @@ const Adminviewcourse = ({
   useEffect(() => {
     let message = '';
     if (istrue) {
-      message = mes ;
+      message = mes;
       // const Toast = Swal.mixin({
       //   toast: true, background: 'red', position: "top",
       //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
@@ -386,13 +386,13 @@ const Adminviewcourse = ({
       //     popup: 'updatecourse-toast'
       //   }
       // });
-      
+
       fetchCourses().then(() => {
         dispatch({ type: RESET_DELETE_SUCCESS_COURSES_MESSAGE });
       });
     } else if (isfalse) {
       // message = failuremessage;
-      message="llla"
+      message = "llla"
     }
 
     if (message) {
@@ -626,9 +626,13 @@ const Adminviewcourse = ({
                           <TableCell>{course.level}</TableCell>
                           <TableCell>{course.createdAt}</TableCell>
                           <TableCell align="right">
-                            <Button>
-                              <GridViewIcon />
-                            </Button>
+
+                            <Link to={'/coursecontent/' + course.courseId}>
+                              <Button>
+                                <GridViewIcon />
+                              </Button>
+                            </Link>
+
                           </TableCell>
                           <TableCell align="right">
                             <Button
