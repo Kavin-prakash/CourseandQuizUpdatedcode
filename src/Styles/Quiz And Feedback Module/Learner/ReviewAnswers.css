@@ -37,6 +37,11 @@ ul {
 .question-container li {
   margin-bottom: 10px;
 }
+
+
+.swal2-toast-quiz-submission {
+  margin-top: 100px;
+}
  
 .button-container {
   display: flex;

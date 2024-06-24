@@ -61,8 +61,8 @@ import { updateUserData } from '../middleware/LearnerMiddleware/UpdateUserProfil
 import { RegisterApi } from '../middleware/LearnerMiddleware/RegisterApi';
 import fetchEmailApi from '../middleware/LearnerMiddleware/FetchEmailApi';
 import OTPReducer from '../reducers/LearnerReducer/OTPReducer';
-import PasswordChangeReducer from '../reducers/LearnerReducer/PasswordChangeReducer';
-import updatePasswordApi from '../middleware/LearnerMiddleware/PasswordChangeApi';
+// import PasswordChangeReducer from '../reducers/LearnerReducer/PasswordChangeReducer';
+// import updatePasswordApi from '../middleware/LearnerMiddleware/PasswordChangeApi';
 import VerifyEmailApi from '../middleware/LearnerMiddleware/VerifyEmailApi';
 import LearnerReducer from '../reducers/LearnerReducer/Registerreducer';
 import fetchEmailReducer from '../reducers/LearnerReducer/FetchEmailReducer'
@@ -199,14 +199,19 @@ import addTopic from '../middleware/Course/Topic/AddTopicMiddleware';
 import AddCourseReducer from '../reducers/Course/Course/AddCourseReducer';
 // import UnenrollCourseApi from '../middleware/LearnerMiddleware/UnenrollApi';
 // import UnEnrollReducer from '../reducers/LearnerReducer/UnEnrollReducer';
-import LearnerScoreProgressBarGraphReducer from '../reducers/LearnerReducer/LearnerScoreProgressBarGraphReducer';
-import LearnerScoreProgressBarGraphApi from '../middleware/LearnerMiddleware/LearnerScoreProgressBarGraphApi';
+// import LearnerScoreProgressBarGraphReducer from '../reducers/LearnerReducer/LearnerScoreProgressBarGraphReducer';
+// import LearnerScoreProgressBarGraphApi from '../middleware/LearnerMiddleware/LearnerScoreProgressBarGraphApi';
 import LearnerdashboardReducer from '../reducers/LearnerReducer/LearnerdashboardReducer';
 import LearnerdashboardApi from '../middleware/LearnerMiddleware/LearnerdashboardApi';
 import { CoursebyScoreApi } from '../middleware/LearnerMiddleware/CoursebyScoreApi';
 import CoursebyScoreReducer from '../reducers/LearnerReducer/CoursebyScoreReducer';
 import FetchIndividualEnrolledCourseReducer from '../reducers/LearnerReducer/FetchIndividualEnrolledCourseReducer';
 import IndividualEnrollCourseApi from '../middleware/LearnerMiddleware/FetchIndividualEnrolledCourseMiddleware';
+
+import GetResultByLearnerIDReducer from '../reducers/Quiz And Feedback Module/Learner/GetResultByLearnerIDReducer';
+import GetResultByLearnerIDApi from '../middleware/Quiz And Feedback Module/Learner/GetResultByLearnerIDApi';
+import LearnerFeedbackResultReducer from '../reducers/Quiz And Feedback Module/LearnerFeedbackResultReducer';
+import LearnerFeedbackResultApi from '../middleware/Quiz And Feedback Module/Learner/LearnerFeedbackResultApi';
 
 const rootReducer = combineReducers({
   forgotPassword: ForgotPasswordreducer,
@@ -241,13 +246,12 @@ const rootReducer = combineReducers({
   enrollmentcoursebarchart: DashboardEnrollmentcourseBarchartReducer,
 
   //
-  passwordchangereducer: PasswordChangeReducer,
+  // passwordchangereducer: PasswordChangeReducer,
   user: userReducer,
   course: courseReducer,
   allcourse: AllcourseReducer,
   deletecourse: DeletecourseReducer,
   updatecourse: courseupdateReducer,
-  learner: LearnerReducer,
   // verifyemail: fetchEmailReducer,
   otp: OTPReducer,
   fetchcourse: LearnerGetCourseReducer,
@@ -258,7 +262,7 @@ const rootReducer = combineReducers({
 
   //learner 
 
-  scoreProgressBarGraph: LearnerScoreProgressBarGraphReducer,
+  // scoreProgressBarGraph: LearnerScoreProgressBarGraphReducer,
   watchTime: addWatchTimeReducer,
   learnerdashboard: LearnerdashboardReducer,
   coursebyscore: CoursebyScoreReducer,
@@ -284,6 +288,9 @@ const rootReducer = combineReducers({
   fetchquizfeedbackquestion: FetchQuizFeedbackQuestionReducer,
   QuizFeedbackResponse: QuizFeedbackResponseReducer,
   updateuserprofilereducer: UpdateUserProfileReducer,
+
+  learnersresult: GetResultByLearnerIDReducer,
+  learnerfeedbackresult : LearnerFeedbackResultReducer,
 
 
   // COURSE TEAM  REDUCER
@@ -315,7 +322,7 @@ const store = createStore(
   applyMiddleware(thunk, LearnerGetCourse, apiMiddleware, ApiForgotpassword, emailMiddleware, apiviewallcourse,
     loginUser, apiDeletecourse, UpdateCourse, apiViewAllLearners, GetProfileCard, GetProfileCourses,
     LastEnrolledCourse, EnableDisableCourse, FetchdashboardData, ApiViewlearnersReport, ApiViewCourseReport,
-    ApiViewQuizReport, RegisterApi,  VerifyEmailApi,  enrollCourseApi,
+    ApiViewQuizReport, VerifyEmailApi,  enrollCourseApi,
     FetchRegisterApi, ApiQuizPassedUsers, ApiQuizFailedUsers, EnrollCourseLearners,
     ApiViewEnrollmentReport, EnrollCoursePassedLearner, EnrollCourseProgressLearner,
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
@@ -339,6 +346,8 @@ const store = createStore(
     QuizFeedbackResponseApi,
     QuizInstructionApi,
     LearnerAttemptQuizIdApi,
+    GetResultByLearnerIDApi,
+    LearnerFeedbackResultApi,
     //course
     addCourse, addCategory, fetchcategoryApi, fetchlevelApi,
     fetchcourseApi, addTopic, fetchTopicsApi, fetchEditTopicsApi,
@@ -346,7 +355,8 @@ const store = createStore(
     fetchContentApi, deleteContentApi, fetchIndividualContentApi,
     updateContentApi, fetchContentUrlApi, fetchcourseApi,
     //learner
-  LearnerScoreProgressBarGraphApi, LearnerdashboardApi, watchTimeApi,IndividualEnrollCourseApi,updatePasswordApi
+  LearnerdashboardApi, watchTimeApi,IndividualEnrollCourseApi,
+  // updatePasswordApi
   )
 );
 

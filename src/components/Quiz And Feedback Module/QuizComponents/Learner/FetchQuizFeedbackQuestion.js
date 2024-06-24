@@ -157,16 +157,223 @@
 // export default FetchQuizFeedbackQuestion;
 
 
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
+// import { useSelector, useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+
+// // import '../../../../Styles/Quiz And Feedback Module/Learner/FeedbackResponse.css';
+// import Button from 'react-bootstrap/Button';
+// import {fetchallquizfeedbackRequest} from '../../../../actions/Quiz And Feedback Module/Admin/GetAllQuizFeedbackAction';
+// import { fetchquizfeedbackquestionrequest } from '../../../../actions/Quiz And Feedback Module/Learner/FetchQuizFeedbackQuestionAction';
+// import { quizfeedbackresponserequest } from '../../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction';
+// import { Container } from 'react-bootstrap';
+
+
+// const FetchQuizFeedbackQuestion = () => {
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+//   const quizfeedbackquestionfetch = useSelector(
+//     (state) => state.fetchquizfeedbackquestion.quizfeedbackquestions
+//   );
+//   console.log("selector", quizfeedbackquestionfetch);
+  
+//   // const quizId = "4f0159a7-6bf2-495d-91af-d6160d9f4e1a";
+
+//   // const quizId = useSelector((state) => state.quizId.quizId);
+
+//     const quizfeedback = useSelector(
+//     (state) => state.fetchquizinstruction.quizinstructiondetails
+//   );
+//   // console.log("fetch quiz id", quizId);
+//   console.log("fetch quiz id", quizfeedback.quizId);
+
+//   const quizId = quizfeedback.quizId
+
+
+
+//   useEffect(() => {
+//     dispatch(fetchquizfeedbackquestionrequest(quizId));
+
+//   }, [quizId])
+
+//   const learnerId = sessionStorage.getItem("LearnerId");
+//   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
+//   console.log(getlearners);
+
+//   console.log("Learner ID :",learnerId);
+
+
+//   const [answers, setAnswers] = useState([])
+
+//   useEffect(() => {
+//     if (quizfeedbackquestionfetch) {
+//       setAnswers(quizfeedbackquestionfetch.map(question => ({
+//         quizFeedbackQuestionId: question.quizFeedbackQuestionId,
+//         quizId: question.quizId,
+//         // learnerId: "a2b7a936-9809-4128-bc3e-e69a1dc48d3b",
+//         learnerId:learnerId,
+//         response: "",
+//         optionText: ""
+//       })));
+//     }
+//   }, [quizfeedbackquestionfetch]);
+
+//   // sessionStorage.getItem("quizId",quizId);
+
+
+
+//   // Handle change for both MCQ and text responses
+//   const onhandleChange = (questionId, optionType, optionValue) => {
+//     setAnswers(answers.map(answer =>
+//       answer.quizFeedbackQuestionId === questionId ?
+//         { ...answer, [optionType]: optionValue } :
+//         answer
+//     ));
+//   };
+//   const onhandleResponse = (questionId, optionType) => (e) => {
+//     const { value } = e.target;
+//     setAnswers(answers.map(answer =>
+//       answer.quizFeedbackQuestionId === questionId ?
+//         { ...answer, [optionType]: value } :
+//         answer
+//     ));
+//   };
+//   // Submit all answers
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     // Replace with your actual submit logic
+//     console.log("Submitting answers:", answers);
+//     dispatch(quizfeedbackresponserequest(answers))
+//   };
+
+//   const handleNavigate = () => {
+//     // sessionStorage.removeItem("topicId");
+//     navigate("/quizengine");
+//   };
+
+//   const divStyle = {
+//     boxShadow: "0px 4px 8px #23275c"
+//   };
+
+
+
+
+//   return (
+
+//     <div>
+
+//       <div className="question template container" id="fq">
+//         <div>
+//           <button
+//             class="btn btn-light"
+//             style={{
+//               marginLeft: "100%",
+//               marginTop: "8%",
+//               backgroundColor: "#365486",
+//               color: "white",
+//               width: "50",
+//             }}
+//             onClick={() => {
+//               handleNavigate();
+//             }}
+//           >
+//             Back
+//           </button>
+//         </div>
+//         <h4 className="card-title">Quiz Feedback</h4>
+//         <div>
+//           <Container fluid id="cardstyle" style={divStyle}>
+//             {quizfeedbackquestionfetch && quizfeedbackquestionfetch.map((quizfeedbackquestions, index) => (
+//               <div className='cont mt-2'>
+//                 <div className="card mt-3" key={index}>
+
+//                   <div className="card-body">
+//                     <h6 className="card-title">Question {quizfeedbackquestions.questionNo}</h6>
+//                     <input
+//                       value={quizfeedbackquestions.question}
+//                       className="form-control"
+//                       readOnly
+//                     />
+//                     <div className="card-body">
+//                       <div className="form-group">
+//                         <h6 className='card-title'>Options:</h6>
+//                         {quizfeedbackquestions.questionType === 'MCQ' ? (
+//                           quizfeedbackquestions.options.map((option, optionIndex) => (
+//                             <div key={optionIndex}>
+//                               <input
+//                                 type="radio"
+//                                 onChange={() => onhandleChange(quizfeedbackquestions.quizFeedbackQuestionId, 'optionText', option.optionText)}
+//                                 value={option.optionText}
+//                                 name={`option_${quizfeedbackquestions.quizFeedbackQuestionId}`} // Unique name for each question
+//                               />
+//                               <label>{option.optionText}</label>
+//                             </div>
+//                           ))
+//                         ) : (
+//                           <textarea
+//                             onChange={onhandleResponse(quizfeedbackquestions.quizFeedbackQuestionId, 'response')}
+//                             value={answers.find(answer => answer.quizFeedbackQuestionId === quizfeedbackquestions.quizFeedbackQuestionId)?.response}
+//                             name='response'
+//                             className="form-control"
+//                           />
+//                         )}
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             ))}
+//             {/* <Button onClick={handleSubmit}>Submit</Button> */}
+//             <Button
+//               type='submit'
+//               onClick={handleSubmit}
+//               className="btn btn-light mt-3 mb-5 float-right"
+//               style={{
+//                 backgroundColor: "#365486",
+//                 color: "white",
+//                 marginLeft: "45%",
+//               }}
+//             >
+//               Submit
+//             </Button>
+
+//             <div>
+//                                 <Button
+//                                   variant="default"
+//                                   style={{
+//                                     backgroundColor: "#365486",
+//                                     color: "whitesmoke",
+//                                     width: "150px",
+//                                     marginRight: "-20%",
+//                                   }}
+//                                   onClick={() => {
+//                                     navigate("/LearnerenrolledCourse");
+//                                   }}
+//                                   >
+//                                     Go To Course
+//                                   </Button>
+//                                 </div>
+//           </Container>
+//         </div>
+//       </div>
+//     </div>
+
+//   );
+// };
+
+// export default FetchQuizFeedbackQuestion;
+
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-// import '../../../../Styles/Quiz And Feedback Module/Learner/FeedbackResponse.css';
-import Button from 'react-bootstrap/Button';
-import {fetchallquizfeedbackRequest} from '../../../../actions/Quiz And Feedback Module/Admin/GetAllQuizFeedbackAction';
-import { fetchquizfeedbackquestionrequest } from '../../../../actions/Quiz And Feedback Module/Learner/FetchQuizFeedbackQuestionAction';
-import { quizfeedbackresponserequest } from '../../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction';
-import { Container } from 'react-bootstrap';
+import "../../../../Styles/Quiz And Feedback Module/Learner/FeedbackResponse.css";
+import Button from "react-bootstrap/Button";
+import { fetchallquizfeedbackRequest } from "../../../../actions/Quiz And Feedback Module/Admin/GetAllQuizFeedbackAction";
+import { fetchquizfeedbackquestionrequest } from "../../../../actions/Quiz And Feedback Module/Learner/FetchQuizFeedbackQuestionAction";
+import { quizfeedbackresponserequest } from "../../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction";
+import { Container } from "react-bootstrap";
+import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
+import Swal from "sweetalert2";
 
 
 const FetchQuizFeedbackQuestion = () => {
@@ -180,13 +387,15 @@ const FetchQuizFeedbackQuestion = () => {
 
   // const quizId = useSelector((state) => state.quizId.quizId);
 
-    const quizfeedback = useSelector(
+  const quizfeedback = useSelector(
     (state) => state.fetchquizinstruction.quizinstructiondetails
   );
   // console.log("fetch quiz id", quizId);
   console.log("fetch quiz id", quizfeedback.quizId);
 
-  const quizId = quizfeedback.quizId
+  // const quizId = quizfeedback.quizId
+
+  const quizId = sessionStorage.getItem("quizId");
 
   // useEffect(() => {
   //   // debugger;
@@ -194,85 +403,111 @@ const FetchQuizFeedbackQuestion = () => {
 
   // }, [quizId])
 
-
   useEffect(() => {
     dispatch(fetchquizfeedbackquestionrequest(quizId));
-
-  }, [quizId])
+  }, [quizId]);
 
   const learnerId = sessionStorage.getItem("LearnerId");
   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
   console.log(getlearners);
 
-  console.log("Learner ID :",learnerId);
+  console.log("Learner ID :", learnerId);
 
-
-  const [answers, setAnswers] = useState([])
+  const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
     if (quizfeedbackquestionfetch) {
-      setAnswers(quizfeedbackquestionfetch.map(question => ({
-        quizFeedbackQuestionId: question.quizFeedbackQuestionId,
-        quizId: question.quizId,
-        // learnerId: "a2b7a936-9809-4128-bc3e-e69a1dc48d3b",
-        learnerId:learnerId,
-        response: "",
-        optionText: ""
-      })));
+      setAnswers(
+        quizfeedbackquestionfetch.map((question) => ({
+          quizFeedbackQuestionId: question.quizFeedbackQuestionId,
+          quizId: question.quizId,
+          // learnerId: "a2b7a936-9809-4128-bc3e-e69a1dc48d3b",
+          learnerId: learnerId,
+          response: "",
+          optionText: "",
+        }))
+      );
     }
   }, [quizfeedbackquestionfetch]);
 
   // sessionStorage.getItem("quizId",quizId);
 
-
-
   // Handle change for both MCQ and text responses
   const onhandleChange = (questionId, optionType, optionValue) => {
-    setAnswers(answers.map(answer =>
-      answer.quizFeedbackQuestionId === questionId ?
-        { ...answer, [optionType]: optionValue } :
-        answer
-    ));
+    setAnswers(
+      answers.map((answer) =>
+        answer.quizFeedbackQuestionId === questionId
+          ? { ...answer, [optionType]: optionValue }
+          : answer
+      )
+    );
   };
   const onhandleResponse = (questionId, optionType) => (e) => {
     const { value } = e.target;
-    setAnswers(answers.map(answer =>
-      answer.quizFeedbackQuestionId === questionId ?
-        { ...answer, [optionType]: value } :
-        answer
-    ));
+    setAnswers(
+      answers.map((answer) =>
+        answer.quizFeedbackQuestionId === questionId
+          ? { ...answer, [optionType]: value }
+          : answer
+      )
+    );
   };
   // Submit all answers
   const handleSubmit = (e) => {
     e.preventDefault();
     // Replace with your actual submit logic
     console.log("Submitting answers:", answers);
-    dispatch(quizfeedbackresponserequest(answers))
+    dispatch(quizfeedbackresponserequest(answers));
+    const Toast = Swal.mixin({
+      customClass:'swal2-toast-quiz-submission',
+      className:"swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background:'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "QuizFeedback Response Submitted successfully",
+      color:'white'
+    });
+  // alert('Quiz deleted successfully');
+  // handleCloseQuizDeleteModal();
+  setTimeout(() => {
+    navigate("/LearnerenrolledCourse");
+  }, 2000);
   };
 
   const handleNavigate = () => {
     // sessionStorage.removeItem("topicId");
-    navigate("/quizengine");
+    navigate("/learnerscorepage");
   };
 
   const divStyle = {
-    boxShadow: "0px 4px 8px #23275c"
+    boxShadow: "0px 4px 8px #23275c",
+    backgroundColor: "#F9F5F6",
   };
 
-
-
+  const allAnswered = answers.every(
+    (answer) => answer.optionText || answer.response
+  );
 
   return (
-
     <div>
-
+      <TopBar/>
       <div className="question template container" id="fq">
         <div>
           <button
             class="btn btn-light"
             style={{
               marginLeft: "100%",
-              marginTop: "8%",
+              marginTop: "7%",
               backgroundColor: "#365486",
               color: "white",
               width: "50",
@@ -287,37 +522,54 @@ const FetchQuizFeedbackQuestion = () => {
         <h4 className="card-title">Quiz Feedback</h4>
         <div>
           <Container fluid id="cardstyle" style={divStyle}>
-            {quizfeedbackquestionfetch && quizfeedbackquestionfetch.map((quizfeedbackquestions, index) => (
-              <div className='cont mt-2'>
-                <div className="card mt-3" key={index}>
-
-                  <div className="card-body">
-                    <h6 className="card-title">Question {quizfeedbackquestions.questionNo}</h6>
-                    <input
-                      value={quizfeedbackquestions.question}
-                      className="form-control"
-                      readOnly
-                    />
+            {quizfeedbackquestionfetch &&
+              quizfeedbackquestionfetch.map((quizfeedbackquestions, index) => (
+                <div className="cont mt-2">
+                  <div className="card mt-3" key={index}>
+                    <div className="card-body">
+                      <h6>
+                        {quizfeedbackquestions.questionNo} .{" "}
+                        {quizfeedbackquestions.question}
+                      </h6>
+                    </div>
                     <div className="card-body">
                       <div className="form-group">
-                        <h6 className='card-title'>Options:</h6>
-                        {quizfeedbackquestions.questionType === 'MCQ' ? (
-                          quizfeedbackquestions.options.map((option, optionIndex) => (
-                            <div key={optionIndex}>
-                              <input
-                                type="radio"
-                                onChange={() => onhandleChange(quizfeedbackquestions.quizFeedbackQuestionId, 'optionText', option.optionText)}
-                                value={option.optionText}
-                                name={`option_${quizfeedbackquestions.quizFeedbackQuestionId}`} // Unique name for each question
-                              />
-                              <label>{option.optionText}</label>
-                            </div>
-                          ))
+                        {/* <h6 className='card-title'>Options:</h6> */}
+                        {quizfeedbackquestions.questionType === "MCQ" ? (
+                          quizfeedbackquestions.options.map(
+                            (option, optionIndex) => (
+                              <div key={optionIndex}>
+                                <input
+                                  id="feedbackradiobtn"
+                                  type="radio"
+                                  onChange={() =>
+                                    onhandleChange(
+                                      quizfeedbackquestions.quizFeedbackQuestionId,
+                                      "optionText",
+                                      option.optionText
+                                    )
+                                  }
+                                  value={option.optionText}
+                                  name={`option_${quizfeedbackquestions.quizFeedbackQuestionId}`} // Unique name for each question
+                                />
+                                <label>{option.optionText}</label>
+                              </div>
+                            )
+                          )
                         ) : (
                           <textarea
-                            onChange={onhandleResponse(quizfeedbackquestions.quizFeedbackQuestionId, 'response')}
-                            value={answers.find(answer => answer.quizFeedbackQuestionId === quizfeedbackquestions.quizFeedbackQuestionId)?.response}
-                            name='response'
+                            onChange={onhandleResponse(
+                              quizfeedbackquestions.quizFeedbackQuestionId,
+                              "response"
+                            )}
+                            value={
+                              answers.find(
+                                (answer) =>
+                                  answer.quizFeedbackQuestionId ===
+                                  quizfeedbackquestions.quizFeedbackQuestionId
+                              )?.response
+                            }
+                            name="response"
                             className="form-control"
                           />
                         )}
@@ -325,11 +577,10 @@ const FetchQuizFeedbackQuestion = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
             {/* <Button onClick={handleSubmit}>Submit</Button> */}
             <Button
-              type='submit'
+              type="submit"
               onClick={handleSubmit}
               className="btn btn-light mt-3 mb-5 float-right"
               style={{
@@ -337,31 +588,51 @@ const FetchQuizFeedbackQuestion = () => {
                 color: "white",
                 marginLeft: "45%",
               }}
+              disabled={
+                !answers.every((answer) => answer.optionText || answer.response)
+              }
             >
               Submit
             </Button>
 
-            <div>
-                                <Button
-                                  variant="default"
-                                  style={{
-                                    backgroundColor: "#365486",
-                                    color: "whitesmoke",
-                                    width: "150px",
-                                    marginRight: "-20%",
-                                  }}
-                                  onClick={() => {
-                                    navigate("/LearnerenrolledCourse");
-                                  }}
-                                  >
-                                    Go To Course
-                                  </Button>
-                                </div>
+            {/* <div>
+              <Button
+                variant="default"
+                style={{
+                  backgroundColor: "#365486",
+                  color: "whitesmoke",
+                  width: "150px",
+                  marginTop:"-5%",
+                  marginRight: "-20%",
+                }}
+                onClick={() => {
+                  navigate("/LearnerenrolledCourse");
+                }}
+              >
+                Go To Course
+              </Button>
+            </div> */}
           </Container>
+          <div>
+            <Button
+              variant="default"
+              style={{
+                backgroundColor: "#365486",
+                color: "whitesmoke",
+                width: "150px",
+                marginTop: "2%",
+                marginRight: "-20%",
+              }}
+              onClick={() => {
+                navigate("/LearnerenrolledCourse");
+              }}
+            >
+              Go To Course
+            </Button>
+          </div>
         </div>
       </div>
     </div>
-
   );
 };
 

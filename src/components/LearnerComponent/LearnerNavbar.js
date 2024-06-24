@@ -197,6 +197,10 @@ export default function MiniDrawer() {
     navigate('/')
     sessionStorage.removeItem("UserSessionID")
     sessionStorage.removeItem("userData")
+    sessionStorage.removeItem("LearnerId");
+    // localStorage.clear()
+    // sessionStorage.clear()
+    window.location.reload();
 
   }
 
@@ -221,7 +225,7 @@ export default function MiniDrawer() {
               <MenuIcon />
             </IconButton>
             <a className="navbar-brand_learner" href="Relevantz"><img src={logo} alt="Relevantz Logo" className='navbar-imaged' /></a>
-            <div className='navbar-name_learner'><h5>Learning Experience Platform</h5></div>
+            <div className='navbar-name_learner'><h5 id="navbar-name_learner">Learning Experience Platform</h5></div>
             <Typography variant="h6" noWrap component="div">
               <Stack direction="row" alignItems="center" className='avatar' spacing={2}>
                 <Avatar {...stringAvatar(`${firstname} ${lastname}`)}

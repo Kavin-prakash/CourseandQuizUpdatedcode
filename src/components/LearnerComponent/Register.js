@@ -1,368 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { validateRegistrationForm } from '..//../utils/LearnerValidations/RegisterValidation';
-// import '..//..//Styles/Learner/Register.css';
-// // import {  sendOTP } from '../../middleware/RegisterApi.js';
-// import Select from 'react-select';
-// import {  userDataRequest, userDataSuccess } from '../../actions/LearnerAction/RegisterAction';
-// import { useDispatch,useSelector } from 'react-redux';
-// import { FaInfoCircle } from 'react-icons/fa';
-// import { userEmailRequest } from '../..//actions/LearnerAction/Fetchemail';
-// import { userOTPRequest } from '../../actions/LearnerAction/OTPAction';
-// import Modal from 'react-modal';
-
-
-// const options = [
-//     { value: 'C++', label: 'C++' },
-//     { value: 'LINQ', label: 'LINQ' },
-//     { value: '.NET', label: '.NET' },
-//     { value: 'C#', label: 'C#' },
-//     { value: 'JAVA', label: 'JAVA' },
-//     { value: 'RUST', label: 'RUST' },
-// ];
-
-// export default function Register() {
-
-
-//     const [errors, setErrors] = useState({});
-//     const [gender, setGender] = useState('');
-//     const [email, setEmail] = useState('');
-//     const [showOTP, setShowOTP] = useState(false);
-//     const [enteredOTP, setEnteredOTP] = useState('');
-//     const [emailVerified, setEmailVerified] = useState(false);
-//     const [showPasswordRules, setShowPasswordRules] = useState(false);
-//     const [timer, setTimer] = useState(120);
-//     const [errorMessage, setErrorMessage] = useState('');
-//     const [ageError, setAgeError] = useState(false);
-//     const minutes = Math.floor(timer / 60);
-//     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-//     const seconds = timer % 60;
-//     // const [registrationStatus,setRegistrationStatus]= useState(null);
-//     const [showModal, setShowModal] = useState(false);
-//     const [verifyOTP, setVerifyOTP] = useState('');
-//     const [userData, setUserData] = useState({
-//         firstName: '',
-//         lastName: '',
-//         gender: '',
-//         dob: '',
-//         email: '',
-//         otp: '',
-//         contactNumber: '',
-//         password: '',
-//         stream: '',
-//         role:'Learner',
-
-//     });
-
-//     const handlePasswordIconHover = () => {
-//         setShowPasswordRules(true);
-//     };
-
-//     const handlePasswordLeave = () => {
-//         setShowPasswordRules(false);
-//     };
-
-//     const dismissAlert = () => {
-//         setShowSuccessAlert(false);
-//     };
-
-//     const dispatch = useDispatch();
-
-//     const success = useSelector((state) => state.email.email)
-//     console.log("otp",success);
-
-//     useEffect(() => {
-//         let interval;
-//         if (showOTP) {
-//             interval = setInterval(() => {
-//                 setTimer((prevTimer) => prevTimer - 1);
-//             }, 1000);
-//         }
-//         return () => clearInterval(interval);
-//     }, [showOTP]);
-
-//     useEffect(() => {
-//         if (timer === 0) {
-//             setShowOTP(false);
-//         }
-//     }, [timer]);
-
-//     // const handleSelectChange = (selectedOptions) => {
-//     //     setSelectedOptions(selectedOptions);
-//     //     setUserData({...userData, selectedOptions});
-//     //     setErrors({ ...errors, selectedOptions: '' });
-//     // };
-
-//     const handleSendOTP = () => {
-
-//          console.log("userEmail",userData.email);
-//         if (!/\S+@\S+\.\S+/.test(email)) {
-//             setErrors({ ...errors, email: 'Invalid email address' });
-//             return; // Return early if email is invalid
-//         }
-
-//         setShowOTP(true);
-//         setErrors('');
-//         setTimer(120);
-//         handleOTPSubmit();
-//         //sendOTP(email);
-
-//         dispatch(userEmailRequest(userData.email));
-
-//     };
-
-//     const handleOTPChange = (event) => {
-//         setEnteredOTP(event.target.value);
-//         setErrors({ ...errors, otp: '' });
-//     };
-
-//     const handleOTPSubmit = (otpp) => {
-//         setUserData({ ...userData, otp: otpp });
-//         // console.log("otp handle:",enteredOTP);
-//         const expectedOTP = success;
-//         console.log("expected otp",expectedOTP);
-//         setVerifyOTP(expectedOTP);
-//     };
-
-//     const SubmitOtp = (event) => {
-//         event.preventDefault();
-//         console.log("handle:", userData.otp);
-//         if (enteredOTP === success) {
-//             setEmailVerified(true);
-//             setShowOTP(false);
-//             setErrors({ ...errors, otp: '' });
-//             setErrors({ ...errors, email: '' });
-//             dispatch(userOTPRequest(enteredOTP,userData.email));
-//         } else {
-//             setErrors({ ...errors, otp: 'Invalid OTP' });
-//         }
-//     };
-
-//     const handleChange = (e) => {
-//         setErrorMessage("");
-//         const { name, value } = e.target || e; // If e.target is undefined, assume it's the selected option
-//         if (name === 'email') {
-//             setEmail(value);
-
-//             setUserData({ ...userData, email: value });
-//         } else if (name === 'stream') {
-//             setUserData({ ...userData, stream: value });
-//         } else {
-//             setUserData({ ...userData, [name]: value });
-//             //dispatch(updateUser({ ...userData, [name]: value }));
-//         }
-//         setErrors({ ...errors, [name]: '' });
-//     };
-
-//     const handleSubmit = (e) => {
-//         e.preventDefault();
-//         console.log("userData",userData)
-//         dispatch(userDataRequest(userData))
-//         const today = new Date();
-//         const birthDate = new Date(userData.dob);
-//         let age = today.getFullYear() - birthDate.getFullYear();
-//         const month = today.getMonth() - birthDate.getMonth();
-
-//         if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-//             age--;
-//         }
-
-//         const ageLimit = 18;
-
-//         if (age < ageLimit) {
-//             setAgeError(true);
-//             setErrorMessage('You must be atleast 18 years old to register');
-//             return;
-//         }
-//         if (!emailVerified) return;
-//         const validationErrors = validateRegistrationForm(userData);
-
-//         if(Object.keys(validationErrors).length > 0)
-//         {
-//             setErrors(validationErrors);
-//             return;
-//         }
-
-//         if (validationErrors && typeof validationErrors === 'object' && Object.keys(validationErrors).length === 0) {
-//             // Convert stream array to string
-//             const streamString = Array.isArray(userData.stream) ? userData.stream.map(option => option.value).join(', ') : userData.stream;
-
-//             // Create a copy of userData with the stream field as a string
-//             const updatedUserData = {
-//                 ...userData,
-//                 stream: userData.stream.map(option => option.value).join(", ")
-//               };
-
-
-//             console.log("in handle submit", updatedUserData);
-
-//             // Dispatch the action with the updated user data
-//             dispatch(userDataRequest(updatedUserData));
-
-//             console.log("in handle submit", updatedUserData);
-//         //    registerUser(userDataStringStream);
-//             setShowModal(true);
-//             setShowSuccessAlert(true);
-//             setTimeout(() => {
-//                 setShowSuccessAlert(false);
-//             }, 5000);
-
-//         } else {
-
-//             setErrors(validationErrors || {});
-//         }
-//     };
-
-//     const handleGenderChange = (event) => {
-//         setGender(event.target.value);
-//         setErrors({ ...errors, gender: '' });
-//     };
-
-//     const closeModal = () => {
-//         setShowModal(false)
-//     }
-
-//     return (
-//         <div style={{ height: "100vh" }} class="register">
-//             <div class="row">
-//                 <div class="col-md-3 register-left">
-//                     <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
-//                     <h3>Welcome to Relevantz </h3>
-//                     <h4>Learning Experience Platform</h4>
-//                     <h6>Gain your knowledge with Relevantz</h6>
-//                     {/* <input type="submit" name="" value="Login" /><br /> */}
-//                 </div>
-
-//                 <div class="col-md-9 register-right">
-
-//                     <div class="tab-content" id="myTabContent">
-//                         <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
-
-//                             <h3 class="register-heading">Registration</h3>
-//                             <div class="row register-form">
-//                                 <div class="col-md-6">
-//                                     <div class="form-group">
-
-
-//                                         <input type="text" class="form-control field" placeholder="First Name *" value={userData.firstName} name="firstName" onChange={handleChange} disabled={showOTP} />
-//                                         {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
-//                                     </div>
-//                                     <div class="form-group">
-//                                         <input type="number" class="form-control" placeholder="Phone Number *" value={userData.contactNumber} name="contactNumber" onChange={handleChange} disabled={showOTP} />
-//                                         {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
-//                                     </div>
-//                                     <div class="form-group d-flex">
-//                                         <input type="email" class="form-control" placeholder="Your Email *" value={userData.email} name="email" onChange={handleChange} disabled={showOTP || emailVerified} />
-//                                         {emailVerified && <span className="text-success">&#10004;</span>}
-//                                         {!showOTP && !emailVerified && email.trim() !== '' && (<button className='btn btn-primary ms-1 otp' onClick={handleSendOTP}><a>Send OTP</a></button>)}
-//                                     </div >
-//                                     {errors.email && <div style={{ marginLeft: "15px" }} className="text-danger">{errors.email}</div>}
-//                                     {showOTP && !emailVerified && (<div class="form-group">
-//                                         <input type="text" minlength="10" maxlength="10" name="enteredOTP" class="form-control" placeholder="Enter OTP *" value={enteredOTP} onChange={handleOTPChange} />
-//                                         <div className='text-muted' style={{ color: 'black' }}>{`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`}remaining</div>
-//                                         {enteredOTP.length === 6 && <button className='btn btn-primary ms-1 otp' onClick={SubmitOtp}><a>Submit</a></button>}
-//                                         {errors.otp && <div className="text-danger">{errors.otp}</div>}
-
-//                                     </div>
-//                                     )}
-//                                     <div style={{marginTop:"-2%"}} class="form-group">
-//                                         <input style={{width:"285px"}} type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
-//                                         <FaInfoCircle style={{marginLeft:"95%",marginTop:"-26%"}} className='password-icon Red-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
-//                                         {errors.password && <div className="text-danger">{errors.password}</div>}
-//                                     </div>
-//                                     {showPasswordRules && <div className='password-rules'>
-//                                         <p style={{marginLeft:"6%",marginTop:"-10%"}} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
-//                                     </div>}
-
-
-//                                     <div class="form-group">
-//                                         <div class="maxl">
-//                                             <h6 style={{ marginTop: "25px" }}>Gender:</h6>
-//                                             <div style={{ marginLeft: "75px", marginTop: "-40px"}}>
-//                                                 <div  style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-//                                                 <label class="gender radio" style={{ display: 'flex', alignItems: 'center'}}>
-//                                                     <input type="radio" name="gender" value="male" checked={userData.gender === "male"} onChange={handleChange} disabled={showOTP}/>
-//                                                     <h6>&nbsp;Male</h6>
-//                                                 </label>
-//                                                 <label class="gender radio" style={{ display: 'flex', alignItems: 'center' }}>
-//                                                     <input type="radio" name="gender" value="female" checked={userData.gender === "female"} onChange={handleChange} disabled={showOTP} />
-//                                                     <h6>&nbsp;Female</h6>
-//                                                 </label>
-//                                                  <label class="gender radio" style={{ display: 'flex', alignItems: 'center' }}>
-//                                                     <input type="radio" name="gender" value="others" checked={userData.gender === "others"} onChange={handleChange} disabled={showOTP}/>
-//                                                     <h6>&nbsp;Transgender</h6>
-//                                                 </label>
-//                                                 </div>
-//                                             </div>
-//                                         </div>
-//                                         {errors.gender && <div className="text-danger">{errors.gender}</div>}
-//                                     </div>
-//                                 </div>
-//                                 <div class="col-md-6">
-//                                     <div class="form-group">
-//                                         <input type="text" class="form-control" placeholder="Last Name *" value={userData.lastName} name="lastName" onChange={handleChange} disabled={showOTP} />
-//                                         {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
-//                                     </div>
-
-//                                     <div class="form-group">
-//                                         <input type="text" class="form-control" value={userData.dob} name="dob" placeholder="Date Of Birth *" onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} max={new Date().toISOString().split('T')[0]} onChange={handleChange} disabled={showOTP} />
-//                                         {ageError && (<div className='age-error-message'><p className='error-message'>{errorMessage}</p></div>)}
-//                                         {errors.dob && <div className="text-danger">{errors.dob}</div>}
-//                                     </div>
-//                                     <div class="form-group">
-//                                         <Select
-//                                             isMulti
-//                                             name="stream"
-//                                             options={options}
-//                                             className="basic-multi-select"
-//                                             classNamePrefix="stream"
-//                                             placeholder="Choose your stream"
-//                                             value={userData.stream}
-//                                             onChange={(selectedOption) => handleChange({ target: { name: "stream", value: selectedOption } })}
-
-//                                         />
-//                                         {errors.selectedOptions && <div className="text-danger">{errors.selectedOptions}</div>}
-
-//                                     </div>
-//                                     <div class="form-group">
-//                                         <input type="password" class="form-control" placeholder="Confirm Password *" value={userData.confirmPassword} name="confirmPassword" onChange={handleChange} disabled={showOTP} />
-//                                         {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
-//                                     </div>
-//                                     <br></br>
-//                                     <button type="submit" data-testid="ben" className="btnRegister" onClick={handleSubmit} ><a>
-//                                         Register</a>
-//                                     </button>
-
-//                                     {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
-//                                 </div>
-//                                 {showSuccessAlert && (
-//                                     <div className='alert alert-success all' role='alert'>Registered successfully!!
-//                                     </div>
-//                                 )}
-
-//                             </div>
-
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//             <Modal 
-//             isOpen={showModal}
-//             onRequestClose={closeModal}
-//             contentLabel='Registration Success'
-//             className='Modal'
-//             overlayClassName='Overlay'
-//             >
-//                 <h2>Registration successfully!</h2>
-//                 <button onClick={closeModal} >close</button>
-
-//             </Modal>
-//         </div>
-//     );
-// }
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { validateRegistrationForm } from '..//../utils/LearnerValidations/RegisterValidation';
 import '..//..//Styles/Learner/Register.css';
@@ -381,65 +16,27 @@ import { fetchallCoursesRequest } from '../../actions/Admin/Adnimviewcourse';
 import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-// const options = [
-//     { value: 'C++', label: 'C++' },
-//     { value: 'LINQ', label: 'LINQ' },
-//     { value: '.NET', label: '.NET' },
-//     { value: 'C#', label: 'C#' },
-//     { value: 'JAVA', label: 'JAVA' },
-//     { value: 'RUST', label: 'RUST' },
-// ];
+import RegisterApi from '../../middleware/LearnerMiddleware/RegisterApi';
 
 export default function Register() {
-
-    const navigate = useNavigate();
-    const alertdisplayregister = () => {
-        const Toast = Swal.mixin({
-            toast: true,
-            background: '#21903d',
-            position: "top",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-
-        Toast.fire({
-            icon: "success",
-            iconColor: 'white',
-            title: "Registered successfully",
-            customClass: {
-                popup: 'custom-toast'
-            }
-        });
-
-        // Set a flag in localStorage indicating the user has just enrolled
-
-
-
-    };
     const [errors, setErrors] = useState({});
+
+    console.log("checking the Erros",errors);
+
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [recievedOTP, setRecievedOTP] = useState('');
-
+    const navigate = useNavigate();
     const [showOTP, setShowOTP] = useState(false);
     const [enteredOTP, setEnteredOTP] = useState('');
     const [emailVerified, setEmailVerified] = useState(false);
     const [showPasswordRules, setShowPasswordRules] = useState(false);
     const [timer, setTimer] = useState(120);
     const [errorMessage, setErrorMessage] = useState('');
-    const [ageError, setAgeError] = useState(false);
-    const minutes = Math.floor(timer / 60);
-    // const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [altermessage, setAlertmessage] = useState(false);
 
-    const learnerId = sessionStorage.getItem("UserSessionID")
-    const seconds = timer % 60;
-    // const [registrationStatus,setRegistrationStatus]= useState(null);
+    console.log("checkerrormesssage",errorMessage);
+    const [ageError, setAgeError] = useState(false);
+    const [buttonText, setButtonText] = useState('Send OTP');
     const [showModal, setShowModal] = useState(false);
     const [verifyOTP, setVerifyOTP] = useState('');
     const [userData, setUserData] = useState({
@@ -453,211 +50,298 @@ export default function Register() {
         password: '',
         stream: '',
         role: 'Learner',
-
     });
-
-
-
-    // const pdf = useSelector((state) => state.fetchPdf.material);
-    const streamCourses = useSelector((state) => state.allcourse.courses)
-    // console.log("scourse", streamCourses)
-
-
-
-    // const options = [
-    //     { value: streamCourses.title, label: streamCourses.title },
-
-    // ];
-
-    const options = streamCourses.map(course => ({
+ 
+    const streamCourses = useSelector((state) => state.allcourse.courses);
+    const options = streamCourses.map((course) => ({
         value: course.title,
-        label: course.title
+        label: course.title,
     }));
-    // console.log("options",options)
-
-
-
-    const handlePasswordIconHover = () => {
-        setShowPasswordRules(true);
-    };
-
-    const handlePasswordLeave = () => {
-        setShowPasswordRules(false);
-    };
-
-    // const dismissAlert = () => {
-    //     setShowSuccessAlert(false);
-    // };
-
+ 
     const dispatch = useDispatch();
-
-    // const success = useSelector((state) => state.verifyemail.email)
-    // console.log("otp", success);
-
+ 
     useEffect(() => {
         let interval;
         if (showOTP) {
             interval = setInterval(() => {
-                setTimer((prevTimer) => prevTimer - 1);
+                setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
             }, 1000);
         }
         return () => clearInterval(interval);
     }, [showOTP]);
-
+ 
     useEffect(() => {
         if (timer === 0) {
             setShowOTP(false);
         }
     }, [timer]);
-
-    // const handleSelectChange = (selectedOptions) => {
-    //     setSelectedOptions(selectedOptions);
-    //     setUserData({...userData, selectedOptions});
-    //     setErrors({ ...errors, selectedOptions: '' });
-    // };
-
+ 
+    const handlePasswordIconHover = () => {
+        setShowPasswordRules(true);
+    };
+ 
+    const handlePasswordLeave = () => {
+        setShowPasswordRules(false);
+    };
+   
+    const alertdisplayotp = () => {
+        const Toast = Swal.mixin({
+            toast: true,
+            background: '#21903d',
+            position: 'top',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+        });
+ 
+        Toast.fire({
+            icon: 'success',
+            iconColor: 'white',
+            title: 'OTP Send successfully',
+            customClass: {
+                popup: 'custom-toast',
+            },
+        });
+ 
+       
+    };
+ 
+    const alertdisplayemail = () => {
+        const Toast = Swal.mixin({
+            toast: true,
+            background: '#21903d',
+            position: 'top',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+        });
+ 
+        Toast.fire({
+            icon: 'success',
+            iconColor: 'white',
+            title: 'Email Verified successfully',
+            customClass: {
+                popup: 'custom-toast',
+            },
+        });
+ 
+       
+    };
+ 
+ 
+ 
     const handleSendOTP = async () => {
-
-        console.log("userEmail", userData.email);
         if (!/\S+@\S+\.\S+/.test(email)) {
             setErrors({ ...errors, email: 'Invalid email address' });
-            return; // Return early if email is invalid
+            return;
         }
-
         setShowOTP(true);
         setErrors('');
         setTimer(120);
         handleOTPSubmit();
-        //sendOTP(email);
+        alertdisplayotp();
         const data = await fetchEmailApi(userData.email);
-        console.log("recieved", data);
-        setRecievedOTP(data)
-        // dispatch(userEmailRequest(userData.email));
-
+        setRecievedOTP(data);
     };
-    // console.log("recieved otp",recievedOTP);
-
-
+ 
     const handleOTPChange = (event) => {
         setEnteredOTP(event.target.value);
         setErrors({ ...errors, otp: '' });
     };
-
-    const handleOTPSubmit = (otpp) => {
-        setUserData({ ...userData, otp: otpp });
-        // console.log("otp handle:",enteredOTP);
-        const expectedOTP = recievedOTP;
-        console.log("expected otp", expectedOTP);
-        setVerifyOTP(expectedOTP);
+ 
+    const handleOTPSubmit = () => {
+        setUserData({ ...userData, otp: recievedOTP });
+        setVerifyOTP(recievedOTP);
     };
-
+ 
     const SubmitOtp = (event) => {
         event.preventDefault();
-        console.log("handle:", userData.otp);
         if (enteredOTP === recievedOTP) {
             setEmailVerified(true);
             setShowOTP(false);
-            setErrors({ ...errors, otp: '' });
-            setErrors({ ...errors, email: '' });
+            setErrors({ ...errors, otp: '', email: '' });
             dispatch(userOTPRequest(enteredOTP, userData.email));
+            alertdisplayemail();
         } else {
             setErrors({ ...errors, otp: 'Invalid OTP' });
         }
     };
-
+ 
+    const alertdisplayregister = () => {
+        const Toast = Swal.mixin({
+            toast: true,
+            background: '#21903d',
+            position: 'top',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+        });
+ 
+        Toast.fire({
+            icon: 'success',
+            iconColor: 'white',
+            title: 'Registered successfully',
+            customClass: {
+                popup: 'custom-toast',
+            },
+        });
+ 
+        setTimeout(() => {
+            navigate('/');
+        }, 2000);
+    };
+ 
     const handleChange = (e) => {
-        setErrorMessage("");
-        const { name, value } = e.target || e; // If e.target is undefined, assume it's the selected option
+        setErrorMessage('');
+        const { name, value } = e.target;
         if (name === 'email') {
             setEmail(value);
-
             setUserData({ ...userData, email: value });
         } else if (name === 'stream') {
             setUserData({ ...userData, stream: value });
         } else {
             setUserData({ ...userData, [name]: value });
-            //dispatch(updateUser({ ...userData, [name]: value }));
         }
         setErrors({ ...errors, [name]: '' });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+ 
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
 
-        console.log("userData", userData)
-        dispatch(userDataRequest(userData));
+    //     console.log("userdata",userData);
+    //     const today = new Date();
+    //     const birthDate = new Date(userData.dob);
+    //     let age = today.getFullYear() - birthDate.getFullYear();
+    //     const month = today.getMonth() - birthDate.getMonth();
+ 
+    //     if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+    //         age--;
+    //     }
+ 
+    //     const ageLimit = 18;
+ 
+    //     if (age < ageLimit) {
+    //         setAgeError(true);
+    //         setErrorMessage('You must be at least 18 years old to register');
+    //         return;
+    //     }
+    //     if (!emailVerified) return;
+        
+    //     const validationErrors = validateRegistrationForm(userData);
+
+    //     console.log("validationerros",validationErrors);
+ 
+    //     if (Object.keys(validationErrors).length > 0) {
+    //         setErrors(validationErrors);
+    //         return;
+    //     }
+ 
+    //     if (validationErrors && typeof validationErrors === 'object' && Object.keys(validationErrors).length === 0) {
+    //         const updatedUserData = {
+    //             ...userData,
+    //             stream: userData.stream.map((option) => option.value).join(', '),
+    //         };
+ 
+            
+    //         dispatch(userDataRequest(updatedUserData));
+    //         alertdisplayregister();
+    //         setTimeout(() => {
+    //                             navigate("/");
+    //                           }, 2000);
+    //     } else {
+    //         setErrors(validationErrors || {});
+    //     }
+    // };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        // Calculate age based on the date of birth
+        console.log("userdata",userData);
         const today = new Date();
         const birthDate = new Date(userData.dob);
         let age = today.getFullYear() - birthDate.getFullYear();
         const month = today.getMonth() - birthDate.getMonth();
-
+    
         if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-
+    
+        // Check if the user is under the age limit
         const ageLimit = 18;
-
         if (age < ageLimit) {
             setAgeError(true);
-            setErrorMessage('You must be atleast 18 years old to register');
+            setErrorMessage('You must be at least 18 years old to register');
             return;
         }
-        if (!emailVerified) return;
+    
+        // Verify email
+        if (!emailVerified) {
+            setErrorMessage('Please verify your email address before registering.');
+            return;
+        }
+    
+        // Validate the form and display errors if any
         const validationErrors = validateRegistrationForm(userData);
+
+
+        console.log("validationerreos",validationErrors);
+
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
-
-        if (validationErrors && typeof validationErrors === 'object' && Object.keys(validationErrors).length === 0) {
-            // Convert stream array to string
-            const streamString = Array.isArray(userData.stream) ? userData.stream.map(option => option.value).join(', ') : userData.stream;
-
-            // Create a copy of userData with the stream field as a string
+    
+        // If no errors, proceed with registration
+        if (Object.keys(validationErrors).length === 0) {
             const updatedUserData = {
                 ...userData,
-                stream: userData.stream.map(option => option.value).join(", ")
+                stream: userData.stream.map((option) => option.value).join(', '),
             };
 
-
-
-            // Dispatch the action with the updated user data
-            dispatch(userDataRequest(updatedUserData));
+            console.log("reg",updatedUserData);
+            await RegisterApi(updatedUserData);
+    
+            // dispatch(userDataRequest(updatedUserData));
             alertdisplayregister();
-            setTimeout(() => {
-                navigate("/");
-            }, 2000);
-            console.log("in handle submit", updatedUserData);
-            //    registerUser(userDataStringStream);
-            // setShowModal(true);
-            // setShowSuccessAlert(true);
             // setTimeout(() => {
-            //     setShowSuccessAlert(false);
-            // }, 5000);
-
-        } else {
-
-            setErrors(validationErrors || {});
+            //     navigate("/");
+            // }, 2000);
         }
     };
-
+    
+ 
     const handleGenderChange = (event) => {
         setGender(event.target.value);
         setErrors({ ...errors, gender: '' });
     };
-
+ 
     const closeModal = () => {
-        setShowModal(false)
-    }
-
-
+        setShowModal(false);
+    };
+ 
     useEffect(() => {
-        console.log("effect");
         dispatch(fetchallCoursesRequest());
     }, []);
-
-
+ 
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+ 
+ 
     return (
         <div style={{ height: "100vh" }} class="register">
             <div class="row">
@@ -668,13 +352,13 @@ export default function Register() {
                     <h6>Gain your knowledge with Relevantz</h6>
                     {/* <input type="submit" name="" value="Login" /><br /> */}
                 </div>
-
+ 
                 <div class="col-md-9 register-right">
-
+ 
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
-
-                            <h3 class="register-heading">Registration</h3>
+ 
+                            <h3 class="register-heading">Join us with an Intellectual Adventure!!!</h3>
                             <Modal
                                 isOpen={showModal}
                                 onRequestClose={closeModal}
@@ -684,35 +368,80 @@ export default function Register() {
                             >
                                 <h2>Registration successfully!</h2>
                                 <button onClick={closeModal} >close</button>
-
+ 
                             </Modal>
                             <div class="row register-form">
                                 <div class="col-md-6">
                                     <div class="form-group">
-
-
+ 
+ 
                                         <input type="text" class="form-control field" placeholder="First Name *" value={userData.firstName} name="firstName" onChange={handleChange} disabled={showOTP} />
                                         {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
                                     </div>
                                     <div class="form-group">
+ 
                                         <input type="number" class="form-control" placeholder="Phone Number *" value={userData.contactNumber} name="contactNumber" onChange={handleChange} disabled={showOTP} />
                                         {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
                                     </div>
-                                    <div class="form-group d-flex">
-                                        <input type="email" class="form-control" placeholder="Email *" value={userData.email} name="email" onChange={handleChange} disabled={showOTP || emailVerified} />
+                                    <div className="form-group d-flex">
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            placeholder="Email *"
+                                            value={userData.email}
+                                            name="email"
+                                            onChange={handleChange}
+                                            disabled={showOTP || emailVerified}
+ 
+                                            style={{maxHeight:40}}
+                                        />
                                         {emailVerified && <span className="text-success">&#10004;</span>}
-                                        {!showOTP && !emailVerified && email.trim() !== '' && (<button className='btn btn-primary ms-1 otp' onClick={handleSendOTP}><a>Send OTP</a></button>)}
-                                    </div >
-                                    {errors.email && <div style={{ marginLeft: "15px" }} className="text-danger">{errors.email}</div>}
-                                    {showOTP && !emailVerified && (<div class="form-group">
-                                        <input type="text" minlength="10" maxlength="10" name="enteredOTP" class="form-control" placeholder="Enter OTP *" value={enteredOTP} onChange={handleOTPChange} />
-                                        <div className='text-muted' style={{ color: 'black' }}>{`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`}remaining</div>
-                                        {enteredOTP.length === 6 && <button className='btn btn-primary ms-1 otp' onClick={SubmitOtp}><a>Submit</a></button>}
-                                        {errors.otp && <div className="text-danger">{errors.otp}</div>}
-
+                                        {!showOTP && !emailVerified && email.trim() !== '' && (
+                                            <button className="btn btn-primary ms-1 otp" onClick={handleSendOTP} style={{maxHeight:40}} >
+                                                <a style={{fontSize:'12px'}}>{timer === 0 ? 'Resend OTP' : 'Send OTP'}</a>
+                                            </button>
+                                        )}
+                                        {errors.email && <div style={{ marginLeft: '15px' }}  className="text-danger">{errors.email}</div>}
+                                        {showOTP && !emailVerified && (
+                                            <div className="form-group" style={{marginTop:'0'}}>
+                                                <input
+                                                    type="text"
+                                                    minLength="6"
+                                                    maxLength="6"
+                                                    name="enteredOTP"
+                                                    className="form-control"
+                                                    placeholder="Enter OTP *"
+                                                    value={enteredOTP}
+                                                    onChange={handleOTPChange}
+                                                   
+                                                />
+                                                <div  style={{ color:'blue' }}>
+                                                    {`${minutes}:${seconds < 10 ? '0' : ''}${seconds} remaining`}
+                                                </div>
+                                                {enteredOTP.length === 6 && (
+                                                    <button className="btn btn-primary ms-1 otp" onClick={SubmitOtp}>
+                                                        <a>Submit</a>
+                                                    </button>
+                                                )}
+                                                {errors.otp && <div className="text-danger">{errors.otp}</div>}
+                                            </div>
+                                           
+                                           
+                                        )}
+                                       
+                                       
                                     </div>
-                                    )}
-                                    <div style={{ marginTop: "-5%" }} class="form-group">
+                                    <div style={{marginTop:"-2%"}} class="form-group">
+                                        <input  type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
+                                        <FaInfoCircle style={{marginLeft:"105%",marginTop:"-26%"}} className='password-icon Red-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
+                                        {errors.password && <div className="text-danger">{errors.password}</div>}
+                                    </div>
+                                    {showPasswordRules && <div className='password-rules'>
+                                        <p style={{marginLeft:"6%",marginTop:"-10%"}} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
+                                    </div>}
+ 
+                                    {/* <div style={{ marginTop: "-5%" }} class="form-group">
+ 
                                         <input type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
                                         <FaInfoCircle data-tip data-for='passwordTooltip' className='password-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
                                         <Tooltip id='passwordTooltip' place='right' effect='solid'>
@@ -722,9 +451,9 @@ export default function Register() {
                                     {errors.password && <div className="text-danger">{errors.password}</div>}
                                     {showPasswordRules && <div className='password-rules'>
                                         <p style={{ marginLeft: "6%", marginTop: "-10%" }} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
-                                    </div>}
-
-
+                                    </div>} */}
+ 
+ 
                                     <div class="form-group">
                                         <div class="maxl d-flex">
                                             <h6 style={{ marginTop: "25px" }}>Gender:</h6>
@@ -751,7 +480,7 @@ export default function Register() {
                                         <input type="text" class="form-control" placeholder="Last Name *" value={userData.lastName} name="lastName" onChange={handleChange} disabled={showOTP} />
                                         {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
                                     </div>
-
+ 
                                     <div class="form-group">
                                         <input type="text" class="form-control" value={userData.dob} name="dob" placeholder="Date Of Birth *" onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} max={new Date().toISOString().split('T')[0]} onChange={handleChange} disabled={showOTP} />
                                         {ageError && (<div className='age-error-message'><p className='error-message'>{errorMessage}</p></div>)}
@@ -768,10 +497,10 @@ export default function Register() {
                                             value={userData.stream}
                                             onChange={(selectedOption) => handleChange({ target: { name: "stream", value: selectedOption } })}
                                             isDisabled={showOTP}
-
+ 
                                         />
                                         {errors.selectedOptions && <div className="text-danger">{errors.selectedOptions}</div>}
-
+ 
                                     </div>
                                     <div class="form-group ">
                                         <input type="password" class="form-control" placeholder="Confirm Password *" value={userData.confirmPassword} name="confirmPassword" onChange={handleChange} disabled={showOTP} />
@@ -781,20 +510,21 @@ export default function Register() {
                                     <button type="submit" data-testid="ben" className="btnRegister" onClick={handleSubmit} ><a>
                                         Register</a>
                                     </button>
-
+ 
                                     {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
                                 </div>
-                                {altermessage && <Alert variant="outlined" severity="success">
-                                    Registered successful! Redirecting...
-                                </Alert>}
-
+                                {/* {altermessage && <Alert variant="outlined" severity="success">
+                  Registered successful! Redirecting...
+                </Alert>} */}
+ 
                             </div>
-
+ 
                         </div>
                     </div>
                 </div>
             </div>
-
+ 
         </div>
+ 
     );
 }
