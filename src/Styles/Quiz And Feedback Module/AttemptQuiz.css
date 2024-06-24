@@ -29,7 +29,7 @@
   margin-top: 20px;
 }
 
-.navbar {
+/* .navbar {
   width: 330px;
   height: 300px;
   padding: 20px;
@@ -41,13 +41,12 @@
   align-self: flex-start;
   border-radius: 5px;
   margin-right: 20px;
-}
+} */
 
-
-
-.navbar button:hover {
+/* .navbar button:hover {
   background-color: #0056b3;
-}
+} */
+
 
 .main-content1 {
   flex: 1;

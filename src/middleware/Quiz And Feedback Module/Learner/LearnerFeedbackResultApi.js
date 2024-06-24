@@ -1,0 +1,35 @@
+import React from 'react'
+import axios from "axios";
+
+import { FETCH_LEARNERFEEDBACKRESULT_REQUEST,fetchlearnerfeedbackresultSuccess,fetchlearnerfeedbackresultFailure } from '../../../actions/Quiz And Feedback Module/Learner/LearnerFeedbackResultAction';
+
+const baseUrl = "http://localhost:5199";
+
+//http://localhost:5199/api/FeedbackResponse/learnerfeedbackinfo?learnerId=200a92f3-7ace-433b-8c35-fdd17ffaa37a
+
+const LearnerFeedbackResultApi =
+  ({ dispatch }) =>
+  (next) =>
+  async (action) => {
+    debugger;
+    if (action.type === FETCH_LEARNERFEEDBACKRESULT_REQUEST) {
+      const learnerfeedbackid = action.payload;
+      try {
+        const API_URL = `${baseUrl}/api/FeedbackResponse/learnerfeedbackinfo?learnerId=${learnerfeedbackid}`;
+        console.log("learnersfeedbackresult", API_URL);
+        const response = await axios.get(API_URL);
+        console.log("learner feedback result", response.data);
+        dispatch(fetchlearnerfeedbackresultSuccess(response.data));
+      } catch (error) {
+        console.error(
+          "API ERROR",
+          error.response ? error.response.data.data : error.message
+        );
+        dispatch(fetchlearnerfeedbackresultFailure(error.message));
+      }
+    }
+    return next(action);
+  };
+
+
+export default LearnerFeedbackResultApi

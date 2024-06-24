@@ -208,6 +208,13 @@ import CoursebyScoreReducer from '../reducers/LearnerReducer/CoursebyScoreReduce
 import FetchIndividualEnrolledCourseReducer from '../reducers/LearnerReducer/FetchIndividualEnrolledCourseReducer';
 import IndividualEnrollCourseApi from '../middleware/LearnerMiddleware/FetchIndividualEnrolledCourseMiddleware';
 
+
+import GetResultByLearnerIDReducer from '../reducers/Quiz And Feedback Module/Learner/GetResultByLearnerIDReducer';
+import GetResultByLearnerIDApi from '../middleware/Quiz And Feedback Module/Learner/GetResultByLearnerIDApi';
+import LearnerFeedbackResultReducer from '../reducers/Quiz And Feedback Module/LearnerFeedbackResultReducer';
+import LearnerFeedbackResultApi from '../middleware/Quiz And Feedback Module/Learner/LearnerFeedbackResultApi';
+
+
 const rootReducer = combineReducers({
   forgotPassword: ForgotPasswordreducer,
   user: userReducer,
@@ -285,6 +292,9 @@ const rootReducer = combineReducers({
   QuizFeedbackResponse: QuizFeedbackResponseReducer,
   updateuserprofilereducer: UpdateUserProfileReducer,
 
+  learnersresult: GetResultByLearnerIDReducer,
+  learnerfeedbackresult : LearnerFeedbackResultReducer,
+
 
   // COURSE TEAM  REDUCER
   level: fetchLevelReducer,
@@ -339,6 +349,9 @@ const store = createStore(
     QuizFeedbackResponseApi,
     QuizInstructionApi,
     LearnerAttemptQuizIdApi,
+
+    GetResultByLearnerIDApi,
+    LearnerFeedbackResultApi,
     //course
     addCourse, addCategory, fetchcategoryApi, fetchlevelApi,
     fetchcourseApi, addTopic, fetchTopicsApi, fetchEditTopicsApi,
