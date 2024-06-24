@@ -578,8 +578,8 @@ function AddContentComponent() {
                     </div>
                     <div className="col">
                       <Box display="flex" alignItems="center">
-                        <Tooltip title="Preview material" ><IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name, content.materialId)}><IoEyeOutline style={{ fontSize: '24px', marginRight: '25px' }} color="#5dbea3" /></IconButton></Tooltip>
-                        <Tooltip title="Edit material" > <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit style={{ fontSize: '24px', marginRight: '20px' }} color="#604CC3" /></IconButton></Tooltip>
+                        <Tooltip title="Preview material" ><IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name, content.materialId)}><IoEyeOutline style={{ fontSize: '24px' }} color="#5dbea3" /></IconButton></Tooltip>
+                        <Tooltip title="Edit material" > <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit style={{ fontSize: '24px' }} color="#604CC3" /></IconButton></Tooltip>
                         <Tooltip title="Delete material" > <IconButton className='ms-1' onClick={() => handleDeleteClickOpen(content.materialId)}><MdOutlineDelete style={{ fontSize: '24px' }} color='#C80036' /></IconButton></Tooltip>
                       </Box>
                     </div>
