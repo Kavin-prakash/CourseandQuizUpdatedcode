@@ -407,6 +407,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import { FaRegEdit } from "react-icons/fa";
+import { LuClipboardEdit } from "react-icons/lu";
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { fetchEditTopicsRequest } from '../../../actions/Course/Topic/FetchEditTopicRequest'
@@ -728,11 +729,17 @@ export default function SavedTopics(props) {
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <span style={{ fontSize: '20px' }}><b>{topic.topicName}</b></span>
                                 <div>
-                                    <Tooltip title="Add Quiz">
+                                {
+                                        topic.isQuiz? <Tooltip title="Edit Quiz">
+                                        <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
+                                            <LuClipboardEdit style={{ color: "#0074D9" }} />
+                                        </IconButton>
+                                    </Tooltip>: <Tooltip title="Add Quiz">
                                         <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
                                             <QuizOutlinedIcon style={{ color: "#0074D9" }} />
                                         </IconButton>
                                     </Tooltip>
+                                    }
                                     <Tooltip title="Add Feedback">
                                         <IconButton aria-label="Addfeedback" onClick={() => handleAddFeedBackButton(topic.topicId)}>
                                             <VscFeedback style={{ color: "#FFDC00" }} />
