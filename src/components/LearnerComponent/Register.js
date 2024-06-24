@@ -376,7 +376,7 @@ import { userOTPRequest } from '../../actions/LearnerAction/OTPAction';
 import Modal from 'react-modal';
 import { getCoursesRequest } from '../../actions/LearnerAction/LearnerGetCourseAction'
 import fetchEmailApi from '../../middleware/LearnerMiddleware/FetchEmailApi';
-import { Tooltip } from 'react-tooltip';
+import { Tooltip } from 'react-bootstrap';
 import { fetchallCoursesRequest } from '../../actions/Admin/Adnimviewcourse';
 import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';

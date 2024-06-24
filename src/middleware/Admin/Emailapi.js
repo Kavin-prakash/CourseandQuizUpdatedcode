@@ -1,16 +1,20 @@
 import axios from 'axios';
-import {EMAIL_REQUEST,emailSuccess,emailError} from '../../actions/Admin/EmailAction'
+import {EMAIL_REQUEST,emailSuccess,emailError, emailFailure} from '../../actions/Admin/EmailAction'
 
 import { baseUrl } from './api';
 
 const emailMiddleware=({dispatch})=>(next)=>async(action)=>{
     if(action.type===EMAIL_REQUEST){
         try{
-            const response=await axios.post(`${baseUrl}/api/ForgetPassword`, action.payload)
-            console.log('API Response:', response.data);
-            if(response.data===true){
+            const response=await axios.post(`${baseUrl}/api/RandomPassword`, action.payload)
+            console.log('API Response:', response.data.result);
+            if(response.data.result===true){
                dispatch(emailSuccess(action.payload));     
                  
+            }
+            else if(response.data.result===false)
+            {
+                dispatch(emailFailure(action.payload))
             }
         }
         catch(error){       

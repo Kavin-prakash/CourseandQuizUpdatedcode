@@ -87,14 +87,6 @@ const Admincourse = ({ fetchCourses, courses }) => {
                       }}
                     >
                       <CardActionArea>
-                        {/* <CardMedia
-                                                    component="img"
-                                                    height="140"
-                                                    // width="80"
-                                                    image={course.thumbnailimage}
-                                                    alt={course.title || 'Course image'}
-                                                    style={{objectFit:"contain"}}
-                                                /> */}
                         <CardMedia
                           component="img"
                           height="200"

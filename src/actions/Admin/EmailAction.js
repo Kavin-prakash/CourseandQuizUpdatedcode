@@ -1,6 +1,7 @@
 export const EMAIL_REQUEST = 'EMAIL_REQUEST';
 export const EMAIL_SUCCESS= 'EMAIL_SUCCESS';
 export const EMAIL_ERROR = 'EMAIL_ERROR';
+export const EMAIL_FAILURE='EMAIL_FAILURE'
 
 export const emailRequest = (emailrequest) =>
 ({
@@ -13,6 +14,13 @@ export const emailSuccess = (email) => ({
   payload: email
 });
 
+export const emailFailure = (email) => ({
+  type: EMAIL_FAILURE,
+  payload: email
+});
+
+
+
 export const emailError = (error) =>
 ({
   type: EMAIL_ERROR,
@@ -20,3 +28,10 @@ export const emailError = (error) =>
 
 });
 
+// Setting flag for the stop the email-successfull-message
+
+export const RESET_EMAIL_UPDATED_SUCCESS_MESSAGE='RESET_EMAIL_UPDATED_SUCCESS_MESSAGE';
+
+
+
+export const RESET_EMAIL_UPDATED_FAILURE_MESSAGE='RESET_EMAIL_UPDATED_FAILURE_MESSAGE';
