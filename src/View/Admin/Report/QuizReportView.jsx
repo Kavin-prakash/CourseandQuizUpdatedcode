@@ -26,7 +26,7 @@ import jsPDF from "jspdf";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ReportSkeleton from '../../../components/Loading/Reportskeleton'
 import '../../../Styles/Admin/Pagenotfound.css'
-
+import Tooltip from '@mui/material/Tooltip';
 const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
 
   const [loading, setLoading] = useState(true);
@@ -388,24 +388,36 @@ const QuizReportView = ({ FetchQuizereportRequest, quizreport }) => {
                         </TableCell>
                         <TableCell align="left">
                           {disableLinkPassedUsers ? (
-                            <span style={{ pointerEvents: 'none', color: 'grey' }}>
-                              {row.noOfPassedUsers}
-                            </span>
+                            <Tooltip title={row.noOfPassedUsers + ' Enrolled Users'} >
+                              <span style={{ color: 'grey' }}>
+                                {row.noOfPassedUsers}
+                              </span>
+                            </Tooltip>
                           ) : (
-                            <Link to={'/quizpassedusers/' + row.quizId} style={{ textDecoration: 'none', color: 'green' }}>
-                              {row.noOfPassedUsers}
-                            </Link>
+                            <Tooltip title={'Passed Users in ' + row.courseName} >
+                              <Link to={'/quizpassedusers/' + row.quizId} style={{ textDecoration: 'none', color: 'green' }}>
+                                {row.noOfPassedUsers}
+                              </Link>
+                            </Tooltip>
                           )}
                         </TableCell>
                         <TableCell align="left">
-                          {disableLinkFailedUsers ? (<span style={{ pointerEvents: 'none', color: 'grey' }}>
-                            {row.noOfFailedUsers}
+                          {disableLinkFailedUsers ? (<span style={{ color: 'grey' }}>
+                            <Tooltip title={'No failed users ' + row.courseName}>
+                              {row.noOfFailedUsers}
+                            </Tooltip>
                           </span>) : (
-                            <Link to={'/quizfailedusers/' + row.quizId} style={{ color: 'red', textDecoration: 'none' }}>{row.noOfFailedUsers}</Link>
+                            <Tooltip title={'Failed user in ' + row.courseName}>
+                              <Link to={'/quizfailedusers/' + row.quizId} style={{ color: 'red', textDecoration: 'none' }}>{row.noOfFailedUsers}</Link>
+                            </Tooltip>
                           )}
 
                         </TableCell>
-                        <TableCell align="left">{row.averageScore}</TableCell>
+                        <TableCell align="left">
+                          <Tooltip title={'Average score in ' + row.courseName}>
+                            {row.averageScore}
+                          </Tooltip>
+                        </TableCell>
 
                       </TableRow>
                     );

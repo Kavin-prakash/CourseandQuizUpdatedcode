@@ -91,12 +91,12 @@ const CourseEnrollmentChart = ({
       legend: { display: false },
       title: {
         display: true,
-        text: "World Wine Production 2018",
+        text: "Learner Enrollment report",
       },
     },
   };
   return (
-    
+
     <Grid item xs={12} md={6}>
       <Item style={{ borderRadius: "15px" }}>
         <Box>
@@ -134,7 +134,7 @@ const CourseEnrollmentChart = ({
         </Card>
       </Item>
     </Grid>
-   
+
   );
 };
 
