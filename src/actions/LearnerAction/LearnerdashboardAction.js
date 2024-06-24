@@ -6,7 +6,7 @@ export const FetchDashboardRequest = (data) => ({
     type: FETCH_DASHBOARD_REQUEST,
     payload: data,
 })
-console.log("dashboardcount", FetchDashboardRequest());
+// console.log("dashboardcount", FetchDashboardRequest());
 
 export const FetchDashboardSuccess = (dashboard) => ({
     type: FETCH_DASHBOARD_SUCCESS,

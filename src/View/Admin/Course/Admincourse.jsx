@@ -9,9 +9,6 @@ import { CardActionArea } from "@mui/material";
 import { connect } from "react-redux";
 import { fetchCoursesRequest } from "../../../actions/Admin/courseAction";
 import { Link } from "react-router-dom";
-import Spinner from "../../../components/Loading/Spinner";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import AddIcon from '@mui/icons-material/Add';
 
 const Admincourse = ({ fetchCourses, courses }) => {

@@ -36,7 +36,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FetchuserDataRequest } from '../../actions/LearnerAction/FetchRegisterAction';
 
 const learnerId = sessionStorage.getItem('UserSessionID')
-console.log('learnerid', learnerId);
 
 
 
@@ -252,16 +251,16 @@ export default function MiniDrawer() {
         </DrawerHeader>
 
         <List>
-        <Link to='/LearnerDashboard'>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              
+          <Link to='/LearnerDashboard'>
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -271,21 +270,21 @@ export default function MiniDrawer() {
                 >
                   <HomeOutlinedIcon />
                 </ListItemIcon>
-              
-              <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+
+                <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
           </Link>
           <Link to='/LearnerPage'>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              
+            <ListItem disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -295,22 +294,22 @@ export default function MiniDrawer() {
                 >
                   <MenuBookIcon />
                 </ListItemIcon>
-              
-              <ListItemText primary="Courses" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+
+                <ListItemText primary="Courses" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
           </Link>
           <Link to='/LearnerenrolledCourse'>
-          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItem disablePadding sx={{ display: 'block' }}>
 
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -320,10 +319,10 @@ export default function MiniDrawer() {
                 >
                   <SchoolOutlinedIcon />
                 </ListItemIcon>
-              
-              <ListItemText primary="My Course" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+
+                <ListItemText primary="My Course" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
           </Link>
           <Link to='/ViewScore'>
             <ListItem disablePadding sx={{ display: 'block' }}>

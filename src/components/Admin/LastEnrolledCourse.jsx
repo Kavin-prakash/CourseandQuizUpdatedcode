@@ -17,11 +17,11 @@ const LastEnrolledCourse = ({ fetchLastEnrolledCourse, enrolledcourse }) => {
             <>
                 <Grid item xs>
                     <Card sx={{ display: 'flex' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', height: 200 ,padding:'25px'}}>
-                            <Typography component="div" variant="h5" sx={{color:'#23275c' ,fontWeight:'bold'}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', height: 200, padding: '25px' }}>
+                            <Typography component="div" variant="h5" sx={{ color: '#23275c', fontWeight: 'bold' }}>
                                 Last Enrolled course
                             </Typography>
-                            <Typography sx={{ display: 'flex', flexDirection: 'row' ,fontStyle:'italic' }} component="div" variant="h6">
+                            <Typography sx={{ display: 'flex', flexDirection: 'row', fontStyle: 'italic' }} component="div" variant="h6">
                                 No Courses Enrolled
                             </Typography>
                         </Box>
@@ -35,18 +35,19 @@ const LastEnrolledCourse = ({ fetchLastEnrolledCourse, enrolledcourse }) => {
             <>
                 <Grid item xs>
                     <Card sx={{ display: 'flex' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column',  height: 200 ,padding:'25px' }}>
-                            <Typography component="div" variant="h5" sx={{color:'#23275c' ,fontWeight:'bold'}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', height: 200, padding: '25px' }}>
+                            <Typography component="div" variant="h5" sx={{ color: '#23275c', fontWeight: 'bold' }}>
                                 Last Enrolled course
                             </Typography>
-                            <Typography sx={{ display: 'flex', flexDirection: 'row',fontStyle:'italic' }} component="div" variant="h5">
-                    
-                             <CardMedia
-                            component="img"
-                            sx={{ width: 230, }}
-                            image={enrolledcourse.lastenrolledCourse.courseImage}
-                            alt="Profile"
-                        />
+                            <Typography sx={{ display: 'flex', flexDirection: 'row', fontStyle: 'italic' }} component="div" variant="h5">
+
+                                <CardMedia
+                                    component="img"
+                                    sx={{ width: '100%', height: '100%' }} // Set fixed size here
+                                    image={enrolledcourse.lastenrolledCourse.courseImage}
+                                    alt="Profile"
+                                />
+
                             </Typography>
                         </Box>
                     </Card>

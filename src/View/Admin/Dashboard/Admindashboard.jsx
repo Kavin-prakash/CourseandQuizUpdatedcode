@@ -43,7 +43,6 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function AdminDashboard() {
   const dispatch = useDispatch();
   const dashboard = useSelector((state) => state.fetchdashboard.data);
-  console.log(dashboard);
   useEffect(() => {
     dispatch(fetchCountRequest());
   }, []);

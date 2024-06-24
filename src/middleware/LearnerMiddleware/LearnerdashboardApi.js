@@ -6,7 +6,6 @@ import { userData } from './/..//..//../src/components/LearnerComponent/Register
 import { useState } from 'react';
 
 // const BASE_URL = 'http://localhost:5199/lxp/view/learner/ ';
-console.log("testing");
 
 const LearnerdashboardApi = ({ dispatch }) => (next) => async (action) => {
     if (action.type === FETCH_DASHBOARD_REQUEST) {

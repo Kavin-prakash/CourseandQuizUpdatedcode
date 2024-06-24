@@ -17,11 +17,11 @@ import { FaRegEdit } from "react-icons/fa";
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 // import { deleteContentRequest } from '../../../action/Course/Material/DeleteContentAction'
-import { deleteContentRequest } from '../../../actions/Course/Material/DeleteContentAction'
+import { RESET_DELETE_SUCCESS_MESSAGE, deleteContentRequest } from '../../../actions/Course/Material/DeleteContentAction'
 import { useSelector } from 'react-redux';
 import { IoEyeOutline } from "react-icons/io5";
 import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
+import { Box, Tooltip } from '@mui/material';
 // import { fetchMaterialTypeRequest } from '../../../action/Course/Material/FetchMaterialTypeAction';
 import { fetchMaterialTypeRequest } from '../../../actions/Course/Material/FetchMaterialTypeAction'
 // import { fetchContentRequest } from '../../../action/Course/Material/FetchContentAction';
@@ -34,11 +34,12 @@ import { fetchIndividualContentRequest } from '../../../actions/Course/Material/
 // import { fetchContentUrlRequest } from '../../action/Course/FetchContentUrlAction';
 // import { updateContentRequest } from '../../../action/Course/Material/UpdateContentAction';
 
-import { updateContentRequest } from '../../../actions/Course/Material/UpdateContentAction';
+import { RESET_UPDATE_SUCCESS_MESSAGE, updateContentRequest, updateContentSuccess } from '../../../actions/Course/Material/UpdateContentAction';
 import PDFViewer from './PDFViewer';
 // import Video from './Video';
 import AudioViewer from './AudioViewer';
 import VideoViewer from './VideoViewer';
+import { TiWarningOutline } from "react-icons/ti";
 import PptViewerComponent from './PptViewer';
 // IMPORT IMAGES FOR MATERIAL 
 // import Video from "../../../assets/Video.png"
@@ -49,6 +50,7 @@ import Pdf from "../../../assets/Course/pdf.png"
 import Txt from "../../../assets/Course/txt.png";
 import Swal from "sweetalert2";
 import '../../../Styles/Course/Material/CourseContent.css'
+import { RESET_DELETE_SUCCESS_COURSES_MESSAGE } from '../../../actions/Admin/DeletecourseAction';
 function AddContentComponent() {
   // const { topicId,materialTypeId } = props
   sessionStorage.setItem("userName", "Mano");
@@ -95,8 +97,8 @@ function AddContentComponent() {
 
       // return () => clearTimeout(timer);
       const Toast = Swal.mixin({
-        
-        customClass:'topic-created-success-messgae',
+
+        customClass: 'topic-created-success-messgae',
         toast: true, position: "top", showConfirmButton: false,
         timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
@@ -147,17 +149,17 @@ function AddContentComponent() {
 
       // return () => clearTimeout(timer);
       const Toast = Swal.mixin({
-        
-        customClass:'topic-created-success-messgae',
+
+        customClass: 'topic-created-success-messgae',
         toast: true, position: "top", showConfirmButton: false,
         timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({ icon: "warning", title: "Material already exists" });
 
-      dispatch({type:RESET_EXISTED_MESSAGE})
+      dispatch({ type: RESET_EXISTED_MESSAGE })
 
     }
-  }, [isExist,dispatch])
+  }, [isExist, dispatch])
 
   const addContentSuccessState = useSelector((state) => state.addContent.isSubmitted);
 
@@ -182,29 +184,49 @@ function AddContentComponent() {
       // return () => clearTimeout(timer);
 
       const Toast = Swal.mixin({
-        
-        customClass:'topic-created-success-messgae',
+
+        customClass: 'topic-created-success-messgae',
         toast: true, position: "top", showConfirmButton: false,
         timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({ icon: "success", title: "Material added successfully" });
-      dispatch({type:RESET_SUBMITTED_MESSAGE})
+      dispatch({ type: RESET_SUBMITTED_MESSAGE })
 
 
     }
-  }, [addContentSuccessState,dispatch])
+  }, [addContentSuccessState, dispatch])
 
   const handleDeleteClickOpen = (materialId) => {
     console.log("dia", materialId);
     setDeleteId(materialId)
     setOpenDelete(true);
   };
+
+  // Success Message for After delete course 
+
+  // UseSeletor for Fetch the Success True Message
+
+  const MaterialDeleteSuccessMessage = useSelector((state) => state.deleteContent.isDeletSuccessMessage)
+  useEffect(() => {
+    if (MaterialDeleteSuccessMessage) {
+      const Toast = Swal.mixin({
+
+        customClass: 'topic-created-success-messgae',
+        toast: true, position: "top", showConfirmButton: false,
+        timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({ icon: "success", title: "Material Deleted successfully" });
+    }
+    dispatch({ type: RESET_DELETE_SUCCESS_MESSAGE })
+
+  }, [MaterialDeleteSuccessMessage, dispatch])
+
+
+
   const handleDeleteClose = () => {
     setOpenDelete(false);
     setDeleteId("");
     fetchContentByType(id, materialType)
-
-
   };
   const handleDelete = (materialId) => {
     console.log("delete material", materialId);
@@ -235,10 +257,33 @@ function AddContentComponent() {
   const fetchIndividualContentById = async (materialid) => {
     await dispatch(fetchIndividualContentRequest(materialid));
   }
+
+  // UPDATA CONETENT SUCCESS MESSGAE  ---- ALTER AND USE SELECTOR
+
+  const UpdateContentSuccessMessage = useSelector((state) => state.updateContent.contentUpdatedSuccessMessgae);
+
+  console.log("updatecontenetmwss", UpdateContentSuccessMessage);
+
+  useEffect(() => {
+    if (UpdateContentSuccessMessage) {
+      const Toast = Swal.mixin({
+
+        customClass: 'topic-created-success-messgae',
+        toast: true, position: "top", showConfirmButton: false,
+        timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({ icon: "success", title: "Material Updated Successfully" });
+    }
+
+    dispatch({ type: RESET_UPDATE_SUCCESS_MESSAGE });
+  }, [UpdateContentSuccessMessage])
+
+
   const handleEditButton = (materialId) => {
     // console.log(materialId);
     // fetchIndividualContentById(materialId)
     dispatch(fetchIndividualContentRequest(materialId));
+
 
     console.log("123456789", EditContent);
     if (EditContent.isFetched) {
@@ -254,9 +299,6 @@ function AddContentComponent() {
       setIsDisableType(true)
       handleEditMaterial(updatedmaterial.material)
     }
-
-
-
 
   }
 
@@ -360,9 +402,9 @@ function AddContentComponent() {
     width: '70vw',
     boxShadow: '0px 4px 8px #23275c',
     borderRadius: '20px',
-    marginTop:'30px',
-    marginLeft:'135px',backgroundColor:'#F6F5F5',
-    
+    marginTop: '30px',
+    marginLeft: '135px', backgroundColor: '#F6F5F5',
+
   };
 
   const handlePreview = (filePath, materialType, materialName, materialId) => {
@@ -420,7 +462,7 @@ function AddContentComponent() {
         
 
       </section> */}
-      <Container style={{ ...divStyle, overflowy: "auto", maxHeight: '150vh', marginTop: '5vh',marginLeft:'140px' ,backgroundColor:'#F6F5F5',fontSize:'18px'}}>
+      <Container style={{ ...divStyle, overflowy: "auto", maxHeight: '150vh', marginTop: '5vh', marginLeft: '140px', backgroundColor: '#F6F5F5', fontSize: '18px' }}>
         <Row>
           <Col></Col>
           <Col>
@@ -448,8 +490,8 @@ function AddContentComponent() {
           <Col md={6}>
             {/* fetch material type */}
             <section className='pt-5'>
-              <Form onSubmit={handleSubmit} style={{marginBottom:'80px', width:'120%',marginLeft:'200px'}}>
-                <h3><b>Add Content</b></h3><hr/>
+              <Form onSubmit={handleSubmit} style={{ marginBottom: '80px', width: '120%', marginLeft: '200px' }}>
+                <h3><b>Add Content</b></h3><hr />
                 <Form.Label><b>Material Type</b></Form.Label>
 
                 <Form.Select aria-label="Default select example" disabled={isDisableType} value={materialType} onChange={(e) => handleMaterialType(e)}>
@@ -481,13 +523,13 @@ function AddContentComponent() {
                       {selectedContent ? (
                         <p> {isDragActive
                           ? "Drag the course thumbnail here ..."
-                          : <span>Click to select Material<br/> or <br/><span className="upload-link">Click to upload</span></span>
+                          : <span>Click to select Material<br /> or <br /><span className="upload-link">Click to upload</span></span>
                         }</p>
 
                       ) : (
                         <p>{isDragActive
                           ? "Drag the course thumbnail here ..."
-                          : <span>Click to select Material<br/> or <br/><span className="upload-link">Click to upload</span></span>
+                          : <span>Click to select Material<br /> or <br /><span className="upload-link">Click to upload</span></span>
                         }</p>
                       )}
 
@@ -524,8 +566,8 @@ function AddContentComponent() {
           <ListGroup className='overflow-auto'>
 
             <>
-              <ListGroup.Item  style={{backgroundColor:'#F6F5F5'}}>
-                <div style={{backgroundColor:'#F6F5F5'}}>
+              <ListGroup.Item style={{ backgroundColor: '#F6F5F5' }}>
+                <div style={{ backgroundColor: '#F6F5F5' }}>
                   <div class="row">
                     <div class="col">
                       <MaterialImage materialType={content.materialType} />  {/*Modified line */}
@@ -536,9 +578,9 @@ function AddContentComponent() {
                     </div>
                     <div className="col">
                       <Box display="flex" alignItems="center">
-                        <IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name, content.materialId)}><IoEyeOutline fontSize={20} color="#5dbea3" /></IconButton>
-                        <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit fontSize={20} color="#27235c" /></IconButton>
-                        <IconButton className='ms-1' onClick={() => handleDeleteClickOpen(content.materialId)}><MdOutlineDelete fontSize={20} color="FF0000" /></IconButton>
+                        <Tooltip title="Preview material" ><IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name, content.materialId)}><IoEyeOutline style={{ fontSize: '24px', marginRight: '25px' }} color="#5dbea3" /></IconButton></Tooltip>
+                        <Tooltip title="Edit material" > <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit style={{ fontSize: '24px', marginRight: '20px' }} color="#604CC3" /></IconButton></Tooltip>
+                        <Tooltip title="Delete material" > <IconButton className='ms-1' onClick={() => handleDeleteClickOpen(content.materialId)}><MdOutlineDelete style={{ fontSize: '24px' }} color='#C80036' /></IconButton></Tooltip>
                       </Box>
                     </div>
                   </div>
@@ -556,7 +598,7 @@ function AddContentComponent() {
 
       {/*-----------PDF viewer Model -------------------- */}
 
-      <Modal show={show} onHide={handleClose} centered size="lg" style={{marginTop:'60px',height:'680px'}}>
+      <Modal show={show} onHide={handleClose} centered size="lg" style={{ marginTop: '60px', height: '680px' }}>
         <Modal.Header closeButton>
           <Modal.Title>{viewerModelHeader}</Modal.Title>
 
@@ -573,20 +615,22 @@ function AddContentComponent() {
         onClose={handleDeleteClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
-          {"Confirm Deletion"}
+        <DialogTitle id="responsive-dialog-title" style={{ display: 'flex', alignItems: 'center' }}>
+          <TiWarningOutline style={{ marginRight: '10px', color: 'red', fontSize: '25px' }} />
+          <h4 style={{ paddingTop: '10px' }}><b>Confirm Deletion</b></h4>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete the content ?
+            <h5>  Are you sure you want to delete the content ?</h5>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={() => handleDelete(deleteId)}>
-            Delete
-          </Button>
-          <Button autoFocus onClick={handleDeleteClose}>
+
+          <Button autoFocus onClick={handleDeleteClose} style={{ backgroundColor: '#0F62FE', color: 'white', borderRadius: '10px', padding: '5px 30px' }}>
             Cancel
+          </Button>
+          <Button autoFocus onClick={() => handleDelete(deleteId)} style={{ backgroundColor: '#E01950', color: 'white', borderRadius: '10px', padding: '5px 30px' }}>
+            Delete
           </Button>
           {/* <Button autoFocus onClick={handleDeleteClose}>
                         Cancel
