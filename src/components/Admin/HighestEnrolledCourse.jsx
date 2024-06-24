@@ -72,7 +72,7 @@ const HighestEnrolledCourse = ({
                           bgcolor: "background.paper",
                         }}
                       >
-                        <Link to={'/coursecontent/' + enrolledcourse.courseid} style={{ textDecoration: "none" }}>
+                        <Link to={'/coursecontent/' + enrolledcourse.courseid} style={{ textDecoration: "none", color: 'black' }}>
                           <ListItem alignItems="flex-start">
                             <ListItemAvatar>
                               <Avatar

@@ -52,20 +52,15 @@ import { GET_COURSES_REQUEST, getCoursesFailure, getCoursesSuccess } from '../..
 
 const LearnerGetCourse = ({ dispatch }) => (next) => async (action) => {
   next(action);
-  console.log("coursegetapi", action)
   const API_URL = `http://localhost:5199/lxp/view/Getallcoursebylearnerid/${action.payload}`;
 
   if (action.type === GET_COURSES_REQUEST) {
     try {
-      console.log("learnerapicomponent:", action);
       const response = await axios.get(`${API_URL}`);
-      console.log(`${API_URL}${action.payload}`);
-      console.log('API  mycourse Response:', response.data); // Log the response data
+      // console.log('API  mycourse Response:', response.data); // Log the response data
 
       if (response.status === 200 && response.data && response.data.data && response.data.data.result) {
         const courses = response.data.data.result.result; // Extract the courses array
-        console.log(courses);
-        dispatch(getCoursesSuccess(courses));
       } else {
         console.error('No valid data received from API');
         dispatch(getCoursesFailure('No valid data received from API'));

@@ -33,7 +33,6 @@ const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
   }, [fetchToplearnersRequest]);
   
   const rows = Object.values(toplearners.toplearners);
-  console.log("top",rows);
   return (
     <>
       <Grid item xs={12} md={3}>

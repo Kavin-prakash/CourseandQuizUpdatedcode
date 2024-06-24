@@ -15,14 +15,17 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
-import BarChartIcon from '@mui/icons-material/BarChart';
+import BarChartIcon from "@mui/icons-material/BarChart";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarController,
   BarElement,
+  Tooltip,
+  Title,
 } from "chart.js";
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -36,7 +39,14 @@ const Item = styled(Paper)(({ theme }) => ({
   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
 }));
 
-ChartJS.register(CategoryScale, LinearScale, BarController, BarElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarController,
+  BarElement,
+  Tooltip,
+  Title
+);
 
 const CourseEnrollmentChart = ({
   fetchEnrollmentcourseBarchartRequest,
@@ -49,21 +59,15 @@ const CourseEnrollmentChart = ({
   const [selectedOption, setSelectedOption] = useState(today.getFullYear());
   useEffect(() => {
     fetchEnrollmentcourseBarchartRequest(selectedOption);
-    // sample();
   }, [selectedOption]);
 
-  //year
   const dashboard = useSelector((state) => state.fetchdashboard.data);
-
-  console.log("ssssd", dashboard);
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
-  const checking = selectedOption;
-  console.log("check", checking);
-  var barColors = [
+  const barColors = [
     "#003f5c",
     "#2f4b7c",
     "#665191",
@@ -73,6 +77,7 @@ const CourseEnrollmentChart = ({
     "#ff7c43",
     "#ffa600]",
   ];
+
   const barData = {
     datasets: [
       {
@@ -82,21 +87,42 @@ const CourseEnrollmentChart = ({
       },
     ],
   };
+
   const barOptions = {
     parsing: {
       xAxisKey: "enrollMonth",
       yAxisKey: "enrollCount",
     },
-    options: {
-      legend: { display: false },
+    plugins: {
+      legend: { display: true },
       title: {
         display: true,
-        text: "Learner Enrollment report",
+        text: "Monthly wise learner enrollment chart based on the year",
+
+        font: {
+          size: 14,
+        },
+        padding: {
+          top: 10,
+          bottom: 30,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            let label = context.dataset.label || "";
+            if (label) {
+              label += ": ";
+            }
+            label += context.parsed.y;
+            return label;
+          },
+        },
       },
     },
   };
-  return (
 
+  return (
     <Grid item xs={12} md={6}>
       <Item style={{ borderRadius: "15px" }}>
         <Box>
@@ -106,7 +132,7 @@ const CourseEnrollmentChart = ({
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={selectedOption}
-              label="Age"
+              label="Year"
               onChange={handleSelectChange}
               style={{ width: "90px", height: "30px" }}
             >
@@ -127,21 +153,19 @@ const CourseEnrollmentChart = ({
             </Typography>
           </FormControl>
         </Box>
-        <Card variant="">
+        <Card>
           <CardContent sx={{ height: "300px", marginLeft: "30px" }}>
             <Bar data={barData} options={barOptions} />
           </CardContent>
         </Card>
       </Item>
     </Grid>
-
   );
 };
 
 const mapStoreToProps = (state) => ({
   enrollmentcoursebarchart: state.enrollmentcoursebarchart,
 });
-
 
 const mapDispatchToProps = (dispatch) => ({
   fetchEnrollmentcourseBarchartRequest: (checking) =>

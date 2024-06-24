@@ -9,7 +9,6 @@ const ApiRecentFeedbackresponse=({dispatch})=>(next)=>async(action)=>{
     if(action.type==FETCH_RECENTFEEDBACKRESPONSE_REQUEST){
         try{
             const response=await axios.get(API_URL);
-            console.log("Recent feedback",response.data.data);
             dispatch(fetchRecentFeedbackResponseSuccess(response.data.data));
         }
         catch(error){

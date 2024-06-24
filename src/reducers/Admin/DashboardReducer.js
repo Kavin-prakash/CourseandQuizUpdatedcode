@@ -14,14 +14,12 @@ const initialState = {
 const fetchDataReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_COUNT_REQUEST:
-        console.log("reducer", action.payload);
       return {
         ...state,
         loading: true,
       };
 
     case FETCH_COUNT_SUCCESS:
-      console.log("FetchDataReducer", action.payload);
       return {
         ...state,
         data: action.payload,
