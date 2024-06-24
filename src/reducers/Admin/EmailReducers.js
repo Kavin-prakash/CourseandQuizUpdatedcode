@@ -1,10 +1,11 @@
-import{EMAIL_REQUEST,EMAIL_SUCCESS,EMAIL_ERROR} from '../../actions/Admin/EmailAction';
+import{EMAIL_REQUEST,EMAIL_SUCCESS,EMAIL_ERROR, RESET_EMAIL_UPDATED_SUCCESS_MESSAGE, EMAIL_FAILURE, RESET_EMAIL_UPDATED_FAILURE_MESSAGE} from '../../actions/Admin/EmailAction';
 
 const initialState={
     email:null,
     loading:false,
     isSuccessemail:false,
     error:null,
+    isFailureEmail:false,
 };
 
 const emailReducer=(state = initialState,action)=>{
@@ -21,7 +22,17 @@ const emailReducer=(state = initialState,action)=>{
                 email:action.payload,
                 isSuccessemail:true,
                 loading:false,
+                isFailureEmail:false,
                 error:null
+
+            }
+        case EMAIL_FAILURE:
+            return{
+                ...state,
+                loading:false,
+                email:action.payload,
+                isFailureEmail:true,
+
             }
         case EMAIL_ERROR:
             return{
@@ -29,6 +40,16 @@ const emailReducer=(state = initialState,action)=>{
                 loading:false,
                 error:action.payload,
             }
+        case RESET_EMAIL_UPDATED_SUCCESS_MESSAGE:
+            return{
+                ...state,
+                isSuccessemail:false
+            }
+            case RESET_EMAIL_UPDATED_FAILURE_MESSAGE:     // Setting up flag for the False the failure message
+                return{
+                    ...state,
+                    isFailureEmail:false
+                }
         default:
             return state;
     }

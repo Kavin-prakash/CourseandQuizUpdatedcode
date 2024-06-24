@@ -82,3 +82,92 @@ input:focus {
   color: #0056b3; 
   text-decoration: underline; 
 } */
+
+#Email-Submitting-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid black;
+  height: 300px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+
+#Email-Submitting-form #Email-input {
+  width: 350px;
+}
+
+#Email-Form-column {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width:768px) {
+  #Email-Submitting-form {
+    width: 90%;
+  }
+}
+
+
+
+#Forgot-Password-Page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+#Forgot-Password-Form-Submission {
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border: 3px solid black;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  #Forgot-Password-Form-Submission {
+    width: 90%;
+  }
+}
+
+
+
+/* Spinner.css */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* Adjust as needed */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
