@@ -44,6 +44,7 @@
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
+    "react-toastify": "^10.0.5",
     "react-tooltip": "^5.27.0",
     "react-virtuoso": "^4.7.10",
     "reactjs-popup": "^2.0.6",
