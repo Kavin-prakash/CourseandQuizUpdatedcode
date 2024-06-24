@@ -15,7 +15,7 @@ export const validationMessages = {
       receivePassword:"Password must be 6 characters",
       receivePattern:"Invalid Password",
       minLength: "Password must be 8 to 14 characters",
-      pattern: "Password must include at least one uppercase letter, one special character, one number, and cannot include spaces"
+      // pattern: "Password must include at least one uppercase letter, one special character, one number, and cannot include spaces"
     }
   };
   

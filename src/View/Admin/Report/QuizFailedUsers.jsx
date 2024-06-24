@@ -141,6 +141,7 @@ import { fetchquizfailedusersRequest } from '../../../actions/Admin/QuizFailedUs
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import Tooltip from '@mui/material/Tooltip';
 export default function QuizFailedReport() {
   const quizId = useParams();
   const dispatch = useDispatch();
@@ -495,10 +496,14 @@ export default function QuizFailedReport() {
                           {row.score}
                         </TableCell>
                         <TableCell align="left">
-                          {row.totalNoofQuizAttempts}
+                          <Tooltip title={'Total Attempts'}>
+                            {row.totalNoofQuizAttempts}
+                          </Tooltip>
                         </TableCell>
                         <TableCell align="left">
-                          {row.learnerAttempts}
+                          <Tooltip title={'Available attempts'}>
+                            {row.learnerAttempts}
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );
