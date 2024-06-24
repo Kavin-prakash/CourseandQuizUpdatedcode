@@ -17,6 +17,11 @@
     padding-left: 15px;
     padding-top: 6px;
   }
+
+#navbar-name_learner{
+ color: white !important;
+}
+
   .avatar{
  margin-right: 0px;
  margin-left: 980px;
@@ -36,3 +41,5 @@
     height: 100vh;
 
   }
+
+ 

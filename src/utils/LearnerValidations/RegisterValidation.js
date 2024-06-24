@@ -1,11 +1,18 @@
 export const validateRegistrationForm = (userData) => {
+
+    // console.log("check",validateRegistrationForm);
     let isValid = true;
     const errors = {};
+
+    console.log("erros",errors);
+
+
 
     if (!userData.firstName.trim()) {
         errors.firstName = 'First Name is required';
         isValid = false;
-    } else if (/\s/.test(userData.firstName)) {
+    }
+     else if (/\s/.test(userData.firstName)) {
         errors.firstName = 'First Name should not contain spaces';
         isValid = false;
     } else if (/\d/.test(userData.firstName)) {
@@ -79,6 +86,6 @@ export const validateRegistrationForm = (userData) => {
     
    
 
-    return errors;
+      return  errors;
+    
 };
-

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
- import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import "../../../../Styles/Quiz And Feedback Module/Learner/Timer.css";
+import Swal from "sweetalert2";
 
 function DynamicTimer() {
   const [startTime, setStartTime] = useState("");
@@ -20,19 +22,13 @@ function DynamicTimer() {
     (state) => state.learnerscore.learnerscoredetails
   );
 
-  useEffect(() => {
+
+    useEffect(() => {
     if (learnerAttempt) {
       setStartTime(learnerAttempt.startTime);
       setEndTime(learnerAttempt.endTime);
     }
   }, [learnerAttempt]);
-  const handleStartTimeChange = (e) => {
-    setStartTime(learnerAttempt.startTime);
-  };
-
-  const handleEndTimeChange = (e) => {
-    setEndTime(e.target.value);
-  };
 
   return (
     <div>
@@ -46,6 +42,7 @@ const Timer = ({ startTime, endTime }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [timeLeft, setTimeLeft] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     const start = new Date(startTime);
@@ -62,13 +59,36 @@ const Timer = ({ startTime, endTime }) => {
         setIsRunning(false);
         setTimeLeft(0);
         clearInterval(interval);
+
+        const Toast = Swal.mixin({
+          customClass:'swal2-toast-quiz-time-end',
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 2000,
+          background:'red',
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: "You have reached the time limit",
+          color:'white'
+        });
+
+        setTimeout(() => {
+          navigate(`/learnerscorepage`);
+        }, 2000);
       }
 
       setCurrentTime(now);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, endTime]);
+  }, [startTime, endTime, navigate]);
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -84,13 +104,9 @@ const Timer = ({ startTime, endTime }) => {
 
   return (
     <div>
-      {/* {isRunning ? (
-        <h5 className="timerclass">Time Left: {formatTime(timeLeft)}</h5>
-      ) : (
-        // <h2>Timer stopped</h2>
-        <h2> </h2>
-      )} */}
-      <h5 id="timerclass" style={{marginRight:"30px"}}>Time Left: {formatTime(timeLeft)}</h5>
+      <h5 id="timerclass" style={{ marginRight: "30px" }}>
+        Time Left: {formatTime(timeLeft)}
+      </h5>
     </div>
   );
 };

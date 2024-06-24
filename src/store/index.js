@@ -208,6 +208,12 @@ import CoursebyScoreReducer from '../reducers/LearnerReducer/CoursebyScoreReduce
 import FetchIndividualEnrolledCourseReducer from '../reducers/LearnerReducer/FetchIndividualEnrolledCourseReducer';
 import IndividualEnrollCourseApi from '../middleware/LearnerMiddleware/FetchIndividualEnrolledCourseMiddleware';
 
+import GetResultByLearnerIDReducer from '../reducers/Quiz And Feedback Module/Learner/GetResultByLearnerIDReducer';
+import GetResultByLearnerIDApi from '../middleware/Quiz And Feedback Module/Learner/GetResultByLearnerIDApi';
+import LearnerFeedbackResultReducer from '../reducers/Quiz And Feedback Module/LearnerFeedbackResultReducer';
+import LearnerFeedbackResultApi from '../middleware/Quiz And Feedback Module/Learner/LearnerFeedbackResultApi';
+
+
 const rootReducer = combineReducers({
   forgotPassword: ForgotPasswordreducer,
   user: userReducer,
@@ -258,7 +264,7 @@ const rootReducer = combineReducers({
 
   //learner 
 
-  scoreProgressBarGraph: LearnerScoreProgressBarGraphReducer,
+  
   watchTime: addWatchTimeReducer,
   learnerdashboard: LearnerdashboardReducer,
   coursebyscore: CoursebyScoreReducer,
@@ -270,6 +276,8 @@ const rootReducer = combineReducers({
   deletequizfeedback: DeleteQuizFeedbackReducer,
   updatetopicfeedback: UpdateTopicFeedbackReducer,
   //quizmodule-learner
+  learnersresult: GetResultByLearnerIDReducer,
+  learnerfeedbackresult : LearnerFeedbackResultReducer,
   //Learner side
   fetchlearnerid: GetLearnerIDReducer,
   AttemptQuiz: AttemptQuizReducer,
@@ -284,7 +292,7 @@ const rootReducer = combineReducers({
   fetchquizfeedbackquestion: FetchQuizFeedbackQuestionReducer,
   QuizFeedbackResponse: QuizFeedbackResponseReducer,
   updateuserprofilereducer: UpdateUserProfileReducer,
-
+  
 
   // COURSE TEAM  REDUCER
   level: fetchLevelReducer,
@@ -303,10 +311,12 @@ const rootReducer = combineReducers({
   fetchContent: fetchContentReducer,
   fetchIndividualContent: fetchIndividualContentReducer,
   updateContent: updateContentReducer,
-  fetchContentUrl: fetchContentUrlReducer,
+fetchContentUrl: fetchContentUrlReducer,
   addcourse: AddCourseReducer,
   fetchindividualCourse: fetchCourseReducer,
 
+
+  
 
 });
 
@@ -315,7 +325,7 @@ const store = createStore(
   applyMiddleware(thunk, LearnerGetCourse, apiMiddleware, ApiForgotpassword, emailMiddleware, apiviewallcourse,
     loginUser, apiDeletecourse, UpdateCourse, apiViewAllLearners, GetProfileCard, GetProfileCourses,
     LastEnrolledCourse, EnableDisableCourse, FetchdashboardData, ApiViewlearnersReport, ApiViewCourseReport,
-    ApiViewQuizReport, RegisterApi,  VerifyEmailApi,  enrollCourseApi,
+    ApiViewQuizReport,  VerifyEmailApi,  enrollCourseApi,
     FetchRegisterApi, ApiQuizPassedUsers, ApiQuizFailedUsers, EnrollCourseLearners,
     ApiViewEnrollmentReport, EnrollCoursePassedLearner, EnrollCourseProgressLearner,
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
@@ -327,6 +337,8 @@ const store = createStore(
     DeleteQuizFeedbackApi,
     UpdateTopicFeedbackApi,
     //quiz-learner flow
+    GetResultByLearnerIDApi,
+  LearnerFeedbackResultApi,
     GetLearnerIDApi,
     fetchQuestionsMiddleware,
     reviewApi,
@@ -346,7 +358,8 @@ const store = createStore(
     fetchContentApi, deleteContentApi, fetchIndividualContentApi,
     updateContentApi, fetchContentUrlApi, fetchcourseApi,
     //learner
-  LearnerScoreProgressBarGraphApi, LearnerdashboardApi, watchTimeApi,IndividualEnrollCourseApi,updatePasswordApi
+   LearnerdashboardApi, watchTimeApi,IndividualEnrollCourseApi,
+  //  updatePasswordApi
   )
 );
 

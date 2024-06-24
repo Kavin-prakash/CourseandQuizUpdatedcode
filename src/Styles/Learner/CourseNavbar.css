@@ -93,10 +93,9 @@
 
 /* Apply styles to the search results div */
 /* .search-results {
-position: absolute;
-top: 100%; 
-left: 30;
-width: 30%;
+
+
+
 background-color: white;
 border: 1px solid #ccc;
 border-radius: 5px;

@@ -261,6 +261,9 @@ export default function MiniDrawer() {
     navigate('/')
     sessionStorage.removeItem("UserSessionID")
     sessionStorage.removeItem("userData")
+    sessionStorage.removeItem("LearnerId");
+ 
+    window.location.reload();
 
   }
 

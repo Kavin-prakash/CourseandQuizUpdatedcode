@@ -1,4 +1,4 @@
-import { GET_INDIVIDUAL_ENROLL_COURSE_REQUEST,GET_INDIVIDUAL_ENROLL_COURSE_SUCCESS,GET_INDIVIDUAL_ENROLL_COURSE_FAILURE  } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
+import { GET_INDIVIDUAL_ENROLL_COURSE_REQUEST,GET_INDIVIDUAL_ENROLL_COURSE_SUCCESS,GET_INDIVIDUAL_ENROLL_COURSE_FAILURE ,SET_ENROLLCOURSE_STATUS } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
  
  
 const initialState = {
@@ -27,9 +27,14 @@ const FetchIndividualEnrolledCourseReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload,
             };
+        case SET_ENROLLCOURSE_STATUS:
+                return {
+                  ...state,
+                  isRequesting: action.payload,
+                };
         default:
             return state; // Added default case to handle unrecognized actions
     }
 };
  
-export default FetchIndividualEnrolledCourseReducer;
+export default FetchIndividualEnrolledCourseReducer;  
