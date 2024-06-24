@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
 import { topicfeedbackresponserequest } from '../../../../actions/Quiz And Feedback Module/Learner/TopicFeedbackResponseAction';
 import { fetchtopicfeedbackquestionrequest } from '../../../../actions/Quiz And Feedback Module/Learner/FetchTopicFeedbackQuestionAction';
- 
+import Swal from "sweetalert2";
  
 const TopicFeedbackquestion = () => {
 
@@ -89,7 +89,30 @@ const TopicFeedbackquestion = () => {
     // Replace with your actual submit logic
     console.log("Submitting answers:", answerss);
     dispatch(topicfeedbackresponserequest(answerss));
-
+    const Toast = Swal.mixin({
+      customClass:'swal2-toast-quiz-submission',
+      className:"swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background:'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "TopicFeedback Response Submitted successfully",
+      color:'white'
+    });
+  // alert('Quiz deleted successfully');
+  // handleCloseQuizDeleteModal();
+  setTimeout(() => {
+    navigate("/LearnerenrolledCourse");
+  }, 2000);
 
     // This is where you want to set isTopicFeedbackGiven to true after feedback submission
 

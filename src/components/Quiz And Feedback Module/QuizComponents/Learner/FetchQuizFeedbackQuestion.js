@@ -372,6 +372,9 @@ import { fetchallquizfeedbackRequest } from "../../../../actions/Quiz And Feedba
 import { fetchquizfeedbackquestionrequest } from "../../../../actions/Quiz And Feedback Module/Learner/FetchQuizFeedbackQuestionAction";
 import { quizfeedbackresponserequest } from "../../../../actions/Quiz And Feedback Module/Learner/QuizFeedbackResponseAction";
 import { Container } from "react-bootstrap";
+import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
+import Swal from "sweetalert2";
+
 
 const FetchQuizFeedbackQuestion = () => {
   const navigate = useNavigate();
@@ -455,11 +458,35 @@ const FetchQuizFeedbackQuestion = () => {
     // Replace with your actual submit logic
     console.log("Submitting answers:", answers);
     dispatch(quizfeedbackresponserequest(answers));
+    const Toast = Swal.mixin({
+      customClass:'swal2-toast-quiz-submission',
+      className:"swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background:'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "QuizFeedback Response Submitted successfully",
+      color:'white'
+    });
+  // alert('Quiz deleted successfully');
+  // handleCloseQuizDeleteModal();
+  setTimeout(() => {
+    navigate("/LearnerenrolledCourse");
+  }, 2000);
   };
 
   const handleNavigate = () => {
     // sessionStorage.removeItem("topicId");
-    navigate("/quizengine");
+    navigate("/learnerscorepage");
   };
 
   const divStyle = {
@@ -473,13 +500,14 @@ const FetchQuizFeedbackQuestion = () => {
 
   return (
     <div>
+      <TopBar/>
       <div className="question template container" id="fq">
         <div>
           <button
             class="btn btn-light"
             style={{
               marginLeft: "100%",
-              marginTop: "8%",
+              marginTop: "7%",
               backgroundColor: "#365486",
               color: "white",
               width: "50",
