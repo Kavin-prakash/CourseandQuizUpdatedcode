@@ -29,3 +29,4 @@ export const setTopicsStatus = (isRequesting) => ({
   });
   
   export const RESET_THE_SUBMITTED_MESSGAE='RESET_THE_SUBMITTED_MESSGAE';
+  export const RESET_EXISTED_MESSAGE = 'RESER_EXISTED_MESSAGE';

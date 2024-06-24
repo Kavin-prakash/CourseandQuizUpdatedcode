@@ -7,7 +7,8 @@ import {
   FETCH_CATEGORY_SUCCESS,
   FETCH_CATEGORY_FAILURE,
   CREATE_COURSES_EXISTS,
-  SET_COURSE_STATUS
+  SET_COURSE_STATUS,
+  RESET_EXISTEDCOURSE_MESSAGE
 } from '../../../actions/Course/Course/AddCourseAction';
  
 const initialState = {
@@ -66,6 +67,11 @@ const AddCourseReducer = (state = initialState, action) => {
             ...state,
             isRequesting:action.payload,
           };
+       case RESET_EXISTEDCOURSE_MESSAGE:
+            return {
+              ...state,
+              isExists:false,
+            }    
    
     default:
       return state;

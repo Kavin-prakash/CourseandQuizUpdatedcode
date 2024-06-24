@@ -16,7 +16,7 @@ const updateTopicsApi = ({ dispatch }) => (next) => async (action) => {
       const response = await axios.put(API_URL, action.payload);
       console.log('API Response:', response.data); // Log the response data
 
-      if (response.statusCode === 412) {
+      if (response.data === null) {
         // Handle the case when the response data is null
         dispatch(UpdateTopicsExists());
       } else {

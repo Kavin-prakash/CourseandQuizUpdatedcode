@@ -148,7 +148,7 @@ import { fetchCourseRequest } from '../../../actions/Course/Course/FetchCouseDet
 import { LogoDev } from "@mui/icons-material";
 import { FaHandPointRight } from "react-icons/fa";
 //-------------------------------
-import { RESET_THE_SUBMITTED_MESSGAE, createTopicsRequest } from '../../../actions/Course/Topic/AddTopicAction';
+import { RESET_THE_SUBMITTED_MESSGAE, createTopicsRequest,RESET_EXISTED_MESSAGE } from '../../../actions/Course/Topic/AddTopicAction';
 import { validateTopicForm } from '../../../utils/Course/Topic/AddTopicValidation';
 // import { fetchTopicsRequest } from '../../../action/Course/Topic/FetchTopicsAction';
 import { fetchTopicsRequest } from '../../../actions/Course/Topic/FetchTopicsAction';
@@ -233,6 +233,7 @@ const Content = () => {
         timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({ icon: "warning", title: "Topic already exists" });
+      dispatch({ type: RESET_EXISTED_MESSAGE })
     }
   }, [isExist])
 
