@@ -1,0 +1,154 @@
+#thumbnail{
+    width:150px
+}
+
+#coursedetails{
+    margin-left: 25px;
+}
+
+#Card_learner{
+    margin-left: 30px;
+    margin-top: 20px;
+    width:250px;
+    text-decoration: none;
+    margin-right: 30px;
+    
+
+/* 
+#Card:hover {
+        transform: scale(1.05);
+        transition: transform .2s;
+        box-shadow: 4px 8px 8px 4px rgba(0,0,0,0.2);
+    } */
+    
+  
+   
+}
+
+#cardcontent{
+   margin-left: 25px;
+}
+
+.box
+{
+    display: flex;
+    flex-direction: row;
+}
+
+#thumbnail{
+    width:150px
+}
+
+#coursedetails{
+    margin-left: 25px;
+}
+
+#Card{
+    margin-left: 280px;
+    margin-top: 20px;
+    width:60vw;
+   height: 60px;
+    text-decoration: none;
+    margin-right: 30px;
+    
+
+/* 
+#Card:hover {
+        transform: scale(1.05);
+        transition: transform .2s;
+        box-shadow: 4px 8px 8px 4px rgba(0,0,0,0.2);
+    } */
+    
+  
+   
+}
+
+#cardcontent{
+   margin-left: 25px;
+}
+
+#box
+{
+    
+    flex-direction: row;
+}
+#level{
+    margin-top: 25px;
+}
+#level h3 {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: large;
+    
+}
+#cardcontent_Learner{
+    margin-left: 25px;
+    color:#e6eefb ;
+ }
+  
+ #box_learner
+ {
+     display: flex;
+     flex-direction: row;
+    
+ }
+  
+ #thumbnail{
+     width:150px
+ }
+  
+ #coursedetails{
+     margin-left: 25px;
+     color:#e6eefb ;
+ }
+  
+ #Card_learner{
+     margin-left: 280px;
+     margin-top: 20px;
+     width:60vw;
+    height: 70px;
+     text-decoration: none;
+     margin-right: 30px;
+     color:#e6eefb ;
+    
+  
+ /*
+ #Card:hover {
+         transform: scale(1.05);
+         transition: transform .2s;
+         box-shadow: 4px 8px 8px 4px rgba(0,0,0,0.2);
+     } */
+    
+  
+    
+ }
+  
+ #cardcontent_Learner{
+    margin-left: 25px;
+    color:#e6eefb ;
+ }
+  
+ .box_learner
+ {
+    
+     flex-direction: row;
+     color:#e6eefb ;
+ }
+ .level{
+     margin-top: 25px;
+ }
+ .level h3 {
+     font-family: 'Times New Roman', Times, serif;
+     font-weight: bold;
+     font-size: large;
+    
+ }
+
+ .Unenrolled-Success-Message
+{
+  margin-top: 60px;
+  color:white;
+  background-color:#21903d;
+ 
+}
+
