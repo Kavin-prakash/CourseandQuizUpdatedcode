@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UPDATE_TOPICS_REQUEST,updateTopicsSuccess,updateTopicsFailure } from '../../../actions/Course/Topic/UpdateTopicsAction';
+import { UPDATE_TOPICS_REQUEST,updateTopicsSuccess,updateTopicsFailure,UpdateTopicsExists } from '../../../actions/Course/Topic/UpdateTopicsAction';
 
 
 
@@ -15,7 +15,14 @@ const API_URL = 'http://localhost:5199/lxp/course/topic';
       // Assuming 'action.payload' contains the data you want to senda
       const response = await axios.put(API_URL,action.payload);
       console.log('API Response:', response.data); // Log the response data
-      dispatch(updateTopicsSuccess(response.data));
+      
+      if (response.statusCode === 412) {
+        // Handle the case when the response data is null
+        dispatch(UpdateTopicsExists());
+      } else {
+        // Dispatch success action with the courseId
+        dispatch(updateTopicsSuccess(response.data));
+      }
       
       
     } catch (error) {

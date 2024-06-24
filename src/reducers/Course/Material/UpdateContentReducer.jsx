@@ -4,6 +4,7 @@ import {
     UPDATE_CONTENT_SUCCESS,
     UPDATE_CONTENT_FAILURE,
     UPDATE_CONTENT_EXISTS,
+    RESET_UPDATE_SUCCESS_MESSAGE,
   } from '../../../actions/Course/Material/UpdateContentAction';
   
   const initialState = {
@@ -12,6 +13,7 @@ import {
     loading: false,
     error: null,
     isExists:false,
+    contentUpdatedSuccessMessgae:false,
     
   };
   
@@ -30,7 +32,7 @@ import {
         return{
           ...state,
           content:action.payload,
-         
+          contentUpdatedSuccessMessgae:true,
           loading:false,
           error:null,
         };
@@ -48,8 +50,12 @@ import {
             loading: false,
              error: null,
              isExists:true,
-          };  
-        
+          };   
+      case RESET_UPDATE_SUCCESS_MESSAGE:                // SETTING FLAG THE CHANGE THE  FALSE STATE OF UPDATE SUCCESS MESSAGE
+        return{
+          ...state,
+          contentUpdatedSuccessMessgae:false
+        } 
       default:
         return state;
     }

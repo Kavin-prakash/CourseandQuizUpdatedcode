@@ -406,15 +406,15 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
-
+import { FaRegEdit } from "react-icons/fa";
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { fetchEditTopicsRequest } from '../../../actions/Course/Topic/FetchEditTopicRequest'
 
 import { FaHandPointRight } from "react-icons/fa";
-import { updateTopicsRequest } from '../../../actions/Course/Topic/UpdateTopicsAction'
+import { updateTopicsRequest,RESET_EXISTED_MESSAGE,RESET_SUBMITTED_MESSAGE } from '../../../actions/Course/Topic/UpdateTopicsAction'
 
-import { deleteTopicsRequest } from '../../../actions/Course/Topic/DeleteTopicsAction'
+import { deleteTopicsRequest,RESET_DELETED_MESSAGE } from '../../../actions/Course/Topic/DeleteTopicsAction'
 
 import { fetchContentUrlSuccess } from '../../../actions/Course/Material/FetchContentUrlAction'
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -423,18 +423,20 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import DialogContentText from '@mui/material/DialogContentText';
 import { validateTopicForm } from '../../../utils/Course/Topic/AddTopicValidation';
-import { Container } from '@mui/material';
+import { Container,Tooltip } from '@mui/material';
 import { Card, OverlayTrigger } from 'react-bootstrap';
 import VideoViewer from '../Material/VideoViewer';
 import AudioViewer from '../Material/AudioViewer';
 import { fetchQuizIdRequest } from '../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction';
-
+import Swal from "sweetalert2";
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
 import { VscFeedback } from "react-icons/vsc";
-import { IconButton, Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
+import { IconButton, Stack } from '@mui/material';    // modification for  imports quizteam 
 import PptViewerComponent from '../Material/PptViewer';
 //import { FaHandPointRight } from "react-icons/fa";
+import { TiWarningOutline } from "react-icons/ti";
+import { RESET_DELETE_SUCCESS_COURSES_MESSAGE } from '../../../actions/Admin/DeletecourseAction';
 export default function SavedTopics(props) {
     const selectorTopicsDetail = useSelector((state) => state.fetchTopic.topics[0]);
     const [topicsDetail, setTopicsDetails] = useState([]);
@@ -566,13 +568,32 @@ export default function SavedTopics(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [openDelete, setOpenDelete] = React.useState(false);
 
+
+    const deleteSuccess=useSelector((state)=>state.deleteTopic.deletesuccessmessgae);
+    console.log("delete",deleteSuccess);
+  
+    useEffect(() => {
+      if (deleteSuccess) {
+  
+        const Toast = Swal.mixin({
+          
+          customClass:'topic-created-success-messgae',
+          toast: true, position: "top", showConfirmButton: false,
+          timer: 3000, timerProgressBar: true, didOpen: (toast) => 
+          { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+        });
+        Toast.fire({ icon: "success", title: "Topic deleted successfully" });
+        dispatch({type:RESET_DELETED_MESSAGE});
+      }
+    }, [deleteSuccess,dispatch])
+
+
     const handleDelete = (topicId) => {
         console.log("delete topic", topicId);
         dispatch(deleteTopicsRequest(topicId));
         handleDeleteClose();
-
-
     }
+
     const handleShow = () => setShow(true);
     const handlePreview = (filePath, materialType, materialName, materialId) => {
         setViewerModelHeader(materialName);
@@ -643,6 +664,60 @@ export default function SavedTopics(props) {
         navigate('/quizfeedback')
     }
 
+   const Updated=useSelector((state)=>state.updateTopic.isUpdated) ;
+   useEffect(() => {
+    if (Updated) {
+
+      const Toast = Swal.mixin({
+        
+        customClass:'topic-created-success-messgae',
+        toast: true, position: "top", showConfirmButton: false,
+        timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({ icon: "success", title: "Topic Updated successfully" });
+      dispatch({type:RESET_SUBMITTED_MESSAGE})
+
+
+    }
+  }, [Updated,dispatch])
+
+  const Exist=useSelector((state)=>state.updateTopic.isExist) ;
+   useEffect(() => {
+    if (Exist) {
+
+      const Toast = Swal.mixin({
+        
+        customClass:'topic-created-success-messgae',
+        toast: true, position: "top", showConfirmButton: false,
+        timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({ icon: "warning", title: "Topic already existed" });
+      dispatch({type:RESET_EXISTED_MESSAGE})
+
+
+    }
+  }, [Updated,dispatch])
+
+ 
+          
+  const deleteFail=useSelector((state)=>state.deleteTopic.isFail)
+  useEffect(() => {
+    if (deleteFail) {
+
+      const Toast = Swal.mixin({
+        
+        customClass:'topic-created-success-messgae',
+        toast: true, position: "top", showConfirmButton: false,
+        timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
+      });
+      Toast.fire({ icon: "error", title: "Sorry Please try again" });
+      dispatch({type:RESET_DELETED_MESSAGE})
+
+
+    }
+  }, [deleteFail,dispatch])
+          
+
     return (
         <Container fluid className='mt-5' style={divStyle}>
             {loading ? (
@@ -654,26 +729,26 @@ export default function SavedTopics(props) {
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <span style={{ fontSize: '20px' }}><b>{topic.topicName}</b></span>
                                 <div>
-                                    <OverlayTrigger placement="top" overlay={<Tooltip id={`tooltip-add-quiz-${index}`}>Add Quiz</Tooltip>}>
+                                <Tooltip title="Add Quiz">
                                         <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
                                             <QuizOutlinedIcon style={{ color: "#0074D9" }} />
                                         </IconButton>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger placement="top" overlay={<Tooltip id={`tooltip-add-feedback-${index}`}>Add Feedback</Tooltip>}>
+                                   </Tooltip>
+                                   <Tooltip title="Add Feedback">
                                         <IconButton aria-label="Addfeedback" onClick={() => handleAddFeedBackButton(topic.topicId)}>
                                             <VscFeedback style={{ color: "#FFDC00" }} />
                                         </IconButton>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger placement="top" overlay={<Tooltip id={`tooltip-edit-topic-${index}`}>Edit Topic</Tooltip>}>
+                                        </Tooltip>
+                                        <Tooltip title="Edit Topic">
                                         <IconButton aria-label="Edittopics" onClick={() => handleEditClickOpen(topic.topicId)}>
-                                            <EditIcon style={{ color: "#604CC3" }} variant="outlined" />
+                                            <FaRegEdit style={{ color: "#604CC3" }} variant="outlined" />
                                         </IconButton>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger placement="top" overlay={<Tooltip id={`tooltip-delete-topic-${index}`}>Delete Topic</Tooltip>}>
+                                        </Tooltip>
+                                        <Tooltip title="Delete Topic">
                                         <IconButton aria-label="Deletetopics" onClick={() => handleDeleteClickOpen(topic.topicId)}>
                                             <DeleteIcon style={{ color: "#C80036" }} />
                                         </IconButton>
-                                    </OverlayTrigger>
+                                        </Tooltip>
                                 </div>
                             </div>
                         </Card.Header>
@@ -745,21 +820,27 @@ export default function SavedTopics(props) {
                 // fullScreen={fullScreen}
                 open={openDelete}
                 onClose={handleDeleteClose}
-                aria-labelledby="responsive-dialog-title"
+                aria-labelledby="responsive-dialog-title"   
             >
-                <DialogTitle id="responsive-dialog-title">
-                    {"Confirm Deletion"}
-                </DialogTitle>
+                {/* <DialogTitle id="responsive-dialog-title" ><TiWarningOutline style={{color:'red'}}/>
+                   <h4><b> {"Confirm Deletion"}</b></h4>
+                </DialogTitle> */}
+               <DialogTitle id="responsive-dialog-title" style={{display:'flex',alignItems:'center'}}>
+  <TiWarningOutline style={{marginRight:'10px',color:'red',fontSize:'25px'}}/>
+  <h4 style={{paddingTop:'10px'}}><b>Confirm Deletion</b></h4>
+</DialogTitle>
+
+
                 <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to delete the topics ?
+                    <DialogContentText >
+                        <h5>Are you sure you want to delete the topics ?</h5>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={handleDeleteClose}>
+                    <Button autoFocus onClick={handleDeleteClose} style={{ backgroundColor: '#0F62FE', color: 'white', borderRadius: '10px', padding: '5px 30px' }}>
                         Cancel
                     </Button>
-                    <Button autoFocus onClick={() => handleDelete(deleteId)}>
+                    <Button autoFocus onClick={() => handleDelete(deleteId)} style={{ backgroundColor: '#E01950', color: 'white', borderRadius: '10px', padding: '5px 30px' }}>
                         Delete
                     </Button>
                 </DialogActions>

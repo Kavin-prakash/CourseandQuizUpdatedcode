@@ -145,7 +145,7 @@ const Loginpage = () => {
     if (email === true && password === true && role === "Admin") {
       const adminId = getLearnerId;
       //   // Store user ID in session
-      sessionStorage.setItem('AdminSessionId', adminId);
+      sessionStorage.setItem('AdmminSessionId', adminId);
       sessionStorage.setItem('Role', role);
       // window.alert("successfully Loged Message")
       const Toast = Swal.mixin({
@@ -161,7 +161,7 @@ const Loginpage = () => {
       });
       Toast.fire({
         icon: "success",
-        title: "Welcome!! Back Admin, Successfully Logged In"
+        title: "Welcome!! Back Admin , Successfully Logged In"
       });
 
 
@@ -299,14 +299,14 @@ const Loginpage = () => {
                     required: validationMessages.email.required,
                     pattern: {
                       value: emailRegex,
-                      message: validationMessages.email.receivePattern
+                      message: validationMessages.email.pattern
                     }
                   })}
                   type='text'
                   placeholder='Email'
                 />
               </div>
-              <p id='loginerrormessage'>{errors.email?.message}</p>
+              <p>{errors.email?.message}</p>
               <div>
                 <input
                   {...register('password', {
@@ -317,13 +317,13 @@ const Loginpage = () => {
                     },
                     pattern: {
                       value: passwordRegex,
-                      message: validationMessages.password.receivePattern
+                      message: validationMessages.password.pattern
                     }
                   })}
                   type='password'
                   placeholder='Password'
                 />
-                <p id='loginerrormessage'>{errors.password?.message}</p>
+                <p>{errors.password?.message}</p>
               </div>
               <div className='button-login' style={{
                 alignItems: "center",

@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { IconButton, Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { ImFolderUpload } from "react-icons/im";
 import { BiSolidCoinStack } from "react-icons/bi";
 import { AiFillEdit } from "react-icons/ai";
@@ -29,7 +26,6 @@ import { editQuizDetailsRequest } from "../../../../actions/Quiz And Feedback Mo
 import QuestionTemplateView from "../../../../View/Quiz And Feedback Module/QuestionTemplateView";
 import { fetchQuizIdFailure } from "../../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction";
 import { Container } from "react-bootstrap";
-import Swal from "sweetalert2";
 import CreateQuizApi from "../../../../middleware/Quiz And Feedback Module/Admin/CreateQuizApi";
 
 export const Home = () => {
@@ -38,7 +34,7 @@ export const Home = () => {
     const courseId = sessionStorage.getItem('courseId');
     const [button, setButton] = useState(true);
     // console.log("create page topic id", topicId);
-    const [showQuestions, setShowQuestions] = useState(true);
+const [showQuestions, setShowQuestions] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [showOptions, setShowOptions] = useState(false);
@@ -56,7 +52,7 @@ export const Home = () => {
     const [showQuizDeleteModal, setShowQuizDeleteModal] = useState(false);
     const [inputQuizTitle, setInputQuizTitle] = useState('');
     const [errordeletequiz, setErrorDeleteQuiz] = useState('');
-    const [formComplete, setFormComplete] = useState(false);
+    const [bulkQuizId, setBulkQuizId] = useState('');
     const [quizDetails, setQuizDetails] = useState({
         topicId: topicId,
         nameOfQuiz: '',
@@ -87,8 +83,6 @@ export const Home = () => {
         event.target.nextSibling.style.display = showOptions ? 'none' : 'block';
     };
 
-
-
     const toggleQuestions = () => {
         setShowQuestions(!showQuestions);
     };
@@ -110,21 +104,21 @@ export const Home = () => {
         ValidationQuizTitle(e.target.value, setError, setQuizTitle);
         handleQuizChange(e);
     };
-    
+
     const handleInputChange = (e) => {
         ValidationDuration(e.target.value, setDuration, setErrorDuration);
         handleQuizChange(e);
     };
-    
+
     const handlemarkChange = (e) => {
         ValidationGrade(e.target.value, setPassMark, setErrormark);
         handleQuizChange(e);
     };
-    
+
     const handleattemptsChange = (e) => {
         ValidationAttempts(e.target.value, setAttemptsAllowed, setErrorAttempt);
         handleQuizChange(e);
-    };
+    }
 
     const handleOpenAddQuestionModal = () => {
         setShowAddQuestionModal(true);
@@ -147,20 +141,10 @@ export const Home = () => {
     }
 
     const handleQuizChange = (e) => {
-        const updatedQuizDetails = { ...quizDetails, [e.target.name]: e.target.value };
-        setQuizDetails(updatedQuizDetails);
+        setQuizDetails({ ...quizDetails, [e.target.name]: e.target.value });
         setQuizData({ ...quizData, [e.target.name]: e.target.value });
-        setFormComplete(isFormComplete(updatedQuizDetails));
-    };
-
-    const isFormComplete = (details) => {
-        return (
-            details.nameOfQuiz.trim() !== '' &&
-            Number(details.duration) > 0 &&
-            Number(details.passMark) > 0 &&
-            Number(details.attemptsAllowed) > 0
-        );
-    };
+ 
+      };
 
     const handleSubmit = () => {
         try {
@@ -201,58 +185,18 @@ export const Home = () => {
         console.log("update", updatedQuizData);
         dispatch(editQuizDetailsRequest(updatedQuizData));
         handleCloseQuizEditModal();
-        const Toast = Swal.mixin({
-            className:"swal2-toast",
-            toast: true,
-            position: "top",
-            showConfirmButton: false,
-            timer: 2000,
-            background:'green',
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.onmouseenter = Swal.stopTimer;
-              toast.onmouseleave = Swal.resumeTimer;
-            }
-          });
-          Toast.fire({
-            icon: "success",
-            title: "Quiz Updated Successfully",
-            color:'white'
-          });
-
     };
 
     const handleDeleteQuiz = (quizId) => {
-        setShowQuestions(false);
         console.log('Entered Title:', inputQuizTitle);
         console.log('Actual Quiz Title:', quizData.nameOfQuiz);
 
         if (inputQuizTitle === quizData.nameOfQuiz) {
             DeleteQuizDetails(quizId);
-            const Toast = Swal.mixin({
-                className:"swal2-toast",
-                toast: true,
-                position: "top",
-                showConfirmButton: false,
-                timer: 2000,
-                background:'green',
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.onmouseenter = Swal.stopTimer;
-                  toast.onmouseleave = Swal.resumeTimer;
-                }
-              });
-              Toast.fire({
-                icon: "success",
-                title: "Quiz deleted successfully",
-                color:'white'
-              });
-            // alert('Quiz deleted successfully');
+            alert('Quiz deleted successfully');
             handleCloseQuizDeleteModal();
-            setTimeout(() => {
             navigate(`/addtopic/${courseId}`)
-            }, 2000);
-            dispatch(fetchQuizIdFailure(topicId))
+        dispatch(fetchQuizIdFailure(topicId))
         } else {
             setErrorDeleteQuiz('The QuizTitle you entered does not match !');
         }
@@ -275,21 +219,18 @@ export const Home = () => {
         <div>
             <Container fluid className="creat-quiz-container">
                 <div >
-                    <div className="d-flex justify-content-end mb-5">
-                        <button class="btn btn-light" style={{ color: "white", width: '50', marginTop: 100, backgroundColor:"#365486"}} onClick={() => { handleNavigate() }}>Back</button>
-                    </div>
+                <div className="d-flex justify-content-end mb-5">
+                            <button class="btn btn-light" style={{ backgroundColor: "#365486", color: "white", width: '50', marginTop:100 }} onClick={() => { handleNavigate() }}>Back</button>
+                        </div>
                     <form className='quiz-content'>
-                        <div className="" id="QuizCard" style={{ backgroundColor: 'white' }}>
+
+                        <div className="" id="QuizCard" style={{backgroundColor:'#F9F5F6'}}>
                             <div className="card-bodycreatequiz">
                                 <div className="dx mt-2">
                                     <div className="container">
                                         <div className="d-flex justify-content-end" >
-                                            {/* <Button class="btn btn-default" style={{ backgroundColor: "#365486", color: "white", margin:3 }} onClick={handleOpenQuizEditModal}><AiFillEdit /> Edit</Button> */}
-                                            <Tooltip title="Edit quiz"><IconButton aria-label="Editquiz" onClick={handleOpenQuizEditModal}  ><EditIcon style={{ color: "#365486" }} variant="outlined" /> </IconButton></Tooltip>
-                                            <Tooltip title="Delete quiz"><IconButton aria-label="deletequiz" onClick={handleOpenQuizDeleteModal}  ><DeleteIcon style={{ color: "C80036" }} /></IconButton></Tooltip>
-
-
-                                            {/* <Button class="btn btn-default" style={{ backgroundColor: "#365486", color: "white", margin:3 }} onClick={handleOpenQuizDeleteModal}><FaTrashCan /> Delete</Button> */}
+                                            <Button class="btn btn-default me-1" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleOpenQuizEditModal}><AiFillEdit /> Edit</Button>
+                                            <Button class="btn btn-default ms-2" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleOpenQuizDeleteModal}><FaTrashCan /> Delete</Button>
                                         </div>
 
                                         <div className="form-group row mt-3">
@@ -301,75 +242,61 @@ export const Home = () => {
                                         <div class="form-group row mt-3">
                                             <label for="lbl3" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Duration (In Minutes)<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={handleInputChange} />
+                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={ handleInputChange }/>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl5" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Grade to be Secured<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={handlemarkChange} />
+                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={ handlemarkChange}/>
                                             </div>
                                         </div>
                                         <div class="form-group row mt-3">
                                             <label for="lbl4" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Attempts Allowed<span id='required'>*</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={handleattemptsChange} />
+                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={ handleattemptsChange} />
                                             </div>
                                         </div>
-                                        {quizId ? (
-                                            <div></div>
-                                        ) : (
-                                            <div className="form-group" style={{ textAlign: 'center' }}>
-                                                <div className="">
-                                                <Button
-    type="submit"
-    className="btn btn-primary"
-    onClick={(e) => {
-        handleUploadClick(e);
-    }}
-    style={{ color: 'white', width: 200 }}
-    disabled={!formComplete}
->
-    <FaUpload /> Import Question
-</Button>
-                                                </div>
+                                        {quizId ? <div></div> : <div className="form-group row">
+                                            <div className="col-sm-10">
+                                                <Button type="submit" className="btn btn-light" onClick={(e) => { handleUploadClick(e) }} style={{ marginLeft: "50%", marginTop: "3%", borderRadius: 8, backgroundColor: "#365486", color: "white" }}  ><FaUpload /> Import Question</Button>
                                             </div>
-                                        )}
+                                        </div>}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
                     {/* --------------------------------------------------------------*/}
-                    {/* {quizId ? <div style={{ textAlign: 'center', marginTop: 50 }}>
-                        <Button
-                            type="submit"
-                            className="btn btn-light"
-                            onClick={toggleQuestions}
-
-                            style={{
-                                backgroundColor:"#365486",
-                                color:"white",
-                                borderRadius: 8,
-
-                            }}
-                        >
-                            {showQuestions ? "Hide Questions" : "View Questions"}
-                        </Button>
-                    </div> : <></>} */}
+                    <div>
+                    <Button
+                        type="submit"
+                        className="btn btn-light"
+                        onClick={toggleQuestions}
+                        style={{
+                            marginLeft: "50%",
+                            marginTop: "3%",
+                            borderRadius: 8,
+                            backgroundColor: "#365486",
+                            color: "white",
+                        }}
+                    >
+                        {showQuestions ? "Hide Questions" : "View Questions"}
+                    </Button>
+                </div>
                     {showQuestions && quizId ? (
-                        <div className="">
-                            <QuestionTemplateView />
-                        </div>
-                    ) : (
-                        <div></div>
-                    )}
+                    <div className="">
+                        <QuestionTemplateView />
+                    </div>
+                ) : (
+                    <div></div>
+                )}
                     {quizId ? <div>
-                        <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-left" style={{ color: "white", marginLeft: "92%" ,  backgroundColor:"#365486" }}>Proceed</button>
+                        <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-left" style={{ backgroundColor: "#365486", color: "white", marginLeft: "92%" }}>Proceed</button>
                     </div> : <div></div>}
                     {/* DeleteQuiz */}
-                    <Modal show={showQuizDeleteModal} onHide={handleCloseQuizDeleteModal} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "4%" }}>
-                        <Modal.Header  closeButton style={{ backgroundColor: "#23275c", color: "whitesmoke" }}>
+                    <Modal show={showQuizDeleteModal} onHide={handleCloseQuizDeleteModal} style={{ marginTop: "2.5%", marginLeft: "4%" }}>
+                        <Modal.Header style={{ backgroundColor: "#23275c", color: "whitesmoke" }}>
                             <Modal.Title><h5>Deleting the Quiz</h5></Modal.Title>
                         </Modal.Header>
                         <Modal.Body style={{ backgroundColor: "#F9F5F6" }} >
@@ -390,7 +317,7 @@ export const Home = () => {
                     </Modal>
 
                     {/* EditQuiz */}
-                    <Modal show={showQuizEditModal} onHide={handleCloseQuizEditModal} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "4%" }}>
+                    <Modal show={showQuizEditModal} onHide={handleCloseQuizEditModal} style={{ marginTop: "2.5%", marginLeft: "4%" }}>
                         <Modal.Header closeButton style={{ backgroundColor: "#23275c", color: "whitesmoke" }}>
                             <Modal.Title><h5>Quiz Editor</h5></Modal.Title>
                         </Modal.Header>
@@ -449,5 +376,6 @@ export const Home = () => {
         </div>
     );
 };
+
 
 export default Home;

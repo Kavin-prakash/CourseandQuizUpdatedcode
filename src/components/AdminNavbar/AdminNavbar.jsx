@@ -15,13 +15,13 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { FaUserGraduate, FaHome, FaChartBar } from "react-icons/fa";
 import "../../Styles/Admin/AdminNavbar.css";
-import { Button, Modal } from "react-bootstrap";
+import { Button,Modal } from "react-bootstrap";
 import Z from "../../assets/Admin/Images/ZWhite.jfif";
 import relevantzzzedited from "../../assets/Admin/Images/relevantzedited.png"
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { UseDispatch, useDispatch } from "react-redux";
 import { successdata } from "../../actions/Admin/loginAction";
-import LogoutIcon from '@mui/icons-material/Logout';
+
 
 const drawerWidth = 240;
 
@@ -91,7 +91,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function AdminNavbar() {
 
-  const dispatch = useDispatch();
+  const dispatch=useDispatch();
 
   const [activePage, setActivePage] = useState("home");
 
@@ -132,10 +132,10 @@ export default function AdminNavbar() {
   const handleLogout = () => {
     // Clear session ID from storage
     // debugger
-    sessionStorage.removeItem("AdminSessionId"); // Replace "sessionId" with your actual session ID key
+    sessionStorage.removeItem("AdmminSessionId"); // Replace "sessionId" with your actual session ID key
     sessionStorage.removeItem("Role");
     dispatch(successdata(false));
-
+     
     // Navigate to login page or home page
     navigate("/"); // Replace "/login" with the path to your login page
     setShowLogoutConfirmation(false); // Hide the confirmation toast
@@ -182,25 +182,20 @@ export default function AdminNavbar() {
               ...(showSideNav && { display: "none" }),
             }}
           >
-            <MenuIcon style={{ fontSize: "140%" }} />
             <img src={Z} style={{ width: "5vw", height: "5vh" }} />
-
+            <MenuIcon style={{ fontSize: "140%" }} />
           </IconButton>
-          <div id="adminNavhead">
-            <h4><span>L</span>earning e<span>X</span>perience <span>P</span>latform</h4>
-          </div>
           <Box component="div">
             {/* <img src={logo} alt="logo" /> */}
             <Button
               style={{
                 position: "absolute",
-                marginLeft: "55%",
+                marginLeft: "75%",
                 marginTop: "-22px",
               }}
               onClick={handleLogoutClick}
             >
-              <span>Logout </span>
-              <LogoutIcon /> 
+              <h6>Logout</h6>
             </Button>
           </Box>
         </Toolbar>
@@ -209,7 +204,7 @@ export default function AdminNavbar() {
 
       {/* Logout Confirmation Modal */}
       <Modal
-        className="mt-5"
+        className="mt-2"
         show={showLogoutModal}
         onHide={() => setShowLogoutModal(false)}
         animation={false}

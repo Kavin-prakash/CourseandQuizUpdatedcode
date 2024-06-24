@@ -27,3 +27,5 @@ export const updateContentRequest = (formData) => ({
     type: UPDATE_CONTENT_EXISTS,
     
   });
+
+  export const RESET_UPDATE_SUCCESS_MESSAGE="RESET_UPDATE_SUCCESS_MESSAGE";

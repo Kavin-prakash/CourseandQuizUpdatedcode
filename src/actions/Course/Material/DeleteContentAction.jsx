@@ -21,3 +21,5 @@ export const deleteContentRequest = (formData) => ({
     type: DELETE_CONTENT_FAILURE,
     payload: error,
   });
+
+  export const RESET_DELETE_SUCCESS_MESSAGE='RESET_DELETE_SUCCESS_MESSAGE';

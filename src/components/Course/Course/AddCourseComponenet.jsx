@@ -14,11 +14,7 @@ import {
   CardHeader,
 } from "react-bootstrap";
 import { useDispatch, connect, useSelector } from "react-redux";
-// import {
-//   createCoursesRequest,
-//   createCoursesSuccess,
-//   fetchLevelRequest,
-// } from "../../../action/Course/Course/AddCourseAction"; // Assuming this is your action creator
+
 
 
 import {
@@ -269,16 +265,7 @@ const AddCourse = () => {
   const handleInputCategory = (e) => {
     setAddCategory({ ...category, [e.target.name]: e.target.value });
   };
-  // const handleCategory = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     console.log("category add", category);
-  //     dispatch(createCategoryrequest(category));
-
-  //   } catch (error) {
-  //     window.alert("Error occured in adding category", error);
-  //   }
-  // };
+  
 
   const handleCategory = async (e) => {
     e.preventDefault();
@@ -521,16 +508,6 @@ const AddCourse = () => {
                     )}
                   </FormControl>
 
-
-                  {/* {selectedImage && (
-          <Row>
-            <Col></Col>
-            <Col xs={4} md={4}>
-              <Image src={selectedImage} thumbnail />
-            </Col>
-            <Col></Col>
-          </Row>
-        )} */}
                   <Row className="mt-3">
                     <Col md={4} ></Col>
                     <Col md={8}>
@@ -548,87 +525,7 @@ const AddCourse = () => {
           <Col xs={0} sm={1} md={1}></Col>
         </Row>
       </Container>
-      {/* <React.Fragment>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleCategory,
-          sx: {
-            width: '100%', // Full width
-            maxWidth: '500px', // Custom max-width
-          }
-        //   style: { maxWidth: 'none' } 
-      }}
-    
-      >
-        <DialogTitle className='dialog-clr'>Add Category</DialogTitle>
-        <DialogContent className='dialog-content'>
- 
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="category"
-            label="Enter new category"
-            type="longtext"
-            value={category.category}
-            onChange={handleInputCategory}
-                         
-            fullWidth
-            
-            variant="standard"
-            // style={{margin:'10px'}}
-          />
-         
- 
-         
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Add</Button>
-        </DialogActions>
-      </Dialog>
-      </React.Fragment> */}
-
-      {/* <React.Fragment>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          PaperProps={{
-            component: 'form',
-            onSubmit: handleCategory,
-            sx: {
-              width: '100%', // Full width
-              maxWidth: '500px', // Custom max-width
-            }
-          }}
-        >
-          <DialogTitle className='dialog-clr'>Add Category</DialogTitle>
-          <DialogContent className='dialog-content'>
-            <TextField
-              autoFocus
-
-              margin="dense"
-              id="name"
-              name="category"
-              label="Enter new category"
-              type="longtext"
-              value={category.category}
-              onChange={handleInputCategory}
-              fullWidth
-              variant="standard"
-            />
-            {categoryErrors.category && <p className="error">{categoryErrors.category}</p>}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Add</Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment> */}
+      
       <Modal show={open} onHide={handleClose} centered>
         <Form onSubmit={handleCategory}>
           <Modal.Header closeButton>
@@ -665,3 +562,9 @@ const AddCourse = () => {
 };
 
 export default AddCourse;
+
+
+
+
+
+

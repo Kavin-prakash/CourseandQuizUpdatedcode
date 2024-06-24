@@ -3,6 +3,7 @@ import {
     DELETE_CONTENT_REQUEST,
     DELETE_CONTENT_SUCCESS,
     DELETE_CONTENT_FAILURE,
+    RESET_DELETE_SUCCESS_MESSAGE,
   } from '../../../actions/Course/Material/DeleteContentAction'
   
   const initialState = {
@@ -10,6 +11,7 @@ import {
     content: [],
     loading: false,
     error: null,
+    isDeletSuccessMessage:false
     
   };
   
@@ -30,6 +32,7 @@ import {
          // topics:action.payload,
           content:state.content.filter(content=>content.materialId !== action.payload),
           loading:false,
+          isDeletSuccessMessage:true,
           error:null,
         };
       case DELETE_CONTENT_FAILURE:
@@ -38,6 +41,12 @@ import {
           loading:false,
           error:action.payload,
         };
+      case RESET_DELETE_SUCCESS_MESSAGE:
+        return{
+          ...state,
+          isDeletSuccessMessage:false,
+
+        }
         
       default:
         return state;

@@ -51,7 +51,7 @@ export default function AdminDashboard() {
   <div className="admindashboard">
     <Box sx={{ flexGrow: 1, mt: 10}} >
       <Grid container spacing={2}>
-      <Grid item xs={12} md={3}>
+        <Grid item sx={12} md={3}   >
           <Item style={{borderRadius:"15px"}}>
             <Card
               // style={{
@@ -60,12 +60,12 @@ export default function AdminDashboard() {
               // }}
               variant=""
             >
-            <Link
+              <Link
                 to={"/adminviewallcourse"}
                 style={{ textDecoration: "none" }}
               >
                 <CardContent>
-                <Typography
+                  <Typography
                     sx={{ fontSize: 18, fontWeight: "bold", color: "#97247e" }}
                     color="text.secondary"
                     gutterBottom
@@ -74,11 +74,9 @@ export default function AdminDashboard() {
                   </Typography>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Typography marginRight={"14% "}>
-                    <div style={{ border:"2px solid #97247e",borderRadius:"50%", }}>
                       <FaBookOpenReader className="rotatinganimation"
-                        style={{ fontSize: "380%", color: "#97247e",padding:"15px"}}
+                        style={{ fontSize: "280%", color: "#97247e" }}
                       />
-                      </div>
                     </Typography>
                     <Typography
                       variant="h3"
@@ -86,7 +84,7 @@ export default function AdminDashboard() {
                       gutterBottom
                       paddingRight={"40%"}
                     >
-                        <CountUp duration={8} end={dashboard.noOfCourse} />
+                      <CountUp duration={8} end={dashboard.noOfCourse} />
                     </Typography>
                   </div>
                 </CardContent>
@@ -94,7 +92,6 @@ export default function AdminDashboard() {
             </Card>
           </Item>
         </Grid>
-     
         <Grid item xs={12} md={3}>
           <Item style={{borderRadius:"15px"}}>
             <Card
@@ -115,12 +112,9 @@ export default function AdminDashboard() {
                   </Typography>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Typography marginRight={"14% "}>
-                    
-                      <div style={{ border:"2px solid #524F7D",borderRadius:"50%", }}>
                       <FaUserGraduate className="rotatinganimation"
-                        style={{ fontSize: "380%", color: "#524F7D",padding:"15px" }}
+                        style={{ fontSize: "280%", color: "#524F7D" }}
                       />
-                      </div>
                     </Typography>
                     <Typography
                       variant="h3"
@@ -159,11 +153,8 @@ export default function AdminDashboard() {
                   </Typography>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Typography marginRight={"14% "}>
-                    <div style={{ border:"2px solid #24A148",borderRadius:"50%", }}>
-                    <FaUserCheck className="rotatinganimation" style={{ fontSize: "380%", color: "#24A148",padding:"15px" }} />
-                      </div>
                       
-                     
+                      <FaUserCheck className="rotatinganimation" style={{ fontSize: "330%", color: "#24A148" }} />
                     </Typography>
                     <Typography
                       variant="h3"
@@ -208,10 +199,7 @@ export default function AdminDashboard() {
                       <div className="dotted-ring"></div>
                            <VoiceOverOffRoundedIcon className="rotatinganimation" style={{ fontSize: "320%", color: "#D20062" }}  />
                       </div> */}
-                       <div style={{ border:"2px solid #D20062",borderRadius:"50%", }}>
-                       <VoiceOverOffRoundedIcon className="rotatinganimation" style={{ fontSize: "420%", color: "#D20062",padding:"15px" }}  />
-                      </div>
-                      
+                       <VoiceOverOffRoundedIcon className="rotatinganimation" style={{ fontSize: "320%", color: "#D20062" }}  />
                     </Typography>
                     <Typography
                       variant="h3"

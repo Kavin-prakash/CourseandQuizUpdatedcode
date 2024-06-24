@@ -624,15 +624,7 @@ const Adminviewcourse = ({
                           <TableCell>{course.category}</TableCell>
                           <TableCell>{course.duration}</TableCell>
                           <TableCell>{course.level}</TableCell>
-                          <TableCell>
-                            {course.createdAt
-                              ?.split("T")[0]
-                              ?.split("-")
-                              .reverse()
-                              .join("-") +
-                              " " +
-                              course.createdAt?.split("T")[1] || ""}
-                          </TableCell>
+                          <TableCell>{course.createdAt}</TableCell>
                           <TableCell align="right">
 
                             <Link to={'/coursecontent/' + course.courseId}>
