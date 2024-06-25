@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { TopicFeedbackResponseApi } from '../../../../middleware/Quiz And Feedback Module/Learner/TopicFeedbackResponseApi';
  
 const TopicFeedbackquestion = () => {
+ 
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const TopicFeedbackquestion = () => {
   const topicId = sessionStorage.getItem("topicId");
   const learnerId = sessionStorage.getItem("UserSessionID");
 
+  const courseId=sessionStorage.getItem("courseId")
   const [answerss, setAnswerss] = useState([]);
 
   useEffect(() => {
@@ -58,6 +60,7 @@ const TopicFeedbackquestion = () => {
     );
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     TopicFeedbackResponseApi(answerss);
@@ -81,7 +84,7 @@ const TopicFeedbackquestion = () => {
       color: 'white'
     });
     setTimeout(() => {
-      navigate("/ViewTopics/:courseId");
+      navigate(`/ViewTopics/${courseId}`);
     }, 2000);
   };
 
@@ -108,7 +111,7 @@ const TopicFeedbackquestion = () => {
               width: "50",
             }}
             onClick={() => {
-              navigate("/ViewTopics/:courseId");
+              navigate(`/ViewTopics/${courseId}`);
             }}
           >
             Back

@@ -102,6 +102,24 @@ const QuestionTemplate = () => {
     // Close the popup and reset questionToDelete
     setShowPopup(false);
     setQuestionToDelete(null);
+    const Toast = Swal.mixin({
+      className:"swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background:'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: " Question Deleted Successfully",
+      color:'white'
+    });
   };
 
   const handleOpenEditQuestionModal = async (quizQuestionId) => {
@@ -664,7 +682,7 @@ const QuestionTemplate = () => {
                 {[...Array(numOptions)].map((_, index) => (
                   <div className="form-group" key={index}>
                     <label>Option {index + 1}:<b id="required">*</b></label>
-                    <div className="input-group">
+                    <div className="d-flex" >
                       <input
                         className="form-control"
                         type="text"
@@ -696,7 +714,7 @@ const QuestionTemplate = () => {
                 {[...Array(numCorrectOptions)].map((_, index) => (
                   <div className="form-group" key={index}>
                     <label>Correct Option {index + 1}:<b id="required">*</b></label>
-                    <div className="input-group">
+                    <div className="d-flex">
                       <select
                         className="form-control"
                         value={newQuestion.correctOptions[index] || ""}

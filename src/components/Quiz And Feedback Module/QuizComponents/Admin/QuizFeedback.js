@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import GetAllFeedbacks from "./GetAllFeedbacks";
 import { QuizFeedbackApi } from "../../../../middleware/Quiz And Feedback Module/Admin/QuizFeedbackApi";
 import { Container } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 export const QuizFeedback = () => {
   const quizName = sessionStorage.getItem("quizName");
@@ -75,6 +76,25 @@ export const QuizFeedback = () => {
   //     window.location.reload(1);
   // }, 500);
     handleCloseAddfbQuestionModal();
+    const Toast = Swal.mixin({
+      className:"swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background:'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "QuizFeedback Added Successfully",
+      color:'white'
+    });
+
     }catch(error){
       console.log(error)
     }
@@ -123,7 +143,7 @@ export const QuizFeedback = () => {
 
   return (
     <>
-    <Container fluid style={{marginTop:'600px'}}>
+    <Container fluid style={{marginTop:'630px'}}>
     <div>
       <button
         class="btn btn-light"

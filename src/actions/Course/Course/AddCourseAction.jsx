@@ -74,3 +74,4 @@ export const setCourseStatus = (isRequesting) => ({
 });
 
 export const RESET_EXISTEDCOURSE_MESSAGE = 'RESER_EXISTED_MESSAGE';
+export const RESET_SUCCESSCOURSE_MESSAGE = 'RESET_SUCCESSCOURSE_MESSAGE';

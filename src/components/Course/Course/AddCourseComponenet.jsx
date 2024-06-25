@@ -25,7 +25,8 @@ import {
   createCoursesRequest,
   createCoursesSuccess,
   fetchLevelRequest,
-  RESET_EXISTEDCOURSE_MESSAGE
+  RESET_EXISTEDCOURSE_MESSAGE,
+  RESET_SUCCESSCOURSE_MESSAGE
 } from '../../../actions/Course/Course/AddCourseAction'
 import { GiCancel } from "react-icons/gi";
 import axios from "axios";
@@ -75,6 +76,7 @@ const AddCourse = () => {
     if (isSubmit) {
       // console.log("oppp",courseid);
       // const courseid = useSelector((state) => state.addcourse.course_id);
+      dispatch({ type: RESET_SUCCESSCOURSE_MESSAGE });
       navigate(`/coursecontent/${courseid}`); // Navigate to the next page on success
     }
   }, [isSubmit, navigate]);

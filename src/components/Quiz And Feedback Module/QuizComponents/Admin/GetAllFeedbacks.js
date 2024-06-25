@@ -186,6 +186,26 @@ export const GetAllFeedbacks = () => {
   const handleDeletefbQuestion = (quizFeedbackQuestionId) => {
     dispatch(deletequizfeedbackRequest(quizFeedbackQuestionId));
     setShowPopup(false);
+    const Toast = Swal.mixin({
+      className:"swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background:'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "QuizFeedback Deleted Successfully",
+      color:'white'
+    });
+
+
 
   };
   const handleNavigate = () => {

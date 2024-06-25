@@ -17,15 +17,15 @@ import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/Top
 import { QuizContext } from "./QuizContext";
  
  
-function roundScore(score) {
-  if (score > 95) {
-      return 100;
-  } else if (score <= 5) {
-      return 0;
-  } else {
-      return Math.round(score / 10) * 10;
-  }
-}
+// function roundScore(score) {
+//   if (score > 95) {
+//       return 100;
+//   } else if (score <= 5) {
+//       return 0;
+//   } else {
+//       return Math.round(score / 10) * 10;
+//   }
+// }
  
 export const LearnerScorePage = () => {
   const {setIsReattempt}=React.useContext(QuizContext);
@@ -315,12 +315,12 @@ useEffect(() => {
                                     </h5>
                                   </Typography>
                                   <Typography variant="body1">
-                                    {/* <h4>
+                                    <h4>
                                       <b>
                                         Your Score is {learnerAttempt.score}
                                       </b>
-                                    </h4> */}
-                                    <h4><b>Your Score is {roundScore(learnerAttempt.score)} Percentage</b></h4>
+                                    </h4>
+                                    {/* <h4><b>Your Score is {roundScore(learnerAttempt.score)} Percentage</b></h4> */}
                                   </Typography>
                                   <div
                                     style={{

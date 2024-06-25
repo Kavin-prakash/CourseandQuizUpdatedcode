@@ -49,6 +49,8 @@ function SidebarTopics() {
   const [topic, setTopic] = useState();
 
 
+  
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -66,6 +68,8 @@ function SidebarTopics() {
 
 
   const { courseId } = useParams();
+
+  sessionStorage.setItem("courseId",courseId);
   const [topicId, settopicId] = useState();
   const selectedCourseSelector = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse);
   const [selectedCourse, setselectedCourse] = useState();

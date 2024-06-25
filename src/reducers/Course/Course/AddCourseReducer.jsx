@@ -8,7 +8,8 @@ import {
   FETCH_CATEGORY_FAILURE,
   CREATE_COURSES_EXISTS,
   SET_COURSE_STATUS,
-  RESET_EXISTEDCOURSE_MESSAGE
+  RESET_EXISTEDCOURSE_MESSAGE,
+  RESET_SUCCESSCOURSE_MESSAGE,
 } from '../../../actions/Course/Course/AddCourseAction';
  
 const initialState = {
@@ -71,7 +72,12 @@ const AddCourseReducer = (state = initialState, action) => {
             return {
               ...state,
               isExists:false,
-            }    
+            } 
+        case RESET_SUCCESSCOURSE_MESSAGE:
+              return {
+                ...state,
+                isSubmitted:false,
+              }    
    
     default:
       return state;

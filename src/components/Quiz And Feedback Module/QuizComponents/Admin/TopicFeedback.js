@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import GetTopicFeedback from './GetTopicFeedback';
 import { TopicFeedbackApi } from '../../../../middleware/Quiz And Feedback Module/Admin/TopicFeedbackApi';
 import { Container } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 export const TopicFeedback = () => {
     const topicId = sessionStorage.getItem('topicId');
@@ -62,6 +63,25 @@ export const TopicFeedback = () => {
             await TopicFeedbackApi(requestBody);
             setFbQuestion({ ...fbQuestion,question:"", options: "",});
             handleCloseAddfbQuestionModal();
+            const Toast = Swal.mixin({
+                className:"swal2-toast",
+                toast: true,
+                position: "top",
+                showConfirmButton: false,
+                timer: 2000,
+                background:'green',
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = Swal.stopTimer;
+                  toast.onmouseleave = Swal.resumeTimer;
+                }
+              });
+              Toast.fire({
+                icon: "success",
+                title: "TopicFeedback Added Successfully",
+                color:'white'
+              });
+          
             // setTimeout(function () {
             //     window.location.reload(1);
             // }, 1000);
@@ -108,7 +128,7 @@ export const TopicFeedback = () => {
 
     return (
         <>
-            <Container fluid style={{ marginTop: '650px' }}>
+            <Container fluid style={{ marginTop: '670px' }}>
                 <div>
                     <div>
                         <button
