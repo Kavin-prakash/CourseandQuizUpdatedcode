@@ -740,7 +740,7 @@ export default function SavedTopics(props) {
                                         </IconButton>
                                     </Tooltip>
                                     }
-                                    <Tooltip title="Add Feedback">
+                                    <Tooltip title="Add Topic Feedback">
                                         <IconButton aria-label="Addfeedback" onClick={() => handleAddFeedBackButton(topic.topicId)}>
                                             <VscFeedback style={{ color: "#FFDC00" }} />
                                         </IconButton>

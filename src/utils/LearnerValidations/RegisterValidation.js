@@ -1,18 +1,12 @@
-export const validateRegistrationForm = (userData) => {
-
-    // console.log("check",validateRegistrationForm);
+export const validateRegistrationForm = (userData,setErrors) => {
+    console.log("raj",userData);
     let isValid = true;
     const errors = {};
-
-    console.log("erros",errors);
-
-
-
+ 
     if (!userData.firstName.trim()) {
         errors.firstName = 'First Name is required';
         isValid = false;
-    }
-     else if (/\s/.test(userData.firstName)) {
+    } else if (/\s/.test(userData.firstName)) {
         errors.firstName = 'First Name should not contain spaces';
         isValid = false;
     } else if (/\d/.test(userData.firstName)) {
@@ -22,7 +16,7 @@ export const validateRegistrationForm = (userData) => {
         errors.firstName = 'First Name should not contain special characters';
         isValid = false;
     }
-
+ 
     if (!userData.lastName.trim()) {
         errors.lastName = 'Last Name is required';
         isValid = false;
@@ -36,17 +30,17 @@ export const validateRegistrationForm = (userData) => {
         errors.lastName = 'Last Name should not contain special characters';
         isValid = false;
     }
-
+ 
     if (!userData.gender) {
         errors.gender = 'Gender is required';
         isValid = false;
     }
-
+ 
     if (!userData.dob) {
         errors.dob = 'Date of Birth is required';
         isValid = false;
     }
-    
+   
     if (!userData.email) {
         errors.email = 'Email is required';
         isValid = false;
@@ -54,7 +48,7 @@ export const validateRegistrationForm = (userData) => {
         errors.email = 'Invalid email address';
         isValid = false;
     }
-    
+   
     if (!userData.contactNumber) {
         errors.contactNumber = 'Contact Number is required';
         isValid = false;
@@ -62,7 +56,7 @@ export const validateRegistrationForm = (userData) => {
         errors.contactNumber = 'Invalid contact number';
         isValid = false;
     }
-
+ 
     if (!userData.password) {
         errors.password = 'Password is required';
         isValid = false;
@@ -70,7 +64,7 @@ export const validateRegistrationForm = (userData) => {
         errors.password = 'Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character';
         isValid = false;
     }
-
+ 
     if (!userData.confirmPassword) {
         errors.confirmPassword = 'Confirm Password is required';
         isValid = false;
@@ -78,14 +72,13 @@ export const validateRegistrationForm = (userData) => {
         errors.confirmPassword = 'Passwords do not match';
         isValid = false;
     }
-
+ 
     if (userData.stream.length === 0 || !userData.stream) {
         errors.selectedOptions = 'Please select at least one option';
         isValid = false;
       }
-    
    
-
-      return  errors;
-    
+   
+   setErrors(errors);
+    return isValid;
 };

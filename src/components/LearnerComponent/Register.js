@@ -266,63 +266,53 @@ export default function Register() {
     //     }
     // };
 
+    const [validationformerror,setValidationError]=useState('');
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        // Calculate age based on the date of birth
-        console.log("userdata",userData);
+        const validationErrors = validateRegistrationForm(userData,setValidationError);
+        console.log("validation",validationErrors);
+        // const isFormValid = validateForm(course, setErrors);
         const today = new Date();
         const birthDate = new Date(userData.dob);
         let age = today.getFullYear() - birthDate.getFullYear();
         const month = today.getMonth() - birthDate.getMonth();
-    
+ 
         if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
-    
-        // Check if the user is under the age limit
+ 
         const ageLimit = 18;
+ 
         if (age < ageLimit) {
             setAgeError(true);
             setErrorMessage('You must be at least 18 years old to register');
             return;
         }
-    
-        // Verify email
-        if (!emailVerified) {
-            setErrorMessage('Please verify your email address before registering.');
-            return;
-        }
-    
-        // Validate the form and display errors if any
-        const validationErrors = validateRegistrationForm(userData);
-
-
-        console.log("validationerreos",validationErrors);
-
-
+        if (!emailVerified) return;
+       
+ 
+ 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
-    
-        // If no errors, proceed with registration
-        if (Object.keys(validationErrors).length === 0) {
+ 
+        if (validationErrors) {
             const updatedUserData = {
                 ...userData,
                 stream: userData.stream.map((option) => option.value).join(', '),
             };
-
-            console.log("reg",updatedUserData);
-            await RegisterApi(updatedUserData);
-    
+            await RegisterApi(updatedUserData)
             // dispatch(userDataRequest(updatedUserData));
             alertdisplayregister();
             // setTimeout(() => {
-            //     navigate("/");
-            // }, 2000);
+            //                     navigate("/");
+            //                   }, 2000);
+        } else {
+            setErrors(validationErrors || {});
         }
     };
+ 
     
  
     const handleGenderChange = (event) => {
@@ -344,187 +334,176 @@ export default function Register() {
  
     return (
         <div style={{ height: "100vh" }} class="register">
-            <div class="row">
-                <div class="col-md-3 register-left">
-                    <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
-                    <h3>Welcome to Relevantz </h3>
-                    <h4>Learning Experience Platform</h4>
-                    <h6>Gain your knowledge with Relevantz</h6>
-                    {/* <input type="submit" name="" value="Login" /><br /> */}
-                </div>
- 
-                <div class="col-md-9 register-right">
- 
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
- 
-                            <h3 class="register-heading">Join us with an Intellectual Adventure!!!</h3>
-                            <Modal
-                                isOpen={showModal}
-                                onRequestClose={closeModal}
-                                contentLabel='Registration Success'
-                                className='Modal'
-                                overlayClassName='Overlay'
-                            >
-                                <h2>Registration successfully!</h2>
-                                <button onClick={closeModal} >close</button>
- 
-                            </Modal>
-                            <div class="row register-form">
-                                <div class="col-md-6">
-                                    <div class="form-group">
- 
- 
-                                        <input type="text" class="form-control field" placeholder="First Name *" value={userData.firstName} name="firstName" onChange={handleChange} disabled={showOTP} />
-                                        {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
-                                    </div>
-                                    <div class="form-group">
- 
-                                        <input type="number" class="form-control" placeholder="Phone Number *" value={userData.contactNumber} name="contactNumber" onChange={handleChange} disabled={showOTP} />
-                                        {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
-                                    </div>
-                                    <div className="form-group d-flex">
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            placeholder="Email *"
-                                            value={userData.email}
-                                            name="email"
-                                            onChange={handleChange}
-                                            disabled={showOTP || emailVerified}
- 
-                                            style={{maxHeight:40}}
-                                        />
-                                        {emailVerified && <span className="text-success">&#10004;</span>}
-                                        {!showOTP && !emailVerified && email.trim() !== '' && (
-                                            <button className="btn btn-primary ms-1 otp" onClick={handleSendOTP} style={{maxHeight:40}} >
-                                                <a style={{fontSize:'12px'}}>{timer === 0 ? 'Resend OTP' : 'Send OTP'}</a>
-                                            </button>
-                                        )}
-                                        {errors.email && <div style={{ marginLeft: '15px' }}  className="text-danger">{errors.email}</div>}
-                                        {showOTP && !emailVerified && (
-                                            <div className="form-group" style={{marginTop:'0'}}>
-                                                <input
-                                                    type="text"
-                                                    minLength="6"
-                                                    maxLength="6"
-                                                    name="enteredOTP"
-                                                    className="form-control"
-                                                    placeholder="Enter OTP *"
-                                                    value={enteredOTP}
-                                                    onChange={handleOTPChange}
-                                                   
-                                                />
-                                                <div  style={{ color:'blue' }}>
-                                                    {`${minutes}:${seconds < 10 ? '0' : ''}${seconds} remaining`}
-                                                </div>
-                                                {enteredOTP.length === 6 && (
-                                                    <button className="btn btn-primary ms-1 otp" onClick={SubmitOtp}>
-                                                        <a>Submit</a>
-                                                    </button>
-                                                )}
-                                                {errors.otp && <div className="text-danger">{errors.otp}</div>}
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+                <h3>Welcome to Relevantz </h3>
+                <h4>Learning Experience Platform</h4>
+                <h6>Gain your knowledge with Relevantz</h6>
+                {/* <input type="submit" name="" value="Login" /><br /> */}
+            </div>
+
+            <div class="col-md-9 register-right">
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                        <h3 class="register-heading">Join us with an Intellectual Adventure!!!</h3>
+                        <Modal
+                            isOpen={showModal}
+                            onRequestClose={closeModal}
+                            contentLabel='Registration Success'
+                            className='Modal'
+                            overlayClassName='Overlay'
+                        >
+                            <h2>Registration successfully!</h2>
+                            <button onClick={closeModal} >close</button>
+
+                        </Modal>
+                        <div class="row register-form">
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+
+                                    <input type="text" class="form-control field" placeholder="First Name *" value={userData.firstName} name="firstName" onChange={handleChange} disabled={showOTP} />
+                                    {validationformerror.firstName && <div className="text-danger">{validationformerror.firstName}</div>}
+                                </div>
+                                <div class="form-group">
+
+                                    <input type="number" class="form-control" placeholder="Phone Number *" value={userData.contactNumber} name="contactNumber" onChange={handleChange} disabled={showOTP} />
+                                    {validationformerror.contactNumber && <div className="text-danger">{validationformerror.contactNumber}</div>}
+                                </div>
+                                <div className="form-group d-flex">
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        placeholder="Email *"
+                                        value={userData.email}
+                                        name="email"
+                                        onChange={handleChange}
+                                        disabled={showOTP || emailVerified}
+
+                                        style={{maxHeight:40}}
+                                    />
+                                    {emailVerified && <span className="text-success">&#10004;</span>}
+                                    {!showOTP && !emailVerified && email.trim() !== '' && (
+                                        <button className="btn btn-primary ms-1 otp" onClick={handleSendOTP} style={{maxHeight:40}} >
+                                            <a style={{fontSize:'12px'}}>{timer === 0 ? 'Resend OTP' : 'Send OTP'}</a>
+                                        </button>
+                                    )}
+                                    {validationformerror.email && <div style={{ marginLeft: '15px' }}  className="text-danger">{validationformerror.email}</div>}
+                                    {showOTP && !emailVerified && (
+                                        <div className="form-group" style={{marginTop:'0'}}>
+                                            <input
+                                                type="text"
+                                                minLength="6"
+                                                maxLength="6"
+                                                name="enteredOTP"
+                                                className="form-control"
+                                                placeholder="Enter OTP *"
+                                                value={enteredOTP}
+                                                onChange={handleOTPChange}
+                                               
+                                            />
+                                            <div  style={{ color:'blue' }}>
+                                                {`${minutes}:${seconds < 10 ? '0' : ''}${seconds} remaining`}
                                             </div>
-                                           
-                                           
-                                        )}
-                                       
-                                       
-                                    </div>
-                                    <div style={{marginTop:"-2%"}} class="form-group">
-                                        <input  type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
-                                        <FaInfoCircle style={{marginLeft:"105%",marginTop:"-26%"}} className='password-icon Red-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
-                                        {errors.password && <div className="text-danger">{errors.password}</div>}
-                                    </div>
-                                    {showPasswordRules && <div className='password-rules'>
-                                        <p style={{marginLeft:"6%",marginTop:"-10%"}} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
-                                    </div>}
- 
-                                    {/* <div style={{ marginTop: "-5%" }} class="form-group">
- 
-                                        <input type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
-                                        <FaInfoCircle data-tip data-for='passwordTooltip' className='password-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
-                                        <Tooltip id='passwordTooltip' place='right' effect='solid'>
-                                            Password must be between 8 to 14 characters, must contain one uppercase, one lowercase, and one special character.
-                                        </Tooltip>
-                                    </div>
-                                    {errors.password && <div className="text-danger">{errors.password}</div>}
-                                    {showPasswordRules && <div className='password-rules'>
-                                        <p style={{ marginLeft: "6%", marginTop: "-10%" }} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
-                                    </div>} */}
- 
- 
-                                    <div class="form-group">
-                                        <div class="maxl d-flex">
-                                            <h6 style={{ marginTop: "25px" }}>Gender:</h6>
-                                            <div className="gender-container">
-                                                <label class="gender">
-                                                    <input type="radio" name="gender" value="male" checked={userData.gender === "male"} onChange={handleChange} disabled={showOTP} />
-                                                    <span>Male</span>
-                                                </label>
-                                                <label class="gender">
-                                                    <input type="radio" name="gender" value="female" checked={userData.gender === "female"} onChange={handleChange} disabled={showOTP} />
-                                                    <span>Female</span>
-                                                </label>
-                                                <label class="gender">
-                                                    <input type="radio" name="gender" value="others" checked={userData.gender === "others"} onChange={handleChange} disabled={showOTP} />
-                                                    <span>Transgender</span>
-                                                </label>
-                                            </div>
+                                            {enteredOTP.length === 6 && (
+                                                <button className="btn btn-primary ms-1 otp" onClick={SubmitOtp}>
+                                                    <a>Submit</a>
+                                                </button>
+                                            )}
+                                            {validationformerror.otp && <div className="text-danger">{validationformerror.otp}</div>}
                                         </div>
-                                        {errors.gender && <div className="text-danger">{errors.gender}</div>}
-                                    </div>
+                                       
+                                       
+                                    )}
+                                   
+                                   
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Last Name *" value={userData.lastName} name="lastName" onChange={handleChange} disabled={showOTP} />
-                                        {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
-                                    </div>
- 
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" value={userData.dob} name="dob" placeholder="Date Of Birth *" onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} max={new Date().toISOString().split('T')[0]} onChange={handleChange} disabled={showOTP} />
-                                        {ageError && (<div className='age-error-message'><p className='error-message'>{errorMessage}</p></div>)}
-                                        {errors.dob && <div className="text-danger">{errors.dob}</div>}
-                                    </div>
-                                    <div class="form-group">
-                                        <Select
-                                            isMulti
-                                            name="stream"
-                                            options={options}
-                                            className="basic-multi-select"
-                                            classNamePrefix="stream"
-                                            placeholder="Choose your stream"
-                                            value={userData.stream}
-                                            onChange={(selectedOption) => handleChange({ target: { name: "stream", value: selectedOption } })}
-                                            isDisabled={showOTP}
- 
-                                        />
-                                        {errors.selectedOptions && <div className="text-danger">{errors.selectedOptions}</div>}
- 
-                                    </div>
-                                    <div class="form-group ">
-                                        <input type="password" class="form-control" placeholder="Confirm Password *" value={userData.confirmPassword} name="confirmPassword" onChange={handleChange} disabled={showOTP} />
-                                        {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
-                                    </div>
-                                    <br></br>
-                                    <button type="submit" data-testid="ben" className="btnRegister" onClick={handleSubmit} ><a>
-                                        Register</a>
-                                    </button>
- 
-                                    {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
+                               
+                                <div style={{marginTop:"-2%"}} class="form-group">
+                                    <input style={{width:"425px"}} type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
+                                    <FaInfoCircle style={{marginLeft:"105%",marginTop:"-26%"}} className='password-icon Red-icon' onMouseEnter={handlePasswordIconHover} onMouseLeave={handlePasswordLeave} />
+                                    {validationformerror.password && <div className="text-danger">{validationformerror.password}</div>}
                                 </div>
-                                {/* {altermessage && <Alert variant="outlined" severity="success">
-                  Registered successful! Redirecting...
-                </Alert>} */}
- 
+                                {showPasswordRules && <div className='password-rules'>
+                                    <p style={{marginLeft:"6%",marginTop:"-10%"}} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
+                                </div>}
+                               
+
+
+                                <div class="form-group">
+                                    <div class="maxl d-flex">
+                                        <h6 style={{ marginTop: "25px" }}>Gender:</h6>
+                                        <div className="gender-container">
+                                            <label class="gender">
+                                                <input type="radio" name="gender" value="male" checked={userData.gender === "male"} onChange={handleChange} disabled={showOTP} />
+                                                <span>Male</span>
+                                            </label>
+                                            <label class="gender">
+                                                <input type="radio" name="gender" value="female" checked={userData.gender === "female"} onChange={handleChange} disabled={showOTP} />
+                                                <span>Female</span>
+                                            </label>
+                                            <label class="gender">
+                                                <input type="radio" name="gender" value="others" checked={userData.gender === "others"} onChange={handleChange} disabled={showOTP} />
+                                                <span>Transgender</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {validationformerror.gender && <div className="text-danger">{validationformerror.gender}</div>}
+                                </div>
                             </div>
- 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Last Name *" value={userData.lastName} name="lastName" onChange={handleChange} disabled={showOTP} />
+                                    {validationformerror.lastName && <div className="text-danger">{validationformerror.lastName}</div>}
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value={userData.dob} name="dob" placeholder="Date Of Birth *" onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} max={new Date().toISOString().split('T')[0]} onChange={handleChange} disabled={showOTP} />
+                                    {ageError && (<div className='age-error-message'><p className='error-message'>{errorMessage}</p></div>)}
+                                    {validationformerror.dob && <div className="text-danger">{validationformerror.dob}</div>}
+                                </div>
+                                <div class="form-group">
+                                    <Select
+                                        isMulti
+                                        name="stream"
+                                        options={options}
+                                        className="basic-multi-select"
+                                        classNamePrefix="stream"
+                                        placeholder="Choose your stream"
+                                        value={userData.stream}
+                                        onChange={(selectedOption) => handleChange({ target: { name: "stream", value: selectedOption } })}
+                                        isDisabled={showOTP}
+
+                                    />
+                                    {validationformerror.selectedOptions && <div className="text-danger">{validationformerror.selectedOptions}</div>}
+
+                                </div>
+                                <div class="form-group ">
+                                    <input type="password" class="form-control" placeholder="Confirm Password *" value={userData.confirmPassword} name="confirmPassword" onChange={handleChange} disabled={showOTP} />
+                                    {validationformerror.confirmPassword && <div className="text-danger">{validationformerror.confirmPassword}</div>}
+                                </div>
+                                <br></br>
+                                <button type="submit" data-testid="ben" className="btnRegister" onClick={handleSubmit} ><a>
+                                    Register</a>
+                                </button>
+
+                                {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
+                            </div>
+                            {/* {altermessage && <Alert variant="outlined" severity="success">
+              Registered successful! Redirecting...
+            </Alert>} */}
+
                         </div>
+
                     </div>
                 </div>
             </div>
- 
         </div>
+
+    </div>
  
     );
 }

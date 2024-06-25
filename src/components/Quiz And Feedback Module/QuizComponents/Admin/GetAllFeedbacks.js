@@ -192,7 +192,7 @@ export const GetAllFeedbacks = () => {
     sessionStorage.removeItem("quizId");
     sessionStorage.removeItem("topicId");
     sessionStorage.removeItem("courseId");
-    navigate(`/addtopic/${courseId}`)
+    navigate(`/coursecontent/${courseId}`)
     dispatch(fetchQuizIdFailure(topicId))
   }
 

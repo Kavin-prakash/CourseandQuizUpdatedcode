@@ -73,3 +73,4 @@ export const setCourseStatus = (isRequesting) => ({
   payload: isRequesting,
 });
 
+export const RESET_EXISTEDCOURSE_MESSAGE = 'RESER_EXISTED_MESSAGE';

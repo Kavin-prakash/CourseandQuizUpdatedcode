@@ -1,4 +1,4 @@
-import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_INTERNALFAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, SET_CATEGORY_STATUS } from "../../../actions/Course/Category/AddCategoryAction";
+import { CREATE_CATEGORY_FAILURE, CREATE_CATEGORY_INTERNALFAILURE, CREATE_CATEGORY_REQUEST, CREATE_CATEGORY_SUCCESS, SET_CATEGORY_STATUS,RESET_THE_SUBMITTED_MESSGAE,RESET_EXISTED_MESSAGE } from "../../../actions/Course/Category/AddCategoryAction";
 
 const initialState = {
 
@@ -45,6 +45,17 @@ const categoryReducer = (state = initialState, action) => {
         isRequesting: action.payload,
 
       };
+      case RESET_THE_SUBMITTED_MESSGAE:
+        return {
+          ...state,
+          isSuccess: false,
+ 
+        }
+        case RESET_EXISTED_MESSAGE:
+          return {
+            ...state,
+            isFailure: false,
+          }    
 
     default:
       return state;

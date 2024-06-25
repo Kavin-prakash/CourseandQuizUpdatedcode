@@ -5,6 +5,7 @@ import {
   CREATE_TOPICS_EXISTS,
   SET_TOPICS_STATUS,
   RESET_THE_SUBMITTED_MESSGAE,
+  RESET_EXISTED_MESSAGE,
 
 } from '../../../actions/Course/Topic/AddTopicAction';
 
@@ -63,6 +64,11 @@ const addTopicReducer = (state = initialState, action) => {
         ...state,
         isSubmitted: false,
       }
+      case RESET_EXISTED_MESSAGE:
+        return {
+          ...state,
+          isExisted: false,
+        }  
     default:
       return state;
   }

@@ -197,7 +197,7 @@ export const GetTopicFeedback = () => {
 
   const handleNavigate = () => {
     sessionStorage.removeItem("topicId");
-    navigate(`/addtopic/${courseId}`)
+    navigate(`/coursecontent/${courseId}`)
   };
 
   const handleCloseModal = () => {

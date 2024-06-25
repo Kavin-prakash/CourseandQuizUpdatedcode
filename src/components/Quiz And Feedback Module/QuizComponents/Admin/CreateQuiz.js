@@ -267,7 +267,7 @@ export const Home = () => {
     const handleNavigate = () => {
         sessionStorage.removeItem("quizId");
         sessionStorage.removeItem("topicId");
-        navigate(`/addtopic/${courseId}`)
+        navigate(`/coursecontent/${courseId}`)
         dispatch(fetchQuizIdFailure(topicId))
     }
 

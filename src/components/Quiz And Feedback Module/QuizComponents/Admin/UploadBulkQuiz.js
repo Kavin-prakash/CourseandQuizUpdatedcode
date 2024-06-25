@@ -247,7 +247,7 @@ const UploadBulkQuiz = () => {
   };
   return (
     <>
-      <Container fluid style={{ marginTop: "600px" }}>
+      <Container fluid style={{ marginTop: "660px" }}>
         <div id="uploadContent">
           <h5 id="heading" style={{ marginTop: "-38%", marginLeft: "25%" }}>
             Upload Question from device{" "}

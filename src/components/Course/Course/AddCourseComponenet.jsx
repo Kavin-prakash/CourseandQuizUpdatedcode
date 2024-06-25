@@ -24,14 +24,15 @@ import { useDispatch, connect, useSelector } from "react-redux";
 import {
   createCoursesRequest,
   createCoursesSuccess,
-  fetchLevelRequest
+  fetchLevelRequest,
+  RESET_EXISTEDCOURSE_MESSAGE
 } from '../../../actions/Course/Course/AddCourseAction'
 import { GiCancel } from "react-icons/gi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "../../../utils/Course/Course/AddCourseValidation";
 // import { createCategoryrequest } from "../../../action/Course/Category/AddCategoryAction";
-import { createCategoryrequest } from '../../../actions/Course/Category/AddCategoryAction';
+import { createCategoryrequest,RESET_THE_SUBMITTED_MESSGAE,RESET_EXISTED_MESSAGE } from '../../../actions/Course/Category/AddCategoryAction';
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Dialog, TextField, DialogContent, DialogTitle, DialogActions, Button, Alert, Stack, Box, MenuItem, FormControl, FormHelperText, CardContent } from "@mui/material";
@@ -93,10 +94,9 @@ const AddCourse = () => {
         didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({
-        icon: "success", title: "Category added successfully", customClass: {
-          popup: 'custom-toast'
-        }
+        icon: "success", title: "Category added successfully"
       });
+      dispatch({ type: RESET_THE_SUBMITTED_MESSGAE });
 
       // setSuccessMsg('Category added successfully');
 
@@ -129,10 +129,9 @@ const AddCourse = () => {
         didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({
-        icon: "warning", title: "Category already exists", customClass: {
-          popup: 'custom-toast'
-        }
+        icon: "warning", title: "Category already exists"
       });
+      dispatch({ type: RESET_EXISTED_MESSAGE });
 
     }
   }, [addCategoryFailureState])
@@ -155,9 +154,7 @@ const AddCourse = () => {
         didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({
-        icon: "error", title: "Internal Server error occured", customClass: {
-          popup: 'custom-toast'
-        }
+        icon: "error", title: "Internal Server error occured"
       });
     }
   }, [InternalError])
@@ -175,10 +172,9 @@ const AddCourse = () => {
         didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({
-        icon: "warning", title: "Course already exists", customClass: {
-          popup: 'custom-toast'
-        }
+        icon: "warning", title: "Course already exists"
       });
+      dispatch({ type: RESET_EXISTEDCOURSE_MESSAGE });
 
     }
   }, [isExist])
@@ -195,9 +191,7 @@ const AddCourse = () => {
         didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
       });
       Toast.fire({
-        icon: "error", title: "Internal Server error occured", customClass: {
-          popup: 'custom-toast'
-        }
+        icon: "error", title: "Internal Server error occured"
       });
 
     }

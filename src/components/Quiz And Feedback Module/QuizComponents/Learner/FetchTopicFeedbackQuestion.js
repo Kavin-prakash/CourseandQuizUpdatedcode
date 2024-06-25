@@ -7,6 +7,7 @@ import { Container } from 'react-bootstrap';
 import { topicfeedbackresponserequest } from '../../../../actions/Quiz And Feedback Module/Learner/TopicFeedbackResponseAction';
 import { fetchtopicfeedbackquestionrequest } from '../../../../actions/Quiz And Feedback Module/Learner/FetchTopicFeedbackQuestionAction';
 import Swal from "sweetalert2";
+import { TopicFeedbackResponseApi } from '../../../../middleware/Quiz And Feedback Module/Learner/TopicFeedbackResponseApi';
  
 const TopicFeedbackquestion = () => {
 
@@ -15,55 +16,28 @@ const TopicFeedbackquestion = () => {
   const topicfeedbackquestionfetch = useSelector(
     (state) => state.fetchtopicfeedbackquestion.topicfeedbackquestions
   );
-  console.log("selector", topicfeedbackquestionfetch);
+  const topicId = sessionStorage.getItem("topicId");
+  const learnerId = sessionStorage.getItem("UserSessionID");
 
-   const learnerId = sessionStorage.getItem("UserSessionID");
-  //  const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
-  //  console.log(getlearners);
+  const [answerss, setAnswerss] = useState([]);
 
-  //  console.log("Learner ID :", learnerId);
+  useEffect(() => {
+    dispatch(fetchtopicfeedbackquestionrequest(topicId));
+  }, [dispatch, topicId]);
 
-//   const [desc, setDesc] = useState("");
-//   const [quiztext, setQuiztext] = useState("")
-  // Initialize answers state as an array of objects
-  const [answerss, setAnswerss] = useState(
-    topicfeedbackquestionfetch.map((question) => ({
-      topicFeedbackQuestionId: question.topicFeedbackQuestionId,
-      topicId: question.topicId,
-      learnerId:learnerId,
-      response: "",
-      optionText: "",
-    }))
-  );
-  console.log("uestate", answerss);
- 
-  // Handle change for both MCQ and text responses
-  // const onhandleChange = (questionId, optionType, optionValue) => {
-  //   setAnswers(answers.map(answer =>
-  //     answer.topicFeedbackQuestionId === questionId ?
-  //       { ...answer, [optionType]: optionValue } :
-  //       answer
-  //   ));
-  // };
-  // const onhandleResponse = (questionId, optionType) => (e) => {
-  //   const { value } = e.target;
-  //   setAnswers(answers.map(answer =>
-  //     answer.topicFeedbackQuestionId === questionId ?
-  //       { ...answer, [optionType]: value } :
-  //       answer
-  //   ));
-  // };
+  useEffect(() => {
+    setAnswerss(
+      topicfeedbackquestionfetch.map((question) => ({
+        topicFeedbackQuestionId: question.topicFeedbackQuestionId,
+        topicId: topicId,
+        learnerId: learnerId,
+        response: "",
+        optionText: "",
+      }))
+    );
+  }, [topicfeedbackquestionfetch, topicId, learnerId]);
 
   const onhandleChange = (questionId, optionType, optionValue) => {
-    setAnswerss(
-    topicfeedbackquestionfetch.map((question) => ({
-      topicFeedbackQuestionId: question.topicFeedbackQuestionId,
-      topicId: question.topicId,
-      learnerId:learnerId,
-      response: "",
-      optionText: "",
-    }))
-  );
     setAnswerss((prevAnswers) =>
       prevAnswers.map((answer) =>
         answer.topicFeedbackQuestionId === questionId
@@ -83,20 +57,18 @@ const TopicFeedbackquestion = () => {
       )
     );
   };
-  // Submit all answers
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Replace with your actual submit logic
-    console.log("Submitting answers:", answerss);
-    dispatch(topicfeedbackresponserequest(answerss));
+    TopicFeedbackResponseApi(answerss);
     const Toast = Swal.mixin({
-      customClass:'swal2-toast-quiz-submission',
-      className:"swal2-toast",
+      customClass: 'swal2-toast-quiz-submission',
+      className: "swal2-toast",
       toast: true,
       position: "top",
       showConfirmButton: false,
       timer: 2000,
-      background:'green',
+      background: 'green',
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -106,50 +78,28 @@ const TopicFeedbackquestion = () => {
     Toast.fire({
       icon: "success",
       title: "TopicFeedback Response Submitted successfully",
-      color:'white'
+      color: 'white'
     });
-  // alert('Quiz deleted successfully');
-  // handleCloseQuizDeleteModal();
-  setTimeout(() => {
-    navigate("/LearnerenrolledCourse");
-  }, 2000);
-
-    // This is where you want to set isTopicFeedbackGiven to true after feedback submission
-
+    setTimeout(() => {
+      navigate("/ViewTopics/:courseId");
+    }, 2000);
   };
- 
-  const handleNavigate = () => {
-    sessionStorage.removeItem("topicId");
-    navigate("/quizengine");
+
+  const divStyle = {
+    boxShadow: "0px 4px 8px #23275c",
+    backgroundColor: "#F9F5F6",
   };
- 
-   const divStyle = {
-     boxShadow: "0px 4px 8px #23275c",
-     backgroundColor: "#F9F5F6",
-  };
-  
-    const allAnswered = answerss.every(
-      (answer) => answer.optionText || answer.response
-    );
 
-const topicId=sessionStorage.getItem("topicId")
+  const allAnswered = answerss.every(
+    (answer) => answer.optionText || answer.response
+  );
 
-  useEffect(() => {
-dispatch(fetchtopicfeedbackquestionrequest(topicId))
-
-  }, [dispatch])
-
-
-  //feedback button disable
-  
-
- 
   return (
     <div>
       <div className="question template container" id="fq">
         <div>
           <button
-            class="btn btn-light"
+            className="btn btn-light"
             style={{
               marginLeft: "100%",
               marginTop: "8%",
@@ -158,7 +108,7 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
               width: "50",
             }}
             onClick={() => {
-             navigate("/ViewTopics");
+              navigate("/ViewTopics/:courseId");
             }}
           >
             Back
@@ -171,8 +121,8 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
             {topicfeedbackquestionfetch &&
               topicfeedbackquestionfetch.map(
                 (topicfeedbackquestions, index) => (
-                  <div className="cont mt-2">
-                    <div className="card mt-5" key={index}>
+                  <div className="cont mt-2" key={index}>
+                    <div className="card mt-5">
                       <div className="card-body">
                         <h6 className="card-title">
                           Question {topicfeedbackquestions.questionNo}
@@ -229,7 +179,6 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
                   </div>
                 )
               )}
-            {/* <Button onClick={handleSubmit}>Submit</Button> */}
             <Button
               type="submit"
               onClick={handleSubmit}
@@ -239,9 +188,7 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
                 color: "white",
                 marginLeft: "45%",
               }}
-              disabled={
-                !answerss.every((answer) => answer.optionText || answer.response)
-              }
+              disabled={!allAnswered}
             >
               Submit
             </Button>
@@ -253,5 +200,3 @@ dispatch(fetchtopicfeedbackquestionrequest(topicId))
 };
  
 export default TopicFeedbackquestion;
- 
- 

@@ -571,6 +571,7 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   const [progress, setProgress] = useState(60);
   const [scoreData, setScoreData] = useState([]);
   const learnerId = sessionStorage.getItem('UserSessionID'); // Retrieve learner ID from session storage
+  console.log("sads",learnerId);
   const selectedcount = useSelector((state) => state.learnerdashboard.dashboard);
   console.log("selectedcount", selectedcount);
   const selectedenrollcount = selectedcount.enrolledCourseCount || 0;
@@ -622,7 +623,7 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   useEffect(() => {
     console.log("gghfhgf");
     fetchCoursesTopicsScores(learnerId);
-}, []);
+}, [learnerId]);
  
   useEffect(() => {
     fetchData((learnerId));
@@ -663,11 +664,12 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   }
  
    const fetchCoursesTopicsScores = async (learnerId) =>{
-        console.log("red")
+        console.log("red",learnerId)
         const data = await LearnerScoreProgressBarGraphApi(learnerId);
         console.log("tadytas",data);
         setScoreProgressSelector(data);
     }
+    
   const handleClose = () => {
     setOpen(false);
   };
@@ -706,6 +708,8 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   const  handleCourseClick = (courseId) => {
     navigate('/LearnerPage');
   }
+
+
  
  
   const fetchprogress = async (learnerId, enrollmentId) => {

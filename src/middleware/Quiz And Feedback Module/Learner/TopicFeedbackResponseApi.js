@@ -9,22 +9,33 @@ import {
  
 const API_URL = "http://localhost:5199/api/FeedbackResponse/AddTopicFeedbackResponses";
  
-export const TopicFeedbackResponseApi =
-  ({ dispatch }) =>
-  (next) =>
-  async (action) => {
-    if (action.type === TOPICFEEDBACKRESPONSE_REQUEST) {
+// export const TopicFeedbackResponseApi =
+//   ({ dispatch }) =>
+//   (next) =>
+//   async (action) => {
+//     if (action.type === TOPICFEEDBACKRESPONSE_REQUEST) {
+//       try {
+//         console.log("post", action.payload);
+//         // Assuming 'action.payload' contains the data you want to senda
+//         const response = await axios.post(API_URL, action.payload);
+//         console.log("API Response:", response.data); // Log the response data
+//         dispatch(topicfeedbackresponseSuccess(response.data)); // Dispatch success action with the response data
+//       } catch (error) {
+//         console.error("API Error:", error.message);
+//         dispatch(topicfeedbackresponseFailure(error.message));
+//       }
+//     }
+//     return next(action);
+//   };
+ 
+export const TopicFeedbackResponseApi =async (action) => {
       try {
-        console.log("post", action.payload);
+        console.log("post", action);
         // Assuming 'action.payload' contains the data you want to senda
-        const response = await axios.post(API_URL, action.payload);
+        const response = await axios.post(API_URL, action);
         console.log("API Response:", response.data); // Log the response data
-        dispatch(topicfeedbackresponseSuccess(response.data)); // Dispatch success action with the response data
       } catch (error) {
         console.error("API Error:", error.message);
-        dispatch(topicfeedbackresponseFailure(error.message));
       }
-    }
-    return next(action);
+
   };
- 

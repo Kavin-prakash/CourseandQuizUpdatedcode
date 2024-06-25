@@ -480,7 +480,7 @@ const QuestionTemplate = () => {
                   labelId="demo-simple-select-label"
                   id="questionType"
                   value={selectedFilterQuestionType}
-                  label="Age"
+                  label="Question Type"
                   onChange={(e) => setSelectedFilterQuestionType(e.target.value)}
                 >
                   <MenuItem value={""}>All</MenuItem>
