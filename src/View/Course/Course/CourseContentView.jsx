@@ -13,7 +13,7 @@ export const CourseContent = () => {
     <>
 
 <Col className="text-end mt-5">
-            <BackButton/>
+            {/* <BackButton/> */}
           </Col>
       <Row>
         {/* <Col md={12}><Header/></Col>
@@ -23,8 +23,8 @@ export const CourseContent = () => {
         {/* </Col> */}
       </Row>
       <Row>
-        <h3 className='mt-5' style={{paddingLeft:'106px'}}><b><u>
-          List of Topics :</u></b>
+        <h3 className='mt-5' style={{paddingLeft:'20px'}}><b>
+          List of Topics :</b>
         </h3>
         
       </Row>

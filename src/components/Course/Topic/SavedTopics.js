@@ -640,9 +640,9 @@ export default function SavedTopics(props) {
     }
 
     const divStyle = {
-        boxShadow: '0px 4px 8px #23275c',
-        backgroundColor: '#F6F5F5', // Replace #yourShadowColor with your color
-        marginLeft: '100px'
+        // boxShadow: '0px 4px 8px #23275c',
+        // backgroundColor: '#F6F5F5', // Replace #yourShadowColor with your color
+        marginLeft: '20px'
     };
 
     // ... (existing functions and state)
@@ -719,7 +719,7 @@ export default function SavedTopics(props) {
 
 
     return (
-        <Container fluid className='mt-5' style={divStyle}>
+        <Container fluid className='mt-1' style={divStyle}>
             {loading ? (
                 <p>Loading...</p>
             ) : (
