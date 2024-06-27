@@ -7,10 +7,14 @@ import { Container } from 'react-bootstrap';
 import { topicfeedbackresponserequest } from '../../../../actions/Quiz And Feedback Module/Learner/TopicFeedbackResponseAction';
 import { fetchtopicfeedbackquestionrequest } from '../../../../actions/Quiz And Feedback Module/Learner/FetchTopicFeedbackQuestionAction';
 import Swal from "sweetalert2";
+import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
 import { TopicFeedbackResponseApi } from '../../../../middleware/Quiz And Feedback Module/Learner/TopicFeedbackResponseApi';
- 
+
+
+
+
 const TopicFeedbackquestion = () => {
- 
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,7 +24,7 @@ const TopicFeedbackquestion = () => {
   const topicId = sessionStorage.getItem("topicId");
   const learnerId = sessionStorage.getItem("UserSessionID");
 
-  const courseId=sessionStorage.getItem("courseId")
+  const courseId = sessionStorage.getItem("courseId")
   const [answerss, setAnswerss] = useState([]);
 
   useEffect(() => {
@@ -90,22 +94,36 @@ const TopicFeedbackquestion = () => {
 
   const divStyle = {
     boxShadow: "0px 4px 8px #23275c",
-    backgroundColor: "#F9F5F6",
+    backgroundColor: "#F5F7F8",
+    width: "750px",
+    height: "100%",
+    marginTop: "2%"
   };
 
   const allAnswered = answerss.every(
     (answer) => answer.optionText || answer.response
   );
 
+  const instructionStyle = {
+    padding: "10px",
+    margin: "10px",
+  };
+
+  const labels = {
+    1: 'Poor',
+    5: 'Excellent'
+  };
+
   return (
     <div>
+      <TopBar />
       <div className="question template container" id="fq">
         <div>
           <button
             className="btn btn-light"
             style={{
               marginLeft: "100%",
-              marginTop: "8%",
+              marginTop: "3%",
               backgroundColor: "#365486",
               color: "white",
               width: "50",
@@ -117,32 +135,41 @@ const TopicFeedbackquestion = () => {
             Back
           </button>
         </div>
-       
-        <h4 className="card-title">Topic Feedback</h4>
+
+        <h4 style={{ fontWeight: "bold", textAlign: "center" }}>Topic Feedback</h4>
         <div>
-          <Container fluid style={divStyle}>
+          <Container fluid id="cardstyle" style={divStyle}>
+          <h6 style={instructionStyle}><b>Please rate from 1 to 5 on the mentioned Topic parameters .
+            <b style={{ color: "red" }}> * </b>
+            Poor = 1 ; Average = 3 ; Excellent = 5</b></h6>
+          <h6 style={instructionStyle}>This questionnaire is issued on a rating system from 1(poor) to 5 (excellent), 3 being an acceptable level. Please select the number, which most accurately reflects your satisfaction level</h6>
             {topicfeedbackquestionfetch &&
               topicfeedbackquestionfetch.map(
                 (topicfeedbackquestions, index) => (
                   <div className="cont mt-2" key={index}>
                     <div className="card mt-5">
                       <div className="card-body">
-                        <h6 className="card-title">
+                        <h5 style={{ fontWeight: "bold", fontSize: "18px" }}>{topicfeedbackquestions.question} <b style={{ color: "red" }}>*</b></h5>
+                        {/* <h6 className="card-title">
                           Question {topicfeedbackquestions.questionNo}
-                        </h6>
-                        <input
+                        </h6> */}
+                        {/* <input
                           value={topicfeedbackquestions.question}
                           className="form-control"
                           readOnly
-                        />
+                        /> */}
                         <div className="card-body">
                           <div className="form-group">
-                            <h6 className="card-title">Options:</h6>
+
+
+                            {/* <h6 className="card-title">Options:</h6> */}
+                            <div className="radio-container">
                             {topicfeedbackquestions.questionType === "MCQ" ? (
                               topicfeedbackquestions.options.map(
                                 (option, optionIndex) => (
-                                  <div key={optionIndex}>
-                                    <input
+                                  <div key={optionIndex} className="custom-radio-button">
+
+                                    {/* <input
                                       id="feedbackradiobtn"
                                       type="radio"
                                       onChange={() =>
@@ -154,8 +181,27 @@ const TopicFeedbackquestion = () => {
                                       }
                                       value={option.optionText}
                                       name={`option_${topicfeedbackquestions.topicFeedbackQuestionId}`} // Unique name for each question
+                                    /> */}
+                                    {/* <label>{option.optionText}</label> */}
+
+
+
+
+
+                                    <input
+                                      id={`option_${topicfeedbackquestions.topicFeedbackQuestionId}_${optionIndex}`}
+                                      type="radio"
+                                      onChange={() => onhandleChange(topicfeedbackquestions.topicFeedbackQuestionId, "optionText", option.optionText)}
+                                      value={option.optionText}
+                                      name={`option_${topicfeedbackquestions.topicFeedbackQuestionId}`}
+                                      className="custom-radio-input"
                                     />
-                                    <label>{option.optionText}</label>
+                                    <label htmlFor={`option_${topicfeedbackquestions.topicFeedbackQuestionId}_${optionIndex}`} className="custom-radio-label">
+                                      {option.optionText}
+                                    </label>
+                                    {labels[option.optionText] && <div className="rating-tag">{labels[option.optionText]}</div>}
+
+
                                   </div>
                                 )
                               )
@@ -180,6 +226,7 @@ const TopicFeedbackquestion = () => {
                       </div>
                     </div>
                   </div>
+                  </div>
                 )
               )}
             <Button
@@ -201,5 +248,5 @@ const TopicFeedbackquestion = () => {
     </div>
   );
 };
- 
+
 export default TopicFeedbackquestion;

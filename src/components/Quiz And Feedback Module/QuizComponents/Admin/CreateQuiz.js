@@ -14,6 +14,8 @@ import AdminNavbar from "./AdminNavbar";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Row, Col, Form, Card, ProgressBar, OverlayTrigger } from 'react-bootstrap';
+import { FaInfoCircle, FaArrowRight } from 'react-icons/fa';
 import "../../../../Styles/Quiz And Feedback Module/CreateQuiz.css";
 import {
     ValidationQuizTitle,
@@ -31,13 +33,18 @@ import { fetchQuizIdFailure } from "../../../../actions/Quiz And Feedback Module
 import { Container } from "react-bootstrap";
 import Swal from "sweetalert2";
 import CreateQuizApi from "../../../../middleware/Quiz And Feedback Module/Admin/CreateQuizApi";
+import { useSelector } from "react-redux";
+import { Modal as MuiModal, Box, Typography, TextField, Button as MuiButton } from '@mui/material';
 
 export const Home = () => {
     const quizId = sessionStorage.getItem('quizId');
     const topicId = sessionStorage.getItem('topicId');
     const courseId = sessionStorage.getItem('courseId');
     const [button, setButton] = useState(true);
-    // console.log("create page topic id", topicId);
+    const selectorTopicsDetail = useSelector((state) => state.fetchTopic.topics[0]);
+
+    // const [viewCourse, setViewCourse] = useState([course])
+    console.log("course", selectorTopicsDetail);
     const [showQuestions, setShowQuestions] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -73,12 +80,24 @@ export const Home = () => {
         attemptsAllowed: ''
     });
 
+    const [currentTopic, setCurrentTopic] = useState(null);
+
+    console.log("courseId:", courseId);
+
     const [isQuizEditable, setIsQuizEditable] = useState(!quizId);
 
     console.log("create page Id: ", quizId, topicId);
 
     useEffect(() => {
         fetchQuizData(quizId);
+    }, []);
+
+    useEffect(() => {
+        fetchQuizData(quizId);
+
+        // Find the correct topic
+        const topic = selectorTopicsDetail.topics.find(topic => topic.topicId === topicId);
+        setCurrentTopic(topic);
     }, []);
 
     const toggleOptions = (event) => {
@@ -250,7 +269,7 @@ export const Home = () => {
             // alert('Quiz deleted successfully');
             handleCloseQuizDeleteModal();
             setTimeout(() => {
-                navigate(`/addtopic/${courseId}`)
+                navigate(`/coursecontent/${courseId}`)
             }, 2000);
             dispatch(fetchQuizIdFailure(topicId))
         } else {
@@ -271,51 +290,123 @@ export const Home = () => {
         dispatch(fetchQuizIdFailure(topicId))
     }
 
+    const handleQuizFeedback = () => {
+        navigate(`/quizfeedback`)
+    }
+
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        p: 4,
+        borderRadius: 2,
+    };
+
     return (
         <div>
             <Container fluid className="creat-quiz-container">
                 <div >
-                    <div className="d-flex justify-content-end mb-5">
-                        <button class="btn btn-light" style={{ color: "white", width: '50', marginTop: 100, backgroundColor: "#365486" }} onClick={() => { handleNavigate() }}>Back</button>
+
+                    <div className="d-flex justify-content-end mb-5" style={{ marginTop: 100 }}>
+                        <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
+                            Quiz Feedback
+                        </Button>
+                        <button class="btn btn-light" style={{ color: "white", width: '50', backgroundColor: "#365486" }} onClick={() => { handleNavigate() }}>Back</button>
                     </div>
-                    <form className='quiz-content'>
-                        <div className="" id="QuizCard" style={{ backgroundColor: '#F9F5F6' }}>
-                            <div className="card-bodycreatequiz">
-                                <div className="dx mt-2">
-                                    <div className="container">
-                                        <div className="d-flex justify-content-end" >
-                                            {/* <Button class="btn btn-default" style={{ backgroundColor: "#365486", color: "white", margin:3 }} onClick={handleOpenQuizEditModal}><AiFillEdit /> Edit</Button> */}
-                                            <Tooltip title="Edit quiz"><IconButton aria-label="Editquiz" onClick={handleOpenQuizEditModal}  ><EditIcon style={{ color: "#365486" }} variant="outlined" /> </IconButton></Tooltip>
-                                            <Tooltip title="Delete quiz"><IconButton aria-label="deletequiz" onClick={handleOpenQuizDeleteModal}  ><DeleteIcon style={{ color: "C80036" }} /></IconButton></Tooltip>
 
+                    <Row>
+                        <Col md={6}>
+                            <Card className="mb-4">
+                                <Card.Header as="h5">Course Details</Card.Header>
+                                <Card.Body>
+                                    <Form>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Course</Form.Label>
+                                            <Form.Control type="text" value={selectorTopicsDetail.courseTitle} readOnly />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Topic</Form.Label>
+                                            <Form.Control type="text" value={currentTopic ? currentTopic.topicName : ''} readOnly />
+                                        </Form.Group>
 
-                                            {/* <Button class="btn btn-default" style={{ backgroundColor: "#365486", color: "white", margin:3 }} onClick={handleOpenQuizDeleteModal}><FaTrashCan /> Delete</Button> */}
-                                        </div>
-
-                                        <div className="form-group row mt-3">
-                                            <label htmlFor="lbl1" className="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }} >Quiz Title<span id='required'>*</span></label>
-                                            <div className="col-sm-8">
-                                                <input type="text" className="form-control" id="lbl1" placeholder="Enter the Quiz Title" style={{ borderRadius: 8 }} name='nameOfQuiz' value={quizData.nameOfQuiz} readOnly={!isQuizEditable} onChange={handleQuizTitleChange} />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mt-3">
-                                            <label for="lbl3" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Duration (In Minutes)<span id='required'>*</span></label>
-                                            <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} readOnly={!isQuizEditable} onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mt-3">
-                                            <label for="lbl5" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Grade to be Secured<span id='required'>*</span></label>
-                                            <div class="col-sm-8">
-                                                <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} readOnly={!isQuizEditable} onChange={handlemarkChange} />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mt-3">
-                                            <label for="lbl4" class="col-sm-3 quizfield col-form-label" style={{ fontWeight: "bold" }}>Attempts Allowed<span id='required'>*</span></label>
-                                            <div class="col-sm-8">
-                                                <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={handleattemptsChange} />
-                                            </div>
-                                        </div>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
+                            <Card className="mb-4">
+                                <Card.Header as="h5">Page Functionality</Card.Header>
+                                <Card.Body>
+                                    <ul>
+                                        <li><h5>This page allows you to:</h5></li>
+                                        <li>1. View, edit and delete the entire quiz</li>
+                                        <li>2. Navigate to quiz feedback or proceed review questions</li>
+                                        <li>2. Question card contains question, options, correct option highlighted in <span style={{ backgroundColor: 'green', color: 'white' }}>green</span></li>
+                                    </ul>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col md={6}>
+                            <Card>
+                                <Card.Header as="h5" className="d-flex justify-content-between align-items-center">
+                                    Quiz Details
+                                    <div>
+                                        <Tooltip title="Edit quiz"><IconButton aria-label="Editquiz" onClick={handleOpenQuizEditModal}  ><EditIcon style={{ color: "#365486" }} variant="outlined" /> </IconButton></Tooltip>
+                                        <Tooltip title="Delete quiz"><IconButton aria-label="deletequiz" onClick={handleOpenQuizDeleteModal}  ><DeleteIcon style={{ color: "C80036" }} /></IconButton></Tooltip>
+                                    </div>
+                                </Card.Header>
+                                <Card.Body>
+                                    <Form>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>
+                                                Quiz Title
+                                                <span id='required'>*</span>
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="nameOfQuiz"
+                                                value={quizData.nameOfQuiz}
+                                                onChange={handleQuizTitleChange}
+                                                readOnly={!isQuizEditable}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>
+                                                Duration
+                                                <span id='required'>*</span>
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name='duration'
+                                                value={quizData.duration}
+                                                readOnly={!isQuizEditable}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>
+                                                Grade to be secured
+                                                <span id='required'>*</span>
+                                            </Form.Label>
+                                            <Form.Control
+                                                name='passMark'
+                                                value={quizData.passMark}
+                                                readOnly={!isQuizEditable}
+                                                onChange={handlemarkChange}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>
+                                                Attempts Allowed
+                                                <span id='required'>*</span>
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={handleattemptsChange}
+                                            />
+                                        </Form.Group>
                                         {quizId ? (
                                             <div></div>
                                         ) : (
@@ -335,28 +426,12 @@ export const Home = () => {
                                                 </div>
                                             </div>
                                         )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
                     {/* --------------------------------------------------------------*/}
-                    {/* {quizId ? <div style={{ textAlign: 'center', marginTop: 50 }}>
-                        <Button
-                            type="submit"
-                            className="btn btn-light"
-                            onClick={toggleQuestions}
-
-                            style={{
-                                backgroundColor:"#365486",
-                                color:"white",
-                                borderRadius: 8,
-
-                            }}
-                        >
-                            {showQuestions ? "Hide Questions" : "View Questions"}
-                        </Button>
-                    </div> : <></>} */}
                     {showQuestions && quizId ? (
                         <div className="">
                             <QuestionTemplateView />
@@ -368,69 +443,115 @@ export const Home = () => {
                         <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-left" style={{ color: "white", marginLeft: "92%", backgroundColor: "#365486" }}>Proceed</button>
                     </div> : <div></div>}
                     {/* DeleteQuiz */}
-                    <Modal show={showQuizDeleteModal} onHide={handleCloseQuizDeleteModal} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "4%" }}>
-                        <Modal.Header closeButton style={{ backgroundColor: "#23275c", color: "whitesmoke" }}>
-                            <Modal.Title><h5>Deleting the Quiz</h5></Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body style={{ backgroundColor: "#F9F5F6" }} >
-                            <div className="container">
-                                <div className="form-group row mt-3">
-                                    <label htmlFor="lbl1" className="col-sm-10 col-form-label" style={{ fontWeight: "bold" }}>To confirm, deleting type the QuizTitle "{quizData.nameOfQuiz}"in the Input<span id='required'>*</span></label>
-                                    <div className="col-sm-10">
-                                        <input type="text" className="form-control" id="lbl1" placeholder="Enter the Quiz Title" style={{ borderRadius: 8 }} onChange={handleQuizTitle} />
-                                        {errordeletequiz && <p style={{ color: 'red', fontSize: "50" }}>{errordeletequiz}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleCloseQuizDeleteModal}>Back</Button>
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={() => { handleDeleteQuiz(quizId) }}>Delete</Button>
-                        </Modal.Footer>
-                    </Modal>
+                    <MuiModal
+                        open={showQuizDeleteModal}
+                        onClose={handleCloseQuizDeleteModal}
+                        aria-labelledby="delete-quiz-modal-title"
+                    >
+                        <Box sx={modalStyle}>
+                            <Typography id="delete-quiz-modal-title" variant="h6" component="h2" gutterBottom>
+                                Delete Quiz
+                            </Typography>
+                            <Typography variant="body1" gutterBottom>
+                                To confirm deletion, please type the quiz title:
+                                <br />
+                                <strong>"{quizData.nameOfQuiz}"</strong>
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                variant="outlined"
+                                placeholder="Enter the Quiz Title"
+                                onChange={handleQuizTitle}
+                                error={!!errordeletequiz}
+                                helperText={errordeletequiz}
+                            />
+                            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                                <MuiButton onClick={handleCloseQuizDeleteModal} sx={{ mr: 1 }}>
+                                    Cancel
+                                </MuiButton>
+                                <MuiButton
+                                    variant="contained"
+                                    color="error"
+                                    onClick={() => handleDeleteQuiz(quizId)}
+                                >
+                                    Delete
+                                </MuiButton>
+                            </Box>
+                        </Box>
+                    </MuiModal>
 
                     {/* EditQuiz */}
-                    <Modal show={showQuizEditModal} onHide={handleCloseQuizEditModal} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "4%" }}>
-                        <Modal.Header closeButton style={{ backgroundColor: "#23275c", color: "whitesmoke" }}>
-                            <Modal.Title><h5>Quiz Editor</h5></Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
-                            <div className="container">
-                                <div className="form-group row mt-3">
-                                    <label htmlFor="lbl1" className="col-sm-5 col-form-label" style={{ fontWeight: "bold" }}>Quiz Title<span id='required'>*</span></label>
-                                    <div className="col-sm-8">
-                                        <input type="text" className="form-control" id="lbl1" placeholder="Enter the Quiz Title" style={{ borderRadius: 8 }} name='nameOfQuiz' value={quizData.nameOfQuiz} onChange={(e) => { handleQuizTitleChange(e); handleQuizChange(e) }} />
-                                        {error && <p style={{ color: 'red', fontSize: "50" }}>{error}</p>}
-                                    </div>
-                                </div>
-                                <div class="form-group row mt-3">
-                                    <label for="lbl3" class="col-sm-5 col-form-label" style={{ fontWeight: "bold" }}>Duration(In Minutes)<span id='required'>*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="lbl3" placeholder="Enter the Time Limit in Minutes" style={{ borderRadius: 8 }} name='duration' value={quizData.duration} onChange={(e) => { handleDurationChange(e); handleQuizChange(e); handleInputChange(e) }} />
-                                        {errorduration && <p style={{ color: 'red', fontSize: "50" }}>{errorduration}</p>}
-                                    </div>
-                                </div>
-                                <div class="form-group row mt-3">
-                                    <label for="lbl5" class="col-sm-5 col-form-label" style={{ fontWeight: "bold" }}>Grade to be Secured<span id='required'>*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="number" class="form-control" id="lbl5" placeholder="Enter the Minimum Score to be Passed" style={{ borderRadius: 8 }} name='passMark' value={quizData.passMark} onChange={(e) => { handleGradeChange(e); handleQuizChange(e); handlemarkChange(e) }}></input>
-                                        {errormark && <p style={{ color: 'red', fontSize: "50" }}>{errormark}</p>}
-                                    </div>
-                                </div>
-                                <div class="form-group row mt-3">
-                                    <label for="lbl4" class="col-sm-5 col-form-label" style={{ fontWeight: "bold" }}>Attempts Allowed<span id='required'>*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="number" className="form-control" id="lbl1" placeholder="Attempts Allowed" style={{ borderRadius: 8 }} name='attemptsAllowed' value={quizData.attemptsAllowed} onChange={(e) => { handleQuizChange(e); handleattemptsChange(e) }} />
-                                        {errorattempts && <p style={{ color: 'red', fontSize: "50" }}>{errorattempts}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Modal.Body>
-                        <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}  >
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleCloseQuizEditModal}>Back</Button>
-                            <Button variant="default" style={{ backgroundColor: "#365486", color: "whitesmoke" }} onClick={handleUpdateQuiz}>Update</Button>
-                        </Modal.Footer>
-                    </Modal>
+                    <MuiModal
+                        open={showQuizEditModal}
+                        onClose={handleCloseQuizEditModal}
+                        aria-labelledby="edit-quiz-modal-title"
+                     >
+                        <Box sx={modalStyle}>
+                            <Typography id="edit-quiz-modal-title" variant="h6" component="h2" gutterBottom>
+                                Edit Quiz
+                            </Typography>
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Quiz Title"
+                                variant="outlined"
+                                name="nameOfQuiz"
+                                value={quizData.nameOfQuiz}
+                                onChange={(e) => { handleQuizTitleChange(e); handleQuizChange(e) }}
+                                error={!!error}
+                                helperText={error}
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Duration (minutes)"
+                                variant="outlined"
+                                type="number"
+                                name="duration"
+                                value={quizData.duration}
+                                onChange={(e) => { handleDurationChange(e); handleQuizChange(e); handleInputChange(e) }}
+                                error={!!errorduration}
+                                helperText={errorduration}
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Grade to be Secured"
+                                variant="outlined"
+                                type="number"
+                                name="passMark"
+                                value={quizData.passMark}
+                                onChange={(e) => { handleGradeChange(e); handleQuizChange(e); handlemarkChange(e) }}
+                                error={!!errormark}
+                                helperText={errormark}
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Attempts Allowed"
+                                variant="outlined"
+                                type="number"
+                                name="attemptsAllowed"
+                                value={quizData.attemptsAllowed}
+                                onChange={(e) => { handleQuizChange(e); handleattemptsChange(e) }}
+                                error={!!errorattempts}
+                                helperText={errorattempts}
+                            />
+                            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                                <MuiButton onClick={handleCloseQuizEditModal} sx={{ mr: 1 }}>
+                                    Cancel
+                                </MuiButton>
+                                <MuiButton
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleUpdateQuiz}
+                                >
+                                    Update
+                                </MuiButton>
+                            </Box>
+                        </Box>
+                    </MuiModal>
                     <Modal show={showModal} onHide={closeModal}>
                         <Modal.Header closeButton>
                             <Modal.Title id='questitle'>Question Library</Modal.Title>

@@ -14,12 +14,18 @@ import { CreateAttemptRequest } from "../../../../actions/Quiz And Feedback Modu
 import { fetchlearneridRequest } from "../../../../actions/Quiz And Feedback Module/Learner/GetLearnerIDAction";
 import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
 import { QuizContext } from "./QuizContext";
+import { fetchlearnerscoreRequest } from "../../../../actions/Quiz And Feedback Module/Learner/LearnerScorePageAction";
+
+
 
 function QuizInstruction() {
   const {isReattempt}=React.useContext(QuizContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const topicId = sessionStorage.getItem("topicId");
+
+  const attemptremains=sessionStorage.getItem("attemptRemaining");
+  console.log("attemptremains",attemptremains)
 
   const LearnerId = sessionStorage.getItem("UserSessionID");
   const quizinstructions = useSelector(
@@ -31,6 +37,8 @@ function QuizInstruction() {
   // const learnerId = sessionStorage.getItem("UserSessionID");
   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
   // console.log(getlearners);
+ const learnerAttemptId=sessionStorage.getItem("learnerattemptid")
+
 
   const [TakeQuiz, setTakeQuiz] = useState({
     learnerId: LearnerId,
@@ -42,6 +50,7 @@ function QuizInstruction() {
     dispatch(fetchlearneridRequest(LearnerId));
   }, [dispatch, topicId, LearnerId]);
 
+  
   const handleTakeQuiz = () => {
     sessionStorage.removeItem("selectedOptions");
     sessionStorage.removeItem("reviewData");
@@ -57,20 +66,30 @@ function QuizInstruction() {
 
   const buttonLabel = isReattempt ? 'Reattempt Quiz' : 'Attempt Quiz';
 
+  const divStyle = {
+    boxShadow: "0px 4px 8px #23275c",
+    backgroundColor: "white",
+    width:"1100px",
+    height:"680px"
+  };
+
+  
+  
+
   return (
     <div>
       <TopBar />
-      <Container fluid>
+      <Container fluid >
         <div>
           <div>
             <button
               className="btn btn-light"
               style={{
-                marginLeft: "95%",
-                marginTop: "5%",
+                marginLeft:"90%",
+                marginTop:"2%",
                 backgroundColor: "#365486",
                 color: "white",
-                width: "50",
+                width:"50",
               }}
               onClick={() => {
                 navigate("/quizengine");
@@ -79,12 +98,13 @@ function QuizInstruction() {
               Back
             </button>
           </div>
-          <Container fluid id="instructionpage-container">
+          <Container id="instructionpage-container" style={divStyle}>
+            <h4 style={{fontWeight:"bold" ,textAlign:"center", paddingTop:"2%"}}>Quiz Instruction</h4>
             <Box
               id="quizinstructionpage"
               sx={{
                 width: "100%",
-                maxWidth: 500,
+                maxWidth:500,
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
                 gap: 2,
@@ -92,29 +112,29 @@ function QuizInstruction() {
             >
               <Card
                 style={{
-                  height: "50px",
-                  width: "440%",
-                  marginLeft: "108%",
-                  marginBottom: "2%",
-                  marginTop: "-20%",
+                  height:"50px",
+                  width:"400%",
+                  marginLeft:"25%",
+                  marginBottom:"2%",
+                  marginTop:"3%",
+                  backgroundColor:"white",
                 }}
-                variant="soft"
                 id="instruction-topic"
-              >
+              > 
                 <CardContent>
                   <Typography level="title-md">
                     {quizinstructions.nameOfQuiz} Assessment
                   </Typography>
                 </CardContent>
-              </Card>
+               </Card>
 
               <Card
                 id="instruction-content"
-                variant="soft"
-                style={{ width: "440%", height: "115%" }}
+                variant="outlined"
+                style={{ width:"400%", height:"87%", marginTop:"75px" , marginLeft:"-200px" , backgroundColor:"white"}}
               >
                 <CardContent>
-                  <Divider inset="none" id="divider" />
+                  <Divider inset="none" id="dividerinstruction" />
                   <Typography level="title-md">
                     Duration : {quizinstructions.duration} (In Minutes)
                   </Typography>
@@ -122,13 +142,12 @@ function QuizInstruction() {
                     Pass Mark : {quizinstructions.passMark}
                   </Typography>
                   <Typography level="title-md">
-                    Attempts Allowed : {quizinstructions.attemptsAllowed}
+                    Attempts Allowed : {quizinstructions.attemptsAllowed} 
                   </Typography>
-                  <Divider inset="none" id="divider" />
-                  <Typography>
-                    <b>Quiz Instruction</b>
-                  </Typography>
-                  <Typography>
+                  {isReattempt && <Typography level="title-md" style={{ color: "red" }}>Remaining Attempts: {attemptremains}</Typography>}
+                  &nbsp;
+                 <Divider inset="none" id="dividerinstruction" />
+                  <Typography >
                     <b>
                       Dear {getlearners.learnerFirstName}{" "}
                       {getlearners.learnerLastName},
@@ -155,6 +174,20 @@ function QuizInstruction() {
                       In "multi-select question (MSQ)", you have to choose more
                       than one option. If your chosen answer is partially
                       correct, you will get half mark.
+                    </li>
+                  </Typography>
+
+                  <Typography>
+                    <li>
+                    As soon as you begin the quiz, the countdown timer initiates. It's crucial to finish the quiz within the designated time frame. 
+                    Remember, your responses will only be considered for evaluation if you hit the submit button after answering all the questions.
+                    </li>
+                  </Typography>
+
+                  <Typography>
+                    <li>
+                    If you attempt to exit or use the back button after initiating the quiz, a confirmation message will appear. 
+                    Please note that doing so will result in you being logged out from the quiz session.
                     </li>
                   </Typography>
 
