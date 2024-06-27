@@ -1,0 +1,18 @@
+#individualLearner {
+    margin-top: 5%;
+}
+
+#profileCardView {
+    display: flex;
+}
+
+#profileCard {
+    width: 30%;
+    background-color: #f0f0f0;
+    margin: 1%;
+}
+
+#profileEnrolledCourses {
+    width: 70%;
+    margin: 1%;
+}

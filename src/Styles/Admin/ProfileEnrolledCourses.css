@@ -1,0 +1,28 @@
+#profileEnrolledCourses {
+    border-radius: 2px;
+    border: #FFFFFF;
+}
+
+#profileEnrolledCoursesBtn h3 {
+    display: inline-block;
+    padding: 3%;
+    margin-left: 2%;
+    background: #E9ECEF;
+    color: #685F78;
+    border-radius: 5px;
+    padding: 12px 15px;
+    font-weight: 500;
+}
+
+#profileEnrolledCoursesBtn h3:hover {
+    background-color: azure;
+}
+
+#profileEnrolledCoursesBtn #active {
+    background-color: #23275c;
+    color: white;
+}
+
+#profileCourses {
+    border-radius: 1px solid black;
+}
