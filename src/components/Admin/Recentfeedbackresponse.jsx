@@ -44,7 +44,7 @@ const RecentFeedback = ({
   const displayedFeedback = recentFeedback.slice(0, 3);
 
   return (
-    <Grid item xs={12} md={5}>
+    <Grid item xs={12} md={6}>
       <Item style={{ borderRadius: "15px" }}>
         <Card variant="">
           <CardContent sx={{ height: "560px" }}>
@@ -58,81 +58,82 @@ const RecentFeedback = ({
             </Typography>
             {
               <Typography variant="h6" gutterBottom sx={{ fontSize: 15 }}>
-                <TransitionGroup>
-                  {displayedFeedback.map((feedback, index) => (
-                    <ListItem
-                      key={index}
-                      alignItems="flex-start"
-                      style={{ marginBottom: "15px" }}
-                    >
-                      <ListItemAvatar>
-                        <Link
-                          to={`/individuallearner/${feedback.learnerid}`}
-                          style={{ textDecoration: "none", color: "black" }}
-                        >
-                          <Avatar
-                            alt="Learner profile"
-                            src={feedback.profilephoto}
-                          />
-                        </Link>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
+        
+                  <TransitionGroup>
+                    {displayedFeedback.map((feedback, index) => (
+                      <ListItem
+                        key={index}
+                        alignItems="flex-start"
+                        style={{ marginBottom: "15px" }}
+                      >
+                        <ListItemAvatar>
                           <Link
                             to={`/individuallearner/${feedback.learnerid}`}
                             style={{ textDecoration: "none", color: "black" }}
                           >
-                            <Typography variant="h6">
-                              {feedback.learnerName}
-                            </Typography>
+                            <Avatar
+                              alt="Learner profile"
+                              src={feedback.profilephoto}
+                            />
                           </Link>
-                        }
-                        secondary={
-                          <>
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                color: "#23275c",
-                                fontWeight: "bold",
-                                fontStyle: "italic",
-                              }}
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            <Link
+                              to={`/individuallearner/${feedback.learnerid}`}
+                              style={{ textDecoration: "none", color: "black" }}
                             >
-                              "{feedback.feedbackresponse}"
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color: "GrayText",
-                                fontWeight: "bold",
-                                fontStyle: "italic",
-                              }}
-                            >
-                              {feedback.dateoftheResponse
-                                .split("T")[0]
-                                .split("-")
-                                .reverse()
-                                .join("-") +
-                                " " +
-                                feedback.dateoftheResponse.split("T")[1]}
-                            </Typography>
-                  
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color: "GrayText",
-                                fontWeight: "bold",
-                           
-                              }}
-                            >
-                              <b >Course:</b> {feedback.coursename} |{" "}
-                              <b>Topic:</b> {feedback.topicName}
-                            </Typography>
-                          </>
-                        }
-                      />
-                    </ListItem>
-                  ))}
-                </TransitionGroup>
+                              <Typography variant="h6">
+                                {feedback.learnerName}
+                              </Typography>
+                            </Link>
+                          }
+                          secondary={
+                            <>
+                              <Typography
+                                variant="body1"
+                                sx={{
+                                  color: "#23275c",
+                                  fontWeight: "bold",
+                                  fontStyle: "italic",
+                                }}
+                              >
+                                "{feedback.feedbackresponse}"
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "GrayText",
+                                  fontWeight: "bold",
+                                  fontStyle: "italic",
+                                }}
+                              >
+                                {feedback.dateoftheResponse
+                                  .split("T")[0]
+                                  .split("-")
+                                  .reverse()
+                                  .join("-") +
+                                  " " +
+                                  feedback.dateoftheResponse.split("T")[1]}
+                              </Typography>
+
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: "GrayText",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                <b>Course:</b> {feedback.coursename} |{" "}
+                                <b>Topic:</b> {feedback.topicName}
+                              </Typography>
+                            </>
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                  </TransitionGroup>
+           
               </Typography>
             }
           </CardContent>

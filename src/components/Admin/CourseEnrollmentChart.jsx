@@ -159,8 +159,7 @@ const CourseEnrollmentChart = ({
             </Typography>
           </FormControl>
         </Box>
-
-        <Box sx={{ height: "90%", marginLeft: "30px" }}>
+        <Box sx={{ height: "100%", marginLeft: "30px" }}>
           <Bar data={barData} options={barOptions} />
         </Box>
       </Item>

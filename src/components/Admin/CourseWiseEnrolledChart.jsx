@@ -108,7 +108,7 @@ const CourseWiseEnrolledChart = () => {
 
   return (
     <>
-      <Grid item xs={12} md={7}>
+      <Grid item xs={12} md={6}>
         <Item style={{ borderRadius: "15px" }}>
           <Card variant="">
             <CardContent sx={{ height: "560px" }}>
