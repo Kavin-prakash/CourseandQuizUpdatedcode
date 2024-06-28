@@ -172,21 +172,37 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
  
   }
  
-  useEffect(() => {
-    const savedTime = localStorage.getItem("video-current-time");
-    if (savedTime && videoRef.current) {
+  const fetchWatchTime = async () => {
+    try {
+      const learnerId = sessionStorage.getItem("UserSessionID");
+     
+     
+      const response = await fetch(`http://localhost:5199/lxp/course/learner/learnerprogress/watchtime?LearnerId=${learnerId}&MaterialId=${materialId}`);
+      const data = await response.json();
+     
+      if (data.data.watchTime) {
+        const parts = data.data.watchTime.split(':').map(Number);
+        const watchTimeInSeconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+        return watchTimeInSeconds;
+      }
+    } catch (error) {
+      console.error("Failed to fetch watch time:", error);
+    }
+     return 0;
+  };
  
-      videoRef.current.currentTime = parseFloat(savedTime);
-      const learnerprogressdata={
-       
-        materialId: materialId,
-        learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime: "00:00:00"
+  useEffect(() => {
+    const initializeVideo = async () => {
+      
+      const savedTime = await fetchWatchTime();
+      if (videoRef.current && !isNaN(savedTime) && isFinite(savedTime)) {
+        videoRef.current.currentTime = savedTime;
+        
       }
      
-     dispatch(watchTimeRequest(learnerprogressdata));
-    }
-  }, []);
+    };
+    initializeVideo();
+  }, [materialId, dispatch]);
  
  
  
@@ -204,24 +220,15 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
       if (isWaiting) setIsWaiting(false);
       setIsPlaying(true);
     };
- 
     const onPause = () => {
       setIsPlaying(false);
       setIsWaiting(false);
-      if (videoRef.current) {
-       
-        localStorage.setItem(
-          "video-current-time",
-          videoRef.current.currentTime
-        );
-      }
-      const learnerprogressdata={
-       
+     
+      const learnerprogressdata = {
         materialId: materialId,
         learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime:formatTime(videoRef.current.currentTime)
-      }
-     
+        watchTime: formatTime(videoRef.current.currentTime)
+      };
       dispatch(watchTimeRequest(learnerprogressdata));
     };
  
