@@ -40,6 +40,10 @@
     font-size: small;
 }
 
-#profile-img img {
-    animation: spin 3.5s infinite linear;
+.profile-group p a {
+    text-align: start;
+    font-size: small;
+    text-decoration: none;
+    color: black;
 }
+

@@ -43,7 +43,7 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
                 <div className="profile-name text-center">
                   <h4>{learnerFirstName} {learnerLastName}</h4>
                 </div>
-                <p><MailIcon /> {learnerEmail}</p>
+                <p><a href={`mailto:${learnerEmail}`}><MailIcon /> {learnerEmail}</a></p>
                 <p><PhoneIcon /> {learnerContactNumber}</p>
                 <p><CakeIcon /> {learnerDob}</p>
                 <p>
@@ -55,7 +55,7 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }
