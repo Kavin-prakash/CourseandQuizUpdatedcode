@@ -100,7 +100,7 @@ function PDFViewer(prop) {
            style={{ width: "100%",height:"83vh",marginTop:'0px'}}
        >  */}
         <Box sx={{
-          width: { xs: '100%', sm: '85vh', md: '65vh', lg: "87" },
+          width: { xs: '100%', sm: '100px', md: '65vh', lg: "1400px" },
           height: { xs: '100%', sm: '83vh', md: '95vh', lg: "83" },
 
           overflow: 'auto',

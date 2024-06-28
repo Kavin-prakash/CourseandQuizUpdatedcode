@@ -14,12 +14,12 @@ function AddMaterial() {
     <Row>
       {/* <Col xs={2} md={2}><Sidenavbar/></Col> */}
       <Col xs={12} md={10} className='pt-4'>
-        <Row className="mt-4">
-          <Col sx={10} md={2}></Col>
-          <Col className="text-end mt-3">
+       {/* <Row className="mt-4">
+          <Col sx={10} md={2}></Col> */}
+          {/* <Col className="text-end mt-3">
             <BackButton/>
-          </Col>
-        </Row>
+          </Col> */}
+        {/* </Row> */}
         <AddContentComponent />
       </Col>
     </Row>

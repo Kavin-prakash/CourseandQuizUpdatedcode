@@ -126,7 +126,7 @@ function Routing() {
 
           <Route path="/addtopic/:id" element={<Topics />} />
           <Route path="/savedtopics/:id" element={<SavedTopics />} />
-          <Route path='/addcontent/:id' element={<AddMaterial />} />
+          <Route path='/:courseName/:topicName/addcontent/:id' element={<AddMaterial />} />
         </Route>
         {/* quiz learnermodule */}
         <Route path="/quizengine" element={<LearnerCoursepageView />} />
@@ -147,7 +147,7 @@ function Routing() {
 
         <Route path="/addtopic/:id" element={<Topics />} />
         <Route path="/savedtopics/:id" element={<SavedTopics />} />
-        <Route path='/addcontent/:id' element={<AddMaterial />} />
+        {/* <Route path='/addcontent/:id' element={<AddMaterial />} /> */}
 
 
       </Routes>

@@ -772,7 +772,7 @@ export default function SavedTopics(props) {
                                     </li>
                                 ))}
                             </ul>
-                            <Link style={{ marginLeft: '450px' }} to={`/addcontent/${topic.topicId}`}>Add Content</Link>
+                            <Link style={{ marginLeft: '450px' }} to={`/${selectorTopicsDetail.courseTitle}/${topic.topicName}/addcontent/${topic.topicId}`}>Add Content</Link>
                         </Card.Body>
                     </Card>
                 ))

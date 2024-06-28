@@ -33,7 +33,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "../../../utils/Course/Course/AddCourseValidation";
 // import { createCategoryrequest } from "../../../action/Course/Category/AddCategoryAction";
-import { createCategoryrequest,RESET_THE_SUBMITTED_MESSGAE,RESET_EXISTED_MESSAGE } from '../../../actions/Course/Category/AddCategoryAction';
+import { createCategoryrequest, RESET_THE_SUBMITTED_MESSGAE, RESET_EXISTED_MESSAGE } from '../../../actions/Course/Category/AddCategoryAction';
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Dialog, TextField, DialogContent, DialogTitle, DialogActions, Button, Alert, Stack, Box, MenuItem, FormControl, FormHelperText, CardContent } from "@mui/material";
@@ -334,8 +334,8 @@ const AddCourse = () => {
     accept: "image/*",
   });
 
-  const [progress,setProgress]=useState(1);
-  const percentage=Math.round((progress/6)*100);
+  const [progress, setProgress] = useState(1);
+  const percentage = Math.round((progress / 6) * 100);
 
   const containerStyles = {
     height: 5,
@@ -349,7 +349,7 @@ const AddCourse = () => {
 
   const fillerStyles = {
     height: '100%',
-     width: `${percentage}%`,
+    width: `${percentage}%`,
     backgroundColor: 'blue', // Change this color as needed
     borderRadius: 'inherit',
     textAlign: 'right',
@@ -361,50 +361,50 @@ const AddCourse = () => {
     color: 'white',
     fontWeight: 'bold',
   };
-  const [step,setStep]=useState(1);
-  const handleContinue=()=>{
+  const [step, setStep] = useState(1);
+  const handleContinue = () => {
     // const isFormValid = alidateForm(course, setErrors);
 
     // if (isFormValid) {
-      setProgress(progress+1);
+    setProgress(progress + 1);
 
-    setStep(step+1);
+    setStep(step + 1);
     // }else{
-      
+
     //   setErrors({})
-    
+
 
     // }
   }
-  const handlePrevious=()=>{
-    setProgress(progress-1);
-    setStep(step-1);
+  const handlePrevious = () => {
+    setProgress(progress - 1);
+    setStep(step - 1);
   }
- 
+
   return (
     <>
-      <Container style={{background:"white"}}>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-        <Row className="mt-5" style={{ boxShadow: '1px 2px 9px #F0F0F0',height:'60px',marginLeft:'10px' }}>
-          <h6 style={{paddingTop:'20px',fontWeight:'bold'}}>Step {progress} of 6</h6>
-          <Row style={containerStyles} className="mt-1">
-          <Row style={fillerStyles}>
-        <span style={labelStyles}>{`${percentage}%`}</span>
-         </Row>
-         </Row>
-        </Row>
-        
-        <Row style={{height:'70vh'}} className="mt-1 d-flex justify-content-center align-items-center">
-          {/* <Col></Col> */}
-          
-          {step==1 && ( <Row className="d-flex justify-content-center align-items-center">
-            <h1 className="mb-3 d-flex justify-content-center align-items-center">How about a working title</h1>
-            <h6 className="mb-5 d-flex justify-content-center align-items-center">It's ok if you can't think of a good title now. You can change it later.</h6>
-            <Col></Col>
-            <Col>
-            
-          <FormControl className="mt-3" fullWidth>
+      <Container style={{ background: "white" }}>
+        <Form onSubmit={handleSubmit}>
+          <Row>
+            <Row className="mt-5" style={{ boxShadow: '1px 2px 9px #F0F0F0', height: '60px', marginLeft: '10px' }}>
+              <h6 style={{ paddingTop: '20px', fontWeight: 'bold' }}>Step {progress} of 6</h6>
+              <Row style={containerStyles} className="mt-1">
+                <Row style={fillerStyles}>
+                  <span style={labelStyles}>{`${percentage}%`}</span>
+                </Row>
+              </Row>
+            </Row>
+
+            <Row style={{ height: '70vh' }} className="mt-1 d-flex justify-content-center align-items-center">
+              {/* <Col></Col> */}
+
+              {step == 1 && (<Row className="d-flex justify-content-center align-items-center">
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">How about a working title</h1>
+                <h6 className="mb-5 d-flex justify-content-center align-items-center">It's ok if you can't think of a good title now. You can change it later.</h6>
+                <Col></Col>
+                <Col>
+
+                  <FormControl className="mt-3" fullWidth>
                     {/* <Form.Label>Course Title</Form.Label> */}
                     <TextField
                       type="text"
@@ -419,64 +419,64 @@ const AddCourse = () => {
                       onChange={handleInputChange}
                     />
                     {/* {errors.title && <p className="error">{errors.title}</p>} */}
-                    </FormControl>
-                    </Col>
-            <Col></Col>
+                  </FormControl>
+                </Col>
+                <Col></Col>
 
-            </Row>)}
-            {step==2 && ( <Row className="d-flex justify-content-center align-items-center">
-            <h1 className="mb-3 d-flex justify-content-center align-items-center">What category best fits the knowledge you'll share?</h1>
-            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the right category, you can change it later.You can add new category also.</h6>
-            <Col></Col>
-            <Col>
+              </Row>)}
+              {step == 2 && (<Row className="d-flex justify-content-center align-items-center">
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">What category best fits the knowledge you'll share?</h1>
+                <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the right category, you can change it later.You can add new category also.</h6>
+                <Col></Col>
+                <Col>
 
- 
- <FormControl className="mt-3" fullWidth>
-  
-   <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
-     {/* <b>Select Category</b> */}
-     {fetchCategory.map((category) => (
-       <MenuItem
-         key={category.categoryId}
-         value={category.categoryId}
-       >
-         {category.category}
-       </MenuItem>
-     ))}
-     <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
-   </TextField>
-  
- </FormControl> 
- </Col>
- <Col></Col>
-            </Row>)}
-           {step==3 && (<Row className="d-flex justify-content-center align-items-center">
-            <h1 className="mb-3 d-flex justify-content-center align-items-center">What level best fits the knowledge you'll share?</h1>
-            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the right category, you can change it later.</h6>
-            <Col></Col>
-            <Col>
-            <FormControl className="mb-3" fullWidth>
-                 
-                 <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
-                   {/* <MenuItem>Select Level</MenuItem> */}
-                   {fetchLevel.map((level) => (
-                     <MenuItem key={level.levelId} value={level.levelId}>
-                       {level.level}
-                     </MenuItem>
-                   ))}
-                 </TextField>
-               </FormControl>
-               </Col>
-               <Col></Col>
-            </Row>)}
-           {step==4 &&( <Row className="d-flex justify-content-center align-items-center">
-            <h1 className="mb-3 d-flex justify-content-center align-items-center">Choose your course duration</h1>
-            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the course duration, you can change it later.</h6>
-            <Col></Col>
-            <Col>
-            <FormControl className="mb-3" fullWidth>
- 
- {/* <TextField
+
+                  <FormControl className="mt-3" fullWidth>
+
+                    <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
+                      {/* <b>Select Category</b> */}
+                      {fetchCategory.map((category) => (
+                        <MenuItem
+                          key={category.categoryId}
+                          value={category.categoryId}
+                        >
+                          {category.category}
+                        </MenuItem>
+                      ))}
+                      <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
+                    </TextField>
+
+                  </FormControl>
+                </Col>
+                <Col></Col>
+              </Row>)}
+              {step == 3 && (<Row className="d-flex justify-content-center align-items-center">
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">What level best fits the knowledge you'll share?</h1>
+                <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the right category, you can change it later.</h6>
+                <Col></Col>
+                <Col>
+                  <FormControl className="mb-3" fullWidth>
+
+                    <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
+                      {/* <MenuItem>Select Level</MenuItem> */}
+                      {fetchLevel.map((level) => (
+                        <MenuItem key={level.levelId} value={level.levelId}>
+                          {level.level}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </FormControl>
+                </Col>
+                <Col></Col>
+              </Row>)}
+              {step == 4 && (<Row className="d-flex justify-content-center align-items-center">
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">Choose your course duration</h1>
+                <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the course duration, you can change it later.</h6>
+                <Col></Col>
+                <Col>
+                  <FormControl className="mb-3" fullWidth>
+
+                    {/* <TextField
    margin="dense"
    id="name"
    label="Course Duration (in hrs)"
@@ -490,115 +490,115 @@ const AddCourse = () => {
    value={course.duration}
    onChange={handleInputChange}
  /> */}
- <TextField name="duration" select onChange={handleInputChange} label="Course duration" fullWidth error={Boolean(errors.duration)} helperText={errors.duration} placeholder="Select Level">
-                   <MenuItem>Select Duration</MenuItem>
-                 
-                     <MenuItem value="01:00:00">
-                       1 hour
-                     </MenuItem>
-                     <MenuItem value="02:00:00">
-                       2 hour
-                     </MenuItem>
-                     <MenuItem value="03:00:00">
-                       3 hour
-                     </MenuItem>
-                     <MenuItem value="04:00:00">
-                       4 hour
-                     </MenuItem>
-                     <MenuItem value="05:00:00">
-                       5 hour
-                     </MenuItem>
-                     <MenuItem value="06:00:00">
-                       6 hour
-                     </MenuItem>
-                     <MenuItem value="07:00:00">
-                       7 hour
-                     </MenuItem>
-                     <MenuItem value="08:00:00">
-                       8 hour
-                     </MenuItem>
-                     <MenuItem value="09:00:00">
-                       9 hour
-                     </MenuItem>
-                     <MenuItem value="10:00:00">
-                       10 hour
-                     </MenuItem>
-                     <MenuItem value="11:00:00">
-                       11 hour
-                     </MenuItem>
-                     <MenuItem value="12:00:00">
-                       12 hour
-                     </MenuItem>
-                     <MenuItem value="13:00:00">
-                       13 hour
-                     </MenuItem>
-                     <MenuItem value="14:00:00">
-                       14 hour
-                     </MenuItem>
-                     <MenuItem value="15:00:00">
-                       15 hour
-                     </MenuItem>
-                     <MenuItem value="16:00:00">
-                       16 hour
-                     </MenuItem>
-                     <MenuItem value="17:00:00">
-                       17 hour
-                     </MenuItem>
-                     <MenuItem value="18:00:00">
-                       18 hour
-                     </MenuItem>
-                     <MenuItem value="19:00:00">
-                       19 hour
-                     </MenuItem>
-                     <MenuItem value="20:00:00">
-                       20 hour
-                     </MenuItem>
-                     <MenuItem value="21:00:00">
-                       21 hour
-                     </MenuItem>
-                     <MenuItem value="22:00:00">
-                       22 hour
-                     </MenuItem>
-                     <MenuItem value="23:00:00">
-                       23 hour
-                     </MenuItem>
-                     <MenuItem value="24:00:00">
-                       24 hour
-                     </MenuItem>
-                     <MenuItem value="25:00:00">
-                       25 hour
-                     </MenuItem>
-                     <MenuItem value="26:00:00">
-                       26 hour
-                     </MenuItem>
-                     <MenuItem value="27:00:00">
-                       27 hour
-                     </MenuItem>
-                     <MenuItem value="28:00:00">
-                       28 hour
-                     </MenuItem>
-                     <MenuItem value="29:00:00">
-                       29 hour
-                     </MenuItem>
-                     <MenuItem value="30:00:00">
-                       30 hour
-                     </MenuItem>
-                   
-                 </TextField>
- 
+                    <TextField name="duration" select onChange={handleInputChange} label="Course duration" fullWidth error={Boolean(errors.duration)} helperText={errors.duration} placeholder="Select Level">
+                      <MenuItem>Select Duration</MenuItem>
+
+                      <MenuItem value="01:00:00">
+                        1 hour
+                      </MenuItem>
+                      <MenuItem value="02:00:00">
+                        2 hour
+                      </MenuItem>
+                      <MenuItem value="03:00:00">
+                        3 hour
+                      </MenuItem>
+                      <MenuItem value="04:00:00">
+                        4 hour
+                      </MenuItem>
+                      <MenuItem value="05:00:00">
+                        5 hour
+                      </MenuItem>
+                      <MenuItem value="06:00:00">
+                        6 hour
+                      </MenuItem>
+                      <MenuItem value="07:00:00">
+                        7 hour
+                      </MenuItem>
+                      <MenuItem value="08:00:00">
+                        8 hour
+                      </MenuItem>
+                      <MenuItem value="09:00:00">
+                        9 hour
+                      </MenuItem>
+                      <MenuItem value="10:00:00">
+                        10 hour
+                      </MenuItem>
+                      <MenuItem value="11:00:00">
+                        11 hour
+                      </MenuItem>
+                      <MenuItem value="12:00:00">
+                        12 hour
+                      </MenuItem>
+                      <MenuItem value="13:00:00">
+                        13 hour
+                      </MenuItem>
+                      <MenuItem value="14:00:00">
+                        14 hour
+                      </MenuItem>
+                      <MenuItem value="15:00:00">
+                        15 hour
+                      </MenuItem>
+                      <MenuItem value="16:00:00">
+                        16 hour
+                      </MenuItem>
+                      <MenuItem value="17:00:00">
+                        17 hour
+                      </MenuItem>
+                      <MenuItem value="18:00:00">
+                        18 hour
+                      </MenuItem>
+                      <MenuItem value="19:00:00">
+                        19 hour
+                      </MenuItem>
+                      <MenuItem value="20:00:00">
+                        20 hour
+                      </MenuItem>
+                      <MenuItem value="21:00:00">
+                        21 hour
+                      </MenuItem>
+                      <MenuItem value="22:00:00">
+                        22 hour
+                      </MenuItem>
+                      <MenuItem value="23:00:00">
+                        23 hour
+                      </MenuItem>
+                      <MenuItem value="24:00:00">
+                        24 hour
+                      </MenuItem>
+                      <MenuItem value="25:00:00">
+                        25 hour
+                      </MenuItem>
+                      <MenuItem value="26:00:00">
+                        26 hour
+                      </MenuItem>
+                      <MenuItem value="27:00:00">
+                        27 hour
+                      </MenuItem>
+                      <MenuItem value="28:00:00">
+                        28 hour
+                      </MenuItem>
+                      <MenuItem value="29:00:00">
+                        29 hour
+                      </MenuItem>
+                      <MenuItem value="30:00:00">
+                        30 hour
+                      </MenuItem>
+
+                    </TextField>
 
 
 
-</FormControl>
-</Col>
-<Col></Col>
-            </Row>)}
-           {step==5 && (<Row className="d-flex justify-content-center align-items-center">
-            <h1 className="mb-3 d-flex justify-content-center align-items-center">Describe about your course</h1>
-            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure, you can change it later.</h6>
-            <Col></Col>
-            <Col>
-            <FormControl className="mb-3" fullWidth >
+
+                  </FormControl>
+                </Col>
+                <Col></Col>
+              </Row>)}
+              {step == 5 && (<Row className="d-flex justify-content-center align-items-center">
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">Describe about your course</h1>
+                <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure, you can change it later.</h6>
+                <Col></Col>
+                <Col>
+                  <FormControl className="mb-3" fullWidth >
                     <TextField
                       type="text"
                       label="Description"
@@ -611,25 +611,25 @@ const AddCourse = () => {
                       helperText={(errors.description)}
                       onChange={handleInputChange}
                     />
-                   
-                  </FormControl>
-                  </Col>
-                  <Col></Col>
-            </Row>)}
-           {step==6 && (<Row> <Row className="d-flex justify-content-center align-items-center">
-            <h1 className="mb-3 d-flex justify-content-center align-items-center">Provide a best thumbnail for your course</h1>
-            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure, you can change it later.</h6>
-            <Col></Col>
-            <Col>
-            
- <FormControl controlId="formFile" className="mb-3" fullWidth>
 
- 
+                  </FormControl>
+                </Col>
+                <Col></Col>
+              </Row>)}
+              {step == 6 && (<Row> <Row className="d-flex justify-content-center align-items-center">
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">Provide a best thumbnail for your course</h1>
+                <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure, you can change it later.</h6>
+                <Col></Col>
+                <Col>
+
+                  <FormControl controlId="formFile" className="mb-3" fullWidth>
+
+
                     <Box {...getRootProps()} className="course-thumbnail">
                       <Card.Body className="text-center">
                         <input {...getInputProps()} type="file" />
                         {selectedImage ? (
- 
+
                           <Card >
                             <CloseButton
                               className="position-absolute top-0 end-0"
@@ -637,12 +637,12 @@ const AddCourse = () => {
                               onClick={removeThumbnail}
                               aria-label="Remove image"
                             />
-                           
- 
+
+
                             <img
                               className="thumbnail-image"
                               src={selectedImage}
-                              alt="Course thumbnail"                              
+                              alt="Course thumbnail"
                             />
                           </Card>
                         ) : (
@@ -659,30 +659,30 @@ const AddCourse = () => {
                       <p className="error">{errors.thumbnailimage}</p>
                     )}
                   </FormControl>
-                  </Col>
-                  <Col></Col>
-            </Row>
-            <Row>
-           <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.title && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.title}</h6>}</Row>
-           <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.description && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.description}</h6>}</Row>
-            <Row className=" mb-3 d-flex justify-content-center align-items-center">{errors.thumbnailimage && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.thumbnailimage}</h6>}</Row>
-            <Row className=" mb-3 d-flex justify-content-center align-items-center">{errors.category && (
-                      <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.category}</h6>
-                    )}</Row>
-          <Row className=" mb-3 d-flex justify-content-center align-items-center">  {errors.level && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.level}</h6>}  </Row>      
-           <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.duration && (
-                      <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.duration}</h6>
-                    )}   </Row> 
-            </Row>
-            </Row>
-            )}
-            
+                </Col>
+                <Col></Col>
+              </Row>
+                <Row>
+                  <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.title && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.title}</h6>}</Row>
+                  <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.description && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.description}</h6>}</Row>
+                  <Row className=" mb-3 d-flex justify-content-center align-items-center">{errors.thumbnailimage && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.thumbnailimage}</h6>}</Row>
+                  <Row className=" mb-3 d-flex justify-content-center align-items-center">{errors.category && (
+                    <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.category}</h6>
+                  )}</Row>
+                  <Row className=" mb-3 d-flex justify-content-center align-items-center">  {errors.level && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.level}</h6>}  </Row>
+                  <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.duration && (
+                    <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.duration}</h6>
+                  )}   </Row>
+                </Row>
+              </Row>
+              )}
 
-         
-        </Row>
-        </Row>
 
-        {/* <Row>
+
+            </Row>
+          </Row>
+
+          {/* <Row>
           <Col xs={2} sm={3} md={3} ></Col>
           <Col xs={12} sm={12} md={6} >
             <Card className="mt-5" id="Course-custom-card" >
@@ -692,8 +692,8 @@ const AddCourse = () => {
               <CardContent className="Course-scrollable-body">
                 <Form onSubmit={handleSubmit}>
                   <FormControl className="mb-3" fullWidth> */}
-                    {/* <Form.Label>Course Title</Form.Label> */}
-                    {/* <TextField
+          {/* <Form.Label>Course Title</Form.Label> */}
+          {/* <TextField
                       type="text"
                       name="title"
                       placeholder="Course title"
@@ -705,13 +705,13 @@ const AddCourse = () => {
                       value={course.title}
                       onChange={handleInputChange}
                     /> */}
-                    {/* {errors.title && <p className="error">{errors.title}</p>} */}
-                  {/* </FormControl>
+          {/* {errors.title && <p className="error">{errors.title}</p>} */}
+          {/* </FormControl>
 
                   <FormControl className="mb-3" fullWidth> */}
-                    {/* <Form.Label required>Course Category</Form.Label> */}
+          {/* <Form.Label required>Course Category</Form.Label> */}
 
-                    {/* <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
+          {/* <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
                       <b>Select Category</b>
                       {fetchCategory.map((category) => (
                         <MenuItem
@@ -723,14 +723,14 @@ const AddCourse = () => {
                       ))}
                       <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
                     </TextField> */}
-                    {/* {errors.category && (
+          {/* {errors.category && (
                       <p className="error">{errors.category}</p>
                     )} */}
 
-                  {/* </FormControl>
+          {/* </FormControl>
                   <FormControl className="mb-3" fullWidth> */}
-                    {/* <Form.Label>Course Level</Form.Label> */}
-                    {/* <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
+          {/* <Form.Label>Course Level</Form.Label> */}
+          {/* <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
                       <MenuItem>Select Level</MenuItem>
                       {fetchLevel.map((level) => (
                         <MenuItem key={level.levelId} value={level.levelId}>
@@ -738,8 +738,8 @@ const AddCourse = () => {
                         </MenuItem>
                       ))}
                     </TextField> */}
-                    {/* {errors.level && <p className="error">{errors.level}</p>} */}
-                  {/* </FormControl>
+          {/* {errors.level && <p className="error">{errors.level}</p>} */}
+          {/* </FormControl>
 
                   <FormControl className="mb-3" fullWidth>
 
@@ -751,18 +751,18 @@ const AddCourse = () => {
                       type="time"
                       helperText={errors.duration}
                       error={Boolean(errors.duration)} */}
-                      {/* // step="0.1"
+          {/* // step="0.1"
                       // min="0" */}
-                      {/* placeholder="CourseDuration (in hrs)"
+          {/* placeholder="CourseDuration (in hrs)"
                       name="duration"
                       value={course.duration}
                       onChange={handleInputChange}
                     /> */}
-                    {/* {errors.duration && (
+          {/* {errors.duration && (
                       <p className="error">{errors.duration}</p>
                     )} */}
 
-                  {/* </FormControl>
+          {/* </FormControl>
 
                   <FormControl className="mb-3" fullWidth >
                     <TextField
@@ -777,10 +777,10 @@ const AddCourse = () => {
                       helperText={(errors.description)}
                       onChange={handleInputChange}
                     /> */}
-                    {/* {errors.description && (
+          {/* {errors.description && (
                       <p className="error">{errors.description}</p>
                     )} */}
-                  {/* </FormControl>
+          {/* </FormControl>
 
                   <FormControl controlId="formFile" className="mb-3" fullWidth>
                     <Form.Label>Course Thumbnail</Form.Label>
@@ -791,16 +791,16 @@ const AddCourse = () => {
                         {selectedImage ? (
 
                           <Card > */}
-                            {/* <Card.Header> */}
-                            {/* <CloseButton
+          {/* <Card.Header> */}
+          {/* <CloseButton
                               className="position-absolute top-0 end-0"
                               style={{ color: 'red' }}
                               onClick={removeThumbnail}
                               aria-label="Remove image"
                             /> */}
-                            {/* </Card.Header> */}
+          {/* </Card.Header> */}
 
-                            {/* <img
+          {/* <img
                               className="thumbnail-image"
                               src={selectedImage}
                               alt="Course thumbnail"                               // modified lines
@@ -822,7 +822,7 @@ const AddCourse = () => {
                   </FormControl> */}
 
 
-                  {/* {selectedImage && (
+          {/* {selectedImage && (
           <Row>
             <Col></Col>
             <Col xs={4} md={4}>
@@ -831,7 +831,7 @@ const AddCourse = () => {
             <Col></Col>
           </Row>
         )} */}
-                  {/* <Row className="mt-3">
+          {/* <Row className="mt-3">
                     <Col md={4} ></Col>
                     <Col md={8}>
                       <Button type="submit" value="CREATE COURSE" style={{ backgroundColor: '#23275C', color: 'white',paddingLeft:'30px',paddingRight:'30px' }} className="align-items-center justify-content-center">
@@ -847,16 +847,16 @@ const AddCourse = () => {
           </Col>
           <Col xs={0} sm={1} md={1}></Col>
         </Row> */}
-         <footer>
-      <Row  style={{ boxShadow: '1px 2px 9px #F0F0F0',height:'60px',marginLeft:'10px' }}>
-        <Col md={6} xs={6} className="mt-3">{progress==1? null:(<Button variant="contained" onClick={handlePrevious}>Previous</Button>)}</Col>
-        <Col md={6}xs={6} className=" d-flex justify-content-end align-items-end"><Button>{progress==6?(<Button variant="contained" type="Submit">Submit</Button>):(<Button variant="contained" onClick={handleContinue}>Continue</Button>)}</Button></Col>
+          <footer>
+            <Row style={{ boxShadow: '1px 2px 9px #F0F0F0', height: '60px', marginLeft: '10px' }}>
+              <Col md={6} xs={6} className="mt-3">{progress == 1 ? null : (<Button variant="contained" onClick={handlePrevious}>Previous</Button>)}</Col>
+              <Col md={6} xs={6} className=" d-flex justify-content-end align-items-end"><Button>{progress == 6 ? (<Button variant="contained" type="Submit">Submit</Button>) : (<Button variant="contained" onClick={handleContinue}>Continue</Button>)}</Button></Col>
 
 
 
-          </Row>
-      </footer>
-      </Form>
+            </Row>
+          </footer>
+        </Form>
       </Container>
       {/* <React.Fragment>
       <Dialog
@@ -970,7 +970,7 @@ const AddCourse = () => {
           </Modal.Footer>
         </Form>
       </Modal>
-     
+
     </>
   );
 };

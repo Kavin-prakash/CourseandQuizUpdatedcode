@@ -303,6 +303,10 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   const handleCourseClick = (courseId) => {
     navigate('/LearnerPage');
   }
+
+  const handleongoingClick = (courseId) => {
+    navigate('/ViewTopics/courseId');
+  }
  
  
  
@@ -520,7 +524,7 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
                 <>
                   <Typography variant="h6">Ongoing Courses</Typography>
                   {viewcourse.map((course, index) => (
-                    <Card key={index} className="ongoing-course-card" style={{ width: 250, height: 90, borderRadius: '20px' }} onClick={() => handleCourseClick(course.courseId)}>
+                    <Card key={index} className="ongoing-course-card" style={{ width: 500, height: 90, borderRadius: '20px' }} onClick={() => handleongoingClick(course.courseId)}>
                       <CardMedia
                         style={{ width: 100 }}
                         component="img"

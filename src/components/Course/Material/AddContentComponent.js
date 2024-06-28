@@ -36,6 +36,7 @@ import { fetchIndividualContentRequest } from '../../../actions/Course/Material/
 
 import { RESET_UPDATE_SUCCESS_MESSAGE, updateContentRequest, updateContentSuccess } from '../../../actions/Course/Material/UpdateContentAction';
 import PDFViewer from './PDFViewer';
+import { BackButton } from '../../../View/Course/BackButton';
 // import Video from './Video';
 import AudioViewer from './AudioViewer';
 import VideoViewer from './VideoViewer';
@@ -49,18 +50,19 @@ import Ppt from "../../../assets/Course/ppt.png"
 import Pdf from "../../../assets/Course/pdf.png"
 import Txt from "../../../assets/Course/txt.png";
 import Swal from "sweetalert2";
+
 import '../../../Styles/Course/Material/CourseContent.css'
 import { RESET_DELETE_SUCCESS_COURSES_MESSAGE } from '../../../actions/Admin/DeletecourseAction';
 function AddContentComponent() {
   // const { topicId,materialTypeId } = props
   sessionStorage.setItem("userName", "Mano");
   const { MaterialTypeId } = { "MaterialTypeId": "02950b1f-6bf6-4463-896e-e5319da2fd6f" }
+  const { courseName, topicName, id } = useParams();
   const EditContent = useSelector((state) => state.fetchIndividualContent);
   const [addupdatebtn, setaddupdatebtn] = useState("Add")
   const [materialType, setMaterialType] = useState(MaterialTypeId);
   const [errors, setErrors] = useState({});
   const [open, setOpen] = React.useState(false);
-  const { id } = useParams();
   const [deleteId, setDeleteId] = useState("");
   const [show, setShow] = useState(false);
   const [isDisableType, setIsDisableType] = useState(false);
@@ -87,6 +89,7 @@ function AddContentComponent() {
   const [updateExist, setExistsUpdateMsg] = useState('');
   const updateExists = useSelector((state) => state.updateContent.isExists);
   console.log("updateExists", updateExists);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (updateExists) {
@@ -117,7 +120,7 @@ function AddContentComponent() {
     console.log("ddd", material)
 
   }, []);
-  const handleClearForm= ()=>{
+  const handleClearForm = () => {
     setMaterial({
       topicId: id,
       materialTypeId: materialType,
@@ -125,15 +128,16 @@ function AddContentComponent() {
       material: null,
       createdBy: sessionStorage.getItem("userName"),
       duration: duration
-   
-   
+
+
     })
-    setErrors({name:"",material:""})
+    setErrors({ name: "", material: "" })
     removecontent();
     setIsDisableType(false);
     setaddupdatebtn("Add")
-   }
-   useEffect(()=>{
+    setIsEditing(false);
+  }
+  useEffect(() => {
     if (EditContent.isFetched) {
       setaddupdatebtn("Update")
       console.log("editcontent", EditContent)
@@ -147,7 +151,7 @@ function AddContentComponent() {
       setIsDisableType(true)
       handleEditMaterial(updatedmaterial.material)
     }
-   },[EditContent])
+  }, [EditContent])
   useEffect(() => {
     fetchContentByType(id, materialType)
     setMaterial({ ...material, materialTypeId: materialType })
@@ -307,6 +311,8 @@ function AddContentComponent() {
     }
 
     dispatch({ type: RESET_UPDATE_SUCCESS_MESSAGE });
+    setIsEditing(false);
+
   }, [UpdateContentSuccessMessage])
 
 
@@ -330,8 +336,10 @@ function AddContentComponent() {
       setIsDisableType(true)
       handleEditMaterial(updatedmaterial.material)
     }
-
+    setIsEditing(true);
   }
+
+
 
   const handleMaterial = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -489,10 +497,19 @@ function AddContentComponent() {
 
   return (
     <>
-      {/* <section className='w-25' >
-        
 
-      </section> */}
+
+
+      <Row className="mt-4">
+        <Col sx={10} md={10} className='mt-3'>
+          <h2><b>{courseName} / {topicName}</b></h2>
+        </Col>
+        <Col className="text-end mt-3">
+          <BackButton />
+        </Col>
+      </Row>
+
+
       <Container style={{ ...divStyle, overflowy: "auto", maxHeight: '150vh', marginTop: '5vh', marginLeft: '140px', backgroundColor: '#F6F5F5', fontSize: '18px' }}>
         <Row>
           <Col></Col>
@@ -586,7 +603,25 @@ function AddContentComponent() {
 
                 <Button className="mt-3" style={{ paddingLeft: '25px', paddingRight: '25px' }} type="submit">{addupdatebtn} Material</Button>
               </Form>
-              <Button className="mt-3" style={{ paddingLeft: '25px', paddingRight: '25px', position:'relative',top:'-16.3vh',left:'22vw'  }} type="clear" onClick={()=>handleClearForm()}>Clear Material</Button>
+              {/* <Button className="mt-3" style={{ paddingLeft: '25px', paddingRight: '25px', position: 'relative', top: '-16.3vh', left: '22vw' }} type="clear" onClick={() => handleClearForm()}>Clear Material</Button> */}
+              {isEditing && (
+                <Button
+                  className="mt-3"
+                  style={{
+                    paddingLeft: '25px',
+                    paddingRight: '25px',
+                    // marginTop:'20px',
+                    position: 'relative',
+                    top: '-17.8vh',
+                    left: '26vw', backgroundColor: '#E01950'
+                  }}
+                  type="clear"
+                  onClick={handleClearForm}
+                >
+                  Clear Material
+                </Button>
+              )}
+
             </section>
           </Col>
         </Row>
@@ -611,7 +646,12 @@ function AddContentComponent() {
                     <div className="col">
                       <Box display="flex" alignItems="center">
                         <Tooltip title="Preview material" ><IconButton className='ms-1' onClick={() => handlePreview(content.filePath, content.materialType, content.name, content.materialId)}><IoEyeOutline style={{ fontSize: '24px' }} color="#5dbea3" /></IconButton></Tooltip>
+
                         <Tooltip title="Edit material" > <IconButton className='ms-1' onClick={() => handleEditButton(content.materialId)}><FaRegEdit style={{ fontSize: '24px' }} color="#604CC3" /></IconButton></Tooltip>
+
+
+
+
                         <Tooltip title="Delete material" > <IconButton className='ms-1' onClick={() => handleDeleteClickOpen(content.materialId)}><MdOutlineDelete style={{ fontSize: '24px' }} color='#C80036' /></IconButton></Tooltip>
                       </Box>
                     </div>

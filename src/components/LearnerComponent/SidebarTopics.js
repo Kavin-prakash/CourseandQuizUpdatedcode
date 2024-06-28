@@ -64,12 +64,10 @@ function SidebarTopics() {
         ? selectedCourse.topics.map((topic) => ({
           name: topic.topicName,
           topicid: topic.topicId,
-          isQuiz: topic.isQuiz? !topic.isAttemptOver:false,
+          isQuiz: topic.isQuiz ? !topic.isAttemptOver : false,
           isFeedBack: topic.isFeedBack,
           isPassed: topic.isPassed,
- 
           isAttemptOver: topic.isAttemptOver,
- 
           isOpen: false,
           materials: topic.materials
             ? topic.materials.map((material) => ({
@@ -94,7 +92,7 @@ function SidebarTopics() {
             name: topic.topicName,
             topicid: topic.topicId,
             isOpen: false,
-            isQuiz: topic.isQuiz? !topic.isAttemptOver : false,
+            isQuiz: topic.isQuiz ? !topic.isAttemptOver : false,
             isFeedBack: topic.isFeedBack,
             isPassed: topic.isPassed,
             isAttemptOver: topic.isAttemptOver,
@@ -220,7 +218,6 @@ function SidebarTopics() {
         const topic = topics[topicIndex];
         setTopic(topic);
  
-        // Set allTopicsDisplayed to true if it's the last topic
         if (topicIndex === folders[folderIndex].topics.length - 1) {
           setAllTopicsDisplayed(true);
         }
@@ -230,13 +227,26 @@ function SidebarTopics() {
     }
   };
  
+  const allMaterialsOpened = (topic) => {
+    return topic.materials.every(material => openedMaterials.has(material.materialId));
+  };
+ 
   const opencontent = (type, materiallink, materialId, materialname) => {
     setOpenedMaterials((prevOpenedMaterials) => {
       const updatedMaterials = new Set(prevOpenedMaterials);
       updatedMaterials.add(materialId);
       saveOpenedMaterials(updatedMaterials);
+ 
+      const currentTopic = folders[0].topics.find(topic =>
+        topic.materials.some(material => material.materialId === materialId)
+      );
+      if (currentTopic && allMaterialsOpened(currentTopic)) {
+        console.log("All materials for this topic have been opened");
+      }
+ 
       return updatedMaterials;
     });
+ 
     switch (type) {
       case "PPT":
         setSelectedComponent(
@@ -389,78 +399,90 @@ function SidebarTopics() {
                                       }}>
                                         {content.materialType === "VIDEO" ? (
                                           <CiYoutube className="icon" style={{ color: "blue", fontSize: "20px" }} />
-                                          ) : content.materialType === "AUDIO" ? (
-                                            <CiMusicNote1 className="icon" style={{ color: "blue" }} />
-                                          ) : content.materialType === "TEXT" ? (
-                                            <FaFileAlt className="icon" style={{ color: "red" }} />
-                                          ) : content.materialType === "PDF" ? (
-                                            <BsFiletypePdf className="icon" style={{ color: "red" }} />
-                                          ) : (
-                                            <BsFiletypePpt className="icon" style={{ color: "red" }} />
-                                          )}
-                                          {content.materialname}
-                                          {openedMaterials.has(content.materialId) && (
-                                            <FaCheck className="icon" style={{ color: "green", marginLeft: "5px" }} />
-                                          )}
-                                        </li>
-                                      ))}
-                                      { topic.isQuiz  ? (
-                                        <button
-                                          className="btn btn-primary m-2"
-                                          onClick={() => completeTopic(topic.name, topic.topicid)}
-                                        >
-                                          Take Quiz
-                                        </button>
-                                      ) : (
+                                        ) : content.materialType === "AUDIO" ? (
+                                          <CiMusicNote1 className="icon" style={{ color: "blue" }} />
+                                        ) : content.materialType === "TEXT" ? (
+                                          <FaFileAlt className="icon" style={{ color: "red" }} />
+                                        ) : content.materialType === "PDF" ? (
+                                          <BsFiletypePdf className="icon" style={{ color: "red" }} />
+                                        ) : (
+                                          <BsFiletypePpt className="icon" style={{ color: "red" }} />
+                                        )}
+                                        {content.materialname}
+                                        {openedMaterials.has(content.materialId) && (
+                                          <FaCheck className="icon" style={{ color: "green", marginLeft: "5px" }} />
+                                        )}
+                                      </li>
+                                    ))}
+                                    {allMaterialsOpened(topic) ? (
+                                      <>
+                                        {topic.isQuiz ? (
+                                          <button
+                                            className="btn btn-primary m-2"
+                                            onClick={() => completeTopic(topic.name, topic.topicid)}
+                                          >
+                                            Take Quiz
+                                          </button>
+                                        ) : (
+                                          <button className="btn btn-primary m-2" disabled>
+                                            Take Quiz
+                                          </button>
+                                        )}
+                                        {topic.isFeedBack ? (
+                                          <button
+                                            className="btn btn-primary m-2"
+                                            onClick={() => giveFeedback(topic.topicid)}
+                                          >
+                                            Give Feedback
+                                          </button>
+                                        ) : (
+                                          <button className="btn btn-primary m-2" disabled>
+                                            {topic.isFeedBack ? "Give Feedback" : "Feedback"}
+                                          </button>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <>
                                         <button className="btn btn-primary m-2" disabled>
                                           Take Quiz
                                         </button>
-                                      )}
-                                      {topic.isAttemptOver && <p style={{color:'red'}}>Attempt is over</p>}
-                                      {topic.isPassed && <p style={{color:'green'}}> You are Passed</p>}
-                                      { topic.isFeedBack ? (
-                                        <button
-                                          className="btn btn-primary m-2"
-                                          onClick={() => giveFeedback(topic.topicid)}
-                                        >
+                                        <button className="btn btn-primary m-2" disabled>
                                           Give Feedback
                                         </button>
-                                      ) : (
-                                        <button className="btn btn-primary m-2" disabled>
-                                          {topic.isFeedBack ? "Give Feedback" : "Feedback"}
-                                        </button>
-                                      )}
-                                      {/* Add this condition to show the message only for the last topic */}
-                                      {topicIndex === folder.topics.length - 1 && (
-                                        <motion.li
-                                          variants={topicVariants}
-                                          className="end-message"
-                                          initial="hidden"
-                                          animate="visible"
-                                          exit="exit"
-                                        >
-                                          Topics for this course are over. Thank you!.To explore new courses <a href="/LearnerPage">Click here!!!</a>
-                                        </motion.li>
-                                      )}
-                                    </motion.ul>
-                                  )}
-                                </AnimatePresence>
-                              </motion.li>
-                            ))}
-                          </motion.ul>
-                        )}
-                      </AnimatePresence>
-                    </motion.li>
-                  ))}
-                </AnimatePresence>
-              </ul>
-            </Row>
+                                      </>
+                                    )}
+                                    {topic.isAttemptOver && <p style={{color:'red'}}>Attempt is over</p>}
+                                    {topic.isPassed && <p style={{color:'green'}}> You are Passed</p>}
+                                    {topicIndex === folder.topics.length - 1 && (
+                                      <motion.li
+                                        variants={topicVariants}
+                                        className="end-message"
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
+                                      >
+                                        Topics for this course are over. Thank you!. To explore new courses <a href="/LearnerPage">Click here!!!</a>
+                                      </motion.li>
+                                    )}
+                                  </motion.ul>
+                                )}
+                              </AnimatePresence>
+                            </motion.li>
+                          ))}
+                        </motion.ul>
+                      )}
+                    </AnimatePresence>
+                  </motion.li>
+                ))}
+              </AnimatePresence>
+            </ul>
           </Row>
+        </Row>
         </Col>
       </Row>
     </>
   );
-  }
+}
  
-  export default SidebarTopics;
+export default SidebarTopics;
  
