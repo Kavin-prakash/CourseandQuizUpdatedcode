@@ -1,12 +1,11 @@
 #profileEnrolledCourses {
-    border-radius: 2px;
     border: #FFFFFF;
 }
 
 #profileEnrolledCoursesBtn h3 {
     display: inline-block;
-    padding: 3%;
-    margin-left: 2%;
+    /* padding: 3%;
+    margin-left: 2%; */
     background: #E9ECEF;
     color: #685F78;
     border-radius: 5px;
@@ -24,5 +23,6 @@
 }
 
 #profileCourses {
-    border-radius: 1px solid black;
+    display: flex;
+    justify-content: space-evenly;
 }

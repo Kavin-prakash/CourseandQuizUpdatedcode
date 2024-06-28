@@ -34,3 +34,8 @@
     background-color: #23375c;
     border-radius: 5px 4px 0 0;
 }
+
+.profile-group p {
+    text-align: start;
+    font-size: small;
+}

@@ -30,9 +30,6 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
 
 
         <div id='profileEnrolledCoursesBtn'>
-          {/* <h3 id="active">Total Courses ({rows.length})</h3>
-          <h3>Completed Courses ({completecourse.length})</h3>
-          <h3>InProgress Courses ({inprogresscourse.length})</h3> */}
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -44,7 +41,7 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
             <TabPanel value="1">
               <div id='profileCourses'>
                 {rows.map(row =>
-                  <Card sx={{ maxWidth: 345 }} key={row.enrollmentid}>
+                  <Card sx={{ maxWidth: 345 }} key={row.enrollmentid} >
                     <CardMedia
                       sx={{ height: 140 }}
                       image={row.courseImage}

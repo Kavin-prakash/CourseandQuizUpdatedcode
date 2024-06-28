@@ -11,6 +11,9 @@ import { fetchProfileCardRequest } from "../../actions/Admin/LearnersViewAction"
 import { useParams } from "react-router-dom";
 import user from "../../assets/Admin/Images/user.png";
 import '../../Styles/Admin/ProfileCard.css';
+import MailIcon from '@mui/icons-material/Mail';
+import StreamIcon from '@mui/icons-material/Stream';
+import CakeIcon from '@mui/icons-material/Cake';
 const ProfileCard = ({ fetchProfileCard, profilecard }) => {
   const learnerid = useParams();
   useEffect(() => {
@@ -28,143 +31,32 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
     learnerLastlogin,
   } = profilecard.profilecard;
 
-  if (
-    profilecard.profilecard.learnerprofile ===
-    "http://localhost:5199/wwwroot/LearnerProfileImages/"
-  ) {
-    return (
-      <>
-        <Grid item xs={9}>
-          <Card sx={{ display: "flex", height: 200 }}>
-            <CardMedia
-              component="img"
-              sx={{ width: 151 }}
-              image={user}
-              alt="Profile"
-            />
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <CardContent sx={{ flex: "1 0 auto" }}>
-                <Typography variant="h4" color="text.secondary" component="div">
-                  <span style={{ fontWeight: "bold", color: "#23275c" }}>
-                    {learnerFirstName} {learnerLastName}{" "}
-                  </span>
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                >
-                  <span style={{ fontWeight: "bold", color: "black" }}>
-                    Streams :{" "}
-                  </span>{" "}
-                  <span
-                    style={{
-                      fontStyle: "italic",
-                      //   fontWeight: "lighter",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {learnerStream}
-                  </span>
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                >
-                  <span style={{ fontWeight: "bold", color: "black" }}>
-                    Email :{" "}
-                  </span>{" "}
-                  <span style={{ fontStyle: "italic" }}>{learnerEmail}</span>
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                >
-                  <span style={{ fontWeight: "bold", color: "black" }}>
-                    DOB :{" "}
-                  </span>
-                  <span style={{ fontStyle: "italic" }}>{learnerDob}</span>
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                ></Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                >
-                  <span style={{ fontWeight: "bold", color: "black" }}>
-                    Gender :{" "}
-                  </span>{" "}
-                  <span
-                    style={{ fontStyle: "italic", textTransform: "capitalize" }}
-                  >
-                    {learnerGender}
-                  </span>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      color: "black",
-                      marginLeft: "20em",
-                    }}
-                  >
-                    {" "}
-                    Last Login :{" "}
-                  </span>{" "}
-                  <span style={{ fontStyle: "italic", color: "black" }}>
-                    {learnerLastlogin
-                      ?.split("T")[0]
-                      ?.split("-")
-                      .reverse()
-                      .join("-") +
-                      " " +
-                      learnerLastlogin?.split("T")[1] || ""}
-                  </span>
-                </Typography>
-              </CardContent>
-            </Box>
-          </Card>
-        </Grid>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div id="adminprofile-card">
-          <div id="profile-img">
-            {/* <img src={learnerprofile} alt="img" />
-            {learnerFirstName}
-            {learnerLastName}
-            {learnerStream}
-            {learnerEmail}
-            {learnerDob}
-            {learnerContactNumber}
-            {learnerGender}
-            {learnerLastlogin} */}
-            <div class="settings-widget dash-profile">
-              <div class="settings-menu">
-                <div class="profile-bg">
-                  <div class="profile-img">
-                    <img src={learnerprofile} alt="img" />
-                  </div>
+  return (
+    <>
+      <div id="adminprofile-card">
+        <div id="profile-img">
+          <div class="settings-widget dash-profile">
+            <div class="settings-menu">
+              <div class="profile-bg">
+                <div class="profile-img">
+                  <img src={learnerprofile} alt="img" />
                 </div>
-                <div className="profile-group">
-                  <div className="profile-name text-center">
-                    <h4>{learnerFirstName}</h4>
-                  </div>
+              </div>
+              <div className="profile-group">
+                <div className="profile-name text-center">
+                  <h4>{learnerFirstName} {learnerLastName}</h4>
                 </div>
+                <p><MailIcon />{learnerEmail}</p>
+                <p><StreamIcon />{learnerStream}</p>
+                <p><CakeIcon />{learnerDob}</p>
               </div>
             </div>
           </div>
         </div>
-      </>
-    );
-  }
-};
+      </div>
+    </>
+  );
+}
 
 const mapStoreToProps = (state) => ({
   profilecard: state.profilecard,
