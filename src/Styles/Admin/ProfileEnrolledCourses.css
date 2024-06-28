@@ -28,7 +28,7 @@
 }
 
 #profileCourses :nth-child(1) #card {
-    filter: drop-shadow(0 0 0.75rem #e2b93b);
+    filter: drop-shadow(0 0 0.75rem #23375c);
 }
 
 #profileCourses :nth-child(1) #card .tooltiptext {
