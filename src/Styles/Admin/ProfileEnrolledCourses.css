@@ -3,8 +3,11 @@
 }
 
 #profileCourses {
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    justify-content: center;
+    justify-items: end;
 }
 
 #profileCourses img {
@@ -16,8 +19,18 @@
     background-color: #a9a7be;
     color: black;
     border-radius: 12px;
+    width: 250px;
+    height: 300px;
+}
+
+#profileCourses #card .tooltiptext {
+    display: none;
 }
 
 #profileCourses :nth-child(1) #card {
-    filter: drop-shadow(0 0 0.75rem #d5a7cb);
+    filter: drop-shadow(0 0 0.75rem #e2b93b);
+}
+
+#profileCourses :nth-child(1) #card .tooltiptext {
+    display: contents;
 }

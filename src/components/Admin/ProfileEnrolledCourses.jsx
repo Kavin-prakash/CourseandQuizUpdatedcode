@@ -40,12 +40,13 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
                 {rows.length === 0 ? <>No Courses Enrolled</> : <></>}
                 {rows.map(row =>
                   <div key={row.index}>
-                    <Card sx={{ width: 300, height: 300 }} key={row.enrollmentid} id="card" >
+                    <Card key={row.enrollmentid} id="card" >
                       <img
                         src={row.courseImage}
                         title={row.courseImage}
                       />
                       <CardContent>
+                        <span class="tooltiptext">Last Enrolled Course</span>
                         <Typography gutterBottom variant="h5" component="div">
                           {row.enrolledcourse}
                         </Typography>
@@ -64,7 +65,7 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
               <div id='profileCourses'>
                 {completecourse.length === 0 ? <>No Courses Completed</> : <></>}
                 {completecourse.map(row =>
-                  <Card sx={{ width: 300, height: 300 }} key={row.enrollmentid} id="card" >
+                  <Card key={row.enrollmentid} id="card" >
                     <img
                       src={row.courseImage}
                       title={row.courseImage}
@@ -87,7 +88,7 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
               <div id='profileCourses'>
                 {inprogresscourse.length === 0 ? <>No Courses Available</> : <></>}
                 {inprogresscourse.map(row =>
-                  <Card sx={{ width: 300, height: 300 }} key={row.enrollmentid} id="card" >
+                  <Card key={row.enrollmentid} id="card" >
                     <img
                       src={row.courseImage}
                       title={row.courseImage}

@@ -12,6 +12,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import TransgenderIcon from '@mui/icons-material/Transgender';
+import { Tooltip } from "@mui/material";
 const ProfileCard = ({ fetchProfileCard, profilecard }) => {
   const learnerid = useParams();
   useEffect(() => {
@@ -43,14 +44,37 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
                 <div className="profile-name text-center">
                   <h4>{learnerFirstName} {learnerLastName}</h4>
                 </div>
-                <p><a href={`mailto:${learnerEmail}`}><MailIcon /> {learnerEmail}</a></p>
-                <p><PhoneIcon /> {learnerContactNumber}</p>
-                <p><CakeIcon /> {learnerDob}</p>
                 <p>
-                  {learnerGender === "others" ? <TransgenderIcon /> : learnerGender === "male" ? <MaleIcon /> : <FemaleIcon />}
-                  {learnerGender ? learnerGender.toUpperCase() : 'Not Provided'} </p>
-                <p><StreamIcon /> {learnerStream}</p>
-                <p><LoginIcon /> {learnerLastlogin ? learnerLastlogin.replace('T', ' ') : 'Not Logged In'}</p>
+                  <Tooltip title="Email" placement="left" arrow>
+                    <a href={`mailto:${learnerEmail}`}><MailIcon /> {learnerEmail}</a>
+                  </Tooltip>
+                </p>
+
+                <p>
+                  <Tooltip title="Contact Number" placement="left" arrow>
+                    <PhoneIcon /> {learnerContactNumber}
+                  </Tooltip>
+                </p>
+                <p>
+                  <Tooltip title="Date of Birth" placement="left" arrow>
+                    <CakeIcon /> {learnerDob}
+                  </Tooltip>
+                </p>
+                <p>
+                  <Tooltip title="Gender" placement="left" arrow>
+                    {learnerGender === "others" ? <TransgenderIcon /> : learnerGender === "male" ? <MaleIcon /> : <FemaleIcon />}
+                    {learnerGender ? learnerGender.toUpperCase() : 'Not Provided'}
+                  </Tooltip> </p>
+                <p>
+                  <Tooltip title="Stream" placement="left" arrow>
+                    <StreamIcon /> {learnerStream}
+                  </Tooltip>
+                </p>
+                <p>
+                  <Tooltip title="Last Login" placement="left" arrow>
+                    <LoginIcon /> {learnerLastlogin ? learnerLastlogin.replace('T', ' ') : 'Not Logged In'}
+                  </Tooltip>
+                </p>
               </div>
             </div>
           </div>
