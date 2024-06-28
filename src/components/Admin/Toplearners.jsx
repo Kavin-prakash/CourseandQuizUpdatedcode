@@ -38,7 +38,7 @@ const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
       <Grid item xs={12} md={3}>
         <Item style={{borderRadius:"15px"}} >
           <Card variant="">
-            <CardContent sx={{ height: "360px" }}>
+             <CardContent sx={{ height: "425px",padding:'30px' }}>
             <Typography
                 sx={{ fontSize: 18, fontWeight: "bold", color: "#524F7D" }}
                 color="text.secondary"

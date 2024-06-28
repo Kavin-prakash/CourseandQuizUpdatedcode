@@ -8,7 +8,8 @@ function Adminrouting() {
     <>
       <Box sx={{ display: "flex" }}>
         <AdminNavbar />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box className="AdminBackground" component="main" sx={{ flexGrow: 1, p: 3 }}>
+          
           <Outlet />
         </Box>
       </Box>

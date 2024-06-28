@@ -76,12 +76,18 @@ const CourseEnrollmentChart = ({
     "#f95d6a",
     "#ff7c43",
     "#ffa600]",
+    "#FF6384",
+    "#36A2EB",
+    "#FFCE56",
+    "#4BC0C0",
+    "#9966FF",
+    "#FF9F40",
   ];
 
   const barData = {
     datasets: [
       {
-        label: "Courses enrolled Per Month",
+        label: "Monthly wise learner enrollment chart based on the year",
         data: enrollmentcoursebarchart.enrollmentcoursebarchart,
         backgroundColor: barColors,
       },
@@ -97,7 +103,7 @@ const CourseEnrollmentChart = ({
       legend: { display: true },
       title: {
         display: true,
-        text: "Monthly wise learner enrollment chart based on the year",
+        // text: "Monthly wise learner enrollment chart based on the year",
 
         font: {
           size: 14,
@@ -153,11 +159,10 @@ const CourseEnrollmentChart = ({
             </Typography>
           </FormControl>
         </Box>
-        <Card>
-          <CardContent sx={{ height: "300px", marginLeft: "30px" }}>
-            <Bar data={barData} options={barOptions} />
-          </CardContent>
-        </Card>
+
+        <Box sx={{ height: "90%", marginLeft: "30px" }}>
+          <Bar data={barData} options={barOptions} />
+        </Box>
       </Item>
     </Grid>
   );

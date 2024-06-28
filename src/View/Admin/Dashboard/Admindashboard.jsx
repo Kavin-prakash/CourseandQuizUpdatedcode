@@ -25,8 +25,9 @@ import { FaUserGraduate } from "react-icons/fa";
 import CourseEnrollmentChart from '../../../components/Admin/CourseEnrollmentChart';
 import { FaUserCheck } from "react-icons/fa";
 import { FaUserMinus } from "react-icons/fa";
+import CourseWiseEnrolledChart from "../../../components/Admin/CourseWiseEnrolledChart";
 // import '../../../Styles/Admin/AdminDashboard.css'
-
+import "../../../Styles/Admin/Admin.css";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -47,198 +48,278 @@ export default function AdminDashboard() {
     dispatch(fetchCountRequest());
   }, []);
   return (
-  <div className="admindashboard">
-    <Box sx={{ flexGrow: 1, mt: 10}} >
-      <Grid container spacing={2}>
-      <Grid item xs={12} md={3}>
-          <Item style={{borderRadius:"15px"}}>
-            <Card
-              // style={{
-              //   borderBottom: "7px solid #0F62FE",
-              //   // boxShadow: "10px 5px  #378ce7",
-              // }}
-              variant=""
-            >
-            <Link
-                to={"/adminviewallcourse"}
-                style={{ textDecoration: "none" }}
-              >
-                <CardContent>
-                <Typography
-                    sx={{ fontSize: 18, fontWeight: "bold", color: "#97247e" }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Total Courses
-                  </Typography>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Typography marginRight={"14% "}>
-                    <div style={{ border:"2px solid #97247e",borderRadius:"50%", }}>
-                      <FaBookOpenReader className="rotatinganimation"
-                        style={{ fontSize: "380%", color: "#97247e",padding:"15px"}}
-                      />
-                      </div>
-                    </Typography>
-                    <Typography
-                      variant="h3"
-                      color={"#000000"}
-                      gutterBottom
-                      paddingRight={"40%"}
-                    >
-                        <CountUp duration={8} end={dashboard.noOfCourse} />
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Link>
-            </Card>
-          </Item>
-        </Grid>
-     
-        <Grid item xs={12} md={3}>
-          <Item style={{borderRadius:"15px"}}>
-            <Card
-              // style={{
-              //   borderBottom: "7px solid #0F62FE",
-              //   // boxShadow: "10px 5px  #378ce7",
-              // }}
-              variant=""
-            >
-              <Link to={"/learnerviewall"} style={{ textDecoration: "none" }}>
-                <CardContent>
-                  <Typography
-                    sx={{ fontSize: 18, fontWeight: "bold", color: "#524F7D" }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Total Learners
-                  </Typography>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Typography marginRight={"14% "}>
-                    
-                      <div style={{ border:"2px solid #524F7D",borderRadius:"50%", }}>
-                      <FaUserGraduate className="rotatinganimation"
-                        style={{ fontSize: "380%", color: "#524F7D",padding:"15px" }}
-                      />
-                      </div>
-                    </Typography>
-                    <Typography
-                      variant="h3"
-                      color={"#000000"}
-                      gutterBottom
-                      paddingRight={"40%"}
-                    >
-                      <CountUp duration={8} end={dashboard.noOfLearners} />
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Link>
-            </Card>
-          </Item>
-        </Grid>
 
-        <Grid item xs={12} md={3}>
-          <Item style={{borderRadius:"15px"}}>
-            <Card
-              style={
-                {
-                  // borderBottom: "7px solid #24A148",
-                  // boxShadow: "10px 5px 5px #1bde52",
-                }
-              }
-              variant=""
-            >
-              <Link to={"/learnerviewall"} style={{ textDecoration: "none" }}>
-                <CardContent>
-                  <Typography
-                    sx={{ fontSize: 18, fontWeight: "bold", color: "#24A148" }}
-                    color="text.secondary"
-                    gutterBottom
+      <div className="admindashboard">
+        <Box sx={{ flexGrow: 1, mt: 10 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+              <Item style={{ borderRadius: "15px" }}>
+                <Card
+                  // style={{
+                  //   borderBottom: "7px solid #0F62FE",
+                  //   // boxShadow: "10px 5px  #378ce7",
+                  // }}
+                  variant=""
+                >
+                  <Link
+                    to={"/adminviewallcourse"}
+                    style={{ textDecoration: "none" }}
                   >
-                    Active Learners
-                  </Typography>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Typography marginRight={"14% "}>
-                    <div style={{ border:"2px solid #24A148",borderRadius:"50%", }}>
-                    <FaUserCheck className="rotatinganimation" style={{ fontSize: "380%", color: "#24A148",padding:"15px" }} />
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          fontWeight: "bold",
+                          color: "#97247e",
+                        }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Total Courses
+                      </Typography>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Typography marginRight={"14% "}>
+                          <div
+                            style={{
+                              border: "2px solid #97247e",
+                              borderRadius: "50%",
+                              background: "#97247e",
+                            }}
+                          >
+                            <FaBookOpenReader
+                              className="rotatinganimation"
+                              style={{
+                                fontSize: "380%",
+                                color: "#ffffff",
+                                padding: "15px",
+                              }}
+                            />
+                          </div>
+                        </Typography>
+                        <Typography
+                          variant="h3"
+                          color={"#000000"}
+                          gutterBottom
+                          paddingRight={"40%"}
+                        >
+                          <CountUp duration={8} end={dashboard.noOfCourse} />
+                        </Typography>
                       </div>
-                      
-                     
-                    </Typography>
-                    <Typography
-                      variant="h3"
-                      color={"#000000"}
-                      gutterBottom
-                      paddingRight={"40%"}
-                    >
-                      <CountUp
-                        duration={8}
-                        end={dashboard.noOfActiveLearners}
-                      />
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Link>
-            </Card>
-          </Item>
-        </Grid>
+                    </CardContent>
+                  </Link>
+                </Card>
+              </Item>
+            </Grid>
 
-        <Grid item xs={12} md={3}>
-          <Item style={{borderRadius:"15px"}}  >
-            <Card
-              style={
-                {
-                  // borderBottom: "7px solid red",
-                }
-              }
-              variant=""
-            >
-              <Link to={"/learnerviewall"} style={{ textDecoration: "none" }}>
-                <CardContent>
-                  <Typography
-                    sx={{ fontSize: 18, fontWeight: "bold", color: "#D20062" }}
-                    color="text.secondary"
-                    gutterBottom
+            <Grid item xs={12} md={3}>
+              <Item style={{ borderRadius: "15px" }}>
+                <Card
+                  // style={{
+                  //   borderBottom: "7px solid #0F62FE",
+                  //   // boxShadow: "10px 5px  #378ce7",
+                  // }}
+                  variant=""
+                >
+                  <Link
+                    to={"/learnerviewall"}
+                    style={{ textDecoration: "none" }}
                   >
-                    InActive Learners
-                  </Typography>
-                  <div style={{ display: "flex", justifyContent: "center"}}>
-                    <Typography marginRight={"14% "}>
-                    {/* <div className="voice-over-icon">
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          fontWeight: "bold",
+                          color: "#524F7D",
+                        }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Total Learners
+                      </Typography>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Typography marginRight={"14% "}>
+                          <div
+                            style={{
+                              border: "2px solid #524F7D",
+                              borderRadius: "50%",
+                              background: "#524F7D",
+                            }}
+                          >
+                            <FaUserGraduate
+                              className="rotatinganimation"
+                              style={{
+                                fontSize: "380%",
+                                color: "#ffffff",
+                                padding: "15px",
+                              }}
+                            />
+                          </div>
+                        </Typography>
+                        <Typography
+                          variant="h3"
+                          color={"#000000"}
+                          gutterBottom
+                          paddingRight={"40%"}
+                        >
+                          <CountUp duration={8} end={dashboard.noOfLearners} />
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </Card>
+              </Item>
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+              <Item style={{ borderRadius: "15px" }}>
+                <Card
+                  style={
+                    {
+                      // borderBottom: "7px solid #24A148",
+                      // boxShadow: "10px 5px 5px #1bde52",
+                    }
+                  }
+                  variant=""
+                >
+                  <Link
+                    to={"/learnerviewall"}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          fontWeight: "bold",
+                          color: "#24A148",
+                        }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Active Learners
+                      </Typography>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Typography marginRight={"14% "}>
+                          <div
+                            style={{
+                              border: "2px solid #24A148",
+                              borderRadius: "50%",
+                              background: "#24A148",
+                            }}
+                          >
+                            <FaUserCheck
+                              className="rotatinganimation"
+                              style={{
+                                fontSize: "380%",
+                                color: "#ffffff",
+                                padding: "15px",
+                              }}
+                            />
+                          </div>
+                        </Typography>
+                        <Typography
+                          variant="h3"
+                          color={"#000000"}
+                          gutterBottom
+                          paddingRight={"40%"}
+                        >
+                          <CountUp
+                            duration={8}
+                            end={dashboard.noOfActiveLearners}
+                          />
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </Card>
+              </Item>
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+              <Item style={{ borderRadius: "15px" }}>
+                <Card
+                  style={
+                    {
+                      // borderBottom: "7px solid red",
+                    }
+                  }
+                  variant=""
+                >
+                  <Link
+                    to={"/learnerviewall"}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          fontWeight: "bold",
+                          color: "#D20062",
+                        }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        InActive Learners
+                      </Typography>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Typography marginRight={"14% "}>
+                          {/* <div className="voice-over-icon">
                       <div className="dotted-ring"></div>
                            <VoiceOverOffRoundedIcon className="rotatinganimation" style={{ fontSize: "320%", color: "#D20062" }}  />
                       </div> */}
-                       <div style={{ border:"2px solid #D20062",borderRadius:"50%", }}>
-                       <VoiceOverOffRoundedIcon className="rotatinganimation" style={{ fontSize: "420%", color: "#D20062",padding:"15px" }}  />
+                          <div
+                            style={{
+                              border: "2px solid #D20062",
+                              borderRadius: "50%",
+                              background: "#D20062",
+                            }}
+                          >
+                            <VoiceOverOffRoundedIcon
+                              className="rotatinganimation"
+                              style={{
+                                fontSize: "420%",
+                                color: "#ffffff",
+                                padding: "15px",
+                              }}
+                            />
+                          </div>
+                        </Typography>
+                        <Typography
+                          variant="h3"
+                          color={"#000000"}
+                          gutterBottom
+                          paddingRight={"40%"}
+                        >
+                          <CountUp
+                            duration={8}
+                            end={dashboard.noofInactiveLearners}
+                          />
+                        </Typography>
                       </div>
-                      
-                    </Typography>
-                    <Typography
-                      variant="h3"
-                      color={"#000000"}
-                      gutterBottom
-                      paddingRight={"40%"}
-                    >
-                      <CountUp
-                        duration={8}
-                        end={dashboard.noofInactiveLearners}
-                      />
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Link>
-            </Card>
-          </Item>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} mt={3}>
-        <CourseEnrollmentChart />
-        <HighestEnrolledCourse />
-        <Toplearners />
-      </Grid>
-      <Grid container spacing={2} mt={3}>
-        <Recentfeedbackresponse />
-      </Grid>
-    </Box>
-    </div>
+                    </CardContent>
+                  </Link>
+                </Card>
+              </Item>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} mt={3}>
+            <CourseEnrollmentChart />
+            <HighestEnrolledCourse />
+            <Toplearners />
+          </Grid>
+          <Grid container spacing={2} mt={6}>
+            <Recentfeedbackresponse />
+            <CourseWiseEnrolledChart />
+          </Grid>
+        </Box>
+      </div>
+    
   );
 }

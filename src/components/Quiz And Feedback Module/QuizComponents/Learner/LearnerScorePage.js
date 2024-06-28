@@ -103,6 +103,8 @@ useEffect(() => {
     window.removeEventListener("popstate", handleBrowserNavigation);
   };
 }, [navigateAway]);
+
+sessionStorage.setItem("attemptRemaining",learnerAttempt.attemptsRemaining)
  
   return (
     <div>

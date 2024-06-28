@@ -1,13 +1,81 @@
-#timerclass{
-  margin-left: 85%;  
-  border: 2px solid red;
-  width: 15%;
-  height: 35px;
+#timerclass {
   text-align: center;
-  /* margin-top: 10%; */
-  /* align-items: center; */
+  padding: 10px;
+  font-size: 1.3em;
+  color: black;
 }
-
+ 
+.timer-rectangle {
+  position: fixed;
+  left: 75%;
+  /* right: -50%; */
+  top: -40px;
+  width: 220px;
+  height: 52px;
+  /* background: rgb(224, 221, 221); */
+  background: rgb(195, 229, 242);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 3px red; /* Initial border thickness */
+}
+ 
+.progress-bar-container {
+  position: absolute;
+  top: -10px; /* Move the bars outside the box */
+  left: -10px; /* Move the bars outside the box */
+  right: -10px; /* Move the bars outside the box */
+  bottom: -10px; /* Move the bars outside the box */
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ 
+/* .progress-bar {
+  background-color: red;
+  transition: width 1s linear, height 1s linear;
+} */
+ 
+.progress-bar-top,
+.progress-bar-bottom {
+  height: 10px; /* Increased thickness */
+}
+ 
+.progress-bar-left,
+.progress-bar-right {
+  width: 10px; /* Increased thickness */
+}
+ 
+.progress-bar-top {
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+ 
+.progress-bar-bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+ 
+.progress-bar-left {
+  height: 100%;
+  position: absolute;
+  left: 0;
+}
+ 
+.progress-bar-right {
+  height: 100%;
+  position: absolute;
+  right: 0;
+}
+ 
 .swal2-toast-quiz-time-end {
   margin-top: 100px;
 }

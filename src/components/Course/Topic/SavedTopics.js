@@ -640,9 +640,9 @@ export default function SavedTopics(props) {
     }
 
     const divStyle = {
-        boxShadow: '0px 4px 8px #23275c',
-        backgroundColor: '#F6F5F5', // Replace #yourShadowColor with your color
-        marginLeft: '100px'
+        // boxShadow: '0px 4px 8px #23275c',
+        // backgroundColor: '#F6F5F5', // Replace #yourShadowColor with your color
+        marginLeft: '20px'
     };
 
     // ... (existing functions and state)
@@ -719,7 +719,7 @@ export default function SavedTopics(props) {
 
 
     return (
-        <Container fluid className='mt-5' style={divStyle}>
+        <Container  fluid className='mt-1' style={divStyle}>
             {loading ? (
                 <p>Loading...</p>
             ) : (
@@ -729,16 +729,16 @@ export default function SavedTopics(props) {
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <span style={{ fontSize: '20px' }}><b>{topic.topicName}</b></span>
                                 <div>
-                                {
-                                        topic.isQuiz? <Tooltip title="Edit Quiz">
-                                        <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
-                                            <LuClipboardEdit style={{ color: "#0074D9" }} />
-                                        </IconButton>
-                                    </Tooltip>: <Tooltip title="Add Quiz">
-                                        <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
-                                            <QuizOutlinedIcon style={{ color: "#0074D9" }} />
-                                        </IconButton>
-                                    </Tooltip>
+                                    {
+                                        topic.isQuiz ? <Tooltip title="Edit Quiz">
+                                            <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
+                                                <LuClipboardEdit style={{ color: "#0074D9" }} />
+                                            </IconButton>
+                                        </Tooltip> : <Tooltip title="Add Quiz">
+                                            <IconButton aria-label="Addquiz" onClick={() => handleAddQuizButton(topic.topicId)}>
+                                                <QuizOutlinedIcon style={{ color: "#0074D9" }} />
+                                            </IconButton>
+                                        </Tooltip>
                                     }
                                     <Tooltip title="Add Topic Feedback">
                                         <IconButton aria-label="Addfeedback" onClick={() => handleAddFeedBackButton(topic.topicId)}>

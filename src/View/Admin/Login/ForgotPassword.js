@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RESET_PASSWORD_FAILURE_MESSAGE, RESET_PASSWORD_SUCCESS_MESSAGE, forgotpasswordrequest } from "../../../actions/Admin/ForgotPasswordAction";
 import Relevantz from "../../../assets/Admin/Images/Relevantz.png";
 import ForgotPasssword from '../../../assets/Admin/Images/Forgot password-cuate (1).png'
+
 import '../../../Styles/Admin/Loginpage.css'
 import { Row, Col, Container } from "react-bootstrap";
 import Swal from "sweetalert2";

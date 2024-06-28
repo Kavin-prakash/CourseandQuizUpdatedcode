@@ -121,7 +121,7 @@ function Routing() {
           {/* course module */}
           <Route path="/addcourse" element={<AddCourseView />} />
           {/* mano changes */}
-          <Route path="/coursecontent/:id" element={<CourseContent />} />/
+          <Route  path="/coursecontent/:id" element={<CourseContent />} />/
           {/* stop mano changes */}
 
           <Route path="/addtopic/:id" element={<Topics />} />

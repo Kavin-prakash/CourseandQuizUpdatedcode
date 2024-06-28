@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../Styles/Learner/Navbarone.css";
-import logo from "../../../src/Images/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import PDFViewer from "./PDFViewer";
 import { CiMusicNote1 } from "react-icons/ci";
 import { BsFiletypePdf, BsFiletypePpt } from "react-icons/bs";
@@ -14,97 +12,50 @@ import LearnerAudioViewer from "./LearnerAudioViewer";
 import LearnerVideoViewer from "./LearnerVideoViewer";
 import { fetchQuizIdRequest } from "../../actions/Quiz And Feedback Module/Learner/FetchQuizIdAction";
 import PptViewerComponent from "./Pptxday";
-import { selectCourse, } from "../../actions/LearnerAction/EnrolledCourseAction";
-//  import {fetchTopicsRequest} from '../../actions/Course/Topic/FetchTopicsAction'
 import { getIndividualEnrollCourseRequest } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Row, Col } from "react-bootstrap";
 import { FaBook, FaBookOpen } from "react-icons/fa";
-//import { CiMusicNote1 } from "react-icons/ci";
-// import { BsFiletypePdf, BsFiletypePpt } from "react-icons/bs";
-import { fetchlearnersresultRequest } from "../../actions/Quiz And Feedback Module/Learner/GetResultByLearnerIDAction";
-import { fetchlearnerfeedbackresultRequest } from "../../actions/Quiz And Feedback Module/Learner/LearnerFeedbackResultAction";
-import { BackButton } from "../../View/Course/BackButton";
-
+import Swal from 'sweetalert2';
+import { motion, AnimatePresence } from "framer-motion";
+ 
 function SidebarTopics() {
-  const pages = ['Products', 'Pricing', 'Blog'];
-  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [learnerfeedbacks, setlearnerfeedbacks] = useState([false]);
   const [topics, setTopics] = useState();
   const [topic, setTopic] = useState();
-
-
-  
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-
+  const [allTopicsDisplayed, setAllTopicsDisplayed] = useState(false);
+ 
   const { courseId } = useParams();
-
-  sessionStorage.setItem("courseId",courseId);
+ 
+  sessionStorage.setItem("courseId", courseId);
   const [topicId, settopicId] = useState();
   const selectedCourseSelector = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse);
   const [selectedCourse, setselectedCourse] = useState();
   const quiz = useSelector((state) => state.quizId.quizId);
   const [quizId, setQuizId] = useState();
-
-
+ 
   useEffect(() => {
     setQuizId(quiz);
-  }, [quiz])
-  console.log("one", quizId);
-  // const id = sessionStorage.getItem('UserSessionID')
-  // const viewcourse = useSelector((state) => state.enroll.course[0]);
+  }, [quiz]);
+ 
   const userId = sessionStorage.getItem("UserSessionID");
-  const learneridresult = sessionStorage.getItem("UserSessionID");
-  const learnerquiz = useSelector((state) => state.learnersresult.learnersfeedbackresultdetails);
   const learnertopicfeedback = useSelector((state) => state.learnerfeedbackresult.learnersfeedbackresultdetails?.isTopicFeedbackSubmitted);
-
+ 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const pdf = useSelector((state) => state.fetchPdf.material);
-  const quizresult = useSelector((state) => state.learnersresult.learnersresultdetails)
-  console.log("check", quizresult);
+ 
   useEffect(() => {
     dispatch(getIndividualEnrollCourseRequest(courseId));
-
-  }, [courseId])
-
+  }, [courseId, dispatch]);
+ 
   useEffect(() => {
     setselectedCourse(selectedCourseSelector);
-  }, [selectedCourseSelector])
-
-  useEffect(() => {
-    console.log("ssss", selectedCourse);
-  }, [selectedCourse]);
+  }, [selectedCourseSelector]);
+ 
   const [folders, setFolders] = useState([
     {
       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
@@ -113,8 +64,12 @@ function SidebarTopics() {
         ? selectedCourse.topics.map((topic) => ({
           name: topic.topicName,
           topicid: topic.topicId,
-          isQuiz: topic.isQuiz,
+          isQuiz: topic.isQuiz? !topic.isAttemptOver:false,
           isFeedBack: topic.isFeedBack,
+          isPassed: topic.isPassed,
+ 
+          isAttemptOver: topic.isAttemptOver,
+ 
           isOpen: false,
           materials: topic.materials
             ? topic.materials.map((material) => ({
@@ -128,7 +83,7 @@ function SidebarTopics() {
         : [],
     },
   ]);
-
+ 
   useEffect(() => {
     setFolders([
       {
@@ -139,8 +94,10 @@ function SidebarTopics() {
             name: topic.topicName,
             topicid: topic.topicId,
             isOpen: false,
-            isQuiz: topic.isQuiz,
+            isQuiz: topic.isQuiz? !topic.isAttemptOver : false,
             isFeedBack: topic.isFeedBack,
+            isPassed: topic.isPassed,
+            isAttemptOver: topic.isAttemptOver,
             materials: topic.materials
               ? topic.materials.map((material) => ({
                 materialId: material.materialId,
@@ -152,13 +109,9 @@ function SidebarTopics() {
           }))
           : [],
       },
-    ])
-  }, [selectedCourse])
-
-  useEffect(() => {
-    console.log(folders);
-  }, [folders]);
-
+    ]);
+  }, [selectedCourse]);
+ 
   const [selectedComponent, setSelectedComponent] = useState(
     <CourseDescription courseId={courseId} />
   );
@@ -174,7 +127,7 @@ function SidebarTopics() {
       ? new Set(JSON.parse(storedCompletedTopics))
       : new Set();
   });
-
+ 
   useEffect(() => {
     const storedOpenedMaterials = sessionStorage.getItem(
       `openedMaterials_${userId}`
@@ -183,112 +136,101 @@ function SidebarTopics() {
       setOpenedMaterials(new Set(JSON.parse(storedOpenedMaterials)));
     }
   }, [userId]);
-
+ 
   const saveOpenedMaterials = (openedMaterials) => {
     sessionStorage.setItem(
       `openedMaterials_${userId}`,
       JSON.stringify(Array.from(openedMaterials))
     );
   };
-
+ 
   const saveCompletedTopics = (completedTopics) => {
     sessionStorage.setItem(
       `completedTopics_${userId}`,
       JSON.stringify(Array.from(completedTopics))
     );
   };
-
-  // useEffect(() => {
-  // fetchquizid()
-  // }, [topicId]);
-
+ 
   const fetchquizid = async (topicindex) => {
     console.log("handleAddQuiz called with topicId:", folders[0].topics[topicindex].topicid);
     settopicId(folders[0].topics[topicindex].topicid);
     await dispatch(fetchQuizIdRequest(folders[0].topics[topicindex].topicid));
-  }; //change
-
-  // const getCourseDetails = () =>{
-  //   try{
-  //     console.log("ghdgf");
-  //   dispatch(getIndividualEnrollCourseRequest(courseId))
-  //   }catch(error){
-  //     console.log(error);
-  //   }
-  // }
-
-  console.log("selected course", selectedCourseSelector);
-  console.log("selected topics", selectedCourseSelector.topics);
-
-
-  // useEffect(()=>{
-  //   setTopics(selectedCourseSelector.topics)
-  // },[]);
-
-
-
+  };
+ 
+  const alertdisplayquiz = () => {
+    const Toast = Swal.mixin({
+      toast: true,
+      background: 'red',
+      position: 'top',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+ 
+    Toast.fire({
+      icon: 'error',
+      iconColor: 'white',
+      title: 'Please complete the quiz for the previous topic before proceeding.',
+      customClass: {
+        popup: 'custom-toast',
+      },
+    });
+  };
+ 
+  const folderVariants = {
+    hidden: { opacity: 0, height: 0 },
+    visible: { opacity: 1, height: "auto", transition: { duration: 0.3 } },
+    exit: { opacity: 0, height: 0, transition: { duration: 0.3 } }
+  };
+ 
+  const topicVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    exit: { opacity: 0, x: -20, transition: { duration: 0.3 } }
+  };
+ 
   const toggleFolder = (index) => {
     const updatedFolders = [...folders];
     updatedFolders[index].isOpen = !updatedFolders[index].isOpen;
     setFolders(updatedFolders);
-    console.log("folder", selectedCourseSelector.topics);
-    setTopics(selectedCourseSelector.topics)
+    setTopics(selectedCourseSelector.topics);
   };
-
-  console.log("topics :", topics);
-
-
+ 
   const toggleTopic = async (folderIndex, topicIndex, e) => {
     e.stopPropagation();
-
-    // if (
-    //   topicIndex > 0 &&
-    //   !completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name)
-    // ) {
-    //   alert("Please complete the quiz for the previous topic before proceeding.");
-    //   return;
-    // }
-
-    const updatedFolders = [...folders];
-    updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
-      (topic, index) => ({
-        ...topic,
-        isOpen: index === topicIndex,
-      })
-    );
-    setFolders(updatedFolders);
-
-    const topic = topics[0]
-    console.log("which topic", topic);
-    setTopic(topic)
-
-
-    // const topicId = folders[folderIndex].topics[topicIndex].topicid;
-    // console.log("give feed index", topicId, learneridresult);
-
-
-
-    // try {
-    //   // Fetch quizId first
-    //   await fetchquizid(topicIndex);
-    //   // Now use the fetched quizId in subsequent dispatches
-    //   await dispatch(fetchlearnerfeedbackresultRequest(topicId, learneridresult));
-    //   console.log("quiqui", learneridresult, quizId);
-    //   await dispatch(fetchlearnersresultRequest(learneridresult, quizId));
-    // } catch (error) {
-    //   console.error("Error in toggleTopic:", error);
-    // }
+ 
+    if (
+      (topicIndex >= 0 ||
+        completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name))
+    ) {
+      if (topicIndex === 0 || !folders[folderIndex].topics[topicIndex - 1].isQuiz) {
+        const updatedFolders = [...folders];
+        updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
+          (topic, index) => ({
+            ...topic,
+            isOpen: index === topicIndex,
+          })
+        );
+        setFolders(updatedFolders);
+ 
+        const topic = topics[topicIndex];
+        setTopic(topic);
+ 
+        // Set allTopicsDisplayed to true if it's the last topic
+        if (topicIndex === folders[folderIndex].topics.length - 1) {
+          setAllTopicsDisplayed(true);
+        }
+      } else {
+        alertdisplayquiz();
+      }
+    }
   };
-
-  console.log("true", topic);
-
-
-
-
+ 
   const opencontent = (type, materiallink, materialId, materialname) => {
-    console.log("io", type);
-    console.log("link", materiallink);
-    //console.log("material",materialName)
     setOpenedMaterials((prevOpenedMaterials) => {
       const updatedMaterials = new Set(prevOpenedMaterials);
       updatedMaterials.add(materialId);
@@ -320,15 +262,10 @@ function SidebarTopics() {
         break;
     }
   };
-
-  const areAllMaterialsOpened = (materials) => {
-    return materials.every((material) => openedMaterials.has(material.materialId));
-  };
-
+ 
   const [feedbackGiven, setFeedbackGiven] = useState(false);
-
+ 
   const completeTopic = (topicName, topicId) => {
-    debugger;
     setCompletedTopics((prevCompletedTopics) => {
       const updatedCompletedTopics = new Set(prevCompletedTopics);
       updatedCompletedTopics.add(topicName);
@@ -338,33 +275,20 @@ function SidebarTopics() {
       return updatedCompletedTopics;
     });
   };
-
+ 
   const giveFeedback = () => {
     setFeedbackGiven(true);
-
     sessionStorage.setItem("topicId", topic.topicId);
     navigate("/topicfeedbackquestion");
   };
-
-
-  console.log("feedback n quiz result", learnertopicfeedback, learnerquiz);
-
-
-  console.log("is fedd", learnerfeedbacks);
-
+ 
   useEffect(() => { setlearnerfeedbacks(learnertopicfeedback); }, [learnertopicfeedback]);
-
-
-  const areAllMaterialsViewed = (materials) => {
-    return materials.every((material) => openedMaterials.has(material.materialId));
-  };
+ 
   return (
     <>
       <Row className="learner_courseView_navbar">
         <AppBar position="static" id="learner_courseView_navbar" >
-          {/* <Container maxWidth="xl" className="learner_courseView_navbar"> */}
           <Toolbar disableGutters>
-            {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
             <Typography
               variant="h6"
               noWrap
@@ -383,44 +307,6 @@ function SidebarTopics() {
             >
               LXP
             </Typography>
-
-            {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-             
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">Course Name</Typography>
-                </MenuItem>
-           
-            </Menu>
-          </Box> */}
-            {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
             <Typography
               variant="h5"
               noWrap
@@ -446,161 +332,135 @@ function SidebarTopics() {
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 id="learner_courseView_backbtn"
               >Back</Button>
-
-
             </Box>
-
-
-
-            {/* <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-             
-                <MenuItem  onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Progress</Typography>
-                </MenuItem>
-             
-            </Menu>
-          </Box> */}
           </Toolbar>
-          {/* </Container> */}
         </AppBar>
       </Row>
       <Row>
         <Col md={10} xs={8} className="content">
           {selectedComponent}
-        </Col>
+        </Col>    
         <Col md={2} xs={4} style={{ color: 'white', backgroundColor: '#EEF5FF', height: '100vh' }}>
-          <Row className="d-flex">
-            <Row className="side">
-              <ul className="tree">
+        <Row className="d-flex">
+          <Row className="side">
+            <ul className="tree">
+              <AnimatePresence>
                 {folders.map((folder, folderIndex) => (
-                  <li style={{ cursor: "pointer" }} key={folderIndex} className={`folder ${folder.isOpen ? "open" : ""}`}>
+                  <motion.li
+                    key={folderIndex}
+                    className={`folder ${folder.isOpen ? "open" : ""}`}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    variants={folderVariants}
+                  >
                     <div onClick={() => toggleFolder(folderIndex)}>
                       {folder.isOpen ? <FaBookOpen /> : <FaBook />} {folder.name}
                     </div>
-                    {folder.isOpen && (
-                      <ul style={{ cursor: "pointer" }}>
-                        {folder.topics?.map((topic, topicIndex) => (
-                          <li key={topicIndex} className={`folder ${topic.isOpen ? "open" : ""}`}>
-                            <div onClick={(e) => toggleTopic(folderIndex, topicIndex, e)}>
-                              {topic.isOpen ? <FaBookOpen /> : <FaBook />} {topic.name}
-                            </div>
-                            {topic.isOpen && (
-                              <ul>
-                                {topic.materials.map((content, contentIndex) => (
-                                  <li key={contentIndex} className="file" onClick={(e) => {
-                                    e.stopPropagation();
-                                    opencontent(content.materialType, content.materiallink, content.materialId, content.materialname);
-                                  }}>
-                                    {content.materialType === "VIDEO" ? (
-                                      <CiYoutube className="icon" style={{ color: "blue", fontSize: "20px" }} />
-                                    ) : content.materialType === "AUDIO" ? (
-                                      <CiMusicNote1 className="icon" style={{ color: "blue" }} />
-                                    ) : content.materialType === "TEXT" ? (
-                                      <FaFileAlt className="icon" style={{ color: "red" }} />
-                                    ) : content.materialType === "PDF" ? (
-                                      <BsFiletypePdf className="icon" style={{ color: "red" }} />
-                                    ) : (
-                                      <BsFiletypePpt className="icon" style={{ color: "red" }} />
-                                    )}
-                                    {content.materialname}
-                                    {openedMaterials.has(content.materialId) && (
-                                      <FaCheck className="icon" style={{ color: "green", marginLeft: "5px" }} />
-                                    )}
-                                  </li>
-                                ))}
-                                {/* <button
-                              className="btn btn-primary"
-                              disabled={topic.isQuiz}
-                              onClick={() => giveFeedback(topic.topicid)}
+                    <AnimatePresence>
+                      {folder.isOpen && (
+                        <motion.ul
+                          initial="hidden"
+                          animate="visible"
+                          exit="exit"
+                          variants={folderVariants}
+                        >
+                          {folder.topics?.map((topic, topicIndex) => (
+                            <motion.li
+                              key={topicIndex}
+                              className={`folder ${topic.isOpen ? "open" : ""}`}
+                              variants={topicVariants}
                             >
-                              {topic.isQuiz === true ? "Take Quiz" : "Take Quiz"}
-                            </button> */}
-                                {/*
-                            <button
-                              className="btn btn-primary"
-                              disabled={topic.isFeedBack}
-                              onClick={() => giveFeedback(topic.topicid)}
-                            >
-                              {topic.isFeedBack === true ? "Give Feedback" : "Feedback Given"}
-                            </button> */}
-                                {/* <button
-  className="btn btn-primary"
-  disabled
-  onClick={() => giveFeedback(topic.topicid)}
->
-  {topic.isQuiz ? "Quiz Taken" : "Take Quiz"}
-</button> */}
-
-{areAllMaterialsViewed(topic.materials) && topic.isFeedBack ? (
-                                  <button
-                                    className="btn btn-primary m-2"
-                                    onClick={() => giveFeedback(topic.topicid)}
+                              <div onClick={(e) => toggleTopic(folderIndex, topicIndex, e)}>
+                                {topic.isOpen ? <FaBookOpen /> : <FaBook />} {topic.name}
+                              </div>
+                              <AnimatePresence>
+                                {topic.isOpen && (
+                                  <motion.ul
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="exit"
+                                    variants={folderVariants}
                                   >
-                                    Give Feedback
-                                  </button>
-                                ) : (
-                                  <button className="btn btn-primary m-2" disabled>
-                                    {topic.isFeedBack ? "Give Feedback" : "Feedback"}
-                                  </button>
-                                )}
-                                {areAllMaterialsViewed(topic.materials) && topic.isQuiz ? (
-                                  <button
-                                    className="btn btn-primary m-2"
-                                    onClick={() => completeTopic(topic.topicName, topic.topicid)}
-                                  >
-                                    Take Quiz
-                                  </button>
-                                ) : (
-                                  <button className="btn btn-primary m-2" disabled>
-                                    Take Quiz
-                                  </button>
-                                )}
-
-                                
-
-                              </ul>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
+                                    {topic.materials.map((content, contentIndex) => (
+                                      <li key={contentIndex} className="file" onClick={(e) => {
+                                        e.stopPropagation();
+                                        opencontent(content.materialType, content.materiallink, content.materialId, content.materialname);
+                                      }}>
+                                        {content.materialType === "VIDEO" ? (
+                                          <CiYoutube className="icon" style={{ color: "blue", fontSize: "20px" }} />
+                                          ) : content.materialType === "AUDIO" ? (
+                                            <CiMusicNote1 className="icon" style={{ color: "blue" }} />
+                                          ) : content.materialType === "TEXT" ? (
+                                            <FaFileAlt className="icon" style={{ color: "red" }} />
+                                          ) : content.materialType === "PDF" ? (
+                                            <BsFiletypePdf className="icon" style={{ color: "red" }} />
+                                          ) : (
+                                            <BsFiletypePpt className="icon" style={{ color: "red" }} />
+                                          )}
+                                          {content.materialname}
+                                          {openedMaterials.has(content.materialId) && (
+                                            <FaCheck className="icon" style={{ color: "green", marginLeft: "5px" }} />
+                                          )}
+                                        </li>
+                                      ))}
+                                      { topic.isQuiz  ? (
+                                        <button
+                                          className="btn btn-primary m-2"
+                                          onClick={() => completeTopic(topic.name, topic.topicid)}
+                                        >
+                                          Take Quiz
+                                        </button>
+                                      ) : (
+                                        <button className="btn btn-primary m-2" disabled>
+                                          Take Quiz
+                                        </button>
+                                      )}
+                                      {topic.isAttemptOver && <p style={{color:'red'}}>Attempt is over</p>}
+                                      {topic.isPassed && <p style={{color:'green'}}> You are Passed</p>}
+                                      { topic.isFeedBack ? (
+                                        <button
+                                          className="btn btn-primary m-2"
+                                          onClick={() => giveFeedback(topic.topicid)}
+                                        >
+                                          Give Feedback
+                                        </button>
+                                      ) : (
+                                        <button className="btn btn-primary m-2" disabled>
+                                          {topic.isFeedBack ? "Give Feedback" : "Feedback"}
+                                        </button>
+                                      )}
+                                      {/* Add this condition to show the message only for the last topic */}
+                                      {topicIndex === folder.topics.length - 1 && (
+                                        <motion.li
+                                          variants={topicVariants}
+                                          className="end-message"
+                                          initial="hidden"
+                                          animate="visible"
+                                          exit="exit"
+                                        >
+                                          Topics for this course are over. Thank you!.To explore new courses <a href="/LearnerPage">Click here!!!</a>
+                                        </motion.li>
+                                      )}
+                                    </motion.ul>
+                                  )}
+                                </AnimatePresence>
+                              </motion.li>
+                            ))}
+                          </motion.ul>
+                        )}
+                      </AnimatePresence>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
               </ul>
             </Row>
           </Row>
-
-
-
-
         </Col>
       </Row>
-
-
     </>
-
   );
-}
-
-export default SidebarTopics;
+  }
+ 
+  export default SidebarTopics;
+ 

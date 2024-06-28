@@ -21,6 +21,7 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import updateuserprofileimage from '../../assets/Learner/Online page-cuate (2).png'
+import { useNavigate } from 'react-router-dom';
  
 
 function UpdateUserProfileComponent() {
@@ -184,11 +185,12 @@ function UpdateUserProfileComponent() {
     // console.log('editInfo.stream is undefined');
   }
  
+  const navigate=useNavigate()
  
   const alertdisplayenrollment = () => {
     const Toast = Swal.mixin({
       toast: true, background: '#096C00', position: "top",
-      showConfirmButton: false, timer: 3500, timerProgressBar: true,
+      showConfirmButton: false, timer: 3000, timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
         toast.onmouseleave = Swal.resumeTimer;
@@ -200,12 +202,10 @@ function UpdateUserProfileComponent() {
       }
     });
  
- 
- 
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
- 
+   setTimeout(() => {
+    navigate('/LearnerDashboard');
+   }, 3000);
+    
   }
  
  

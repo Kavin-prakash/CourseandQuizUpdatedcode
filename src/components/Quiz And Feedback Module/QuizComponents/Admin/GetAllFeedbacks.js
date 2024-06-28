@@ -1,27 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashCan } from "react-icons/fa6";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Modal as MuiModal,
+  IconButton,
+  Tooltip,
+  Alert,
+  Card,
+  CardContent,
+  Container,
+  Stack
+} from '@mui/material';
+import StarIcon from '@mui/icons-material/Star';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { updatequizfeedbackRequest } from "../../../../actions/Quiz And Feedback Module/Admin/UpdateQuizFeedbackAction";
-import Alert from "@mui/material/Alert";
 import { deletequizfeedbackRequest } from "../../../../actions/Quiz And Feedback Module/Admin/DeleteQuizFeedbcakAction";
 import { GetAllFeedbackApi } from "../../../../middleware/Quiz And Feedback Module/Admin/GetAllFeedbackApi";
 import GetByIDFeedbackApi from "../../../../middleware/Quiz And Feedback Module/Admin/GetByIDFeedbackApi";
 import { fetchQuizIdFailure } from "../../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction";
 import { useNavigate } from "react-router-dom";
-import { Container } from 'react-bootstrap';
-import { IconButton, Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import "../../../../Styles/Quiz And Feedback Module/QuestionTemplate.css";
 import Swal from "sweetalert2";
 
 export const GetAllFeedbacks = () => {
 
   const courseId = sessionStorage.getItem('courseId');
-  const [showPopup, setShowPopup] = useState(false);
   const [getallfeedback, setGetAllfeedback] = useState();
   const [getfeedback, setGetFeedback] = useState();
   const [errorfb, setErrorfb] = useState("");
@@ -29,11 +39,9 @@ export const GetAllFeedbacks = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [errors, setErrors] = useState("");
   const [showEditfbQuestionModal, setShowEditfbQuestionModal] = useState(false);
+  const [deleteQuestionId, setDeleteQuestionId] = useState(null);
 
   const quizId = sessionStorage.getItem("quizId");
-  // const quizId = useSelector((state) => state.quizId.quizId);
-
-  // sessionStorage.setItem('quizId', quizId)
   const topicId = sessionStorage.getItem('topicId')
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,29 +50,11 @@ export const GetAllFeedbacks = () => {
     question: "",
     questionType: "",
     options: [],
-  }); /// going to store the value of edit
-
-  // const getfeedback = useSelector(
-  //   (state) => state.fetchquizfeedbackid.quizfeedback
-  // );
-
-
-  // useEffect(() => {
-  //   const fetchAllquizFeedback = async (quizId) => {
-  //     const quizFeedbackData = await GetAllFeedbackApi(quizId);
-  //     setGetAllfeedback(quizFeedbackData);
-  //   };
-  //   fetchAllquizFeedback(quizId);
-  // });
-
+  });
 
   useEffect(() => {
     fetchAllquizFeedback(quizId);
   });
-
-  // const fetchAllquizFeedback = async (quizId) => {
-  //   dispatch(fetchallquizfeedbackRequest(quizId));
-  // }
 
   const fetchAllquizFeedback = async (quizId) => {
     const quizFeedbackData = await GetAllFeedbackApi(quizId);
@@ -72,11 +62,10 @@ export const GetAllFeedbacks = () => {
     return quizFeedbackData;
   }
 
-
-
   const handleCloseAddfbQuestionModal = () => {
     setShowAddfbModal(false);
   };
+
   const handleCloseEditQuestionModal = () => {
     setShowEditfbQuestionModal(false);
   };
@@ -138,12 +127,12 @@ export const GetAllFeedbacks = () => {
     console.log("requestBody", requestBody);
     dispatch(updatequizfeedbackRequest(quizFeedbackQuestionId, requestBody));
     const Toast = Swal.mixin({
-      className:"swal2-toast",
+      className: "swal2-toast",
       toast: true,
       position: "top",
       showConfirmButton: false,
       timer: 2000,
-      background:'green',
+      background: 'green',
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -153,7 +142,7 @@ export const GetAllFeedbacks = () => {
     Toast.fire({
       icon: "success",
       title: "QuizFeedback Updated Successfully",
-      color:'white'
+      color: 'white'
     });
 
 
@@ -185,14 +174,14 @@ export const GetAllFeedbacks = () => {
 
   const handleDeletefbQuestion = (quizFeedbackQuestionId) => {
     dispatch(deletequizfeedbackRequest(quizFeedbackQuestionId));
-    setShowPopup(false);
+    setDeleteQuestionId(null);
     const Toast = Swal.mixin({
-      className:"swal2-toast",
+      className: "swal2-toast",
       toast: true,
       position: "top",
       showConfirmButton: false,
       timer: 2000,
-      background:'green',
+      background: 'green',
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -202,12 +191,10 @@ export const GetAllFeedbacks = () => {
     Toast.fire({
       icon: "success",
       title: "QuizFeedback Deleted Successfully",
-      color:'white'
+      color: 'white'
     });
-
-
-
   };
+
   const handleNavigate = () => {
     sessionStorage.removeItem("quizId");
     sessionStorage.removeItem("topicId");
@@ -216,7 +203,6 @@ export const GetAllFeedbacks = () => {
     dispatch(fetchQuizIdFailure(topicId))
   }
 
-  // savedtopics/:id
   const handleCloseModal = () => {
     setShowAddModal(false);
   };
@@ -225,210 +211,164 @@ export const GetAllFeedbacks = () => {
     setShowAddModal(true);
   };
 
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    maxWidth: 600,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    maxHeight: '90vh',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
   return (
-    <Container fluid style={{ marginTop: "10px" }}>
-      <div>
-        {/* <QuizFeedback /> */}
-        <div className="question template container">
-          <div>
-            <h5>
-              {getallfeedback ? <b style={{marginLeft:"2%"}}>Review Feedback Questions</b> : <b>No Feedback Questions</b>}
-
-            </h5>
-            {getallfeedback &&
-              getallfeedback.length > 0 &&
-              getallfeedback.map((feedback, index) => (
-                <div
-                  key={index}
-                  className="card mt-3"
-                  style={{ backgroundColor: "#F9F5F6" }}
-                >
-                  <div className="d-flex justify-content-end">
-                    <Tooltip title="Edit Feedback"><IconButton aria-label="Editquiz" onClick={() => { handleOpenEditQuestionModal(feedback.quizFeedbackQuestionId) }}><EditIcon style={{ color: "#365486" }} variant="outlined" /> </IconButton></Tooltip>
-                    {/* <a
-                    onClick={() => {
-                      handleOpenEditQuestionModal(
-                        feedback.quizFeedbackQuestionId
-                      );
-                    }}
-                    className="m-2 me-2"
-                  >
-                    <AiFillEdit
-                      id="edit"
-                      style={{ fontSize: "30", color: "#365486", cursor: "pointer" }}
-                    />
-                  </a> */}
-                    {/* <a
-                    onClick={() => {
-                      handleDeletefbQuestion(feedback.quizFeedbackQuestionId);
-                    }}
-                    className="m-2 ms-3"
-                  >
-                    <FaTrashCan
-                      id="delete"
-                      style={{ fontSize: "25", color: "#365486", cursor: "pointer" }}
-                    />
-                  </a> */}
-
-                    <Tooltip title="Delete Feedback">
-                      <IconButton aria-label="deletequiz" onClick={() => setShowPopup(true)} >
-                        <DeleteIcon style={{ color: "C80036" }} />
-                      </IconButton>
-                    </Tooltip>
-
-
-
-                    {showPopup && (
-                      <div id="popupQuizQuestionDelete">
-                        <div id="popup-contentQuizQuestionDelete">
-                          <button id="popup-close-buttonQuizQuestionDelete" onClick={() => setShowPopup(false)}>×</button>
-                          <p id='QuizQuestionDelete' style={{ marginTop: "5%" }}>Are you sure want to Delete the Feedback?</p>
-                          <button onClick={() => handleDeletefbQuestion(feedback.quizFeedbackQuestionId)} id='delete-btn'>Delete</button>
-                          <button onClick={() => setShowPopup(false)}>Cancel</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Question {feedback.questionNo}:
-                    </h5>
-                    <input value={feedback.question} className="form-control" />
-                    <div className="form-group">
-                      {/* <label>Options:</label> */}
-                      {feedback.options.map((option, index) => (
-                        <input
-                          key={index}
-                          type="text"
-                          className="form-control mt-2"
-                          value={option.optionText}
-                        />
-                      ))}
-                    </div>
+    <Container maxWidth="lg" sx={{ mt: 2 }}>
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        {getallfeedback ? <b>Review Feedback Questions</b> : <b>No Feedback Questions</b>}
+      </Typography>
+      {getallfeedback &&
+        getallfeedback.length > 0 &&
+        getallfeedback.map((feedback, index) => (
+          <Card key={index} sx={{ mb: 2, bgcolor: '#F9F5F6' }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Tooltip title="Edit Feedback">
+                  <IconButton onClick={() => handleOpenEditQuestionModal(feedback.quizFeedbackQuestionId)}>
+                    <EditIcon sx={{ color: "#365486" }} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete Feedback">
+                  <IconButton onClick={() => setDeleteQuestionId(feedback.quizFeedbackQuestionId)}>
+                    <DeleteIcon sx={{ color: "#C80036" }} />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+              {deleteQuestionId === feedback.quizFeedbackQuestionId && (
+                <div id="popupQuizQuestionDelete">
+                  <div id="popup-contentQuizQuestionDelete">
+                    <button id="popup-close-buttonQuizQuestionDelete" onClick={() => setDeleteQuestionId(null)}>×</button>
+                    <p id='QuizQuestionDelete' style={{ marginTop: "5%" }}>Are you sure you want to delete the feedback?</p>
+                    <button onClick={() => handleDeletefbQuestion(feedback.quizFeedbackQuestionId)} id='delete-btn'>Delete</button>
+                    <button onClick={() => setDeleteQuestionId(null)}>Cancel</button>
                   </div>
                 </div>
-              ))}
-          </div>
-        </div>
-        <div>
-          {getallfeedback ? <button
-            onClick={handleTypeChange}
-            className="btn btn-light mt-3 mb-5 float-right"
-            style={{
-              backgroundColor: "#365486",
-              color: "white",
-              marginLeft: "90%",
-            }}
-          >
-            Submit
-          </button> : <></>}
-          <Modal show={showAddModal} onHide={handleCloseModal}  backdrop='static' style={{ marginTop: "2.5%", marginLeft: "4%" }}>
-            <Modal.Header
-              closeButton
-              style={{ backgroundColor: "#23275c" }}
-            ></Modal.Header>
-            <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
-              <div onClick={handleTypeChange}>
-                <Alert severity="success" color="info">
-                  QuizFeedback Published successfully !
-                </Alert>
-              </div>
-            </Modal.Body>
-            <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
-              <Button
-                className="btn btn-default mt-1 mb-5"
-                style={{
-                  backgroundColor: "#365486",
-                  color: "white",
-                  marginLeft: "55%",
-                }}
-                onClick={() => {
-
-                  handleNavigate();
-                }}
-              >
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-        <Modal
-         backdrop='static'
-          show={showEditfbQuestionModal}
-          onHide={handleCloseEditQuestionModal}
-          style={{ marginTop: "2.5%", marginLeft: "4%" }}
-        >
-          <Modal.Header
-            closeButton
-            style={{ backgroundColor: "#23275c", color: "whitesmoke" }}
-          >
-            <Modal.Title>
-              <h5>Edit Question</h5>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
-            <div className="form-group">
-              <label>Question:</label>
-              <input
-                className="form-control"
-                type="text"
-                value={editedQuestion.question}
-                onChange={(e) => {
-                  console.log("p", e.target.value);
-                  setEditedQuestion({
-                    ...editedQuestion,
-                    question: e.target.value,
-                  });
-
-                  validateField("question", e.target.value);
-
-                }}
-              />
-              {errors.question && (
-                <div style={{ color: "red" }}>{errors.question}</div>
               )}
-            </div>
+              <Typography variant="h6">Question {feedback.questionNo}:</Typography>
+              <TextField
+                fullWidth
+                value={feedback.question}
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="outlined"
+                sx={{ mb: 2 }}
+              />
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: 2 }}>
+                {feedback.options.map((option, index) => (
+                  <StarIcon key={index} sx={{ color: "#FFD700", mr: 1 }} />
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
+        ))}
 
-            {editedQuestion &&
-              editedQuestion.options &&
-              editedQuestion.options.map((option, index) => (
-                <div className="form-group" key={index}>
-                  <label>Option {index + 1}:</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={option}
-                    onChange={(e) => {
-                      const updatedOptions = [...editedQuestion.options];
-                      updatedOptions[index] = e.target.value;
-                      setEditedQuestion({
-                        ...editedQuestion,
-                        options: updatedOptions,
-                      });
-                    }}
-                  />
-                  {errors.individualoptions &&
-                    errors.individualOptions[index] && (
-                      <div style={{ color: "red" }}>
-                        {errors.individualOptions[index]}
-                      </div>
-                    )}
-                </div>
-              ))}
-            {errors.options && (
-              <div style={{ color: "red" }}>{errors.options}</div>
-            )}
-          </Modal.Body>
-          <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
-            <Button className="btn btn-light" style={{ backgroundColor: "#365486", color: "white" }} onClick={handleCloseEditQuestionModal}>
+      {getallfeedback && (
+        <Button
+          onClick={handleTypeChange}
+          variant="contained"
+          sx={{ bgcolor: "#365486", color: "white", float: "right", mb: 2 }}
+        >
+          Submit
+        </Button>
+      )}
+      <MuiModal
+        open={showAddModal}
+        onClose={handleCloseModal}
+        aria-labelledby="submit-modal-title"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="submit-modal-title" variant="h6" component="h2" gutterBottom>
+            Confirmation
+          </Typography>
+          <Alert severity="success" sx={{ mb: 2 }}>
+            QuizFeedback Published successfully!
+          </Alert>
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              onClick={handleNavigate}
+              sx={{ bgcolor: "#365486", color: "white" }}
+            >
               Close
             </Button>
-            <Button className="btn btn-light" style={{ backgroundColor: "#365486", color: "white" }} onClick={validUpdatedQuestion}>
+          </Box>
+        </Box>
+      </MuiModal>
+      <MuiModal
+        open={showEditfbQuestionModal}
+        onClose={handleCloseEditQuestionModal}
+        aria-labelledby="edit-question-modal-title"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="edit-question-modal-title" variant="h6" component="h2" gutterBottom>
+            Edit Question
+          </Typography>
+          <TextField
+            fullWidth
+            label="Question"
+            variant="outlined"
+            value={editedQuestion.question}
+            onChange={(e) => {
+              setEditedQuestion({
+                ...editedQuestion,
+                question: e.target.value,
+              });
+              validateField("question", e.target.value);
+            }}
+            error={!!errors.question}
+            helperText={errors.question}
+            sx={{ mb: 2 }}
+          />
+          {editedQuestion.options && editedQuestion.options.map((option, index) => (
+            <TextField
+              key={index}
+              fullWidth
+              label={`Option ${index + 1}`}
+              variant="outlined"
+              value={option}
+              onChange={(e) => {
+                const updatedOptions = [...editedQuestion.options];
+                updatedOptions[index] = e.target.value;
+                setEditedQuestion({
+                  ...editedQuestion,
+                  options: updatedOptions,
+                });
+                validateField("options", e.target.value, index);
+              }}
+              error={!!errors.individualOptions && !!errors.individualOptions[index]}
+              helperText={errors.individualOptions && errors.individualOptions[index]}
+              sx={{ mb: 2 }}
+            />
+          ))}
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button onClick={handleCloseEditQuestionModal} sx={{ mr: 1 }}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={validUpdatedQuestion}
+              sx={{ bgcolor: "#365486", color: "white" }}
+            >
               Save Changes
             </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+          </Box>
+        </Box>
+      </MuiModal>
     </Container>
   );
 };

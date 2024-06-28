@@ -182,22 +182,3 @@ ul {
 }
 
 
-.question-number.active {
-  /* border: 2px solid blue; */
-}
- 
- 
-/* @media (max-width: 768px) {
-    .review-answers-container {
-        flex-direction: column;
-    }
- 
-    .question-grid-container {
-        width: 100%;
-        margin-bottom: 20px;
-    }
- 
-    .question-content {
-        padding-left: 0;
-    }
-} */

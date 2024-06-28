@@ -2,13 +2,12 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
 import Routing from './routes/Routing/Routing';
-import '../src/Styles/Admin/Admin.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { QuizProvider } from './components/Quiz And Feedback Module/QuizComponents/Learner/QuizContext';
 
 function App() {
   return (
-    <div className="App">
+    <div >
       <Provider store={store}>
         <QuizProvider>
         <Routing />

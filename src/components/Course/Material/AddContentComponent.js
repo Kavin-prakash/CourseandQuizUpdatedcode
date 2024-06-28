@@ -117,6 +117,37 @@ function AddContentComponent() {
     console.log("ddd", material)
 
   }, []);
+  const handleClearForm= ()=>{
+    setMaterial({
+      topicId: id,
+      materialTypeId: materialType,
+      name: "",
+      material: null,
+      createdBy: sessionStorage.getItem("userName"),
+      duration: duration
+   
+   
+    })
+    setErrors({name:"",material:""})
+    removecontent();
+    setIsDisableType(false);
+    setaddupdatebtn("Add")
+   }
+   useEffect(()=>{
+    if (EditContent.isFetched) {
+      setaddupdatebtn("Update")
+      console.log("editcontent", EditContent)
+      const updatedmaterial = {
+        materialId: EditContent.content.materialId,
+        name: EditContent.content.name,
+        material: EditContent.content.filePath,
+        modifiedBy: sessionStorage.getItem("userName"),
+      }
+      setMaterial(updatedmaterial)
+      setIsDisableType(true)
+      handleEditMaterial(updatedmaterial.material)
+    }
+   },[EditContent])
   useEffect(() => {
     fetchContentByType(id, materialType)
     setMaterial({ ...material, materialTypeId: materialType })
@@ -555,6 +586,7 @@ function AddContentComponent() {
 
                 <Button className="mt-3" style={{ paddingLeft: '25px', paddingRight: '25px' }} type="submit">{addupdatebtn} Material</Button>
               </Form>
+              <Button className="mt-3" style={{ paddingLeft: '25px', paddingRight: '25px', position:'relative',top:'-16.3vh',left:'22vw'  }} type="clear" onClick={()=>handleClearForm()}>Clear Material</Button>
             </section>
           </Col>
         </Row>

@@ -13,7 +13,7 @@ import CardMedia from '@mui/material/CardMedia';
 //import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { Row, Col, Container } from "react-bootstrap";
- 
+
 import { LogoDev } from "@mui/icons-material";
 import { FaHandPointRight } from "react-icons/fa";
 //-------------------------------
@@ -22,7 +22,7 @@ function CourseDescription() {
     const dispatch = useDispatch();
     const [isExpanded, setIsExpanded] = useState(false);
     const course = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse);
-    console.log("course",course);
+    console.log("course", course);
     const handleToggleDescription = () => {
         setIsExpanded(!isExpanded);
     };
@@ -32,46 +32,50 @@ function CourseDescription() {
     console.log(course);
     return (
         <>
-           
-                <Card sx={{ display: 'flex', marginLeft: '100px', marginTop: '60px', marginRight: '100px', height: '280px', fontSize: '18px', boxShadow: '0px 4px 8px #23275c', }}>
-                    <CardMedia
-                        style={{ objectFit: 'cover', width: '40%' }}
-                        component="img"
-                        height="380"
- 
-                        image={course.thumbnailimage}
-                        alt="Course-Thumbnail"
-                    />
-                    <CardContent sx={{ flex: 1}}>
-                        <Typography gutterBottom variant="h4" component="div">
-                            <b>{course.enrolledCoursename}</b>
- 
- 
-                        </Typography>
- 
-                        <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                            <b>Category:</b> {course.enrolledcoursecategory}
-                        </Typography>
-                        <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                            <b>Level:</b> {course.enrolledcourselevels}
-                        </Typography>
-                        <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                            <b>Course Description: </b>
-                            {course.enrolledcoursedescription ? (isExpanded ? course.enrolledcoursedescription  : `${course.enrolledcoursedescription .substring(0, 100)}...`) : 'No description available'}
-                        </Typography>
-                        {course.enrolledcoursedescription  && course.enrolledcoursedescription .length > 100 && (
-                            <Button size="small" color="primary" onClick={handleToggleDescription}>
-                                {isExpanded ? 'Show Less' : 'Show More'}
-                            </Button>
-                        )}
-                        <br />
- 
-                    </CardContent>
-                </Card>
-           
+
+            <Card sx={{ display: 'flex', marginLeft: '100px', marginTop: '60px', marginRight: '100px', height: 'auto', fontSize: '18px', boxShadow: '0px 4px 8px #23275c', }}>
+                <CardMedia
+                    style={{ objectFit: 'cover', width: '40%' }}
+                    component="img"
+                    height="380"
+
+                    image={course.thumbnailimage}
+                    alt="Course-Thumbnail"
+                />
+                <CardContent sx={{ flex: 1 }}>
+                    <Typography gutterBottom variant="h4" component="div">
+                        <b>{course.enrolledCoursename}</b>
+
+
+                    </Typography>
+
+                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+                        <b>Category:</b> {course.enrolledcoursecategory}
+                    </Typography>
+                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+                        <b>Level:</b> {course.enrolledcourselevels}
+                    </Typography>
+                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+                        <b>Topic Description</b> {course.enrolledcourselevels}
+                    </Typography>
+                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+                        <b>Course Description: </b>
+                        {course.enrolledcoursedescription ? (isExpanded ? course.enrolledcoursedescription : `${course.enrolledcoursedescription.substring(0, 100)}...`) : 'No description available'}
+                    </Typography>
+
+                    {course.enrolledcoursedescription && course.enrolledcoursedescription.length > 100 && (
+                        <Button size="small" color="primary" onClick={handleToggleDescription}>
+                            {isExpanded ? 'Show Less' : 'Show More'}
+                        </Button>
+                    )}
+                    <br />
+
+                </CardContent>
+            </Card>
+
         </>
- 
+
     )
 }
- 
+
 export default CourseDescription;

@@ -143,7 +143,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container,Breadcrumb } from "react-bootstrap";
 import { fetchCourseRequest } from '../../../actions/Course/Course/FetchCouseDetailsAction';
 import { LogoDev } from "@mui/icons-material";
 import { FaHandPointRight } from "react-icons/fa";
@@ -325,9 +325,19 @@ const Content = () => {
 
 
     //-----------------
-    <Container>
+    <Container style={{background:"white"}}>
+      <Row className="mt-2">
+      <Breadcrumb> 
+        <Breadcrumb.Item href="/admincourse"> 
+           Home
+        </Breadcrumb.Item> 
+        <Breadcrumb.Item active> 
+          View Course Details
+        </Breadcrumb.Item> 
+      </Breadcrumb> 
+      </Row>
       <Row className="mt-1">
-        {!open && successMsg && (
+        {/* {!open && successMsg && (
           <Alert severity="success" className="mt-3">
             {successMsg}
           </Alert>
@@ -336,35 +346,74 @@ const Content = () => {
           <Alert severity="warning" className="mt-3">
             {existMsg}
           </Alert>
-        )}
+        )} */}
 
         <Col md={12} xs={12} >
-          <Card sx={{ display: 'flex', maxWidth: 1200, marginLeft: '100px', marginTop: '60px', marginRight: '100px', width: '1500px', height: '380px', fontSize: '18px',boxShadow: '0px 4px 8px #23275c', }}>
+          <Card sx={{ display: 'flex', maxWidth: 1600, marginLeft: '20px', height: '200px', fontSize: '18px',border: '1px solid grey' }} className="mt-2">
             <CardMedia
-              style={{ objectFit: 'cover', width: '40%' }}
+              style={{ objectFit: 'cover', width: '20%' }}
               component="img"
-              height="380"
+              height="180"
 
               image={course.thumbnail}
               alt="Course-Thumbnail"
             />
             <CardContent sx={{ flex: 1, width: '80%' }}>
-              <Typography gutterBottom variant="h4" component="div">
-                <b>{course.title}</b>
+
+              <Row className="mt-5 ">
+               {/* <Col></Col>
+               <Col>              */}
+                <Typography gutterBottom variant="h4" className="d-flex justify-content-center align-items-center">
+                {course.title}
 
 
               </Typography>
+                {/* </Col>
+               <Col></Col> */}
+              </Row>
+              <Row>
+               {/* <Col></Col>
+               <Col>
+                </Col> */}
+               <Button  className=" d-flex justify-content-end align-items-end" onClick={handleClickOpen} size="large"  variant="text">Add Topic</Button>
+              </Row>
+             
 
-              <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+              {/* <div style={{ marginLeft: '120px' }}>
+
+
+
+                <button type="button" class="btn btn-primary" onClick={handleClickOpen} style={{ paddingLeft: '60px', paddingRight: '60px', color: 'blue', backgroundColor: 'white', marginLeft: '350px', marginTop: '15px' }}>Add Topics</button>
+              </div> */}
+              {/* <CardActions>
+                <Button size="small" color="primary" onClick={handleAddTopic}>
+                  Add Topic
+                </Button>
+              </CardActions> */}
+              {/* <br /> */}
+
+              
+            </CardContent>
+          </Card>
+
+        </Col>
+      </Row>
+      {/* <Row>
+        <Col></Col>
+        <Col></Col>
+        <Col><Button onClick={handleClickOpen} size="large"  variant="text">Add More Topics</Button></Col>
+      </Row> */}
+      <Row className="mt-4 mx-2">
+      <Typography variant="h6" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
                 <b>Category:</b> {course.category}
               </Typography>
-              <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+              <Typography variant="h6" display="block" className="mt-2"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
                 <b>Level:</b> {course.level}
               </Typography>
-              <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+              <Typography variant="h6" display="block"className="mt-2"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
                 <b>Duration: </b>{course.duration} hrs
               </Typography>
-              <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
+              <Typography variant="h6" display="block" className="mt-2"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
                 <b>Course Description: </b>
                 {course.description ? (isExpanded ? course.description : `${course.description.substring(0, 100)}...`) : 'No description available'}
               </Typography>
@@ -374,20 +423,8 @@ const Content = () => {
                 </Button>
               )}
 
-              <div style={{ marginLeft: '120px' }}>
-
-
-
-                <button type="button" class="btn btn-primary" onClick={handleClickOpen} style={{ paddingLeft: '60px', paddingRight: '60px', color: 'blue', backgroundColor: 'white', marginLeft: '350px', marginTop: '15px' }}>Add Topics</button>
-              </div>
-              {/* <CardActions>
-                <Button size="small" color="primary" onClick={handleAddTopic}>
-                  Add Topic
-                </Button>
-              </CardActions> */}
-              <br />
-
-              <Dialog
+      </Row>
+      <Dialog
                 open={open}
                 onClose={handleClose}
                 PaperProps={{
@@ -395,7 +432,7 @@ const Content = () => {
                   onSubmit: handleSubmit,
                 }}
               >
-                <DialogTitle className='dialog-clr'>Add Topics</DialogTitle>
+                <DialogTitle style={{backgroundColor:'#1976d2',color:'white'}} >Add Topics</DialogTitle>
                 <DialogContent className='dialog-content'>
 
                   <TextField
@@ -436,12 +473,6 @@ const Content = () => {
                   <Button type="submit" >Save</Button>
                 </DialogActions>
               </Dialog>
-            </CardContent>
-          </Card>
-
-        </Col>
-      </Row>
-
     </Container>
   );
 };

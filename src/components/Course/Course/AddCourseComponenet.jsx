@@ -333,52 +333,259 @@ const AddCourse = () => {
     onDrop,
     accept: "image/*",
   });
+
+  const [progress,setProgress]=useState(1);
+  const percentage=Math.round((progress/6)*100);
+
+  const containerStyles = {
+    height: 5,
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    // marginLeft:'10px'
+
+    //margin: 50,
+  };
+
+  const fillerStyles = {
+    height: '100%',
+     width: `${percentage}%`,
+    backgroundColor: 'blue', // Change this color as needed
+    borderRadius: 'inherit',
+    textAlign: 'right',
+    // marginLeft:'10px'
+  };
+
+  const labelStyles = {
+    padding: 5,
+    color: 'white',
+    fontWeight: 'bold',
+  };
+  const [step,setStep]=useState(1);
+  const handleContinue=()=>{
+    // const isFormValid = alidateForm(course, setErrors);
+
+    // if (isFormValid) {
+      setProgress(progress+1);
+
+    setStep(step+1);
+    // }else{
+      
+    //   setErrors({})
+    
+
+    // }
+  }
+  const handlePrevious=()=>{
+    setProgress(progress-1);
+    setStep(step-1);
+  }
+ 
   return (
     <>
-      <Container fluid>
+      <Container style={{background:"white"}}>
+      <Form onSubmit={handleSubmit}>
         <Row>
-          <Col xs={2} sm={3} md={3}></Col>
-          <Col xs={12} sm={12} md={6}>
+        <Row className="mt-5" style={{ boxShadow: '1px 2px 9px #F0F0F0',height:'60px',marginLeft:'10px' }}>
+          <h6 style={{paddingTop:'20px',fontWeight:'bold'}}>Step {progress} of 6</h6>
+          <Row style={containerStyles} className="mt-1">
+          <Row style={fillerStyles}>
+        <span style={labelStyles}>{`${percentage}%`}</span>
+         </Row>
+         </Row>
+        </Row>
+        
+        <Row style={{height:'70vh'}} className="mt-1 d-flex justify-content-center align-items-center">
+          {/* <Col></Col> */}
+          
+          {step==1 && ( <Row className="d-flex justify-content-center align-items-center">
+            <h1 className="mb-3 d-flex justify-content-center align-items-center">How about a working title</h1>
+            <h6 className="mb-5 d-flex justify-content-center align-items-center">It's ok if you can't think of a good title now. You can change it later.</h6>
+            <Col></Col>
+            <Col>
+            
+          <FormControl className="mt-3" fullWidth>
+                    {/* <Form.Label>Course Title</Form.Label> */}
+                    <TextField
+                      type="text"
+                      name="title"
+                      placeholder="eg : Learn Reactjs from scratch"
+                      label="Course title"
+                      fullWidth
+                      autoFocus
+                      error={Boolean(errors.title)}
+                      helperText={errors.title}
+                      value={course.title}
+                      onChange={handleInputChange}
+                    />
+                    {/* {errors.title && <p className="error">{errors.title}</p>} */}
+                    </FormControl>
+                    </Col>
+            <Col></Col>
 
-            {/* <Col xs={12} sm={10} md={8} lg={12}> */}
-            {!open && successMsg && (
-              <Alert severity="success" className="mt-5">
-                {successMsg}
-              </Alert>
+            </Row>)}
+            {step==2 && ( <Row className="d-flex justify-content-center align-items-center">
+            <h1 className="mb-3 d-flex justify-content-center align-items-center">What category best fits the knowledge you'll share?</h1>
+            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the right category, you can change it later.You can add new category also.</h6>
+            <Col></Col>
+            <Col>
+
+ 
+ <FormControl className="mt-3" fullWidth>
+  
+   <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
+     {/* <b>Select Category</b> */}
+     {fetchCategory.map((category) => (
+       <MenuItem
+         key={category.categoryId}
+         value={category.categoryId}
+       >
+         {category.category}
+       </MenuItem>
+     ))}
+     <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
+   </TextField>
+  
+ </FormControl> 
+ </Col>
+ <Col></Col>
+            </Row>)}
+           {step==3 && (<Row className="d-flex justify-content-center align-items-center">
+            <h1 className="mb-3 d-flex justify-content-center align-items-center">What level best fits the knowledge you'll share?</h1>
+            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the right category, you can change it later.</h6>
+            <Col></Col>
+            <Col>
+            <FormControl className="mb-3" fullWidth>
+                 
+                 <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
+                   {/* <MenuItem>Select Level</MenuItem> */}
+                   {fetchLevel.map((level) => (
+                     <MenuItem key={level.levelId} value={level.levelId}>
+                       {level.level}
+                     </MenuItem>
+                   ))}
+                 </TextField>
+               </FormControl>
+               </Col>
+               <Col></Col>
+            </Row>)}
+           {step==4 &&( <Row className="d-flex justify-content-center align-items-center">
+            <h1 className="mb-3 d-flex justify-content-center align-items-center">Choose your course duration</h1>
+            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure about the course duration, you can change it later.</h6>
+            <Col></Col>
+            <Col>
+            <FormControl className="mb-3" fullWidth>
+ 
+ <TextField
+   margin="dense"
+   id="name"
+   label="Course Duration (in hrs)"
+   fullWidth
+   type="time"
+   helperText={errors.duration}
+   error={Boolean(errors.duration)}
+  
+   placeholder="CourseDuration (in hrs)"
+   name="duration"
+   value={course.duration}
+   onChange={handleInputChange}
+ />
+
+
+</FormControl>
+</Col>
+<Col></Col>
+            </Row>)}
+           {step==5 && (<Row className="d-flex justify-content-center align-items-center">
+            <h1 className="mb-3 d-flex justify-content-center align-items-center">Describe about your course</h1>
+            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure, you can change it later.</h6>
+            <Col></Col>
+            <Col>
+            <FormControl className="mb-3" fullWidth >
+                    <TextField
+                      type="text"
+                      label="Description"
+                      multiline
+                      rows={3}
+                      placeholder="eg :This course covers key React concepts such as JSX, components, state, props, and hooks. You’ll learn how to build powerful interactive web applications using React. The syllabus includes 11 lessons, 7 projects, and quizzes1."
+                      name="description"
+                      value={course.description}
+                      error={(errors.description)}
+                      helperText={(errors.description)}
+                      onChange={handleInputChange}
+                    />
+                   
+                  </FormControl>
+                  </Col>
+                  <Col></Col>
+            </Row>)}
+           {step==6 && (<Row> <Row className="d-flex justify-content-center align-items-center">
+            <h1 className="mb-3 d-flex justify-content-center align-items-center">Provide a best thumbnail for your course</h1>
+            <h6 className="mb-5 d-flex justify-content-center align-items-center">If you're not sure, you can change it later.</h6>
+            <Col></Col>
+            <Col>
+            
+ <FormControl controlId="formFile" className="mb-3" fullWidth>
+
+ 
+                    <Box {...getRootProps()} className="course-thumbnail">
+                      <Card.Body className="text-center">
+                        <input {...getInputProps()} type="file" />
+                        {selectedImage ? (
+ 
+                          <Card >
+                            <CloseButton
+                              className="position-absolute top-0 end-0"
+                              style={{ color: 'red' }}
+                              onClick={removeThumbnail}
+                              aria-label="Remove image"
+                            />
+                           
+ 
+                            <img
+                              className="thumbnail-image"
+                              src={selectedImage}
+                              alt="Course thumbnail"                              
+                            />
+                          </Card>
+                        ) : (
+                          <p >
+                            {isDragActive
+                              ? "Drag the course thumbnail here ..."
+                              : <span>Click to select thumbnail image or <span className="upload-link">Click to upload</span></span>
+                            }
+                          </p>
+                        )}
+                      </Card.Body>
+                    </Box>
+                    {errors.thumbnailimage && (
+                      <p className="error">{errors.thumbnailimage}</p>
+                    )}
+                  </FormControl>
+                  </Col>
+                  <Col></Col>
+            </Row>
+            <Row>
+           <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.title && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.title}</h6>}</Row>
+           <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.description && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.description}</h6>}</Row>
+            <Row className=" mb-3 d-flex justify-content-center align-items-center">{errors.thumbnailimage && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.thumbnailimage}</h6>}</Row>
+            <Row className=" mb-3 d-flex justify-content-center align-items-center">{errors.category && (
+                      <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.category}</h6>
+                    )}</Row>
+          <Row className=" mb-3 d-flex justify-content-center align-items-center">  {errors.level && <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.level}</h6>}  </Row>      
+           <Row className=" mb-3 d-flex justify-content-center align-items-center"> {errors.duration && (
+                      <h6 className="error mb-2 d-flex justify-content-center align-items-center">*{errors.duration}</h6>
+                    )}   </Row> 
+            </Row>
+            </Row>
             )}
+            
 
-            {!open && failurMsg && (
-              <Alert severity="error" className="mt-5">
-                {failurMsg}
-              </Alert>
-            )}
-
-            {!open && servererror && (
-              <Alert severity="error" className="mt-5">
-                {servererror}
-              </Alert>
-            )}
-
-            {!open && failure && (
-              <Alert severity="error" className="mt-5">
-                {failure}
-              </Alert>
-            )}
-
-            {!open && existMsg && (
-              <Alert severity="warning" className="mt-5">
-                {existMsg}
-              </Alert>
-            )}
-
-            {/* </Col> */}
-
-
-          </Col>
-          <Col xs={0} sm={1} md={1}></Col>
+         
+        </Row>
         </Row>
 
-        <Row>
+        {/* <Row>
           <Col xs={2} sm={3} md={3} ></Col>
           <Col xs={12} sm={12} md={6} >
             <Card className="mt-5" id="Course-custom-card" >
@@ -387,9 +594,9 @@ const AddCourse = () => {
               </Card.Header>
               <CardContent className="Course-scrollable-body">
                 <Form onSubmit={handleSubmit}>
-                  <FormControl className="mb-3" fullWidth>
+                  <FormControl className="mb-3" fullWidth> */}
                     {/* <Form.Label>Course Title</Form.Label> */}
-                    <TextField
+                    {/* <TextField
                       type="text"
                       name="title"
                       placeholder="Course title"
@@ -400,14 +607,14 @@ const AddCourse = () => {
                       helperText={errors.title}
                       value={course.title}
                       onChange={handleInputChange}
-                    />
+                    /> */}
                     {/* {errors.title && <p className="error">{errors.title}</p>} */}
-                  </FormControl>
+                  {/* </FormControl>
 
-                  <FormControl className="mb-3" fullWidth>
+                  <FormControl className="mb-3" fullWidth> */}
                     {/* <Form.Label required>Course Category</Form.Label> */}
 
-                    <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
+                    {/* <TextField select name="category" onChange={handleInputChange} fullWidth label="Course Catagory" placeholder="Select Catagory" error={Boolean(errors.category)} helperText={errors.category}>
                       <b>Select Category</b>
                       {fetchCategory.map((category) => (
                         <MenuItem
@@ -418,24 +625,24 @@ const AddCourse = () => {
                         </MenuItem>
                       ))}
                       <MenuItem value="Add category" style={{ color: "#050C9C" }}>+ Add Category</MenuItem>
-                    </TextField>
+                    </TextField> */}
                     {/* {errors.category && (
                       <p className="error">{errors.category}</p>
                     )} */}
 
-                  </FormControl>
-                  <FormControl className="mb-3" fullWidth>
+                  {/* </FormControl>
+                  <FormControl className="mb-3" fullWidth> */}
                     {/* <Form.Label>Course Level</Form.Label> */}
-                    <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
+                    {/* <TextField name="level" select onChange={handleInputChange} label="Course Level" fullWidth error={Boolean(errors.level)} helperText={errors.level} placeholder="Select Level">
                       <MenuItem>Select Level</MenuItem>
                       {fetchLevel.map((level) => (
                         <MenuItem key={level.levelId} value={level.levelId}>
                           {level.level}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </TextField> */}
                     {/* {errors.level && <p className="error">{errors.level}</p>} */}
-                  </FormControl>
+                  {/* </FormControl>
 
                   <FormControl className="mb-3" fullWidth>
 
@@ -446,19 +653,19 @@ const AddCourse = () => {
                       fullWidth
                       type="time"
                       helperText={errors.duration}
-                      error={Boolean(errors.duration)}
-                      // step="0.1"
-                      // min="0"
-                      placeholder="CourseDuration (in hrs)"
+                      error={Boolean(errors.duration)} */}
+                      {/* // step="0.1"
+                      // min="0" */}
+                      {/* placeholder="CourseDuration (in hrs)"
                       name="duration"
                       value={course.duration}
                       onChange={handleInputChange}
-                    />
+                    /> */}
                     {/* {errors.duration && (
                       <p className="error">{errors.duration}</p>
                     )} */}
 
-                  </FormControl>
+                  {/* </FormControl>
 
                   <FormControl className="mb-3" fullWidth >
                     <TextField
@@ -472,11 +679,11 @@ const AddCourse = () => {
                       error={(errors.description)}
                       helperText={(errors.description)}
                       onChange={handleInputChange}
-                    />
+                    /> */}
                     {/* {errors.description && (
                       <p className="error">{errors.description}</p>
                     )} */}
-                  </FormControl>
+                  {/* </FormControl>
 
                   <FormControl controlId="formFile" className="mb-3" fullWidth>
                     <Form.Label>Course Thumbnail</Form.Label>
@@ -486,17 +693,17 @@ const AddCourse = () => {
                         <input {...getInputProps()} type="file" />
                         {selectedImage ? (
 
-                          <Card >
+                          <Card > */}
                             {/* <Card.Header> */}
-                            <CloseButton
+                            {/* <CloseButton
                               className="position-absolute top-0 end-0"
                               style={{ color: 'red' }}
                               onClick={removeThumbnail}
                               aria-label="Remove image"
-                            />
+                            /> */}
                             {/* </Card.Header> */}
 
-                            <img
+                            {/* <img
                               className="thumbnail-image"
                               src={selectedImage}
                               alt="Course thumbnail"                               // modified lines
@@ -515,7 +722,7 @@ const AddCourse = () => {
                     {errors.thumbnailimage && (
                       <p className="error">{errors.thumbnailimage}</p>
                     )}
-                  </FormControl>
+                  </FormControl> */}
 
 
                   {/* {selectedImage && (
@@ -527,10 +734,10 @@ const AddCourse = () => {
             <Col></Col>
           </Row>
         )} */}
-                  <Row className="mt-3">
+                  {/* <Row className="mt-3">
                     <Col md={4} ></Col>
                     <Col md={8}>
-                      <Button type="submit" value="CREATE COURSE" style={{ backgroundColor: '#23275C', color: 'white' }} className="align-items-center justify-content-center">
+                      <Button type="submit" value="CREATE COURSE" style={{ backgroundColor: '#23275C', color: 'white',paddingLeft:'30px',paddingRight:'30px' }} className="align-items-center justify-content-center">
                         CREATE COURSE
                       </Button></Col>
                     <Col md={2}></Col>
@@ -542,7 +749,17 @@ const AddCourse = () => {
             </Card>
           </Col>
           <Col xs={0} sm={1} md={1}></Col>
-        </Row>
+        </Row> */}
+         <footer>
+      <Row  style={{ boxShadow: '1px 2px 9px #F0F0F0',height:'60px',marginLeft:'10px' }}>
+        <Col md={6} xs={6} className="mt-3">{progress==1? null:(<Button variant="contained" onClick={handlePrevious}>Previous</Button>)}</Col>
+        <Col md={6}xs={6} className=" d-flex justify-content-end align-items-end"><Button>{progress==6?(<Button variant="contained" type="Submit">Submit</Button>):(<Button variant="contained" onClick={handleContinue}>Continue</Button>)}</Button></Col>
+
+
+
+          </Row>
+      </footer>
+      </Form>
       </Container>
       {/* <React.Fragment>
       <Dialog
@@ -656,6 +873,7 @@ const AddCourse = () => {
           </Modal.Footer>
         </Form>
       </Modal>
+     
     </>
   );
 };

@@ -1,11 +1,22 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import AdminNavbar from "./AdminNavbar";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../../../Styles/Quiz And Feedback Module/CreateQuiz.css";
-import Button from "react-bootstrap/Button";
+// import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
-
+import {
+  Modal as MuiModal,
+  Box,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Rating
+} from '@mui/material';
 import GetAllFeedbacks from "./GetAllFeedbacks";
 import { QuizFeedbackApi } from "../../../../middleware/Quiz And Feedback Module/Admin/QuizFeedbackApi";
 import { Container } from "react-bootstrap";
@@ -24,7 +35,7 @@ export const QuizFeedback = () => {
 
   const quizId = sessionStorage.getItem("quizId");
   console.log("quiz feed", quizId);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,68 +48,61 @@ export const QuizFeedback = () => {
 
 
   const handleSaveQuestion = async () => {
-    let tempfbErrors = { question: "", questionType: "", optionText: "" };
-
+    let tempfbErrors = { question: "", questionType: "" };
+  
     if (!fbQuestion.question) {
       tempfbErrors.question = "Question is required";
     }
     if (!fbQuestion.questionType) {
       tempfbErrors.questionType = "Question type is required";
     }
-    if (fbQuestion.options.length === 0 && fbQuestion.questionType == "MCQ") {
-      tempfbErrors.optionText = "At least one option is required";
-    }
-
+  
     setErrorfb(tempfbErrors);
-
-    if (
-      tempfbErrors.question ||
-      tempfbErrors.questionType ||
-      tempfbErrors.optionText
-  ) {
+  
+    if (tempfbErrors.question || tempfbErrors.questionType) {
       return;
     }
-
+  
     const requestBody = {
       quizId: quizId,
       question: fbQuestion.question,
       questionType: fbQuestion.questionType,
-      options: fbQuestion.options.map((optionText, index) => ({
-        optionText: optionText,
-        // isCorrect: fbQuestion.correctOptions.includes(option) // Check if option is in correctOptions array
-      })),
+      options: fbQuestion.questionType === "MCQ" 
+        ? [
+            { optionText: "1" },
+            { optionText: "2" },
+            { optionText: "3" },
+            { optionText: "4" },
+            { optionText: "5" }
+          ]
+        : []
     };
-    console.log("checkrequestody",requestBody);
-    try{
-    await QuizFeedbackApi(requestBody);
-    setFbQuestion({ ...fbQuestion,question:"", options: ""});
-  //   setTimeout(function () {
-  //     window.location.reload(1);
-  // }, 500);
-    handleCloseAddfbQuestionModal();
-    const Toast = Swal.mixin({
-      className:"swal2-toast",
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2000,
-      background:'green',
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: "QuizFeedback Added Successfully",
-      color:'white'
-    });
-
-    }catch(error){
+  
+    try {
+      await QuizFeedbackApi(requestBody);
+      setFbQuestion({ ...fbQuestion, question: "", options: [] });
+      handleCloseAddfbQuestionModal();
+      const Toast = Swal.mixin({
+        className: "swal2-toast",
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2000,
+        background: 'green',
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "QuizFeedback Added Successfully",
+        color: 'white'
+      });
+    } catch (error) {
       console.log(error)
     }
-   
   };
 
   const handleOpenAddfbQuestionModal = () => {
@@ -107,7 +111,7 @@ export const QuizFeedback = () => {
 
   const handleCloseAddfbQuestionModal = () => {
     setShowAddfbModal(false);
-   
+
   };
   const handleChange = (index, field, value) => {
     const updatedoptions = [...fbQuestion.options];
@@ -141,152 +145,144 @@ export const QuizFeedback = () => {
     navigate(`/reviewquestions`);
   };
 
+
+
   return (
     <>
-    <Container fluid style={{marginTop:'630px'}}>
-    <div>
-      <button
-        class="btn btn-light"
-        style={{
-          marginLeft: "95%",
-          marginTop: "-73%",
-          backgroundColor: "#365486",
-          color: "white",
-          width: "50",
-        }}
-        onClick={() => {
-          handleNavigate();
-        }}
-      >
-        Back
-      </button>
-
-      <div>
+      <Container fluid style={{ marginTop: '630px' }}>
         <div>
-          <h4 className="text" style={{ marginLeft: "3%", marginTop: "-35%" }}>
-            <b>Feedback Questions for {quizName} Quiz</b>
-          </h4>
           <button
-            onClick={handleOpenAddfbQuestionModal}
-            className="btn btn-light mt-3 mb-5 float-right"
+            class="btn btn-light"
             style={{
+              marginLeft: "95%",
+              marginTop: "-73%",
               backgroundColor: "#365486",
               color: "white",
-              marginLeft: "43%",
+              width: "50",
+            }}
+            onClick={() => {
+              handleNavigate();
             }}
           >
-            Add Feedback Questions
+            Back
           </button>
-          <GetAllFeedbacks />
-          <Modal show={showAddfbModal} onHide={handleCloseAddfbQuestionModal}  backdrop='static' style={{marginTop:"2.5%",marginLeft:"4%"}}>
-            <Modal.Header
-              closeButton
-              style={{ backgroundColor: "#23275c", color: "whitesmoke" }}
-            >
-              <h5>Add Feedback Questions</h5>
-              <Modal.Title></Modal.Title>
-            </Modal.Header>
-            <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
-              <div className="form-group">
-                <label>Question Type <b id="required">*</b></label>
-                <select
-                  className="form-control"
-                  value={selectedfbType}
-                  onChange={handlefbQuestionTypeChange}
-                >
-                  <option value="">Select Question Type</option>
-                  <option value="MCQ">MCQ</option>
-                  <option value="Descriptive">Descriptive</option>
-                </select>
-                {errorfb.questionType && (
-                  <div style={{ color: "red" }}>{errorfb.questionType}</div>
-                )}
-              </div>
 
-              {selectedfbType === "MCQ" && (
-                <>
-                  <div className="form-group">
-                    <label>
-                      Question: <b id="required">*</b>
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={fbQuestion.question}
-                      onChange={(e) =>
-                        handleChange(-1, "question", e.target.value)
-                      }
-                    />
-                    {errorfb.question && (
-                      <div style={{ color: "red" }}>{errorfb.question}</div>
-                    )}
-                  </div>
-                  {[...Array(4)].map((_, index) => (
-                    <div className="form-group" key={index}>
-                      <label>
-                        Option {index + 1} <b id="required">*</b>
-                      </label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        value={fbQuestion.options[index] || ""}
-                        onChange={(e) =>
-                          handleChange(index, "options", e.target.value)
-                        }
-                      />
-                      {errorfb.options && (
-                        <div style={{ color: "red" }}>{errorfb.options}</div>
-                      )}
-                    </div>
-                  ))}
-                </>
-              )}
-
-              {selectedfbType === "Descriptive" && (
-                <>
-                  <div className="form-group">
-                    <label>Question: <b id="required">*</b></label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={fbQuestion.question}
-                      onChange={(e) =>
-                        handleChange(-1, "question", e.target.value)
-                      }
-                    />
-                    {errorfb.question && (
-                      <div style={{ color: "red" }}>{errorfb.question}</div>
-                    )}
-                  </div>
-                </>
-              )}
-            </Modal.Body>
-
-            <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
-              <Button
-                variant="default"
-                style={{ backgroundColor: "#365486", color: "whitesmoke" }}
-                onClick={handleCloseAddfbQuestionModal}
-              >
-                Close
-              </Button>
-              <Button
-                variant="default"
-                style={{ backgroundColor: "#365486", color: "whitesmoke" }}
-                onClick={() => {
-                  handleSaveQuestion();
+          <div>
+            <div>
+              <h4 className="text" style={{ marginLeft: "3%", marginTop: "-35%" }}>
+                <b>Feedback Questions for {quizName} Quiz</b>
+              </h4>
+              <button
+                onClick={handleOpenAddfbQuestionModal}
+                className="btn btn-light mt-3 mb-5 float-right"
+                style={{
+                  backgroundColor: "#365486",
+                  color: "white",
+                  marginLeft: "43%",
                 }}
               >
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      </div>
-    </div>
+                Add Feedback Questions
+              </button>
+              <GetAllFeedbacks />
+              <MuiModal
+                open={showAddfbModal}
+                onClose={handleCloseAddfbQuestionModal}
+                aria-labelledby="add-feedback-modal-title"
+              >
+                <Box sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '90%',
+                  maxWidth: 600,
+                  bgcolor: 'background.paper',
+                  boxShadow: 24,
+                  p: 4,
+                  maxHeight: '90vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}>
+                  <Typography id="add-feedback-modal-title" variant="h6" component="h2" gutterBottom>
+                    Add Feedback Questions
+                  </Typography>
 
-    </Container>
+                  <Box sx={{ flexGrow: 1, overflowY: 'auto', pr: 2 }}>
+                    <FormControl fullWidth margin="normal" error={!!errorfb.questionType}>
+                      <InputLabel id="question-type-label">Question Type</InputLabel>
+                      <Select
+                        labelId="question-type-label"
+                        value={selectedfbType}
+                        onChange={handlefbQuestionTypeChange}
+                        label="Question Type"
+                      >
+                        <MenuItem value="">Select Question Type</MenuItem>
+                        <MenuItem value="MCQ">Rating</MenuItem>
+                        <MenuItem value="Descriptive">Descriptive</MenuItem>
+                      </Select>
+                      {errorfb.questionType && <Typography color="error">{errorfb.questionType}</Typography>}
+                    </FormControl>
+
+                    {selectedfbType === "MCQ" && (
+                      <>
+                        <TextField
+                          fullWidth
+                          margin="normal"
+                          label="Rating Question"
+                          variant="outlined"
+                          value={fbQuestion.question}
+                          onChange={(e) => handleChange(-1, "question", e.target.value)}
+                          error={!!errorfb.question}
+                          helperText={errorfb.question}
+                        />
+                        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                          This a 5-star rating question.
+                        </Typography>
+                        <Rating
+                        name="star-rating"
+                        max={5}
+                        readOnly
+                        />
+                      </>
+                    )}
+
+                    {selectedfbType === "Descriptive" && (
+                      <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Question"
+                        variant="outlined"
+                        value={fbQuestion.question}
+                        onChange={(e) => handleChange(-1, "question", e.target.value)}
+                        error={!!errorfb.question}
+                        helperText={errorfb.question}
+                      />
+                    )}
+                  </Box>
+
+                  <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button onClick={handleCloseAddfbQuestionModal} sx={{ mr: 1 }}>
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        handleSaveQuestion();
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
+                </Box>
+              </MuiModal>
+
+            </div>
+          </div>
+        </div>
+
+      </Container>
     </>
-      );
+  );
 }
 export default QuizFeedback;

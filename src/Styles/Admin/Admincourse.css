@@ -37,9 +37,12 @@
 }
 
 .recentaddedcourse {
-    background-color: #f0f5f9;
-    border: 1px solid #85d3f7;
-    border-radius: 15PX;
+    background-color: #f0f0f0; /* Replace with the color you prefer */
+
+    /* background-color: #d2d2d2; */
+    /* border: 1px solid #85d3f7; */
+    border-radius: 15px;
+    /* border: 2px solid black; */
     margin-top: 15px;
 }
 

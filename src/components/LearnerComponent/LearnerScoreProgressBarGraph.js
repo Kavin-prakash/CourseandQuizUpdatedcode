@@ -1,71 +1,72 @@
-
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCoursesTopicsScoresRequest } from '../../actions/LearnerAction/LearnerScoreProgressBarGraphAction';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTooltip, VictoryGroup } from 'victory';
+import React, { useEffect, useRef,useState } from 'react';
 import LearnerScoreProgressBarGraphApi from '../../middleware/LearnerMiddleware/LearnerScoreProgressBarGraphApi';
+// import { Chart } from 'chart.js';
+import { Chart, Tooltip, CategoryScale } from 'chart.js/auto';
+import { Card } from '@mui/material';
+ 
+ 
+Chart.register(Tooltip, CategoryScale);
  
 function LearnerScoreProgressBarGraph() {
-    const dispatch = useDispatch();
+    const chartRef = useRef(null);
+    const chartInstance = useRef(null);
     const id = sessionStorage.getItem("UserSessionID");
-    // const scoreProgressSelector = useSelector((state) => state);
     const [scoreProgressSelector, setScoreProgressSelector] = useState([]);
-    console.log("scoreProgressSelector",scoreProgressSelector);
  
     useEffect(() => {
-        console.log("gghfhgf");
         fetchCoursesTopicsScores(id);
     }, []);
  
- 
- 
-    const fetchCoursesTopicsScores = async (id) =>{
-        console.log("red")
+    const fetchCoursesTopicsScores = async (id) => {
         const data = await LearnerScoreProgressBarGraphApi(id);
-        console.log("tadytas",data);
         setScoreProgressSelector(data);
     }
  
-    // Get all unique topics
-    const topics = [...new Set(scoreProgressSelector.map(item => item.topicName))];
- 
-    // Get all unique courses
-    const courses = [...new Set(scoreProgressSelector.map(item => item.courseName))];
- 
-    const topicColors = ['#e6eefb', '#27235C']
- 
-     // Check if there's any score data
-     const hasScoreData = scoreProgressSelector.some(item => item.score > 0);
- 
-     if (!hasScoreData) {
-         return null; // Don't render anything if there's no score data
-     }
- 
-    // Calculate chart width based on the number of courses and topics
-    const chartWidth = 100 * courses.length * topics.length;
+    useEffect(() => {
+        if (scoreProgressSelector.length > 0 && chartRef.current) {
+            if (chartInstance.current) {
+                chartInstance.current.destroy();
+            }
+            const ctx = chartRef.current.getContext('2d');
+            chartInstance.current =  new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: scoreProgressSelector.map(item => item.courseName),
+                    datasets: scoreProgressSelector.map((item, index) => ({
+                        label: item.topicName,
+                        data: [item.score],
+                        backgroundColor: ['#e6eefb', '#27235C'][index % 2],
+                    })),
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { beginAtZero: true },
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].dataset.label;
+                                },
+                                label: function(context) {
+                                    return `Score: ${context.parsed.y}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }, [scoreProgressSelector]);
  
     return (
-        <div style={{ width: `350px`, height: '350px' }}>
-            <VictoryChart domainPadding={55} padding={{ top: 20, bottom: 60, left: 100, right: 80 }}>
-                <VictoryAxis tickValues={courses} tickFormat={courses} />
-                <VictoryAxis dependentAxis />
-                <VictoryGroup offset={15}>
-                    {topics.map((topic, index) => (
-                        <VictoryBar
-                            key={index}
-                            data={scoreProgressSelector.filter(item => item.topicName === topic)}
-                            x="courseName"
-                            y="score"
-                            labels={({ datum }) => `Topic: ${topic}, Score: ${datum.score}`}
-                            labelComponent={<VictoryTooltip />}
-                            style={{ data: { fill: topicColors[index % topicColors.length] } }}
-                        />
-                    ))}
-                </VictoryGroup>
-            </VictoryChart>
-        </div>
+        <Card style={{backgroundColor:"whitesmoke",height:'400px'}}>
+            <canvas ref={chartRef} style={{ width: '300px', height: '350px' }}></canvas>
+        </Card>
     );
 }
  
 export default LearnerScoreProgressBarGraph;
+ 

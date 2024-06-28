@@ -1,28 +1,32 @@
 import * as React from "react";
-import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import "../../Styles/Admin/AdminNavbar.css";
 import { FaBookOpenReader } from "react-icons/fa6";
 import { FaUserGraduate, FaHome, FaChartBar } from "react-icons/fa";
-import "../../Styles/Admin/AdminNavbar.css";
-import { Button, Modal } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import Z from "../../assets/Admin/Images/ZWhite.jfif";
-import relevantzzzedited from "../../assets/Admin/Images/relevantzedited.png"
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import relevantzzzedited from "../../assets/Admin/Images/relevantzedited.png";
+import { Button, Modal } from "react-bootstrap";
 import { UseDispatch, useDispatch } from "react-redux";
 import { successdata } from "../../actions/Admin/loginAction";
-import LogoutIcon from '@mui/icons-material/Logout';
-
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useState } from "react";
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -51,6 +55,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -89,40 +94,20 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function AdminNavbar() {
-
-  const dispatch = useDispatch();
-
-  const [activePage, setActivePage] = useState("home");
-
-  const [showReportDropdown, setShowReportDropdown] = useState(false);
-  const handlePageChange = (page) => {
-    setActivePage(page);
-
-    if (page === "reports" && showSideNav) {
-      setShowReportDropdown(!showReportDropdown);
-    }
-    // if (showReportDropdown) {
-    //     setShowReportDropdown(!showReportDropdown);
-    // }
-  };
-
-  const navigate = useNavigate();
+export default function MiniDrawer() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
   const theme = useTheme();
-  const [showSideNav, setShowSideNav] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
-    setShowSideNav(true);
+    setOpen(true);
   };
 
   const handleDrawerClose = () => {
-    setShowSideNav(false);
-    if (showReportDropdown) {
-      setShowReportDropdown(!showReportDropdown);
-    }
+    setOpen(false);
   };
-
-  // Logout 
+  // Logout
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const confirmLogout = () => {
@@ -141,55 +126,48 @@ export default function AdminNavbar() {
     setShowLogoutConfirmation(false); // Hide the confirmation toast
   };
 
-
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
   };
 
   return (
-    <div id="admin_navbar">
+    <Box sx={{ display: "flex" }} id="admin_navbar">
       <CssBaseline />
-      {/* <AppBar position="fixed" open={showSideNav}>
-        <Toolbar className="top-nav">
+      <AppBar
+        position="fixed"
+        open={open}
+        style={{ backgroundColor: "#27235c" }}
+      >
+        <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
-              marginRight: 5,
-              ...(showSideNav && { display: "none" }),
+              marginRight: 3,
+              ...(open && { display: "none" }),
             }}
           >
-          <MenuIcon />
+            {/* <MenuIcon /> */}
+            <img src={Z} style={{ width: "3vw", height: "7vh" }} />
           </IconButton>
-          <Box component="div">
-            <img src={logo} alt="logo"/> 
-            <KeyboardBackspaceIcon style={{position:"absolute",marginLeft:'70%',marginTop:'10px',cursor:"pointer"}} onClick={() => navigate(-1)} />
-            <Link style={{textDecoration:'none'}} to='/'>   <Button style={{position:'absolute',marginLeft:'72%',marginTop:'10px'}}>Logout</Button></Link>
-          </Box>
-        </Toolbar>
-      </AppBar> */}
-      <AppBar position="fixed" open={showSideNav}>
-        <Toolbar className="top-nav">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(showSideNav && { display: "none" }),
-            }}
-          >
-            <MenuIcon style={{ fontSize: "140%" }} />
-            <img src={Z} style={{ width: "5vw", height: "5vh" }} />
+          <Typography id="adminNavhead">
+            <h4>
+              <span>L</span>earning e<span>X</span>perience <span>P</span>
+              latform
+            </h4>
+          </Typography>
 
-          </IconButton>
-          <div id="adminNavhead">
-            <h4><span>L</span>earning e<span>X</span>perience <span>P</span>latform</h4>
-          </div>
-          <Box component="div">
+          <Box
+            component="div"
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "flex-end",
+              marginRight: "100px",
+            }}
+          >
             {/* <img src={logo} alt="logo" /> */}
             <Button
               style={{
@@ -200,7 +178,7 @@ export default function AdminNavbar() {
               onClick={handleLogoutClick}
             >
               <span>Logout </span>
-              <LogoutIcon /> 
+              <LogoutIcon />
             </Button>
           </Box>
         </Toolbar>
@@ -227,9 +205,8 @@ export default function AdminNavbar() {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      <Drawer variant="permanent" open={showSideNav}>
-        <DrawerHeader className="drawerheader">
+      <Drawer variant="permanent" open={open}>
+        <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <img src={Z} className="iconDrawer" />
@@ -243,81 +220,124 @@ export default function AdminNavbar() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <div className="ssss">
-          <div className={`side-nav ${showSideNav ? "open" : ""}`}>
-            <ul>
-              <Link to="/admindashboard" style={{ textDecoration: "none" }}>
-                <li
-                  className={activePage === "home" ? "active" : ""}
-                  onClick={() => handlePageChange("home")}
-                >
-                  <FaHome className="icon" />
-                  {showSideNav && <span>Home</span>}
-                </li>
-              </Link>
-              <Link to="/admincourse" style={{ textDecoration: "none" }}>
-                <li
-                  className={activePage === "course" ? "active" : ""}
-                  onClick={() => handlePageChange("course")}
-                >
-                  <FaBookOpenReader className="icon" />
-                  {showSideNav && <span>Course</span>}
-                </li>
-              </Link>
-              <Link to="/learnerviewall" style={{ textDecoration: "none" }}>
-                <li
-                  className={activePage === "learner" ? "active" : ""}
-                  onClick={() => handlePageChange("learner")}
-                >
-                  <FaUserGraduate className="icon" />
-                  {showSideNav && <span>Learner</span>}
-                </li>
-              </Link>
-              <li
-                className="reports"
-                onClick={() => handlePageChange("reports")}
+        <List>
+          <Link
+            to="/admindashboard"
+            style={{ textDecoration: "none", color: "#27235c" }}
+          >
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
               >
-                <Link
-                  style={{ textDecoration: "none", color: "black" }}
-                  to="/report"
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
                 >
-                  {" "}
-                  <FaChartBar className="icon" />
-                </Link>
-                {showSideNav && <span>Reports</span>}
-              </li>
-            </ul>
-            <ul className={`submenu ${showReportDropdown ? "open" : ""}`}>
-              <Link style={{ textDecoration: "none" }} to="/learnerreport">
-                <li onClick={() => setActivePage("learnerreport")}>
-                  {" "}
-                  Learner Report
-                </li>
-              </Link>
-              <Link style={{ textDecoration: "none" }} to="/coursereport">
-                <li onClick={() => setActivePage("coursereport")}>
-                  Course Report
-                </li>
-              </Link>
-              <Link style={{ textDecoration: "none" }} to="/enrollreport">
-                {" "}
-                <li onClick={() => setActivePage("enroll")}>
-                  Enrollment Report
-                </li>
-              </Link>
-              <Link style={{ textDecoration: "none" }} to="/quizreport">
-                <li onClick={() => setActivePage("quiz")}>Quiz Report</li>
-              </Link>
-            </ul>
-          </div>
-        </div>
-        <Divider />
+                  <FaHome style={{ color: "#27235c" }} />
+                </ListItemIcon>
+                <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+
+          <Link
+            to="/admincourse"
+            style={{ textDecoration: "none", color: "#27235c" }}
+          >
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FaBookOpenReader style={{ color: "#27235c" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Courses"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+
+          <Link
+            to="/learnerviewall"
+            style={{ textDecoration: "none", color: "#27235c" }}
+          >
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FaUserGraduate style={{ color: "#27235c" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Learners"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+          <Link
+            style={{ textDecoration: "none", color: "#27235c" }}
+            to="/report"
+          >
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FaChartBar style={{ color: "#27235c" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Reports"
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        </List>
       </Drawer>
       {/* <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
-                <Home />
-            </Box> */}
-    </div>
-    // </Box>
+        <DrawerHeader />
+       
+      </Box> */}
+    </Box>
   );
 }
