@@ -138,7 +138,7 @@ function Email() {
                                             onChange={(e) => SetsendEmailButton(e.target.value)} // This updates the state when the email is typed
                                         />
                                     </div>
-                                    <p className='errormessgae'>{errors.email?.message}</p>
+                                    <p id='loginerrormessage'>{errors.email?.message}</p>
                                     {/* {
                                     loading?
                                     <SpinnerComponent/>: */}

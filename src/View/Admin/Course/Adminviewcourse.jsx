@@ -426,6 +426,7 @@ const Adminviewcourse = ({
   const confirmDeletion = () => {
     deleteCourse(selectedCourseId);
     setShowModal(false);
+    fetchCourses();
   };
 
 

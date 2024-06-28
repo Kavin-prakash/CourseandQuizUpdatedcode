@@ -1,52 +1,18 @@
-
 .dashboard-container {
-   display: flex;
-   padding: 2rem;
-   background-color: #f0f4f8;
-   min-height: calc(100vh - 64px); /* Adjust based on your navbar height */
- }
- 
- .recommended-courses-container {
-   width: 100%;
-   max-width: 1200px;
-   margin: 0 auto;
-   margin-top: 50px;
- }
- 
- .carousel-container {
-   width: 100%;
-   height: 350px; /* Adjust this value based on your card height */
-   overflow: hidden;
- }
+  display: flex;
+  padding: 2rem;
+  background-color: #f0f4f8;
+  min-height: calc(100vh - 64px); /* Adjust based on your navbar height */
+}
  
  
-.carousel-item {
-   height: 100%;
-   padding: 10px;
-   box-sizing: border-box;
- }
+.dashboard-container {
+  animation: fadeIn 0.5s ease-in-out;
+  height: 100vh; /* Changed from 600px to 100vh */
+  margin-left: 0; /* Removed the 40px left margin */
+}
  
- .course-card-container {
-   height: 100%;
- }
- 
- .course-card {
-   height: 100%;
-   display: flex;
-   flex-direction: column;
- }
- 
- .course-card .MuiCardMedia-root {
-   height: 140px; /* Adjust as needed */
-   object-fit: cover;
- }
- 
- .course-card .MuiCardContent-root {
-   flex-grow: 1;
-   overflow: hidden;
- }
- 
- .profile-card {
+.profile-card {
   width: 25%;
    margin-right: 2rem;
    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -71,6 +37,7 @@
   text-align: center;
    text-align: center;
    background: rgba(255, 255, 255, 0.1);
+   color: #fff;
    
  }
  
@@ -89,6 +56,7 @@
  
  .profile-content {
   padding: 1.5rem;
+  color: #fff;
    
  }
  
@@ -96,6 +64,7 @@
    background: rgba(255, 255, 255, 0.1);
    border-radius: 0.5rem;
   padding: 1.5rem;
+  color: #fff;
  }
  
  .detail-item {
@@ -435,10 +404,6 @@
    }
  }
  
- #course-card{
-   
- }
- 
  .ongoing-course-card:hover {
    transform: translateY(-5px) scale(1.02);
    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
@@ -506,6 +471,4 @@
      opacity: 0.6;
    }
  }
- 
- 
  

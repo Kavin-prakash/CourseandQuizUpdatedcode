@@ -543,14 +543,15 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
             )}
  
  
- {!hasScoreData && !hasOngoingCourses && (
-  <div className='recommended-courses-container'>
-    <Typography variant="h6" style={{ color: '#27235C', marginBottom: '1rem' }}>Recommended Courses</Typography>
-    <div className='carousel-container'>
-    <Carousel
+            {(!hasScoreData && !hasOngoingCourses) && (
+              <div className='row' id='recommend-container'>
+                <div className=''>
+                  <h3 id='count-recommend' style={{ color: '#27235C' }}>Recommended Courses</h3>
+                </div>
+                <Carousel
                   responsive={responsive}
                   infinite={true}
-                 
+                  removeArrowOnDeviceType={["tablet", "mobile"]}
                 // containerClass='carousel-container'
                 // itemClass='carousel-item'
                 // autoPlay={true}
@@ -558,9 +559,9 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
                 // customTransition='transform 300ms ease-in-out'
                 // transitionDuration={300}
                 >
-        {filteredCourses.map((course, index) => (
-                    <div key={index} id="rec-course" >
-                      <Card id='course-card' onClick={() => handleCourseClick(course.courseId)} style={{height:300}}>
+                  {filteredCourses.map((course, index) => (
+                    <div key={index} id="rec-course">
+                      <Card id='course-card' onClick={() => handleCourseClick(course.courseId)}>
                         <CardMedia
                           className='course-image'
                           component="img"
@@ -584,10 +585,9 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
                       </Card>
                     </div>
                   ))}
-      </Carousel>
-    </div>
-  </div>
-)}
+                </Carousel>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -601,7 +601,6 @@ const mapStateToProps = (state) => ({
 });
  
 export default connect(mapStateToProps)(LearnerDashboard);
- 
  
  
  

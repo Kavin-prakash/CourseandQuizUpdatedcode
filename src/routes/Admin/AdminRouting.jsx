@@ -2,6 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import '../../Styles/Admin/Admin.css'
 function Adminrouting() {
   const storedValue = sessionStorage.getItem('Role');
   return storedValue == "Admin" ? (

@@ -67,6 +67,16 @@ const ReviewAnswers = ({ attemptId }) => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  const [flaggedQuestions, setFlaggedQuestions] = useState(() => {
+    const storedFlaggedQuestions = sessionStorage.getItem("flaggedQuestions");
+    return storedFlaggedQuestions ? JSON.parse(storedFlaggedQuestions) : {};
+  });
+ 
+  const [selectedOptions, setSelectedOptions] = useState(() => {
+    const storedSelectedOptions = sessionStorage.getItem("selectedOptions");
+    return storedSelectedOptions ? JSON.parse(storedSelectedOptions) : {};
+  });
  
   const scrollToQuestion = (index) => {
     const element = document.getElementById(`question-${index}`);
@@ -146,13 +156,25 @@ const ReviewAnswers = ({ attemptId }) => {
               (response) => response.quizQuestionId === question.quizQuestionId
             );
             return (
+              // <button
+              //   key={index}
+              //   className={isAnswered ? "sidebar-question-button answered" : "sidebar-question-button"}
+              //   onClick={() => scrollToQuestion(index)}
+              // >
+              //   {index + 1}
+              // </button>
               <button
                 key={index}
-                className={isAnswered ? "sidebar-question-button answered" : "sidebar-question-button"}
+                // className={isAnswered ? "sidebar-question-button answered" : "sidebar-question-button"}
+                className={`
+                attempt-quiz-navbar-button
+                ${selectedOptions[question.quizQuestionId] ? "answered" : ""}
+                ${flaggedQuestions[question.quizQuestionId] ? "flagged" : ""}
+              `}
                 onClick={() => scrollToQuestion(index)}
-              >
+>
                 {index + 1}
-              </button>
+               </button>
             );
           })}
         </div>
@@ -183,13 +205,26 @@ const ReviewAnswers = ({ attemptId }) => {
                   return (
                     <li key={optionIndex}>
                       <label className={`option-label ${isAnswered ? "selected" : ""}`}>
-                        <input
+                        {/* <input
                           type={question.questionType === "MSQ" ? "checkbox" : "radio"}
                           name={question.quizQuestionId}
                           value={option.option}
                           checked={isAnswered}
                           readOnly
                           className="option-type"
+                        /> */}
+                          <input
+                          type={question.questionType === "MSQ" ? "checkbox" : "radio"}
+                          name={question.quizQuestionId}
+                          value={option.option}
+                          checked={isAnswered}
+                          readOnly
+                          className="option-type"
+                          style={{
+                            margin: "0 -400px 0 0",
+                            marginLeft: "-45%",
+                            marginRight: "-530px"
+                          }}
                         />
                         <span className="option-text">{option.option}</span>
                       </label>

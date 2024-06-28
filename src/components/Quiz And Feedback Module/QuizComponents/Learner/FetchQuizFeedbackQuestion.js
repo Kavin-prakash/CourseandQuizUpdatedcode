@@ -181,7 +181,7 @@ const FetchQuizFeedbackQuestion = () => {
             <h6 style={instructionStyle}><b>Please rate from 1 to 5 on the mentioned Quiz parameters .
               <b style={{color:"red"}}> * </b> 
               Easy = 1 ; Intermediate = 3 ; Hard = 5</b></h6>
-            <h6 style={instructionStyle}>This questionnaire is issued on a rating system from 1(poor) to 5 (excellent), 3 being an acceptable level. Please select the number, which most accurately reflects your satisfaction level</h6>
+            <h6 style={instructionStyle}>Please select the number, which most accurately reflects your satisfaction level</h6>
             
 
             {quizfeedbackquestionfetch &&

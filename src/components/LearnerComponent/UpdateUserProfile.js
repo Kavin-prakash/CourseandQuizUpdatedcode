@@ -376,6 +376,7 @@ function UpdateUserProfileComponent() {
                <InputLabel htmlFor="component-outlined"  style={{marginTop:"10px"}} >Stream</InputLabel>
               <Select
                 id="component-outlined"
+
                 isMulti
                 name="stream"
                 options={options}
@@ -385,7 +386,7 @@ function UpdateUserProfileComponent() {
                   control: (base) => ({
                     ...base,
                     backgroundColor:"#F5F7F8",
-                    height: '55px', // Set the height of the select field
+                    height: 'auto', // Set the height of the select field
                     minHeight: '55px' // Ensure the minimum height is also set
                   })
                 }}

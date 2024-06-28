@@ -142,7 +142,7 @@ const TopicFeedbackquestion = () => {
           <h6 style={instructionStyle}><b>Please rate from 1 to 5 on the mentioned Topic parameters .
             <b style={{ color: "red" }}> * </b>
             Poor = 1 ; Average = 3 ; Excellent = 5</b></h6>
-          <h6 style={instructionStyle}>This questionnaire is issued on a rating system from 1(poor) to 5 (excellent), 3 being an acceptable level. Please select the number, which most accurately reflects your satisfaction level</h6>
+          <h6 style={instructionStyle}>Please select the number, which most accurately reflects your satisfaction level</h6>
             {topicfeedbackquestionfetch &&
               topicfeedbackquestionfetch.map(
                 (topicfeedbackquestions, index) => (

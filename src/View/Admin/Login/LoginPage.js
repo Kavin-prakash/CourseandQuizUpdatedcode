@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import "../../../Styles/Admin/Loginpage.css";
 import Relevantz from "../../../assets/Admin/Images/Relevantz.png";
 import { ReactTyped } from "react-typed";
-// import loginUser from "../../../middleware/Admin/apiLogin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   emailRegex,
   passwordRegex,
@@ -16,19 +16,15 @@ import {
 import {
   loginRequest,
   loginPasswordMessage,
-  loginEmaildMessage,
   successdata,
 } from "../../../actions/Admin/loginAction";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
-import axios from "axios";
 import Swal from "sweetalert2";
 import LoginBackground from "../../../assets/Admin/Images/LmsLogin.png";
-import LoginUser from "../../../middleware/Admin/apiLogin";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LearnerIdbyProfileId from "../../../middleware/LearnerMiddleware/LearnerIdbyProfileId";
-import { Container } from "react-bootstrap";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+ 
 const Loginpage = () => {
   const dispatch = useDispatch();
   const {
@@ -36,49 +32,42 @@ const Loginpage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
   const navigate = useNavigate();
-
-  // const navigates = useNavigate();
-
   const isSuccessadmin = useSelector((state) => state.user.isSuccessadmin);
-
   const isSuccessuser = useSelector((state) => state.user.isSuccessuser);
-
-  const [altermessage, setAlertmessage] = useState(false);
-
-  // Handle the function for the navigation
-
+  const [alertmessage, setAlertmessage] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordfailuremessage, setpasswordfailureAlertmessage] =
+    useState(false);
+  const isPasswordMessage = useSelector((state) => state.user.failuremessage);
+  const isEmailfailuremessage = useSelector(
+    (state) => state.user.emailfailuremessage
+  );
+  const [emailfailurealertmessage, setEmailfailurealertmessage] =
+    useState(false);
+  const StoreLoginResposeData = useSelector((state) => state.user.user);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+ 
+  const handlePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+ 
   const handlnavigation = (path) => {
     setAlertmessage(true);
-
     const timer = setTimeout(() => {
       setAlertmessage(false);
       navigate(path);
     }, 1000);
-
     return () => clearTimeout(timer);
   };
-
-  // useEffect(() => {
-  //   if (isSuccessadmin) {
-  //     handlnavigation('/admindashboard'); // Navigate to the next page on success
-  //   }
-  // }, [isSuccessadmin]);
-
+ 
   useEffect(() => {
     if (isSuccessuser) {
-      handlnavigation("/LearnerDashboard"); // Navigate to the next page on success
+      handlnavigation("/LearnerDashboard");
     }
   }, [isSuccessuser]);
-
-  const [passwordfailuremessage, setpasswordfailureAlertmessage] =
-    useState(false);
-
-  const isPasswordMessage = useSelector((state) => state.user.failuremessage);
-
-  console.log("passwordmessage", isPasswordMessage);
-
+ 
   useEffect(() => {
     let timer;
     if (isSuccessadmin) {
@@ -90,7 +79,7 @@ const Loginpage = () => {
     }
     return () => clearTimeout(timer);
   }, [isSuccessadmin, navigate]);
-
+ 
   useEffect(() => {
     let times;
     if (isPasswordMessage) {
@@ -103,51 +92,24 @@ const Loginpage = () => {
     }
     return () => clearTimeout(times);
   }, [isPasswordMessage]);
-
-  // Email Faliliure Messare
-
-  const isEmailfailuremessage = useSelector(
-    (state) => state.user.emailfailuremessage
-  );
-
-  console.log("emailmessage", isEmailfailuremessage);
-
-  const [emailfailurealertmessage, setEmailfailurealertmessage] =
-    useState(false);
-
+ 
   useEffect(() => {
     let emailmessgeclosingtime;
-
     if (isEmailfailuremessage) {
       setEmailfailurealertmessage(true);
-
       emailmessgeclosingtime = setTimeout(() => {
         setEmailfailurealertmessage(false);
       }, 2000);
     }
     return () => clearTimeout(emailmessgeclosingtime);
   }, [isEmailfailuremessage]);
-
-  // debugger
-
-  const StoreLoginResposeData = useSelector((state) => state.user.user);
-
-  console.log("StoreLoginResposeData", StoreLoginResposeData);
-
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-
-  // Check if StoreLoginResposeData is not null before destructuring
+ 
   if (StoreLoginResposeData != null) {
     const { email, password, role, getLearnerId } = StoreLoginResposeData;
-
-    // Proceed with the navigation if both email and password are true
     if (email === true && password === true && role === "Admin") {
       const adminId = getLearnerId;
-      //   // Store user ID in session
       sessionStorage.setItem("AdminSessionId", adminId);
       sessionStorage.setItem("Role", role);
-      // window.alert("successfully Loged Message")
       const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -163,17 +125,13 @@ const Loginpage = () => {
         icon: "success",
         title: "Welcome!! Back Admin, Successfully Logged In",
       });
-
       dispatch(successdata(false));
-
       setTimeout(() => {
         navigate("/home");
       }, 2000);
     } else if (email === true && password === true && role === "Learner") {
       const learnerId = getLearnerId;
       sessionStorage.setItem("UserSessionID", learnerId);
-      // window.alert("successfully Loged Message")
-
       const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -189,15 +147,12 @@ const Loginpage = () => {
         icon: "success",
         title: "Welcome Back !!! Futures of Earth,Continue Your Learning.",
       });
-
       dispatch(successdata(false));
       LearnerIdbyProfileId();
-
       setTimeout(() => {
         navigate("/LearnerDashboard");
       }, 2000);
     } else if (email === false && password === false) {
-      // window.alert("Please Enter the valid Email Id")
       const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -213,9 +168,7 @@ const Loginpage = () => {
         icon: "error",
         title: "Please Enter Valid Email",
       });
-
       dispatch(successdata(false));
-      console.log("Please Enter the valid Email Id");
     } else if (email === true && password === false) {
       const Toast = Swal.mixin({
         toast: true,
@@ -232,35 +185,14 @@ const Loginpage = () => {
         icon: "error",
         title: "Please Enter correct Password",
       });
-
-      // setAlertMessage("Please Enter the correct Password")
-      // setShowAlert(true);
       dispatch(successdata(false));
-      console.log("Please Enter the correct Password");
     }
   }
-
+ 
   const onSubmit = (data) => {
     dispatch(loginRequest(data));
-    console.log("onsubmit", data);
-
-    // <loginUser data={data}/>
-
-    // <LoginUser data={data}/>
-    // LoginUser(data);
-
-    // try {
-    //   const response = await axios.post("http://localhost:5199/api/Login/LoginLearner", data)
-
-    //   console.table("consolerespone", response.data)
-    // }
-    // catch (error) {
-    //   console.error("Error:", error);
-    // }
-
-    // <loginUser data={data}/>
   };
-
+ 
   return (
     <>
       <Container fluid className="d-flex">
@@ -286,7 +218,7 @@ const Loginpage = () => {
                   style={{
                     color: "#27235c",
                     fontFamily: "Arial, Helvetica, sans-serif",
-                    fontSize:"30px"
+                    fontSize: "30px",
                   }}
                 >
                   Welcome to{" "}
@@ -325,8 +257,9 @@ const Loginpage = () => {
                         placeholder="Email"
                       />
                     </div>
+ 
                     <p id="loginerrormessage">{errors.email?.message}</p>
-                    <div>
+                    <div style={{ position: "relative", marginTop: "5px" }}>
                       <input
                         {...register("password", {
                           required: validationMessages.password.required,
@@ -339,9 +272,21 @@ const Loginpage = () => {
                             message: validationMessages.password.receivePattern,
                           },
                         })}
-                        type="password"
+                        type={passwordVisible ? "text" : "password"}
                         placeholder="Password"
                       />
+                      <span
+                        onClick={handlePasswordVisibility}
+                        style={{
+                          position: "absolute",
+                          right: "10px",
+                          top: "40%",
+                          transform: "translateY(-50%)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {passwordVisible ? <VisibilityOff /> : <Visibility />}
+                      </span>
                       <p id="loginerrormessage">{errors.password?.message}</p>
                     </div>
                     <div
@@ -354,13 +299,6 @@ const Loginpage = () => {
                     >
                       <button className="btn">Login</button>
                     </div>
-                    {/* <div style={{
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "left"
-              }}>
-                <Link to={'/RegisterView'} style={{ alignItems: "right", textDecoration: "none" }} >New User? <br></br>Register here...</Link>
-              </div> */}
                     <div
                       style={{
                         alignItems: "center",
@@ -372,10 +310,12 @@ const Loginpage = () => {
                         to={"/RegisterView"}
                         style={{ textDecoration: "none" }}
                       >
-                        New User? <br></br>Register here...
+                        New User?
+                        <br />
+                        Register here...
                       </Link>
                       <Link to={"/email"} style={{ textDecoration: "none" }}>
-                        Forgot password?{" "}
+                        Forgot password?
                       </Link>
                     </div>
                   </form>
@@ -388,5 +328,7 @@ const Loginpage = () => {
     </>
   );
 };
-
+ 
 export default Loginpage;
+ 
+ 

@@ -7,13 +7,14 @@
  
 .timer-rectangle {
   position: fixed;
-  left: 75%;
+  /* left: 69%; */
+  left: 69%;
   /* right: -50%; */
   top: -40px;
   width: 220px;
   height: 52px;
   /* background: rgb(224, 221, 221); */
-  background: rgb(195, 229, 242);
+  background: rgb(222, 244, 252);
   border-radius: 10px;
   display: flex;
   flex-direction: column;

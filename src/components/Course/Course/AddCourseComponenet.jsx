@@ -476,7 +476,7 @@ const AddCourse = () => {
             <Col>
             <FormControl className="mb-3" fullWidth>
  
- <TextField
+ {/* <TextField
    margin="dense"
    id="name"
    label="Course Duration (in hrs)"
@@ -489,7 +489,104 @@ const AddCourse = () => {
    name="duration"
    value={course.duration}
    onChange={handleInputChange}
- />
+ /> */}
+ <TextField name="duration" select onChange={handleInputChange} label="Course duration" fullWidth error={Boolean(errors.duration)} helperText={errors.duration} placeholder="Select Level">
+                   <MenuItem>Select Duration</MenuItem>
+                 
+                     <MenuItem value="01:00:00">
+                       1 hour
+                     </MenuItem>
+                     <MenuItem value="02:00:00">
+                       2 hour
+                     </MenuItem>
+                     <MenuItem value="03:00:00">
+                       3 hour
+                     </MenuItem>
+                     <MenuItem value="04:00:00">
+                       4 hour
+                     </MenuItem>
+                     <MenuItem value="05:00:00">
+                       5 hour
+                     </MenuItem>
+                     <MenuItem value="06:00:00">
+                       6 hour
+                     </MenuItem>
+                     <MenuItem value="07:00:00">
+                       7 hour
+                     </MenuItem>
+                     <MenuItem value="08:00:00">
+                       8 hour
+                     </MenuItem>
+                     <MenuItem value="09:00:00">
+                       9 hour
+                     </MenuItem>
+                     <MenuItem value="10:00:00">
+                       10 hour
+                     </MenuItem>
+                     <MenuItem value="11:00:00">
+                       11 hour
+                     </MenuItem>
+                     <MenuItem value="12:00:00">
+                       12 hour
+                     </MenuItem>
+                     <MenuItem value="13:00:00">
+                       13 hour
+                     </MenuItem>
+                     <MenuItem value="14:00:00">
+                       14 hour
+                     </MenuItem>
+                     <MenuItem value="15:00:00">
+                       15 hour
+                     </MenuItem>
+                     <MenuItem value="16:00:00">
+                       16 hour
+                     </MenuItem>
+                     <MenuItem value="17:00:00">
+                       17 hour
+                     </MenuItem>
+                     <MenuItem value="18:00:00">
+                       18 hour
+                     </MenuItem>
+                     <MenuItem value="19:00:00">
+                       19 hour
+                     </MenuItem>
+                     <MenuItem value="20:00:00">
+                       20 hour
+                     </MenuItem>
+                     <MenuItem value="21:00:00">
+                       21 hour
+                     </MenuItem>
+                     <MenuItem value="22:00:00">
+                       22 hour
+                     </MenuItem>
+                     <MenuItem value="23:00:00">
+                       23 hour
+                     </MenuItem>
+                     <MenuItem value="24:00:00">
+                       24 hour
+                     </MenuItem>
+                     <MenuItem value="25:00:00">
+                       25 hour
+                     </MenuItem>
+                     <MenuItem value="26:00:00">
+                       26 hour
+                     </MenuItem>
+                     <MenuItem value="27:00:00">
+                       27 hour
+                     </MenuItem>
+                     <MenuItem value="28:00:00">
+                       28 hour
+                     </MenuItem>
+                     <MenuItem value="29:00:00">
+                       29 hour
+                     </MenuItem>
+                     <MenuItem value="30:00:00">
+                       30 hour
+                     </MenuItem>
+                   
+                 </TextField>
+ 
+
 
 
 </FormControl>

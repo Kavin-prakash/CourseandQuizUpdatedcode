@@ -135,7 +135,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams,Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "react-bootstrap";
 import Card from '@mui/material/Card';
@@ -328,8 +328,9 @@ const Content = () => {
     <Container style={{background:"white"}}>
       <Row className="mt-2">
       <Breadcrumb> 
-        <Breadcrumb.Item href="/admincourse"> 
-           Home
+        <Breadcrumb.Item> 
+        <Link to="/admincourse"> Home</Link>
+          
         </Breadcrumb.Item> 
         <Breadcrumb.Item active> 
           View Course Details
@@ -349,7 +350,7 @@ const Content = () => {
         )} */}
 
         <Col md={12} xs={12} >
-          <Card sx={{ display: 'flex', maxWidth: 1600, marginLeft: '20px', height: '200px', fontSize: '18px',border: '1px solid grey' }} className="mt-2">
+          <Card sx={{ display: 'flex', maxWidth: 1400, marginLeft: '20px', height: '200px', fontSize: '18px',border: '1px solid grey' }} className="mt-2">
             <CardMedia
               style={{ objectFit: 'cover', width: '20%' }}
               component="img"
