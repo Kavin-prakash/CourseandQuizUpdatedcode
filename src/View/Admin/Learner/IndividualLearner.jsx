@@ -15,7 +15,7 @@ export function IndividualLearner() {
                         <ProfileEnrolledCourses />
                     </div>
                 </div>
-                <LastEnrolledCourse />
+               
             </div>
         </>
     )

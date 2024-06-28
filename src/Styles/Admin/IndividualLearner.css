@@ -10,9 +10,12 @@
     width: 30%;
     background-color: #f0f0f0;
     margin: 1%;
+    border-radius: 12px;
 }
 
 #profileEnrolledCourses {
-    width: 100%;
+    width: 90%;
     margin: 1%;
+    border-radius: 12px;
 }
+

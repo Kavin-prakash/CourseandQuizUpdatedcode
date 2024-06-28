@@ -1,19 +1,17 @@
 import { useEffect } from "react";
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import CardMedia from "@mui/material/CardMedia";
 import { connect } from "react-redux";
 import { fetchProfileCardRequest } from "../../actions/Admin/LearnersViewAction";
 import { useParams } from "react-router-dom";
-import user from "../../assets/Admin/Images/user.png";
 import '../../Styles/Admin/ProfileCard.css';
 import MailIcon from '@mui/icons-material/Mail';
 import StreamIcon from '@mui/icons-material/Stream';
 import CakeIcon from '@mui/icons-material/Cake';
+import LoginIcon from '@mui/icons-material/Login';
+import PhoneIcon from '@mui/icons-material/Phone';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import TransgenderIcon from '@mui/icons-material/Transgender';
 const ProfileCard = ({ fetchProfileCard, profilecard }) => {
   const learnerid = useParams();
   useEffect(() => {
@@ -30,7 +28,6 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
     learnerGender,
     learnerLastlogin,
   } = profilecard.profilecard;
-
   return (
     <>
       <div id="adminprofile-card">
@@ -46,9 +43,14 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
                 <div className="profile-name text-center">
                   <h4>{learnerFirstName} {learnerLastName}</h4>
                 </div>
-                <p><MailIcon />{learnerEmail}</p>
-                <p><StreamIcon />{learnerStream}</p>
-                <p><CakeIcon />{learnerDob}</p>
+                <p><MailIcon /> {learnerEmail}</p>
+                <p><PhoneIcon /> {learnerContactNumber}</p>
+                <p><CakeIcon /> {learnerDob}</p>
+                <p>
+                  {learnerGender === "others" ? <TransgenderIcon /> : learnerGender === "male" ? <MaleIcon /> : <FemaleIcon />}
+                  {learnerGender ? learnerGender.toUpperCase() : 'Not Provided'} </p>
+                <p><StreamIcon /> {learnerStream}</p>
+                <p><LoginIcon /> {learnerLastlogin ? learnerLastlogin.replace('T', ' ') : 'Not Logged In'}</p>
               </div>
             </div>
           </div>

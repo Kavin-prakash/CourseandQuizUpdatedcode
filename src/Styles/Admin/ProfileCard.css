@@ -39,3 +39,7 @@
     text-align: start;
     font-size: small;
 }
+
+#profile-img img {
+    animation: spin 3.5s infinite linear;
+}

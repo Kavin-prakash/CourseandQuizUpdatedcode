@@ -26,55 +26,54 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
   return (
     <>
       <div id='profileEnrolledCourses'>
-        <h1>Enrolled Courses</h1>
-
-
         <div id='profileEnrolledCoursesBtn'>
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
-                <Tab label={`Total Courses (${rows.length})`} value="1" />
+                <Tab label={`Enrolled Courses (${rows.length})`} value="1" />
                 <Tab label={`Completed Courses (${completecourse.length})`} value="2" />
                 <Tab label={`InProgress Courses (${inprogresscourse.length})`} value="3" />
               </TabList>
             </Box>
             <TabPanel value="1">
               <div id='profileCourses'>
+                {rows.length === 0 ? <>No Courses Enrolled</> : <></>}
                 {rows.map(row =>
-                  <Card sx={{ maxWidth: 345 }} key={row.enrollmentid} >
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image={row.courseImage}
-                      title={row.courseImage}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {row.enrolledcourse}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {row.enrolledCourseCategory}<br />
-                        {row.enrolledCourselevels}<br />
-                        {row.enrollmentdate.replace('T', ' ')}
-                      </Typography>
-                    </CardContent>
-                  </Card>
+                  <div key={row.index}>
+                    <Card sx={{ width: 300, height: 300 }} key={row.enrollmentid} id="card" >
+                      <img
+                        src={row.courseImage}
+                        title={row.courseImage}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {row.enrolledcourse}
+                        </Typography>
+                        <Typography variant="body2">
+                          {row.enrolledCourseCategory}<br />
+                          {row.enrolledCourselevels}<br />
+                          {row.enrollmentdate.replace('T', ' ')}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </div>
                 )}
               </div>
             </TabPanel>
             <TabPanel value="2">
               <div id='profileCourses'>
+                {completecourse.length === 0 ? <>No Courses Completed</> : <></>}
                 {completecourse.map(row =>
-                  <Card sx={{ maxWidth: 345 }} key={row.enrollmentid}>
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image={row.courseImage}
+                  <Card sx={{ width: 300, height: 300 }} key={row.enrollmentid} id="card" >
+                    <img
+                      src={row.courseImage}
                       title={row.courseImage}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
                         {row.enrolledcourse}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2">
                         {row.enrolledCourseCategory}<br />
                         {row.enrolledCourselevels}<br />
                         {row.enrollmentdate.replace('T', ' ')}
@@ -86,18 +85,18 @@ const ProfileEnrolledCourses = ({ fetchProfileCourses, profilecourses }) => {
             </TabPanel>
             <TabPanel value="3">
               <div id='profileCourses'>
+                {inprogresscourse.length === 0 ? <>No Courses Available</> : <></>}
                 {inprogresscourse.map(row =>
-                  <Card sx={{ maxWidth: 345 }} key={row.enrollmentid}>
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image={row.courseImage}
+                  <Card sx={{ width: 300, height: 300 }} key={row.enrollmentid} id="card" >
+                    <img
+                      src={row.courseImage}
                       title={row.courseImage}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
                         {row.enrolledcourse}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" >
                         {row.enrolledCourseCategory}<br />
                         {row.enrolledCourselevels}<br />
                         {row.enrollmentdate.replace('T', ' ')}
