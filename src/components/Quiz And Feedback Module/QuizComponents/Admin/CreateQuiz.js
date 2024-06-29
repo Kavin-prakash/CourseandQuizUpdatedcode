@@ -167,7 +167,10 @@ export const Home = () => {
 
     const handleQuizChange = (e) => {
         const updatedQuizDetails = { ...quizDetails, [e.target.name]: e.target.value };
-        setQuizDetails(updatedQuizDetails);
+        setQuizDetails(prevDetails => ({
+            ...prevDetails,
+            [e.target.name]: e.target.value
+        }));
         setQuizData({ ...quizData, [e.target.name]: e.target.value });
         setFormComplete(isFormComplete(updatedQuizDetails));
     };
@@ -338,7 +341,7 @@ export const Home = () => {
                             </Card>
                             <Card className="mb-4">
                                 <Card.Header as="h5">Page Functionality</Card.Header>
-                                <Card.Body style={{fontSize:13}}>
+                                <Card.Body style={{ fontSize: 13 }}>
                                     <ul>
                                         <li><h5>This page allows you to:</h5></li>
                                         <li>1. View, edit and delete the entire quiz</li>
@@ -360,53 +363,51 @@ export const Home = () => {
                                 <Card.Body>
                                     <Form>
                                         <Form.Group className="mb-3">
-                                            <Form.Label>
-                                                Quiz Title
-                                                <span id='required'>*</span>
-                                            </Form.Label>
+                                            <Form.Label>Quiz Title<span id='required'>*</span></Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 name="nameOfQuiz"
                                                 value={quizData.nameOfQuiz}
-                                                onChange={handleQuizTitleChange}
                                                 readOnly={!isQuizEditable}
+                                                onChange={handleQuizTitleChange}
                                             />
+                                            {error && <Form.Text className="text-danger">{error}</Form.Text>}
                                         </Form.Group>
                                         <Form.Group className="mb-3">
-                                            <Form.Label>
-                                                Duration
-                                                <span id='required'>*</span>
-                                            </Form.Label>
+                                            <Form.Label>Duration<span id='required'>*</span></Form.Label>
                                             <Form.Control
-                                                type="text"
-                                                name='duration'
+                                                type="number"
+                                                name="duration"
                                                 value={quizData.duration}
                                                 readOnly={!isQuizEditable}
                                                 onChange={handleInputChange}
                                             />
+                                            {errorduration && <Form.Text className="text-danger">{errorduration}</Form.Text>}
                                         </Form.Group>
+
                                         <Form.Group className="mb-3">
-                                            <Form.Label>
-                                                Grade to be secured
-                                                <span id='required'>*</span>
-                                            </Form.Label>
+                                            <Form.Label>Grade to be secured<span id='required'>*</span></Form.Label>
                                             <Form.Control
-                                                name='passMark'
+                                                type="number"
+                                                name="passMark"
                                                 value={quizData.passMark}
                                                 readOnly={!isQuizEditable}
                                                 onChange={handlemarkChange}
                                             />
+                                            {errormark && <Form.Text className="text-danger">{errormark}</Form.Text>}
                                         </Form.Group>
                                         <Form.Group className="mb-3">
-                                            <Form.Label>
-                                                Attempts Allowed
-                                                <span id='required'>*</span>
-                                            </Form.Label>
+                                            <Form.Label>Attempts Allowed<span id='required'>*</span></Form.Label>
                                             <Form.Control
-                                                type="text"
-                                                name='attemptsAllowed' value={quizData.attemptsAllowed} readOnly={!isQuizEditable} onChange={handleattemptsChange}
+                                                type="number"
+                                                name="attemptsAllowed"
+                                                value={quizData.attemptsAllowed} 
+                                                readOnly={!isQuizEditable}
+                                                onChange={handleattemptsChange}
                                             />
+                                            {errorattempts && <Form.Text className="text-danger">{errorattempts}</Form.Text>}
                                         </Form.Group>
+
                                         {quizId ? (
                                             <div></div>
                                         ) : (
@@ -453,7 +454,7 @@ export const Home = () => {
                                 Delete Quiz
                             </Typography>
                             <Typography variant="body1" gutterBottom>
-                                All the quiz related data will be removed permanently. <br/>
+                                All the quiz related data will be removed permanently. <br />
                                 To confirm deletion, please type the quiz title:
                                 <br />
                                 <strong>"{quizData.nameOfQuiz}"</strong>
@@ -487,7 +488,7 @@ export const Home = () => {
                         open={showQuizEditModal}
                         onClose={handleCloseQuizEditModal}
                         aria-labelledby="edit-quiz-modal-title"
-                     >
+                    >
                         <Box sx={modalStyle}>
                             <Typography id="edit-quiz-modal-title" variant="h6" component="h2" gutterBottom>
                                 Edit Quiz
