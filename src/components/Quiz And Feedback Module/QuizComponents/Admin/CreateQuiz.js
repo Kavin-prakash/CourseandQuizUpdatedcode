@@ -453,6 +453,7 @@ export const Home = () => {
                                 Delete Quiz
                             </Typography>
                             <Typography variant="body1" gutterBottom>
+                                All the quiz related data will be removed permanently. <br/>
                                 To confirm deletion, please type the quiz title:
                                 <br />
                                 <strong>"{quizData.nameOfQuiz}"</strong>
