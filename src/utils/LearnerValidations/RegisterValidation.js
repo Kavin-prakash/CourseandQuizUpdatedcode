@@ -68,7 +68,7 @@ export const validateRegistrationForm = (userData,setErrors) => {
     if (!userData.confirmPassword) {
         errors.confirmPassword = 'Confirm Password is required';
         isValid = false;
-    } else if (userData.confirmPassword !== userData. password) {
+    } else if (userData.confirmPassword !== userData.password) {
         errors.confirmPassword = 'Passwords do not match';
         isValid = false;
     }
