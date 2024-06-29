@@ -54,6 +54,7 @@ const QuestionTemplate = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const [selectedFilterQuestionType, setSelectedFilterQuestionType] = useState('')
+  const [deleteQuestionId, setDeleteQuestionId] = useState(null);
   const [newQuestion, setNewQuestion] = useState({
     question: "",
     questionType: "",
@@ -83,41 +84,66 @@ const QuestionTemplate = () => {
     }
   };
 
-  const handleDeleteQuestion = (quizQuestionId) => {
-    setQuestionToDelete(quizQuestionId);
-    setShowPopup(true);
+  const handleDeleteQuestion = async (quizQuestionId) => {
+        // Dispatch the delete request
+        await dispatch(deleteQuizQuestionRequest(quizQuestionId));
+
+        // Update the questions state to remove the deleted question
+        setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
+    
+        // Close the popup and reset questionToDelete
+        setShowPopup(false);
+        setDeleteQuestionId(null);
+        const Toast = Swal.mixin({
+          className: "swal2-toast",
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 2000,
+          background: 'green',
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: " Question Deleted Successfully",
+          color: 'white'
+        });
   };
 
 
-  const handleConfirmDelete = async () => {
-    // Dispatch the delete request
-    await dispatch(deleteQuizQuestionRequest(questionToDelete));
+  // const handleConfirmDelete = async () => {
+  //   // Dispatch the delete request
+  //   await dispatch(deleteQuizQuestionRequest(questionToDelete));
 
-    // Update the questions state to remove the deleted question
-    setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
+  //   // Update the questions state to remove the deleted question
+  //   setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
 
-    // Close the popup and reset questionToDelete
-    setShowPopup(false);
-    setQuestionToDelete(null);
-    const Toast = Swal.mixin({
-      className: "swal2-toast",
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2000,
-      background: 'green',
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: " Question Deleted Successfully",
-      color: 'white'
-    });
-  };
+  //   // Close the popup and reset questionToDelete
+  //   setShowPopup(false);
+  //   setQuestionToDelete(null);
+  //   const Toast = Swal.mixin({
+  //     className: "swal2-toast",
+  //     toast: true,
+  //     position: "top",
+  //     showConfirmButton: false,
+  //     timer: 2000,
+  //     background: 'green',
+  //     timerProgressBar: true,
+  //     didOpen: (toast) => {
+  //       toast.onmouseenter = Swal.stopTimer;
+  //       toast.onmouseleave = Swal.resumeTimer;
+  //     }
+  //   });
+  //   Toast.fire({
+  //     icon: "success",
+  //     title: " Question Deleted Successfully",
+  //     color: 'white'
+  //   });
+  // };
 
   const handleOpenEditQuestionModal = async (quizQuestionId) => {
     try {
@@ -551,14 +577,21 @@ const QuestionTemplate = () => {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete Question">
-                        <IconButton
-                          aria-label="Delete question"
-                          onClick={() => handleDeleteQuestion(question.quizQuestionId)}
-                        >
+                        <IconButton aria-label="Delete question" onClick={() => setDeleteQuestionId(question.quizQuestionId)}>
                           <DeleteIcon style={{ color: "#e74c3c" }} />
                         </IconButton>
                       </Tooltip>
                     </div>
+                    {deleteQuestionId === question.quizQuestionId && (
+                      <div id="popupQuizQuestionDelete">
+                        <div id="popup-contentQuizQuestionDelete">
+                          <button id="popup-close-buttonQuizQuestionDelete" onClick={() => setDeleteQuestionId(null)}>×</button>
+                          <p id='QuizQuestionDelete' style={{ marginTop: "5%" }}>Are you sure you want to delete the feedback?</p>
+                          <button onClick={() => handleDeleteQuestion(question.quizQuestionId)} id='delete-btn'>Delete</button>
+                          <button onClick={() => setDeleteQuestionId(null)}>Cancel</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="question-card-body">
                     <p className="quiz-question-number">Question {question.questionNo}</p>
@@ -698,9 +731,9 @@ const QuestionTemplate = () => {
                     </Box>
                   ))}
                   <Button
-                  className='btn-primary'
+                    className='btn-primary'
                     variant="contained"
-                    
+
                     startIcon={<AddIcon />}
                     onClick={handleAddCorrectOption}
                     sx={{ mt: 2, mb: 2 }}
@@ -888,7 +921,7 @@ const QuestionTemplate = () => {
             </Box>
           </Box>
         </MuiModal>
-        <Modal show={showPopup} onHide={() => setShowConfirmationModal(false)} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
+        {/* <Modal show={showPopup} onHide={() => setShowConfirmationModal(false)} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
           <Modal.Header>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
@@ -901,7 +934,7 @@ const QuestionTemplate = () => {
               Delete
             </Button>
           </Modal.Footer>
-        </Modal>
+        </Modal> */}
       </div>
     </Container>
   );
