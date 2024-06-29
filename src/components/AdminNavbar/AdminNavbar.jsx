@@ -27,6 +27,7 @@ import { UseDispatch, useDispatch } from "react-redux";
 import { successdata } from "../../actions/Admin/loginAction";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
+import { Tooltip } from "@mui/material";
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -95,8 +96,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -247,91 +248,101 @@ export default function MiniDrawer() {
             </ListItem>
           </Link>
 
-          <Link
-            to="/admincourse"
-            style={{ textDecoration: "none", color: "#27235c" }}
-          >
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+          <Tooltip title='LXP Courses'>
+            <Link
+              to="/admincourse"
+              style={{ textDecoration: "none", color: "#27235c" }}
+            >
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <FaBookOpenReader style={{ color: "#27235c" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Courses"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaBookOpenReader style={{ color: "#27235c" }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Courses"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          </Tooltip>
 
-          <Link
-            to="/learnerviewall"
-            style={{ textDecoration: "none", color: "#27235c" }}
-          >
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+          <Tooltip title="Individual Learner Details">
+            <Link
+              to="/learnerviewall"
+              style={{ textDecoration: "none", color: "#27235c" }}
+            >
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <FaUserGraduate style={{ color: "#27235c" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Learners"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-          <Link
-            style={{ textDecoration: "none", color: "#27235c" }}
-            to="/report"
-          >
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaUserGraduate style={{ color: "#27235c" }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Learners"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          </Tooltip>
+
+          <Tooltip title='LXP Report'>
+
+            <Link
+              style={{ textDecoration: "none", color: "#27235c" }}
+              to="/report"
+            >
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <FaChartBar style={{ color: "#27235c" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Reports"
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaChartBar style={{ color: "#27235c" }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Reports"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+
+            </Link>
+          </Tooltip>
+
         </List>
       </Drawer>
       {/* <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

@@ -28,7 +28,9 @@ import { BeatLoader } from 'react-spinners';
  
 const CourseComponent = ({ loading, error, search }) => {
   const courses = useSelector((state) => state.fetchcourse.courses);
+  console.log('courses ',courses )
   const Enrolledcourseslength = useSelector((state) => state.enroll.course[0]);
+  console.log('Enrolledcourseslength',Enrolledcourseslength)
   const dispatch = useDispatch();
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);

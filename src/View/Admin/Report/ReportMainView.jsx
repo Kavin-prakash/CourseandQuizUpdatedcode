@@ -44,19 +44,19 @@ export default function ReportMainView() {
 
     const handleViewLearnerReport = () => {
         setActiveReport('learner');
-        learnerReportRef.current?.scrollIntoView({ behavior: 'smooth',block:'start' });
+        learnerReportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         window.scrollTo({ top: learnerReportRef.current.offsetTop, behavior: 'smooth' });
     };
 
     const handleViewCourseReport = () => {
         setActiveReport('course');
-        courseReportRef.current?.scrollIntoView({ behavior: 'smooth',block:'start' });
+        courseReportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         window.scrollTo({ top: courseReportRef.current.offsetTop, behavior: 'smooth' });
     };
 
     const handleViewEnrollmentReport = () => {
         setActiveReport('enrollment');
-        enrollmentReportRef.current?.scrollIntoView({ behavior: 'smooth',block:'start' });
+        enrollmentReportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         window.scrollTo({ top: enrollmentReportRef.current.offsetTop, behavior: 'smooth' });
 
 
@@ -106,7 +106,7 @@ export default function ReportMainView() {
         <>
             <Container fluid>
                 <div className="mt-5">
-                    <div id="Report-Page-Title">LXP Report Page</div>
+                    {/* <div id="Report-Page-Title">LXP Report Page</div> */}
                     <Row>
                         <div id="Report-page-description">
                             <div class="div-report-page-description">
@@ -146,26 +146,26 @@ export default function ReportMainView() {
                         </div>
                     </Row>
                     <Row >
-                        <div  ref={quizReportRef}>
+                        <div ref={quizReportRef}>
                             {activeReport === 'quiz' && <QuizReportView />}
                         </div>
-                        <div  ref={learnerReportRef}>
+                        <div ref={learnerReportRef}>
                             {activeReport === 'learner' && <LearnerReportView />}
                         </div>
 
-                        <div  ref={courseReportRef}>
+                        <div ref={courseReportRef}>
                             {activeReport === 'course' && <CourseReportView />}
 
 
                         </div>
-                        <div  ref={enrollmentReportRef}>
+                        <div ref={enrollmentReportRef}>
                             {activeReport === 'enrollment' && <CourseEnrollmentReportView />}
 
                         </div>
                         {
                             activeReport && (
                                 <div>
-                                    <button onClick={handleCloseReport} className="btn btn-danger">Close<CloseIcon /></button>
+                                    <button style={{ float: 'right' }} onClick={handleCloseReport} className="btn btn-danger">Close<CloseIcon /></button>
                                 </div>
                             )
                         }

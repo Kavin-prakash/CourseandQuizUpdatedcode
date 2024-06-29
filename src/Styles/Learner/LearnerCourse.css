@@ -102,7 +102,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
   width:1100px;
-  height: 400px;
+  height: 500px;
 }
  
 #count-recommend {
@@ -124,8 +124,8 @@
   overflow: hidden;
  
   transition: all 0.3s ease;
-  width: 500px;
-  height:350px ;
+  width: 300px;
+  height:380px ;
 }
  
 #course-card:hover {
@@ -215,11 +215,11 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #recommend-container {
-    padding: 20px;
+    padding: 10px;
   }
  
   #count-recommend {
-    font-size: 2rem;
+    font-size: 1rem;
   }
  
   #course-card {

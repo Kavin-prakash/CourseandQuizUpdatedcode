@@ -58,6 +58,7 @@ import { styled } from '@mui/material/styles';
  
 const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   const courses = useSelector((state) => state.fetchcourse.courses);
+  console.log('courses ',courses )
   const dispatch = useDispatch();
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -79,6 +80,8 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   const [overallProgress, setOverallProgress] = useState(0);
  
   const viewcourse = useSelector((state) => state.enroll.course[0]);
+
+ 
  
   const [scoreProgressSelector, setScoreProgressSelector] = useState([]);
   console.log("hasscore", scoreProgressSelector);
@@ -96,7 +99,8 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
  
   const profilePhoto = sessionStorage.getItem("userData");
   console.log("userData", profilePhoto)
- 
+
+  
  
   const enrollmentId = sessionStorage.getItem("enrolled");
   console.log("enrolleddashbaord", enrollmentId);
@@ -295,6 +299,8 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   // const handleCourseClick = (courseId) => {
   //   navigate('/LearnerPage');
   // }
+
+  // const courseId=sessionStorage.getItem("")
  
   const handleCardClick = (status) => {
     navigate('/LearnerenrolledCourse', { state: { status } });
@@ -305,7 +311,7 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
   }
 
   const handleongoingClick = (courseId) => {
-    navigate('/ViewTopics/courseId');
+    navigate(`/ViewTopics/${courseId}`);
   }
  
  
@@ -524,7 +530,7 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
                 <>
                   <Typography variant="h6">Ongoing Courses</Typography>
                   {viewcourse.map((course, index) => (
-                    <Card key={index} className="ongoing-course-card" style={{ width: 500, height: 90, borderRadius: '20px' }} onClick={() => handleongoingClick(course.courseId)}>
+                    <Card key={index} className="ongoing-course-card" style={{ width: 300, height: 90, borderRadius: '20px' }} onClick={() => handleongoingClick(course.enrolledCourseId)}>
                       <CardMedia
                         style={{ width: 100 }}
                         component="img"
