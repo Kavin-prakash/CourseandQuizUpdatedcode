@@ -338,7 +338,7 @@ export const Home = () => {
                             </Card>
                             <Card className="mb-4">
                                 <Card.Header as="h5">Page Functionality</Card.Header>
-                                <Card.Body>
+                                <Card.Body style={{fontSize:13}}>
                                     <ul>
                                         <li><h5>This page allows you to:</h5></li>
                                         <li>1. View, edit and delete the entire quiz</li>
