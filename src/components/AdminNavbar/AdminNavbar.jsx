@@ -122,6 +122,13 @@ export default function MiniDrawer() {
     sessionStorage.removeItem("Role");
     dispatch(successdata(false));
 
+    localStorage.removeItem("IndividualLearnerrowsPerPage");
+
+    localStorage.removeItem("LearnerrowsPerPage");
+
+    localStorage.removeItem("CourserowsPerPage")
+    localStorage.removeItem("rowsPerPage")
+
     // Navigate to login page or home page
     navigate("/"); // Replace "/login" with the path to your login page
     setShowLogoutConfirmation(false); // Hide the confirmation toast

@@ -451,11 +451,9 @@ const Adminviewcourse = ({
 
   const EnableOrDisable = () => {
     enableordisable(enabledisablecourseId, !coursestatus);
+    fetchCourses();
     setShowEnableModal(false);
-    setTimeout(() => {
-      document.location.reload();
-    }, 500);
-
+    fetchCourses();
   };
 
   //Style for Disable And Enable Modal

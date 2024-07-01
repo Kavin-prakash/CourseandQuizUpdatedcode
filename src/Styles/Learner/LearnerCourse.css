@@ -10,10 +10,10 @@
 #Learner-course-Langing-Page {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   flex-wrap: wrap;
   width: 100%;
-  gap: 30px;
+  gap: 50px;
   padding: 50px 20px;
 }
  

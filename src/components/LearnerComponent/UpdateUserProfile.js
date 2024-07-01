@@ -206,6 +206,8 @@ function UpdateUserProfileComponent() {
     navigate('/LearnerDashboard');
    }, 3000);
     
+
+   window.location.reload();
   }
  
  
