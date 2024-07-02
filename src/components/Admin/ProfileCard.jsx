@@ -13,7 +13,7 @@ import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import TransgenderIcon from '@mui/icons-material/Transgender';
 import { Tooltip } from "@mui/material";
-import user from '../../assets/Admin/Images/user.png'
+import user from '../../assets/Admin/Images/user.png';
 const ProfileCard = ({ fetchProfileCard, profilecard }) => {
   const learnerid = useParams();
   useEffect(() => {

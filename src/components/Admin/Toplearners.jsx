@@ -14,6 +14,7 @@ import { fetchToplearnersRequest } from "../../actions/Admin/AdminDashboardActio
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "../../Styles/Admin/AdminDashboard.css";
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import user from '../../assets/Admin/Images/user.png';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -27,30 +28,30 @@ const Item = styled(Paper)(({ theme }) => ({
   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
 }));
 
-const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
+const Toplearners = ({ fetchToplearnersRequest, toplearners }) => {
   useEffect(() => {
     fetchToplearnersRequest();
   }, [fetchToplearnersRequest]);
-  
+
   const rows = Object.values(toplearners.toplearners);
   return (
     <>
       <Grid item xs={12} md={3}>
-        <Item style={{borderRadius:"15px"}} >
+        <Item style={{ borderRadius: "15px" }} >
           <Card variant="">
             <CardContent sx={{ height: "360px" }}>
-            <Typography
+              <Typography
                 sx={{ fontSize: 18, fontWeight: "bold", color: "#524F7D" }}
                 color="text.secondary"
                 gutterBottom
               >
                 Top Learners
-                &nbsp; 
-                <MilitaryTechIcon/>
+                &nbsp;
+                <MilitaryTechIcon />
               </Typography>
-              <Typography variant="h6" gutterBottom sx={{ fontSize: 15 }} style={{marginTop:"30px"}}>
+              <Typography variant="h6" gutterBottom sx={{ fontSize: 15 }} style={{ marginTop: "30px" }}>
                 <TransitionGroup>
-                  {rows.map((toplearner,index) => (
+                  {rows.map((toplearner, index) => (
                     <CSSTransition
                       key={index}
                       timeout={1000}
@@ -67,7 +68,23 @@ const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
                           style={{ textDecoration: "none", color: "black" }}
                         >
                           <React.Fragment>
-                            <img
+                            {toplearner.profilePhoto === "http://localhost:5199/wwwroot/LearnerProfileImages/" ?
+                              <img src={user} alt="img"
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  borderRadius: "50%",
+                                  marginRight: "15px",
+                                }} /> :
+                              <img src={toplearner.profilePhoto} alt="img"
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  borderRadius: "50%",
+                                  marginRight: "15px",
+                                }} />
+                            }
+                            {/* <img
                               src={toplearner.profilePhoto}
                               style={{
                                 width: "50px",
@@ -75,7 +92,7 @@ const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
                                 borderRadius: "50%",
                                 marginRight: "15px",
                               }}
-                            />
+                            /> */}
                             <span className="name-animation">
                               {<b>{toplearner.learnerName}</b>}
                             </span>
@@ -92,7 +109,7 @@ const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
                   ))}
                 </TransitionGroup>
               </Typography>
-            </CardContent> 
+            </CardContent>
           </Card>
         </Item>
       </Grid>
