@@ -35,6 +35,7 @@ import Swal from "sweetalert2";
 import CreateQuizApi from "../../../../middleware/Quiz And Feedback Module/Admin/CreateQuizApi";
 import { useSelector } from "react-redux";
 import { Modal as MuiModal, Box, Typography, TextField, Button as MuiButton } from '@mui/material';
+import { fetchTopicsRequest } from "../../../../actions/Course/Topic/FetchTopicsAction";
 
 export const Home = () => {
     const quizId = sessionStorage.getItem('quizId');
@@ -89,6 +90,10 @@ export const Home = () => {
     console.log("create page Id: ", quizId, topicId);
 
     useEffect(() => {
+        dispatch(fetchTopicsRequest(courseId));
+    }, []);
+
+    useEffect(() => {
         fetchQuizData(quizId);
     }, []);
 
@@ -96,7 +101,7 @@ export const Home = () => {
         fetchQuizData(quizId);
 
         // Find the correct topic
-        const topic = selectorTopicsDetail.topics.find(topic => topic.topicId === topicId);
+        const topic = selectorTopicsDetail?.topics.find(topic => topic.topicId === topicId);
         setCurrentTopic(topic);
     }, []);
 
@@ -105,8 +110,6 @@ export const Home = () => {
         setShowOptions(!showOptions);
         event.target.nextSibling.style.display = showOptions ? 'none' : 'block';
     };
-
-
 
     const toggleQuestions = () => {
         setShowQuestions(!showQuestions);
@@ -320,33 +323,38 @@ export const Home = () => {
                         </Button>
                         <button class="btn btn-light" style={{ color: "white", width: '50', backgroundColor: "#365486" }} onClick={() => { handleNavigate() }}>Back</button>
                     </div>
-
                     <Row>
                         <Col md={6}>
                             <Card className="mb-4">
                                 <Card.Header as="h5">Course Details</Card.Header>
                                 <Card.Body>
                                     <Form>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Course</Form.Label>
-                                            <Form.Control type="text" value={selectorTopicsDetail.courseTitle} readOnly />
+                                        <Form.Group className="mb-3 d-flex">
+                                            <Form.Label className="mt-1" style={{ width: 80 }}>Course: </Form.Label>
+                                            <Form.Control type="text" value={selectorTopicsDetail?.courseTitle} readOnly />
                                         </Form.Group>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Topic</Form.Label>
-                                            <Form.Control type="text" value={currentTopic ? currentTopic.topicName : ''} readOnly />
+                                        <Form.Group className="mb-3 d-flex">
+                                            <Form.Label className="mt-1" style={{ width: 80 }}>Topic: </Form.Label>
+                                            <Form.Control type="text" value={currentTopic?.topicName} readOnly />
                                         </Form.Group>
 
                                     </Form>
                                 </Card.Body>
                             </Card>
                             <Card className="mb-4">
-                                <Card.Header as="h5">Page Functionality</Card.Header>
+                                <Card.Header as="h5">On this page, you can:</Card.Header>
                                 <Card.Body style={{ fontSize: 13 }}>
                                     <ul>
-                                        <li><h5>This page allows you to:</h5></li>
-                                        <li>1. View, edit and delete the entire quiz</li>
-                                        <li>2. Navigate to quiz feedback or proceed review questions</li>
-                                        <li>2. Question card contains question, options, correct option highlighted in <span style={{ backgroundColor: 'green', color: 'white' }}>green</span></li>
+                                        <li>View and manage the entire quiz</li>
+                                        <li>Navigate to quiz feedback or proceed to review questions</li>
+                                        <li>View question cards containing:
+                                            <ul>
+                                                <li>Question text</li>
+                                                <li>Answer options</li>
+                                                <li>Correct option highlighted in <span style={{ backgroundColor: 'green', color: 'white' }}>green</span></li>
+                                            </ul>
+                                        </li>
+                                        <li>Use the "Proceed" button at the bottom to move to the next step</li>
                                     </ul>
                                 </Card.Body>
                             </Card>
@@ -401,7 +409,7 @@ export const Home = () => {
                                             <Form.Control
                                                 type="number"
                                                 name="attemptsAllowed"
-                                                value={quizData.attemptsAllowed} 
+                                                value={quizData.attemptsAllowed}
                                                 readOnly={!isQuizEditable}
                                                 onChange={handleattemptsChange}
                                             />
