@@ -252,7 +252,7 @@ function QuizInstruction() {
     sessionStorage.removeItem("reviewData");
     sessionStorage.removeItem("answeredQuestions");
     sessionStorage.removeItem("currentQuestionIndex");
- 
+    sessionStorage.removeItem("flaggedQuestions");
     sessionStorage.setItem("quizId", quizId);
     sessionStorage.setItem("LearnerId", LearnerId);
     dispatch(CreateAttemptRequest(TakeQuiz));

@@ -399,7 +399,7 @@ const AddCourse = () => {
               {/* <Col></Col> */}
 
               {step == 1 && (<Row className="d-flex justify-content-center align-items-center">
-                <h1 className="mb-3 d-flex justify-content-center align-items-center">How about a working title</h1>
+                <h1 className="mb-3 d-flex justify-content-center align-items-center">How about a Course title</h1>
                 <h6 className="mb-5 d-flex justify-content-center align-items-center">It's ok if you can't think of a good title now. You can change it later.</h6>
                 <Col></Col>
                 <Col>

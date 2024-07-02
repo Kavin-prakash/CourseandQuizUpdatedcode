@@ -95,13 +95,13 @@ function PDFViewer(prop) {
   return (
     <Container>
       <Row className="justify-content-md-center">
-        {/* <div
+        <div
            className="container"
-           style={{ width: "100%",height:"83vh",marginTop:'0px'}}
-       >  */}
+           style={{ width: "70%",height:"83vh",marginTop:'0px'}}
+       > 
         <Box sx={{
-          width: { xs: '100%', sm: '100px', md: '65vh', lg: "1400px" },
-          height: { xs: '100%', sm: '83vh', md: '95vh', lg: "83" },
+         width: { xs: '100%', sm: '65vh', md: '55vh', lg: "77" },
+         height: { xs: '100%', sm: '83vh', md: '95vh', lg: "83" },
 
           overflow: 'auto',
           marginTop: '7px'
@@ -118,7 +118,7 @@ function PDFViewer(prop) {
             </Worker>
           )}
         </Box>
-        {/* </div> */}
+        </div>
 
       </Row>
     </Container>
