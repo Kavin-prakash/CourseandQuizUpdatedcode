@@ -63,6 +63,7 @@ import SavedTopics from "../../components/Course/Topic/SavedTopics";
 import AddMaterial from "../../View/Course/Material/AddMaterial";
 import CourseNavbar from "../../components/LearnerComponent/CourseNavbar";
 import TopicScore from "../../components/LearnerComponent/TopicScore";
+import FeedbackReport from "../../View/Admin/Report/FeedbackReport";
 function Routing() {
 
   return (
@@ -108,6 +109,7 @@ function Routing() {
           <Route path='/individualenrollprogresscourselearner/:courseId' element={<EnrollCourseProgressLearners />}></Route>
           <Route path="/enrollreport" element={<CourseEnrollmentReportView />}></Route>
           <Route path="/report" element={<ReportMainView />}></Route>
+          <Route path="/feedbackreport" element={<FeedbackReport />}></Route>
           {/* quiz team */}
           <Route path="/coursepageview" element={<CoursePageView />} />
           <Route path="/createquiz" element={<CreateQuizView />} />
@@ -121,7 +123,7 @@ function Routing() {
           {/* course module */}
           <Route path="/addcourse" element={<AddCourseView />} />
           {/* mano changes */}
-          <Route  path="/coursecontent/:id" element={<CourseContent />} />/
+          <Route path="/coursecontent/:id" element={<CourseContent />} />/
           {/* stop mano changes */}
 
           <Route path="/addtopic/:id" element={<Topics />} />

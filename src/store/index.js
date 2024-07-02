@@ -191,6 +191,8 @@ import GetResultByLearnerIDReducer from '../reducers/Quiz And Feedback Module/Le
 import GetResultByLearnerIDApi from '../middleware/Quiz And Feedback Module/Learner/GetResultByLearnerIDApi';
 import LearnerFeedbackResultReducer from '../reducers/Quiz And Feedback Module/LearnerFeedbackResultReducer';
 import LearnerFeedbackResultApi from '../middleware/Quiz And Feedback Module/Learner/LearnerFeedbackResultApi';
+import QuizfeedbackreportReducer from '../reducers/Admin/QuizfeedbackreportReducer';
+import QuizFeedbackReport from '../middleware/Admin/Reports/QuizFeedbackReport';
 
 
 const rootReducer = combineReducers({
@@ -224,6 +226,7 @@ const rootReducer = combineReducers({
   highestenrolledcourse: DashboardHighestEnrolledCourseReducer,
   recentfeedbackresponse: DashboardRecentFeedbackReducer,
   enrollmentcoursebarchart: DashboardEnrollmentcourseBarchartReducer,
+  quizfeedbackreports: QuizfeedbackreportReducer,
 
   //
   passwordchangereducer: PasswordChangeReducer,
@@ -310,7 +313,7 @@ const store = createStore(
     ApiDashboardTopLearners, ApiDashboardHighestEnrolledCourse, ApiRecentFeedbackresponse, ApiDashboardEnrollmentcourseBarchart,
     FetchQuizById,
     DeleteQuizQuestionsApi,
-    PutQuizDetails, updateUserData,
+    PutQuizDetails, updateUserData, QuizFeedbackReport,
 
     UpdateQuizFeedbackApi,
     DeleteQuizFeedbackApi,

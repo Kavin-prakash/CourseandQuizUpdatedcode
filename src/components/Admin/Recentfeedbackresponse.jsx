@@ -56,6 +56,7 @@ const RecentFeedback = ({
               Recent Feedbacks &nbsp;
               <FeedbackRoundedIcon />
             </Typography>
+            {displayedFeedback.length === 0 ? <>No DESCRIPTIVE Topic feedback given</> : <></>}
             {
               <Typography variant="h6" gutterBottom sx={{ fontSize: 15 }}>
                 <TransitionGroup>
@@ -115,13 +116,13 @@ const RecentFeedback = ({
                                 " " +
                                 feedback.dateoftheResponse.split("T")[1]}
                             </Typography>
-                  
+
                             <Typography
                               variant="body2"
                               sx={{
                                 color: "GrayText",
                                 fontWeight: "bold",
-                           
+
                               }}
                             >
                               <b >Course:</b> {feedback.coursename} |{" "}
