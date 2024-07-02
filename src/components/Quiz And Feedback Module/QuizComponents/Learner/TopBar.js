@@ -234,7 +234,7 @@ const Logout=()=>{
                 >
                   {/* <MenuItem onClick={handleMenuClose} > <link to='/updateuserprofile'>Edit Profile</link></MenuItem> */}
                   <MenuItem onClick={handleMenuClose}> <Link to='/updateuserprofile' style={{ color: 'inherit', textDecoration: 'inherit' }}>    Edit Profile  </Link></MenuItem>
-                  <MenuItem onClick={handleMenuClose} >     <Link to='/passwordchange' style={{ color: 'inherit', textDecoration: "inherit" }}>Password Update</Link> </MenuItem>
+                  <MenuItem onClick={handleMenuClose} ><Link to='/passwordchange' style={{ color: 'inherit', textDecoration: "inherit" }}>Password Update</Link> </MenuItem>
                   <MenuItem onClick={Logout}>Log Out</MenuItem>
                 </Menu>
               </Stack>

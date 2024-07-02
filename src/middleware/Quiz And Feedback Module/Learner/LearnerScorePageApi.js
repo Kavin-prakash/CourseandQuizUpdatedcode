@@ -32,6 +32,8 @@ const LearnerScorePageApi =
         console.log("learner score", response.data);
         // if (response.status === 200) {
         dispatch(fetchlearnerscoreSuccess(response.data));
+
+     
         // } else {
         //   console.error("No data received.");
         // }

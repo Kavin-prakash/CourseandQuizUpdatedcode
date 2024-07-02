@@ -38,10 +38,11 @@ const ProfileCard = ({ fetchProfileCard, profilecard }) => {
             <div class="settings-menu">
               <div class="profile-bg">
                 <div class="profile-img">
-                  {learnerprofile === "http://localhost:5199/wwwroot/LearnerProfileImages/" ?
+                {
+                learnerprofile === "http://localhost:5199/wwwroot/LearnerProfileImages/" ?
                     <img src={user} alt="img" /> :
                     <img src={learnerprofile} alt="img" />
-                  }
+                  } 
                 </div>
               </div>
               <div className="profile-group">

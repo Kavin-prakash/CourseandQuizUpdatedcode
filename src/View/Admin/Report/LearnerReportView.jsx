@@ -255,7 +255,9 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const dense = true;
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(
+      parseInt(localStorage.getItem('LearnerrowsPerPage'), 10) || 5
+    );
     const [searchTerm, setSearchTerm] = React.useState("");
     const [filteredUser, setFilteredUser] = React.useState([]);
 
@@ -279,9 +281,12 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
+      const newRowsPerPage = parseInt(event.target.value, 10);
+      setRowsPerPage(newRowsPerPage);
+      localStorage.setItem('LearnerrowsPerPage', newRowsPerPage); // Store the value in localStorage
       setPage(0);
     };
+
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -434,9 +439,9 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
           </div>
           <TablePagination
             rowsPerPageOptions={[
-              { label: '5 Rows', value: 5 },
-              { label: '10 rows', value: 10 },
-              { label: '25 rows', value: 25 },
+              { label: '5 ', value: 5 },
+              { label: '10 ', value: 10 },
+              { label: '25 ', value: 25 },
               { label: 'All', value: rows.length },
             ]}
             component="div"

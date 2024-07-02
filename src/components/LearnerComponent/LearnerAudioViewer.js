@@ -198,21 +198,37 @@ const LearnerAudioViewer = ({ material, materialId ,materialName }) => {
  
   }
  
-  useEffect(() => {
-    const savedTime = localStorage.getItem("video-current-time");
-    if (savedTime && videoRef.current) {
- 
-      videoRef.current.currentTime = parseFloat(savedTime);
-      const learnerprogressdata = {
- 
-        materialId: materialId,
-        learnerId: sessionStorage.getItem("UserSessionID"),
-        watchTime: "00:00:00"
+  const fetchWatchTime = async () => {
+    try {
+      const learnerId = sessionStorage.getItem("UserSessionID");
+    
+     
+      const response = await fetch(`http://localhost:5199/lxp/course/learner/learnerprogress/watchtime?LearnerId=${learnerId}&MaterialId=${materialId}`);
+      const data = await response.json();
+    
+      if (data.data.watchTime) {
+        const parts = data.data.watchTime.split(':').map(Number);
+        const watchTimeInSeconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+        return watchTimeInSeconds;
       }
- 
-      dispatch(watchTimeRequest(learnerprogressdata));
+    } catch (error) {
+      console.error("Failed to fetch watch time:", error);
     }
-  }, []);
+     return 0;
+  };
+ 
+  useEffect(() => {
+    const initializeVideo = async () => {
+     
+      const savedTime = await fetchWatchTime();
+      if (videoRef.current && !isNaN(savedTime) && isFinite(savedTime)) {
+        videoRef.current.currentTime = savedTime;
+        
+      }
+     
+    };
+    initializeVideo();
+  }, [materialId, dispatch]);
  
   useEffect(() => {
     if (!videoRef.current) return;
@@ -231,24 +247,14 @@ const LearnerAudioViewer = ({ material, materialId ,materialName }) => {
     const onPause = () => {
       setIsPlaying(false);
       setIsWaiting(false);
-      setShowTranscript(false);
-      if (videoRef.current) {
- 
-        localStorage.setItem(
-          "video-current-time",
-          videoRef.current.currentTime
-        );
-      }
+     
       const learnerprogressdata = {
- 
         materialId: materialId,
         learnerId: sessionStorage.getItem("UserSessionID"),
         watchTime: formatTime(videoRef.current.currentTime)
-      }
- 
+      };
       dispatch(watchTimeRequest(learnerprogressdata));
     };
- 
     const onProgress = () => {
       if (!videoRef.current || !videoRef.current.buffered || !bufferRef.current) return;
       if (!videoRef.current.buffered.length) return;
@@ -360,7 +366,7 @@ const LearnerAudioViewer = ({ material, materialId ,materialName }) => {
     <>
     <h2 style={{ marginLeft: '2vw',position:'relative',top:'1vh'}} >{materialName}</h2>
     <hr style={{ marginLeft: '2vw',width:'80vw',position:'relative',top:'1vh'}}/>
-    <Box ref={containerRef} position="relative" width="80%" left="110px" style={{backgroundColor:'grey'}}>
+    <Box ref={containerRef} position="relative" width="80%" left="110px" style={{bottom:'25vh'}}>
       <Audio
         ref={videoRef}
         src={src}
@@ -375,7 +381,7 @@ const LearnerAudioViewer = ({ material, materialId ,materialName }) => {
         padding="10px"
         alignItems="center"
         justifyContent="space-between"
-        background="rgba(0, 0, 0, 0.5)"
+        background="black"
       >
        <div className="d-flex flex-row gap-2" style={{height:'25px'}}>
         <Button onClick={handlePlayPauseClick}>

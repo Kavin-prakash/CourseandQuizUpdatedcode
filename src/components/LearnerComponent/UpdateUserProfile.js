@@ -21,6 +21,7 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import updateuserprofileimage from '../../assets/Learner/Online page-cuate (2).png'
+import { useNavigate } from 'react-router-dom';
  
 
 function UpdateUserProfileComponent() {
@@ -184,11 +185,12 @@ function UpdateUserProfileComponent() {
     // console.log('editInfo.stream is undefined');
   }
  
+  const navigate=useNavigate()
  
   const alertdisplayenrollment = () => {
     const Toast = Swal.mixin({
       toast: true, background: '#096C00', position: "top",
-      showConfirmButton: false, timer: 3500, timerProgressBar: true,
+      showConfirmButton: false, timer: 3000, timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
         toast.onmouseleave = Swal.resumeTimer;
@@ -200,12 +202,12 @@ function UpdateUserProfileComponent() {
       }
     });
  
- 
- 
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
- 
+   setTimeout(() => {
+    navigate('/LearnerDashboard');
+   }, 3000);
+    
+
+   window.location.reload();
   }
  
  
@@ -376,6 +378,7 @@ function UpdateUserProfileComponent() {
                <InputLabel htmlFor="component-outlined"  style={{marginTop:"10px"}} >Stream</InputLabel>
               <Select
                 id="component-outlined"
+
                 isMulti
                 name="stream"
                 options={options}
@@ -385,7 +388,7 @@ function UpdateUserProfileComponent() {
                   control: (base) => ({
                     ...base,
                     backgroundColor:"#F5F7F8",
-                    height: '55px', // Set the height of the select field
+                    height: 'auto', // Set the height of the select field
                     minHeight: '55px' // Ensure the minimum height is also set
                   })
                 }}

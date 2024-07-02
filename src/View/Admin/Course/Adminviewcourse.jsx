@@ -426,6 +426,7 @@ const Adminviewcourse = ({
   const confirmDeletion = () => {
     deleteCourse(selectedCourseId);
     setShowModal(false);
+    fetchCourses();
   };
 
 
@@ -450,11 +451,9 @@ const Adminviewcourse = ({
 
   const EnableOrDisable = () => {
     enableordisable(enabledisablecourseId, !coursestatus);
+    fetchCourses();
     setShowEnableModal(false);
-    setTimeout(() => {
-      document.location.reload();
-    }, 500);
-
+    fetchCourses();
   };
 
   //Style for Disable And Enable Modal
@@ -579,6 +578,9 @@ const Adminviewcourse = ({
       </Modal>
       <Container fluid>
         <Row className="mt-5">
+          <Row>
+            <h3>LXP All Courses</h3>
+          </Row>
           <Col xs={12} md={12} className="mt-2">
             <Row>
               <Col xs={12} md={6}>
@@ -602,7 +604,7 @@ const Adminviewcourse = ({
                     aria-label="sticky table"
                     style={{ backgroundColor: "#f3f3f3" }}
                   >
-                    <TableHead>
+                    <TableHead style={{backgroundColor:'black'}}>
                       <TableRow sx={{ bgcolor: "#23275c" }}>
                         <TableCell>Title</TableCell>
                         <TableCell>Category</TableCell>

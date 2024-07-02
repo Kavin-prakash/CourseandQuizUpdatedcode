@@ -47,7 +47,7 @@ export default function PptViewerComponent(prop) {
     return (
         <div
             ref={containerRef}
-            style={{ width: '45vw', height: '90vh', marginLeft: 10, marginTop: 10 }}
+            style={{ width: '40vw', height: '90vh', marginTop: 10 }}
         />
     );
 }

@@ -15,7 +15,7 @@
     background-color: #23275c;
     color: #fff;
     height: 4rem;
-    width: 100vw;
+    width: 100%;
 }
 
 #admin_navbar .top-nav img {
@@ -36,7 +36,7 @@
 
 #admin_navbar .side-nav {
     margin-top: 4rem;
-    /* width: 50%; */
+    /* width: 100%; */
     /* Collapsed width */
     height: 100%;
 
@@ -129,4 +129,8 @@
     color:#f0f0f0;
     font-size: 100%;
     font-weight: bold;
+}
+#admin_navbar img {
+    max-width: 100%;
+    height: auto;
 }

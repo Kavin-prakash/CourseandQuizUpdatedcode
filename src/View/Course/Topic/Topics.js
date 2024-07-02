@@ -30,9 +30,9 @@ function Topics() {
           <Col xs={8} md={6} className='mt-5'>
             <Row className="mt-4">
               <Col sx={10} md={2}></Col>
-              <Col className="text-end mt-3">
+              {/* <Col className="text-end mt-3">
                 <BackButton />
-              </Col>
+              </Col> */}
             </Row>
             <AddTopic />
             <SavedTopics />

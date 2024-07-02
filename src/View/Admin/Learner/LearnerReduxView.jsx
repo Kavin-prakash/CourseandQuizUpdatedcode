@@ -32,7 +32,7 @@ const LearnerReduxView = ({ fetchLearners, learners }) => {
   }
   //Rows for the table
   const rows = learners.learners;
-  console.log("ssss",rows);
+  console.log("ssss", rows);
 
   //Descending function
   function descendingComparator(a, b, orderBy) {
@@ -205,7 +205,14 @@ const LearnerReduxView = ({ fetchLearners, learners }) => {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const dense = true;
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+
+    const [rowsPerPage, setRowsPerPage] = React.useState(
+      parseInt(localStorage.getItem('IndividualLearnerrowsPerPage'), 10) || 5
+    );
+
+
+
     const [searchTerm, setSearchTerm] = React.useState("");
     const [filteredUser, setFilteredUser] = React.useState([]);
 
@@ -229,9 +236,12 @@ const LearnerReduxView = ({ fetchLearners, learners }) => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
+      const newRowsPerPage = parseInt(event.target.value, 10);
+      setRowsPerPage(newRowsPerPage);
+      localStorage.setItem('IndividualLearnerrowsPerPage', newRowsPerPage); // Store the value in localStorage
       setPage(0);
     };
+
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -306,7 +316,7 @@ const LearnerReduxView = ({ fetchLearners, learners }) => {
                       key={row.index}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
-                      style={{textDecoration:'none'}}
+                      style={{ textDecoration: 'none' }}
                       component={Link} to={'/individuallearner/' + row.learnerID}
                     >
                       <TableCell align="left">{index + 1}</TableCell>
@@ -317,17 +327,17 @@ const LearnerReduxView = ({ fetchLearners, learners }) => {
                         align="left"
                         padding="none"
                       >
-                      {row.learnerName}
+                        {row.learnerName}
                       </TableCell>
                       <TableCell align="left">{row.email}</TableCell>
                       <TableCell align="left">
-                       
+
                         {row.lastLogin.split('T')[0].split('-').reverse().join('-') + ' ' + row.lastLogin.split('T')[1]}
-                      
-                        
+
+
                       </TableCell>
                       <TableCell align="left">
-                       { row.learnerStatus==true?<h6 style={{color:"green"}}>Active</h6>:<h6 style={{color:"red"}}>InActive</h6>}
+                        {row.learnerStatus == true ? <h6 style={{ color: "green" }}>Active</h6> : <h6 style={{ color: "red" }}>InActive</h6>}
                       </TableCell>
                     </TableRow>
                   );

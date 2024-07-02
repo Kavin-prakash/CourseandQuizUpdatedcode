@@ -43,7 +43,7 @@ const LastEnrolledCourse = ({ fetchLastEnrolledCourse, enrolledcourse }) => {
 
                                 <CardMedia
                                     component="img"
-                                    sx={{ width: '100%', height: '100%' }} // Set fixed size here
+                                    sx={{ width: '250px', height: '130px' }} // Set fixed size here
                                     image={enrolledcourse.lastenrolledCourse.courseImage}
                                     alt="Profile"
                                 />

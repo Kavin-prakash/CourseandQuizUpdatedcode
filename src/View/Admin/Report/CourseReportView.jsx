@@ -246,7 +246,10 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const dense = true;
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(
+      parseInt(localStorage.getItem('CourserowsPerPage'), 10) || 5
+    );
+
     const [searchTerm, setSearchTerm] = React.useState("");
     const [filteredUser, setFilteredUser] = React.useState([]);
 
@@ -269,10 +272,20 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
       setPage(newPage);
     };
 
+
     const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
+      const newRowsPerPage = parseInt(event.target.value, 10);
+      setRowsPerPage(newRowsPerPage);
+      localStorage.setItem('CourserowsPerPage', newRowsPerPage); // Store the value in localStorage
       setPage(0);
     };
+
+
+    // const handleChangeRowsPerPage = (event) => {
+    //   const newRowsPerPage = parseInt(event.target.value, 10);
+    //   setRowsPerPage(parseInt(event.target.value, 10));
+    //   setPage(0);
+    // };
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -383,7 +396,10 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
                         </TableCell>
                         <TableCell align="left">
 
-                          {row.modifiedAt}
+                          {/* {row.modifiedAt} */}
+                          {
+                            row.modifiedAt===null ?<span style={{color:'green'}}>Not Modified</span>:row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1]
+                          }
                           {/* {row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1]} */}
                         </TableCell>
 
@@ -406,9 +422,9 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
           <TablePagination
             style={{ color: 'black' }}
             rowsPerPageOptions={[
-              { label: '5 Rows', value: 5 },
-              { label: '10 rows', value: 10 },
-              { label: '25 rows', value: 25 },
+              { label: '5 ', value: 5 },
+              { label: '10 ', value: 10 },
+              { label: '25 ', value: 25 },
               { label: 'All', value: rows.length },
             ]}
             component="div"

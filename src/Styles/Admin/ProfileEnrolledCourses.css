@@ -3,11 +3,16 @@
 }
 
 #profileCourses {
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    justify-content: center;
-    justify-items: end;
+    /* gap: 50px; */
+    /* justify-content: center; */
+    justify-content: start;
+    flex-direction: row;
+    column-gap: 80px;
+
+    /* justify-items: end; */
+
 }
 
 #profileCourses img {

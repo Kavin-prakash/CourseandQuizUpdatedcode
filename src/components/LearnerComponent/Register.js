@@ -17,12 +17,12 @@ import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import RegisterApi from '../../middleware/LearnerMiddleware/RegisterApi';
-
+ 
 export default function Register() {
     const [errors, setErrors] = useState({});
-
+ 
     console.log("checking the Erros",errors);
-
+ 
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [recievedOTP, setRecievedOTP] = useState('');
@@ -33,7 +33,7 @@ export default function Register() {
     const [showPasswordRules, setShowPasswordRules] = useState(false);
     const [timer, setTimer] = useState(120);
     const [errorMessage, setErrorMessage] = useState('');
-
+ 
     console.log("checkerrormesssage",errorMessage);
     const [ageError, setAgeError] = useState(false);
     const [buttonText, setButtonText] = useState('Send OTP');
@@ -157,7 +157,8 @@ export default function Register() {
         setErrors({ ...errors, otp: '' });
     };
  
-    const handleOTPSubmit = () => {
+   
+const handleOTPSubmit = () => {
         setUserData({ ...userData, otp: recievedOTP });
         setVerifyOTP(recievedOTP);
     };
@@ -174,6 +175,7 @@ export default function Register() {
             setErrors({ ...errors, otp: 'Invalid OTP' });
         }
     };
+ 
  
     const alertdisplayregister = () => {
         const Toast = Swal.mixin({
@@ -208,19 +210,23 @@ export default function Register() {
         const { name, value } = e.target;
         if (name === 'email') {
             setEmail(value);
-            setUserData({ ...userData, email: value });
+            setUserData({ ...userData, email: value },{...userData, firstName:value},{...userData,lastName:value},
+               
+                {...userData,contactNumber:value},{...userData,gender:value},{...userData,dob:value},{...userData,password:value});
         } else if (name === 'stream') {
             setUserData({ ...userData, stream: value });
         } else {
             setUserData({ ...userData, [name]: value });
         }
         setErrors({ ...errors, [name]: '' });
+ 
+        setValidationError(false);
     };
-
+ 
  
     // const handleSubmit = (e) => {
     //     e.preventDefault();
-
+ 
     //     console.log("userdata",userData);
     //     const today = new Date();
     //     const birthDate = new Date(userData.dob);
@@ -239,9 +245,9 @@ export default function Register() {
     //         return;
     //     }
     //     if (!emailVerified) return;
-        
+       
     //     const validationErrors = validateRegistrationForm(userData);
-
+ 
     //     console.log("validationerros",validationErrors);
  
     //     if (Object.keys(validationErrors).length > 0) {
@@ -255,7 +261,7 @@ export default function Register() {
     //             stream: userData.stream.map((option) => option.value).join(', '),
     //         };
  
-            
+           
     //         dispatch(userDataRequest(updatedUserData));
     //         alertdisplayregister();
     //         setTimeout(() => {
@@ -265,7 +271,7 @@ export default function Register() {
     //         setErrors(validationErrors || {});
     //     }
     // };
-
+ 
     const [validationformerror,setValidationError]=useState('');
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -313,7 +319,8 @@ export default function Register() {
         }
     };
  
-    
+ 
+   
  
     const handleGenderChange = (event) => {
         setGender(event.target.value);
@@ -342,12 +349,12 @@ export default function Register() {
                 <h6>Gain your knowledge with Relevantz</h6>
                 {/* <input type="submit" name="" value="Login" /><br /> */}
             </div>
-
+ 
             <div class="col-md-9 register-right">
-
+ 
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
-
+ 
                         <h3 class="register-heading">Join us with an Intellectual Adventure!!!</h3>
                         <Modal
                             isOpen={showModal}
@@ -358,69 +365,69 @@ export default function Register() {
                         >
                             <h2>Registration successfully!</h2>
                             <button onClick={closeModal} >close</button>
-
+ 
                         </Modal>
                         <div class="row register-form">
-                            <div class="col-md-6">
-                                <div class="form-group">
-
-
-                                    <input type="text" class="form-control field" placeholder="First Name *" value={userData.firstName} name="firstName" onChange={handleChange} disabled={showOTP} />
-                                    {validationformerror.firstName && <div className="text-danger">{validationformerror.firstName}</div>}
-                                </div>
-                                <div class="form-group">
-
-                                    <input type="number" class="form-control" placeholder="Phone Number *" value={userData.contactNumber} name="contactNumber" onChange={handleChange} disabled={showOTP} />
-                                    {validationformerror.contactNumber && <div className="text-danger">{validationformerror.contactNumber}</div>}
-                                </div>
-                                <div className="form-group d-flex">
-                                    <input
-                                        type="email"
-                                        className="form-control"
-                                        placeholder="Email *"
-                                        value={userData.email}
-                                        name="email"
-                                        onChange={handleChange}
-                                        disabled={showOTP || emailVerified}
-
-                                        style={{maxHeight:40}}
-                                    />
-                                    {emailVerified && <span className="text-success">&#10004;</span>}
-                                    {!showOTP && !emailVerified && email.trim() !== '' && (
-                                        <button className="btn btn-primary ms-1 otp" onClick={handleSendOTP} style={{maxHeight:40}} >
-                                            <a style={{fontSize:'12px'}}>{timer === 0 ? 'Resend OTP' : 'Send OTP'}</a>
-                                        </button>
-                                    )}
-                                    {validationformerror.email && <div style={{ marginLeft: '15px' }}  className="text-danger">{validationformerror.email}</div>}
-                                    {showOTP && !emailVerified && (
-                                        <div className="form-group" style={{marginTop:'0'}}>
-                                            <input
-                                                type="text"
-                                                minLength="6"
-                                                maxLength="6"
-                                                name="enteredOTP"
-                                                className="form-control"
-                                                placeholder="Enter OTP *"
-                                                value={enteredOTP}
-                                                onChange={handleOTPChange}
-                                               
-                                            />
-                                            <div  style={{ color:'blue' }}>
-                                                {`${minutes}:${seconds < 10 ? '0' : ''}${seconds} remaining`}
+                                <div class="col-md-6">
+                                    <div class="form-group">
+ 
+ 
+                                        <input type="text" class="form-control field" placeholder="First Name *" value={userData.firstName} name="firstName" onChange={handleChange} disabled={showOTP} />
+                                        {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
+                                    </div>
+                                    <div class="form-group">
+ 
+                                        <input type="number" class="form-control" placeholder="Phone Number *" value={userData.contactNumber} name="contactNumber" onChange={handleChange} disabled={showOTP} />
+                                        {errors.contactNumber && <div className="text-danger">{errors.contactNumber}</div>}
+                                    </div>
+                                    <div className="form-group d-flex">
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            placeholder="Email *"
+                                            value={userData.email}
+                                            name="email"
+                                            onChange={handleChange}
+                                            disabled={showOTP || emailVerified}
+ 
+                                            style={{maxHeight:40}}
+                                        />
+                                        {emailVerified && <span className="text-success">&#10004;</span>}
+                                        {!showOTP && !emailVerified && email.trim() !== '' && (
+                                            <button className="btn btn-primary ms-1 otp" onClick={handleSendOTP} style={{maxHeight:40}} >
+                                                <a style={{fontSize:'12px'}}>{timer === 0 ? 'Resend OTP' : 'Send OTP'}</a>
+                                            </button>
+                                        )}
+                                        {errors.email && <div style={{ marginLeft: '15px' }}  className="text-danger">{errors.email}</div>}
+                                        {showOTP && !emailVerified && (
+                                            <div className="form-group" style={{marginTop:'0'}}>
+                                                <input
+                                                    type="text"
+                                                    minLength="6"
+                                                    maxLength="6"
+                                                    name="enteredOTP"
+                                                    className="form-control"
+                                                    placeholder="Enter OTP *"
+                                                    value={enteredOTP}
+                                                    onChange={handleOTPChange}
+                                                   
+                                                />
+                                                <div  style={{ color:'blue' }}>
+                                                    {`${minutes}:${seconds < 10 ? '0' : ''}${seconds} remaining`}
+                                                </div>
+                                                {enteredOTP.length === 6 && (
+                                                    <button className="btn btn-primary ms-1 otp" onClick={SubmitOtp}>
+                                                        <a>Submit</a>
+                                                    </button>
+                                                )}
+                                                {errors.otp && <div className="text-danger">{errors.otp}</div>}
                                             </div>
-                                            {enteredOTP.length === 6 && (
-                                                <button className="btn btn-primary ms-1 otp" onClick={SubmitOtp}>
-                                                    <a>Submit</a>
-                                                </button>
-                                            )}
-                                            {validationformerror.otp && <div className="text-danger">{validationformerror.otp}</div>}
-                                        </div>
+                                           
+                                           
+                                        )}
                                        
                                        
-                                    )}
-                                   
-                                   
-                                </div>
+                                    </div>
                                
                                 <div style={{marginTop:"-2%"}} class="form-group">
                                     <input style={{width:"425px"}} type="password" class="form-control" placeholder="Password *" value={userData.password} name="password" onChange={handleChange} disabled={showOTP} />
@@ -431,8 +438,8 @@ export default function Register() {
                                     <p style={{marginLeft:"6%",marginTop:"-10%"}} className='error-message'>Password must be between 8 to 14 characters,must contain one uppercase,must contain one lowercase,and must contain one special character</p>
                                 </div>}
                                
-
-
+ 
+ 
                                 <div class="form-group">
                                     <div class="maxl d-flex">
                                         <h6 style={{ marginTop: "25px" }}>Gender:</h6>
@@ -459,7 +466,7 @@ export default function Register() {
                                     <input type="text" class="form-control" placeholder="Last Name *" value={userData.lastName} name="lastName" onChange={handleChange} disabled={showOTP} />
                                     {validationformerror.lastName && <div className="text-danger">{validationformerror.lastName}</div>}
                                 </div>
-
+ 
                                 <div class="form-group">
                                     <input type="text" class="form-control" value={userData.dob} name="dob" placeholder="Date Of Birth *" onFocus={(e) => e.target.type = 'date'} onBlur={(e) => e.target.type = 'text'} max={new Date().toISOString().split('T')[0]} onChange={handleChange} disabled={showOTP} />
                                     {ageError && (<div className='age-error-message'><p className='error-message'>{errorMessage}</p></div>)}
@@ -476,10 +483,10 @@ export default function Register() {
                                         value={userData.stream}
                                         onChange={(selectedOption) => handleChange({ target: { name: "stream", value: selectedOption } })}
                                         isDisabled={showOTP}
-
+ 
                                     />
                                     {validationformerror.selectedOptions && <div className="text-danger">{validationformerror.selectedOptions}</div>}
-
+ 
                                 </div>
                                 <div class="form-group ">
                                     <input type="password" class="form-control" placeholder="Confirm Password *" value={userData.confirmPassword} name="confirmPassword" onChange={handleChange} disabled={showOTP} />
@@ -489,21 +496,22 @@ export default function Register() {
                                 <button type="submit" data-testid="ben" className="btnRegister" onClick={handleSubmit} ><a>
                                     Register</a>
                                 </button>
-
+ 
                                 {/* <input type="submit" class="btnRegister" value="Register" onClick={handleSubmit} /> */}
                             </div>
                             {/* {altermessage && <Alert variant="outlined" severity="success">
               Registered successful! Redirecting...
             </Alert>} */}
-
+ 
                         </div>
-
+ 
                     </div>
                 </div>
             </div>
         </div>
-
+ 
     </div>
  
     );
 }
+ 

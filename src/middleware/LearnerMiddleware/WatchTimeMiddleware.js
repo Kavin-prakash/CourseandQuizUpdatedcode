@@ -23,7 +23,7 @@ if (!ReducerData.isRequesting) {
       // console.log("post",action.payload)
       // Assuming 'action.payload' contains the data you want to senda\
       console.log("check action",action.payload);
-      const response = await axios.post(`http://localhost:5199/lxp/learner/learnerprogressWatchTime?learnerId=${action.payload.learnerId}&materialId=${action.payload.materialId}&watchtime=${action.payload.watchTime}`);
+      const response = await axios.post(`http://localhost:5199/lxp/course/learner/learnerprogress`,action.payload);
       console.log('API Response data:', response.data); // Log the response data
       if(response.data.statusCode==412){
         dispatch( watchTimeExists());
