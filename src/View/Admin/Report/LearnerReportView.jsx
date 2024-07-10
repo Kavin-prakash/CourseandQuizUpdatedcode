@@ -24,8 +24,11 @@ import { Button } from "bootstrap";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import ReportSkeleton from "../../../components/Loading/Reportskeleton";
-
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
+
 const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
   //skeleton
   const [loading, setLoading] = useState(true);
@@ -128,7 +131,7 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
 
 
 
-  const Exportreport = () => {
+  const ExportPdf = () => {
     const input = pdfRef.current;
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
@@ -155,6 +158,22 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
       pdf.save(`Learnersreports_${Dates}.pdf`);
     });
   };
+
+  const ExportExcel=()=>{
+    const selectedFields = rows.map(row => ({
+      userName: row.userName,
+      enrolledCourse: row.enrolledCourse,
+      completedCourse: row.completedCourse,
+      lastLogin:row.lastLogin.split('T')[0].split('-').reverse().join('-') + ' ' + row.lastLogin.split('T')[1],
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(selectedFields);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], {type: 'application/octet-stream'});
+    saveAs(blob, `Learnersreports_${Dates}.xlsx`);
+  };
+
 
   //Component for Head in Table
   function EnhancedTableHead(props) {
@@ -333,14 +352,19 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </form>
-            <button
-              className="btn btn-success"
-              onClick={Exportreport}
-              style={{ marginLeft: "48%" }}
-            >
-              Download Report
-              <ArrowDownwardIcon />
-            </button>
+        <DropdownButton
+      id="dropdown-basic-button"
+      title={
+        <>
+          Download Report <ArrowDownwardIcon />
+        </>
+      }
+      variant="success"
+      style={{ marginLeft: '48%' }}
+    >
+      <Dropdown.Item onClick={ExportPdf}>Pdf Format</Dropdown.Item>
+      <Dropdown.Item onClick={ExportExcel}>Excel Format</Dropdown.Item>
+    </DropdownButton>
           </div>
           <Typography
             sx={{ flex: "1 1 100%" }}
@@ -350,7 +374,7 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
             align="center"
             style={{ marginBottom: "15px" }}
           >
-            Learners Report
+          Learners Report
           </Typography>
           <div id="learnersreport">
             <TableContainer ref={pdfRef}>

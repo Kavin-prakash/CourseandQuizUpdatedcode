@@ -269,6 +269,10 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import Tooltip from '@mui/material/Tooltip';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
+
 export default function QuizPassedUsers() {
     const quizId = useParams();
     const dispatch = useDispatch();
@@ -357,7 +361,7 @@ export default function QuizPassedUsers() {
     let month = String(today.getMonth() + 1).padStart(2, "0");
     let day = String(today.getDate()).padStart(2, "0");
     let Dates = day + "-" + month + "-" + today.getFullYear();
-    const Exportreport = () => {
+    const ExportPdf = () => {
         const input = pdfRef.current;
         html2canvas(input).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
@@ -376,6 +380,21 @@ export default function QuizPassedUsers() {
             pdf.save(`Quiz_Passed_User_List_${Dates}.pdf`);
         });
     };
+
+    const ExportExcel=()=>{
+        const selectedFields = rows.map(row => ({
+          userName: row.userName,
+          enrolledCourse: row.enrolledCourse,
+          completedCourse: row.completedCourse,
+          lastLogin:row.lastLogin.split('T')[0].split('-').reverse().join('-') + ' ' + row.lastLogin.split('T')[1],
+        }));
+        const worksheet = XLSX.utils.json_to_sheet(selectedFields);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], {type: 'application/octet-stream'});
+        saveAs(blob, `Quiz_Passed_User_List_${Dates}.xlsx`);
+      };
 
     //Component for Head in Table
     function EnhancedTableHead(props) {
@@ -558,14 +577,19 @@ export default function QuizPassedUsers() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </form>
-                        <button
-                            className="btn btn-success"
-                            onClick={Exportreport}
-                            style={{ marginLeft: "48%" }}
-                        >
-                            Download Report
-                            <ArrowDownwardIcon />
-                        </button>
+                        <DropdownButton
+      id="dropdown-basic-button"
+      title={
+        <>
+          Download Report <ArrowDownwardIcon />
+        </>
+      }
+      variant="success"
+      style={{ marginLeft: '48%' }}
+    >
+      <Dropdown.Item onClick={ExportPdf}>Pdf Format</Dropdown.Item>
+      <Dropdown.Item onClick={ExportExcel}>Excel Format</Dropdown.Item>
+    </DropdownButton>
                     </div>
                     <Typography
                         sx={{ flex: "1 1 100%" }}

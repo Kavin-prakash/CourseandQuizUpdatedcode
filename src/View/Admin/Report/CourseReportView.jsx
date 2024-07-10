@@ -24,7 +24,10 @@ import { Button } from "bootstrap";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ReportSkeleton from '../../../components/Loading/Reportskeleton'
+import ReportSkeleton from '../../../components/Loading/Reportskeleton';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
 
@@ -42,7 +45,6 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
 
   //Pdf 
   const pdfRef = React.useRef();
-
   if (loading || coursereport.length === 0) {
     return <div>
       <ReportSkeleton />
@@ -128,7 +130,7 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
   let day = String(today.getDate()).padStart(2, '0');
   let Dates = day + '-' + month + '-' + today.getFullYear();
 
-  const Exportreport = () => {
+  const ExportPdf = () => {
     const input = pdfRef.current;
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
@@ -146,6 +148,22 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
       pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
       pdf.save(`CourseReports_${Dates}.pdf`);
     })
+  };
+
+  const ExportExcel=()=>{
+    const selectedFields = rows.map(row => ({
+      title: row.title,
+      category: row.category,
+      level: row.level,
+      createdAt:row.createdAt.split('T')[0].split('-').reverse().join('-') + ' ' + row.createdAt.split('T')[1],
+      modifiedAt:row.modifiedAt===null ?"Not Modified":row.modifiedAt.split(' ')[0].split('-').reverse().join('-') + ' ' + row.modifiedAt.split(' ')[1],
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(selectedFields);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], {type: 'application/octet-stream'});
+    saveAs(blob,`CourseReports_${Dates}.xlsx`);
   };
 
   //Component for Head in Table
@@ -332,7 +350,19 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </form>
-            <button className="btn btn-success" onClick={Exportreport} style={{ marginLeft: '48%' }}>Download Report<ArrowDownwardIcon /></button>
+                <DropdownButton
+      id="dropdown-basic-button"
+      title={
+        <>
+          Download Report <ArrowDownwardIcon />
+        </>
+      }
+      variant="success"
+      style={{ marginLeft: '48%' }}
+    >
+      <Dropdown.Item onClick={ExportPdf}>Pdf Format</Dropdown.Item>
+      <Dropdown.Item onClick={ExportExcel}>Excel Format</Dropdown.Item>
+    </DropdownButton>
           </div>
           <Typography
             sx={{ flex: "1 1 100%" }}
