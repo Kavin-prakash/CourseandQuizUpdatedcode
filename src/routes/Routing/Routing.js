@@ -63,6 +63,8 @@ import SavedTopics from "../../components/Course/Topic/SavedTopics";
 import AddMaterial from "../../View/Course/Material/AddMaterial";
 import CourseNavbar from "../../components/LearnerComponent/CourseNavbar";
 import TopicScore from "../../components/LearnerComponent/TopicScore";
+
+import CourseFeedback from "../../components/Course/Course/CourseFeedback";
 function Routing() {
 
   return (
@@ -114,6 +116,7 @@ function Routing() {
           <Route path="/topicfeedback" element={<TopicFeedback />} />
           <Route path="/questiontemplate" element={<QuestionTemplateView />} />
           {/* <Route path="/getallfeedback" element={<GetAllFeedbacks />} /> */}
+          <Route path="/coursefeedback" element={<CourseFeedback />} />
           <Route path="/reviewquestions" element={<ReviewQuestions />} />
           <Route path="/quizfeedback" element={<QuizFeedback />} />
           <Route path="/upload" element={<UploadBulkQuiz />} />

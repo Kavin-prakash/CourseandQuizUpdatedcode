@@ -657,7 +657,15 @@ export default function SavedTopics(props) {
 
     const handleAddQuizButton = (topicId) => {
         dispatch(fetchQuizIdRequest(topicId));
+
         sessionStorage.setItem('topicId', topicId);
+    }
+
+    const handleAddFeedBackButtons = (courseId) => {
+        sessionStorage.setItem("courseId", id)
+
+        sessionStorage.setItem('courseId', courseId);
+        navigate('/coursefeedback')
     }
     const handleAddQuizFeedBackButton = (topicId) => {
         sessionStorage.setItem('topicId', topicId);
@@ -719,7 +727,7 @@ export default function SavedTopics(props) {
 
 
     return (
-        <Container  fluid className='mt-1' style={divStyle}>
+        <Container fluid className='mt-1' style={divStyle}>
             {loading ? (
                 <p>Loading...</p>
             ) : (
@@ -740,6 +748,11 @@ export default function SavedTopics(props) {
                                             </IconButton>
                                         </Tooltip>
                                     }
+                                    <Tooltip title="Add Course Feedback">
+                                        <IconButton aria-label="Addfeedback" onClick={() => handleAddFeedBackButtons(id)}>
+                                            <VscFeedback style={{ color: "#365E32" }} />
+                                        </IconButton>
+                                    </Tooltip>
                                     <Tooltip title="Add Topic Feedback">
                                         <IconButton aria-label="Addfeedback" onClick={() => handleAddFeedBackButton(topic.topicId)}>
                                             <VscFeedback style={{ color: "#FFDC00" }} />
