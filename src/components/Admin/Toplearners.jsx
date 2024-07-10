@@ -14,6 +14,7 @@ import { fetchToplearnersRequest } from "../../actions/Admin/AdminDashboardActio
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "../../Styles/Admin/AdminDashboard.css";
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import user from '../../assets/Admin/Images/user.png';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -67,15 +68,22 @@ const Toplearners = ({fetchToplearnersRequest, toplearners }) => {
                           style={{ textDecoration: "none", color: "black" }}
                         >
                           <React.Fragment>
-                            <img
-                              src={toplearner.profilePhoto}
-                              style={{
-                                width: "50px",
-                                height: "50px",
-                                borderRadius: "50%",
-                                marginRight: "15px",
-                              }}
-                            />
+                          {toplearner.profilePhoto === "http://localhost:5199/wwwroot/LearnerProfileImages/" ?
+                              <img src={user} alt="img"
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  borderRadius: "50%",
+                                  marginRight: "15px",
+                                }} /> :
+                              <img src={toplearner.profilePhoto} alt="img"
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  borderRadius: "50%",
+                                  marginRight: "15px",
+                                }} />
+                            }
                             <span className="name-animation">
                               {<b>{toplearner.learnerName}</b>}
                             </span>

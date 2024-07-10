@@ -31,7 +31,8 @@ const Admincourse = ({ fetchCourses, courses }) => {
   //     return <div className='spinnerclass'> <Spinner /></div>;
   // }
   return (
-    <div id="admin_recentcourse">
+    // <div id="admin_recentcourse">
+    <div id="">
 
       <Container fluid className="coursepagebody">
         <Row className="pt-3 contentbody">
@@ -46,7 +47,6 @@ const Admincourse = ({ fetchCourses, courses }) => {
             <Col className="mt-5">
               <h3 style={{ fontWeight: "bold", color: "#27235C" }}>Recently Added Courses</h3>
             </Col>
-
             <Col className="text-end  mt-5" >
               <Link to="/addcourse">
                 <Button >

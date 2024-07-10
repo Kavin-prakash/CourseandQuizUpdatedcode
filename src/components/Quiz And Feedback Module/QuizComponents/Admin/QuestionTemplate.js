@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 import { FormHelperText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useNavigate } from 'react-router-dom';
 
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
@@ -68,6 +69,8 @@ const QuestionTemplate = () => {
     correctOptions: ["", "", ""],
   });
 
+  const navigate = useNavigate();
+
   const [showPopup, setShowPopup] = useState(false);
 
 
@@ -85,65 +88,34 @@ const QuestionTemplate = () => {
   };
 
   const handleDeleteQuestion = async (quizQuestionId) => {
-        // Dispatch the delete request
-        await dispatch(deleteQuizQuestionRequest(quizQuestionId));
+    // Dispatch the delete request
+    await dispatch(deleteQuizQuestionRequest(quizQuestionId));
 
-        // Update the questions state to remove the deleted question
-        setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
-    
-        // Close the popup and reset questionToDelete
-        setShowPopup(false);
-        setDeleteQuestionId(null);
-        const Toast = Swal.mixin({
-          className: "swal2-toast",
-          toast: true,
-          position: "top",
-          showConfirmButton: false,
-          timer: 2000,
-          background: 'green',
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
-        });
-        Toast.fire({
-          icon: "success",
-          title: " Question Deleted Successfully",
-          color: 'white'
-        });
+    // Update the questions state to remove the deleted question
+    setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
+
+    // Close the popup and reset questionToDelete
+    setShowPopup(false);
+    setDeleteQuestionId(null);
+    const Toast = Swal.mixin({
+      className: "swal2-toast",
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 2000,
+      background: 'green',
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: " Question Deleted Successfully",
+      color: 'white'
+    });
   };
-
-
-  // const handleConfirmDelete = async () => {
-  //   // Dispatch the delete request
-  //   await dispatch(deleteQuizQuestionRequest(questionToDelete));
-
-  //   // Update the questions state to remove the deleted question
-  //   setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
-
-  //   // Close the popup and reset questionToDelete
-  //   setShowPopup(false);
-  //   setQuestionToDelete(null);
-  //   const Toast = Swal.mixin({
-  //     className: "swal2-toast",
-  //     toast: true,
-  //     position: "top",
-  //     showConfirmButton: false,
-  //     timer: 2000,
-  //     background: 'green',
-  //     timerProgressBar: true,
-  //     didOpen: (toast) => {
-  //       toast.onmouseenter = Swal.stopTimer;
-  //       toast.onmouseleave = Swal.resumeTimer;
-  //     }
-  //   });
-  //   Toast.fire({
-  //     icon: "success",
-  //     title: " Question Deleted Successfully",
-  //     color: 'white'
-  //   });
-  // };
 
   const handleOpenEditQuestionModal = async (quizQuestionId) => {
     try {
@@ -362,14 +334,14 @@ const QuestionTemplate = () => {
     setErrors(tempErrors);
   };
   useEffect(() => {
-    const newFilteredQuestions = questions.filter(
+    const newFilteredQuestions = questions?.filter(
       (question) =>
         !selectedFilterQuestionType || question.questionType === selectedFilterQuestionType
     );
     setFilteredQuestions(newFilteredQuestions);
   }, [selectedFilterQuestionType, questions]);
 
-  const searchFilteredQuestions = questions.filter(
+  const searchFilteredQuestions = questions?.filter(
     (question) =>
       question.question.toLowerCase().includes(searchTerm) &&
       (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
@@ -378,7 +350,7 @@ const QuestionTemplate = () => {
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
 
-  const currentQuestions = searchFilteredQuestions.slice(
+  const currentQuestions = searchFilteredQuestions?.slice(
     indexOfFirstQuestion,
     indexOfLastQuestion
   );
@@ -495,10 +467,12 @@ const QuestionTemplate = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 500,
+    maxHeight: '90vh', // Set a maximum height
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
     borderRadius: 2,
+    overflow: 'auto', // Enable scrolling
   };
 
 
@@ -506,6 +480,7 @@ const QuestionTemplate = () => {
   return (
     <Container >
       <div className='question-template-container'>
+
         <div className="" style={{ marginBottom: '-200px' }}>
           <div className=" " id="filter">
             <Box sx={{ width: 190 }}>
@@ -526,14 +501,25 @@ const QuestionTemplate = () => {
               </FormControl>
             </Box>
           </div>
-          <div className="question-card-footer ">
-            <button
-              onClick={handleOpenAddQuestionModal}
-              className="btn btn-light mt-3 mb-2"
-              style={{ color: "white", backgroundColor: "#365486" }}
-            >
-              Add More Question
-            </button>
+          <div className="question-card-footer d-block">
+            <div>
+              <button
+                onClick={() => { navigate('/upload') }}
+                className="btn btn-light mb-2"
+                style={{ color: "white", backgroundColor: "#365486" }}
+              >
+                Add Bulk Question
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={handleOpenAddQuestionModal}
+                className="btn btn-light"
+                style={{ color: "white", backgroundColor: "#365486" }}
+              >
+                Add More Question
+              </button>
+            </div>
           </div>
           <div style={{ textAlign: 'center' }} >
             <input
@@ -545,17 +531,14 @@ const QuestionTemplate = () => {
             />
           </div>
         </div>
-
-
-
         <div className="question-template">
           {error && <p>Error: {error}</p>}
-          {currentQuestions.length > 0 ? (
+          {currentQuestions?.length > 0 ? (
             <>
               <h5>Uploaded Questions</h5>
               <div style={{ gridColumn: "1 / -1", justifySelf: "end" }}>
                 <BasicPagination
-                  totalQuestions={filteredQuestions.length}
+                  totalQuestions={filteredQuestions?.length}
                   questionsPerPage={questionsPerPage}
                   page={currentPage}
                   onPageChange={handlePageChange}
@@ -830,111 +813,103 @@ const QuestionTemplate = () => {
           aria-labelledby="edit-question-modal-title"
         >
           <Box sx={modalStyle}>
-            <Typography id="edit-question-modal-title" variant="h6" component="h2" gutterBottom>
-              Edit Question
-            </Typography>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Question"
-              variant="outlined"
-              value={editedQuestion.question}
-              onChange={(e) => {
-                setEditedQuestion({
-                  ...editedQuestion,
-                  question: e.target.value,
-                });
-                validateField("question", e.target.value);
-              }}
-              error={!!errors.question}
-              helperText={errors.question}
-            />
-            {editedQuestion.options.map((option, index) => (
-              <TextField
-                key={index}
-                fullWidth
-                margin="normal"
-                label={`Option ${index + 1}`}
-                variant="outlined"
-                value={option}
-                onChange={(e) => {
-                  const updatedOptions = [...editedQuestion.options];
-                  updatedOptions[index] = e.target.value;
-                  setEditedQuestion({
-                    ...editedQuestion,
-                    options: updatedOptions,
-                  });
-                  validateField("options", e.target.value);
-                }}
-                error={!!errors.individualOptions && !!errors.individualOptions[index]}
-                helperText={errors.individualOptions && errors.individualOptions[index]}
-              />
-            ))}
-            {errors.options && (
-              <Typography color="error">{errors.options}</Typography>
-            )}
-            {editedQuestion.correctOptions.map((option, index) => (
-              <FormControl key={index} fullWidth margin="normal" error={!!errors.individualCorrectOptions && !!errors.individualCorrectOptions[index]}>
-                <InputLabel id={`correct-option-${index}-label`}>Correct Option {index + 1}</InputLabel>
-                <Select
-                  labelId={`correct-option-${index}-label`}
-                  value={option}
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Typography id="edit-question-modal-title" variant="h6" component="h2" gutterBottom>
+                Edit Question
+              </Typography>
+              <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Question"
+                  variant="outlined"
+                  value={editedQuestion.question}
                   onChange={(e) => {
-                    const updatedCorrectOptions = [...editedQuestion.correctOptions];
-                    updatedCorrectOptions[index] = e.target.value;
                     setEditedQuestion({
                       ...editedQuestion,
-                      correctOptions: updatedCorrectOptions,
+                      question: e.target.value,
                     });
-                    validateField("correctOptions", e.target.value, index);
+                    validateField("question", e.target.value);
                   }}
-                  label={`Correct Option ${index + 1}`}
-                >
-                  <MenuItem value="">
-                    <em>Select Correct Option</em>
-                  </MenuItem>
-                  {editedQuestion.options.map((opt, i) => (
-                    <MenuItem key={i} value={opt}>
-                      {opt}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {errors.individualCorrectOptions && errors.individualCorrectOptions[index] && (
-                  <FormHelperText>{errors.individualCorrectOptions[index]}</FormHelperText>
+                  error={!!errors.question}
+                  helperText={errors.question}
+                />
+                {editedQuestion.options.map((option, index) => (
+                  <TextField
+                    key={index}
+                    fullWidth
+                    margin="normal"
+                    label={`Option ${index + 1}`}
+                    variant="outlined"
+                    value={option}
+                    onChange={(e) => {
+                      const updatedOptions = [...editedQuestion.options];
+                      updatedOptions[index] = e.target.value;
+                      setEditedQuestion({
+                        ...editedQuestion,
+                        options: updatedOptions,
+                      });
+                      validateField("options", e.target.value);
+                    }}
+                    error={!!errors.individualOptions && !!errors.individualOptions[index]}
+                    helperText={errors.individualOptions && errors.individualOptions[index]}
+                  />
+                ))}
+                {errors.options && (
+                  <Typography color="error">{errors.options}</Typography>
                 )}
-              </FormControl>
-            ))}
-            {errors.correctOptions && (
-              <Typography color="error">{errors.correctOptions}</Typography>
-            )}
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-              <MuiButton onClick={handleCloseEditQuestionModal} sx={{ mr: 1 }}>
-                Cancel
-              </MuiButton>
-              <MuiButton
-                variant="contained"
-                color="primary"
-                onClick={validUpdatedQuestion}
-              >
-                Save Changes
-              </MuiButton>
+                {editedQuestion.correctOptions.map((option, index) => (
+                  <FormControl key={index} fullWidth margin="normal" error={!!errors.individualCorrectOptions && !!errors.individualCorrectOptions[index]}>
+                    <InputLabel id={`correct-option-${index}-label`}>Correct Option {index + 1}</InputLabel>
+                    <Select
+                      labelId={`correct-option-${index}-label`}
+                      value={option}
+                      onChange={(e) => {
+                        const updatedCorrectOptions = [...editedQuestion.correctOptions];
+                        updatedCorrectOptions[index] = e.target.value;
+                        setEditedQuestion({
+                          ...editedQuestion,
+                          correctOptions: updatedCorrectOptions,
+                        });
+                        validateField("correctOptions", e.target.value, index);
+                      }}
+                      label={`Correct Option ${index + 1}`}
+                    >
+                      <MenuItem value="">
+                        <em>Select Correct Option</em>
+                      </MenuItem>
+                      {editedQuestion.options.map((opt, i) => (
+                        <MenuItem key={i} value={opt}>
+                          {opt}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.individualCorrectOptions && errors.individualCorrectOptions[index] && (
+                      <FormHelperText>{errors.individualCorrectOptions[index]}</FormHelperText>
+                    )}
+                  </FormControl>
+                ))}
+                {errors.correctOptions && (
+                  <Typography color="error">{errors.correctOptions}</Typography>
+                )}
+              </Box>
+
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                <MuiButton onClick={handleCloseEditQuestionModal} sx={{ mr: 1 }}>
+                  Cancel
+                </MuiButton>
+                <MuiButton
+                  variant="contained"
+                  color="primary"
+                  onClick={validUpdatedQuestion}
+                >
+                  Save Changes
+                </MuiButton>
+              </Box>
             </Box>
           </Box>
         </MuiModal>
-        {/* <Modal show={showPopup} onHide={() => setShowConfirmationModal(false)} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
-          <Modal.Header>
-            <Modal.Title>Confirm Delete</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this question?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowPopup(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleConfirmDelete}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
+
       </div>
     </Container>
   );
