@@ -337,7 +337,7 @@ function SidebarTopics() {
               LXP
             </Typography>
             <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', marginRight: "100px" }} >
-              <Button onClick={() => navigate(-1)}
+              <Button onClick={() => navigate(`/LearnerCourseLandingPage/${courseId}`)}
                 variant="contained"
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 id="learner_courseView_backbtn"

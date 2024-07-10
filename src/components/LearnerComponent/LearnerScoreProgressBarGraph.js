@@ -62,7 +62,7 @@ function LearnerScoreProgressBarGraph() {
     }, [scoreProgressSelector]);
  
     return (
-        <Card style={{backgroundColor:"whitesmoke",height:'400px'}}>
+        <Card style={{backgroundColor:"whitesmoke",height: "fit-content"}}>
             <canvas ref={chartRef} style={{ width: '300px', height: '350px' }}></canvas>
         </Card>
     );

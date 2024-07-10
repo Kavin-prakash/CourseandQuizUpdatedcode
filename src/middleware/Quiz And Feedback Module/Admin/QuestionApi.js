@@ -3,6 +3,7 @@ import { DELETE_QUIZ_QUESTION_REQUEST, deleteQuizQuestionSuccess, deleteQuizQues
 import { UPDATE_QUIZ_QUESTION_REQUEST, updateQuizQuestionSuccess, updateQuizQuestionFailure } from '../../../actions/Quiz And Feedback Module/Admin/UpdateQuizQuestionAction';
 
 export const BulkUploadQuestion = async (files, quizId) => {
+  console.log("file api",files, quizId);
   if (files && files.length > 0) {
     const file = files[0];
     const formData = new FormData();

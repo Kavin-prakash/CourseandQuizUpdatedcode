@@ -53,6 +53,7 @@ import ReviewAnswers from '../../components/Quiz And Feedback Module/QuizCompone
 import LearnerScorePage from '../../components/Quiz And Feedback Module/QuizComponents/Learner/LearnerScorePage';
 import TopicFeedbackquestion from '../../components/Quiz And Feedback Module/QuizComponents/Learner/FetchTopicFeedbackQuestion';
 import FetchQuizFeedbackQuestion from '../../components/Quiz And Feedback Module/QuizComponents/Learner/FetchQuizFeedbackQuestion';
+import LearnerCourseLandingPage from '../.././components/LearnerComponent/LearnerCourseLandingPage';
 
 // course team
 
@@ -85,6 +86,7 @@ function Routing() {
         <Route path="/LearnerenrolledCourse" element={<GetEnrollment />}></Route>
         {/* <Route path="/ViewTopics" element={<SidebarTopics />}></Route> */}
         <Route path="/ViewScore" element={<TopicScore />}></Route>
+        <Route path='/LearnerCourseLandingPage/:id' element={<LearnerCourseLandingPage/>}></Route>
         <Route path="/ViewTopics/:courseId" element={<SidebarTopics />}></Route>
         {/* <Route path="/PDF" element={<PDFViewer />}></Route>
         <Route path="/PPT" element={<PptViewerComponent />}></Route> */}

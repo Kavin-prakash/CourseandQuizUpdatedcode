@@ -25,13 +25,10 @@ import { Modal, Button, Container } from 'react-bootstrap';
 import { maxWidth } from '@mui/system';
 import { CardActionArea } from '@mui/material';
 import { BeatLoader } from 'react-spinners';
-import {Row} from 'react-bootstrap'
-  
+ 
 const CourseComponent = ({ loading, error, search }) => {
   const courses = useSelector((state) => state.fetchcourse.courses);
-  console.log('courses ',courses )
   const Enrolledcourseslength = useSelector((state) => state.enroll.course[0]);
-  console.log('Enrolledcourseslength',Enrolledcourseslength)
   const dispatch = useDispatch();
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -41,6 +38,12 @@ const CourseComponent = ({ loading, error, search }) => {
   const navigate = useNavigate();
   const alertsuccess = useRef();
   const [isLoading, setIsLoading] = useState(false);
+
+
+  const handleViewCourseClick = (courseId) => {
+    navigate(`/LearnerCourseLandingPage/${courseId}`);
+  }
+
  
   const alertdisplayenrollment = () => {
     const Toast = Swal.mixin({
@@ -180,6 +183,7 @@ const CourseComponent = ({ loading, error, search }) => {
  
       <div id="Learner-course-page-division">
         <Container fluid id='Learner-course-Langing-Page' >
+ 
           {filteredCourses.map((course, index) => (
             <div key={index}>
               <Card
@@ -227,9 +231,9 @@ const CourseComponent = ({ loading, error, search }) => {
                         Level: {course.level}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" >
-                        Category: {course.category}
+                        Category: {course.catagory}
                       </Typography>
-                      <Button variant='outline' style={{color:'blue'}} onClick={() => handleOpen(course)}>View More</Button>
+                      <Button variant='outline' style={{color:'blue'}} onClick={() => handleViewCourseClick(course.courseId)}>View </Button>
                     </div>
                   </CardContent>
                 </Box>
@@ -237,25 +241,7 @@ const CourseComponent = ({ loading, error, search }) => {
               <Container>
  
  
-                <Modal backdrop='static' centered show={open && selectedCourse && selectedCourse.courseId === course.courseId} onHide={handleClose}>
-                  <Modal.Header closeButton>
-                    <Modal.Title><b>Title:</b>{course.title}</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <b> Description:</b>{course.description}
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Close</Button>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleEnrollCourse(course.courseId)}
-                      disabled={isEnrolled.has(course.courseId)}
-                    >
-                      {isEnrolled.has(course.courseId) ? 'Enrolled' : 'Enroll'}
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
- 
+            
               </Container>
  
             </div>

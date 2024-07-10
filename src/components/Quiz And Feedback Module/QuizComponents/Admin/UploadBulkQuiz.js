@@ -221,7 +221,7 @@ const UploadBulkQuiz = () => {
 
   const handleFileUpload = async (e) => {
     e.preventDefault();
-    console.log("handleFileUpload: ", quizId);
+    console.log("handleFileUpload: ",files, quizId);
     BulkUploadQuestion(files, quizId);
     const Toast = Swal.mixin({
       className: "swal2-toast",
@@ -241,9 +241,9 @@ const UploadBulkQuiz = () => {
       title: "Bulk Uploaded Successfully",
       color: 'white'
     });
-    setTimeout(function () {
-      navigate(`/createquiz`);
-    }, 2000);
+    // setTimeout(function () {
+    //   navigate(`/createquiz`);
+    // }, 2000);
   };
   return (
     <>

@@ -219,6 +219,7 @@ function QuizInstruction() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const topicId = sessionStorage.getItem("topicId");
+  const courseId = sessionStorage.getItem('courseId')
  
   const attemptremains=sessionStorage.getItem("attemptRemaining");
   console.log("attemptremains",attemptremains)
@@ -278,21 +279,21 @@ function QuizInstruction() {
       <Container fluid >
         <div>
           <div>
-            <button
+          <button
               className="btn btn-light"
               style={{
-                marginLeft:"90%",
-                marginTop:"2%",
+                marginLeft: "90%",
+                marginTop: "2%",
                 backgroundColor: "#365486",
                 color: "white",
-                width:"50",
+                width: "50",
               }}
               onClick={() => {
-                navigate("/quizengine");
+                navigate(`/ViewTopics/${courseId}`);
               }}
             >
               Back
-            </button>
+              </button>
           </div>
           <Container id="instructionpage-container" style={divStyle}>
             <h4 style={{fontWeight:"bold" ,textAlign:"center", paddingTop:"2%"}}>Quiz Instruction</h4>

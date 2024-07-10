@@ -218,7 +218,7 @@
    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
  }
  
- .overall-progress {
+ .overall-progress_dashboard {
    background: linear-gradient(135deg, #abb7ec 0%, #bfa2dd 100%);
    border-radius: 2rem;
    padding: 2rem;
@@ -282,8 +282,8 @@
    z-index: 2;
  }
  .overall-progress,
- .score-progress,
- .ongoing-courses {
+ .score-progress_dashboard,
+ .ongoing-courses_dashboard {
   flex: 1 1 30%;
   margin: 0.5rem;
    background: rgb(255, 255, 255);
@@ -291,6 +291,7 @@
    padding: 1.5rem;
    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
    min-width: 250px;
+   height: fit-content;
  
    
  }
@@ -363,7 +364,7 @@
    animation: slideIn 0.5s ease-in-out;
  }
  
- .ongoing-courses {
+ .ongoing-courses_dashboard {
    background: linear-gradient(135deg, #f6f9fc 0%, #e9f1f9 100%);
    border-radius: 10px;
    padding: 2rem;
@@ -371,7 +372,7 @@
  
  }
  
- .ongoing-courses h6 {
+ .ongoing-courses_dashboard h6 {
    font-size: 1rem;
    color: #333;
    /* margin-bottom: 1.5rem; */

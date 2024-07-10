@@ -493,8 +493,8 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
           <div className="dashboard-lower-half">
  
             {hasOngoingCourses && (
-              <div className="overall-progress">
-                <Typography variant="h6" className="progress-title">Overall Progress</Typography>
+              <div className="overall-progress_dashboard">
+                <Typography variant="h6" className="progress-title_dashboard">Overall Progress</Typography>
                 <div id='Learner_Progress'>
  
                   <div className="progress-container">
@@ -516,7 +516,7 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
             }
  
             {hasScoreData && (
-              <div className="score-progress">
+              <div className="score-progress_dashboard">
                 <>
                   <Typography variant="h6">Score Progress</Typography>
                   <LearnerScoreProgressBarGraph />
@@ -526,11 +526,11 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search }) => {
  
  
             {hasOngoingCourses && (
-              <div className="ongoing-courses">
+              <div className="ongoing-courses_dashboard">
                 <>
                   <Typography variant="h6">Ongoing Courses</Typography>
                   {viewcourse.map((course, index) => (
-                    <Card key={index} className="ongoing-course-card" style={{ width: 300, height: 90, borderRadius: '20px' }} onClick={() => handleongoingClick(course.enrolledCourseId)}>
+                    <Card key={index} className="ongoing-course-card" style={{ width: 260, height: 90, borderRadius: '20px' }} onClick={() => handleongoingClick(course.enrolledCourseId)}>
                       <CardMedia
                         style={{ width: 100 }}
                         component="img"
