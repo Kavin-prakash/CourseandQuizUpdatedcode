@@ -130,6 +130,11 @@ import { FetchQuizFeedbackQuestionApi } from '../middleware/Quiz And Feedback Mo
 
 // COURSE TEAMS 
 
+import DeleteCourseFeedbackApi from "../middleware/Course/Course/DeleteCourseFeedbackApi";
+import UpdateCourseFeedbackApi from "../middleware/Course/Course/UpdateCourseFeedbackApi";
+import DeleteCourseFeedbackReducer from "../reducers/Course/Course/DeleteCourseFeedbackReducer";
+
+import UpdateCourseFeedbackReducer from "../reducers/Course/Course/UpdateCourseFeedbackReducer";
 // import fetchTopicsReducer from '../../reducer/Course/CTopic/FetchTopicReducer';
 import fetchTopicsReducer from '../reducers/Course/Topic/FetchTopicReducer'
 
@@ -296,6 +301,8 @@ const rootReducer = combineReducers({
   fetchContentUrl: fetchContentUrlReducer,
   addcourse: AddCourseReducer,
   fetchindividualCourse: fetchCourseReducer,
+  updatecoursefeedback: UpdateCourseFeedbackReducer,
+
 
 
 
@@ -340,7 +347,7 @@ const store = createStore(
     fetchContentApi, deleteContentApi, fetchIndividualContentApi,
     updateContentApi, fetchContentUrlApi, fetchcourseApi,
     //learner
-    LearnerdashboardApi, watchTimeApi, IndividualEnrollCourseApi,
+    LearnerdashboardApi, watchTimeApi, IndividualEnrollCourseApi, UpdateCourseFeedbackApi,
     //  updatePasswordApi
   )
 );

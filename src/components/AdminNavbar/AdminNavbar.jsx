@@ -229,7 +229,8 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <Link
+         <Tooltip title='Home' placement="left-start" arrow>
+         <Link
             to="/admindashboard"
             style={{ textDecoration: "none", color: "#27235c" }}
           >
@@ -254,8 +255,9 @@ export default function MiniDrawer() {
               </ListItemButton>
             </ListItem>
           </Link>
-
-          <Tooltip title='LXP Courses'>
+         </Tooltip>
+ 
+          <Tooltip title='LXP Courses' placement="left-start" arrow>
             <Link
               to="/admincourse"
               style={{ textDecoration: "none", color: "#27235c" }}
@@ -286,7 +288,7 @@ export default function MiniDrawer() {
             </Link>
           </Tooltip>
 
-          <Tooltip title="Individual Learner Details">
+          <Tooltip title="Individual Learner Details" placement="left-start" arrow>
             <Link
               to="/learnerviewall"
               style={{ textDecoration: "none", color: "#27235c" }}
@@ -317,7 +319,7 @@ export default function MiniDrawer() {
             </Link>
           </Tooltip>
 
-          <Tooltip title='LXP Report'>
+          <Tooltip title='LXP Report' placement="left-start" arrow>
 
             <Link
               style={{ textDecoration: "none", color: "#27235c" }}

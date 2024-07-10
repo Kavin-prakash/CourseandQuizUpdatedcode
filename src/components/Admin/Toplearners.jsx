@@ -68,7 +68,7 @@ const Toplearners = ({ fetchToplearnersRequest, toplearners }) => {
                           style={{ textDecoration: "none", color: "black" }}
                         >
                           <React.Fragment>
-                            {toplearner.profilePhoto === "http://localhost:5199/wwwroot/LearnerProfileImages/" ?
+                          {toplearner.profilePhoto === "http://localhost:5199/wwwroot/LearnerProfileImages/" ?
                               <img src={user} alt="img"
                                 style={{
                                   width: "50px",
@@ -84,15 +84,6 @@ const Toplearners = ({ fetchToplearnersRequest, toplearners }) => {
                                   marginRight: "15px",
                                 }} />
                             }
-                            {/* <img
-                              src={toplearner.profilePhoto}
-                              style={{
-                                width: "50px",
-                                height: "50px",
-                                borderRadius: "50%",
-                                marginRight: "15px",
-                              }}
-                            /> */}
                             <span className="name-animation">
                               {<b>{toplearner.learnerName}</b>}
                             </span>
