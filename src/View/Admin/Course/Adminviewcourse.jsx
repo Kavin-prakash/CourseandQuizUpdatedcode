@@ -35,6 +35,8 @@ import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { RESET_UPDATE_COURSES, updateCoursesRequest, updateCoursesSuccess } from "../../../actions/Admin/Updatecourse";
 import ClearIcon from "@mui/icons-material/Clear";
+import Rating from '@mui/material/Rating';
+
 
 const Adminviewcourse = ({
   fetchCourses,
@@ -604,13 +606,14 @@ const Adminviewcourse = ({
                     aria-label="sticky table"
                     style={{ backgroundColor: "#f3f3f3" }}
                   >
-                    <TableHead style={{backgroundColor:'black'}}>
+                    <TableHead style={{ backgroundColor: 'black' }}>
                       <TableRow sx={{ bgcolor: "#23275c" }}>
                         <TableCell>Title</TableCell>
                         <TableCell>Category</TableCell>
                         <TableCell>Duration</TableCell>
                         <TableCell>Level</TableCell>
                         <TableCell>Created Date</TableCell>
+                        <TableCell>Rating</TableCell>
                         <TableCell align="right">View</TableCell>
                         <TableCell align="right">Edit</TableCell>
                         <TableCell align="right">Delete</TableCell>
@@ -635,6 +638,10 @@ const Adminviewcourse = ({
                               " " +
                               course.createdAt?.split("T")[1] || ""}
                           </TableCell>
+                          <TableCell align="rigth">
+                            <Rating style={{ opacity:"100%" }} name="disabled" value={course.averageRating} disabled />
+                          </TableCell>
+
                           <TableCell align="right">
 
                             <Link to={'/coursecontent/' + course.courseId}>

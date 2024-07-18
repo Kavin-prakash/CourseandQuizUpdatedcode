@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { fetchCoursesRequest } from "../../../actions/Admin/courseAction";
 import { Link } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
+import Rating from '@mui/material/Rating';
 
 const Admincourse = ({ fetchCourses, courses }) => {
   const [loading, setLoading] = useState(true);
@@ -31,26 +32,19 @@ const Admincourse = ({ fetchCourses, courses }) => {
   //     return <div className='spinnerclass'> <Spinner /></div>;
   // }
   return (
-    // <div id="admin_recentcourse">
-    <div id="">
+    <div id="admin_recentcourse">
 
       <Container fluid className="coursepagebody">
         <Row className="pt-3 contentbody">
-          {/* <Col>
-              <Col className="text-end mt-5">
-                <Link to="/addcourse">
-                  <Button>Add Course</Button>
-                </Link>
-              </Col>
-            </Col> */}
           <Row>
             <Col className="mt-5">
               <h3 style={{ fontWeight: "bold", color: "#27235C" }}>Recently Added Courses</h3>
             </Col>
+
             <Col className="text-end  mt-5" >
               <Link to="/addcourse">
                 <Button >
-                  
+
                   Create New Course</Button>
               </Link>
             </Col>
@@ -110,6 +104,9 @@ const Admincourse = ({ fetchCourses, courses }) => {
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           {course.category}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          <Rating style={{ opacity:"100%" }} name="disabled" value={course.averageRating} disabled />
                         </Typography>
                       </CardContent>
                     </CardActionArea>
