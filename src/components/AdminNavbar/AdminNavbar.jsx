@@ -118,16 +118,10 @@ export default function MiniDrawer() {
   const handleLogout = () => {
     // Clear session ID from storage
     // debugger
-    sessionStorage.removeItem("AdminSessionId"); // Replace "sessionId" with your actual session ID key
-    sessionStorage.removeItem("Role");
+   
     dispatch(successdata(false));
-
-    localStorage.removeItem("IndividualLearnerrowsPerPage");
-
-    localStorage.removeItem("LearnerrowsPerPage");
-
-    localStorage.removeItem("CourserowsPerPage")
-    localStorage.removeItem("rowsPerPage")
+    sessionStorage.clear();
+    localStorage.clear();
 
     // Navigate to login page or home page
     navigate("/"); // Replace "/login" with the path to your login page
@@ -229,34 +223,34 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-         <Tooltip title='Home' placement="left-start" arrow>
-         <Link
-            to="/admindashboard"
-            style={{ textDecoration: "none", color: "#27235c" }}
-          >
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+          <Tooltip title='Home' placement="left-start" arrow>
+            <Link
+              to="/admindashboard"
+              style={{ textDecoration: "none", color: "#27235c" }}
+            >
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  <FaHome style={{ color: "#27235c" }} />
-                </ListItemIcon>
-                <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-         </Tooltip>
- 
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FaHome style={{ color: "#27235c" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          </Tooltip>
+
           <Tooltip title='LXP Courses' placement="left-start" arrow>
             <Link
               to="/admincourse"
