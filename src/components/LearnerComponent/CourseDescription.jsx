@@ -1,173 +1,119 @@
-import React from 'react'
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import "../../Styles/Learner/GetEnrollment.css";
+
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { getIndividualEnrollCourseRequest } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
 import { useParams } from 'react-router-dom';
-//import Card from '@mui/material/Card';
-//import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-//import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
-import { Row, Col, Container } from "react-bootstrap";
-
-import { LogoDev } from "@mui/icons-material";
-import { FaHandPointRight } from "react-icons/fa";
-//-------------------------------
+import {
+  Card, CardContent, CardMedia, Typography,
+  Grid, Tabs, Tab, Box, Rating, Chip, Accordion, AccordionSummary, AccordionDetails
+} from '@mui/material';
+import { styled } from '@mui/system';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { getIndividualEnrollCourseRequest } from '../../actions/LearnerAction/FetchIndividualEnrolledCourseAction';
+ 
+const StyledCard = styled(Card)(({ theme }) => ({
+  margin: '60px auto',
+  maxWidth: '90%',
+  boxShadow: '0px 8px 16px rgba(35, 39, 92, 0.2)',
+  borderRadius: '16px',
+  overflow: 'hidden',
+  background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
+}));
+ 
+const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
+  height: 300,
+  objectFit: 'cover',
+}));
+ 
+const StyledChip = styled(Chip)(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
+ 
 function CourseDescription() {
-    const { courseId } = useParams();
-    const dispatch = useDispatch();
-    const [isExpanded, setIsExpanded] = useState(false);
-    const course = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse);
-    console.log("course", course);
-    const handleToggleDescription = () => {
-        setIsExpanded(!isExpanded);
-    };
-    useEffect(() => {
-        dispatch(getIndividualEnrollCourseRequest(courseId));
-    }, [courseId])
-    console.log(course);
-    return (
-        <>
-
-            {/* <Card sx={{ display: 'flex', marginLeft: '100px', marginTop: '60px', marginRight: '100px', height: 'auto', fontSize: '18px', boxShadow: '0px 4px 8px #23275c', }}>
-                <CardMedia
-                    style={{ objectFit: 'cover', width: '40%' }}
-                    component="img"
-                    height="380"
-
-                    image={course.thumbnailimage}
-                    alt="Course-Thumbnail"
-                />
-                <CardContent sx={{ flex: 1 }}>
-                    <Typography gutterBottom variant="h4" component="div">
-                        <b>{course.enrolledCoursename}</b>
-
-
-                    </Typography>
-
-                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                        <b>Category:</b> {course.enrolledcoursecategory}
-                    </Typography>
-                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                        <b>Level:</b> {course.enrolledcourselevels}
-                    </Typography>
-                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                        <b>Topic Description</b> {course.enrolledcourselevels}
-                    </Typography>
-                    <Typography variant="h7" display="block"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                        <b>Course Description: </b>
-                        {course.enrolledcoursedescription ? (isExpanded ? course.enrolledcoursedescription : `${course.enrolledcoursedescription.substring(0, 100)}...`) : 'No description available'}
-                    </Typography>
-
-                    {course.enrolledcoursedescription && course.enrolledcoursedescription.length > 100 && (
-                        <Button size="small" color="primary" onClick={handleToggleDescription}>
-                            {isExpanded ? 'Show Less' : 'Show More'}
-                        </Button>
-                    )}
-                    <br />
-
-                </CardContent>
-            </Card> */}
-            <Card sx={{
-                display: 'flex',
-                margin: '60px auto',
-                maxWidth: '90%',
-                height: 'auto',
-                fontSize: '18px',
-                boxShadow: '0px 8px 16px rgba(35, 39, 92, 0.2)',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
-
-            }}>
-                <CardMedia
-                    style={{
-                        // // objectFit: 'cover',
-                        // height:'300px',
-                        // width: "300px",
-                        // // minHeight: '400px',
-
-                        objectFit: "cover",
-                        height: "140px",
-                        width: "240px",
-                        marginTop:'80px',
-                        boxShadow: '4px 0 8px rgba(0, 0, 0, 0.1)'
-
-                    }}
-                    component="img"
-                    image={course.thumbnailimage}
-                    alt="Course-Thumbnail"
-                />
-                <CardContent sx={{
-                    flex: 1,
-                    padding: '30px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                }}>
-                    <Typography gutterBottom variant="h4" component="div" sx={{
-                        fontWeight: 'bold',
-                        color: '#23275c',
-                        marginBottom: '20px',
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.1)'
-                    }}>
-                        {course.enrolledCoursename}
-                    </Typography>
-                    <Typography variant="h7" display="block" sx={{ marginBottom: '15px' }}>
-                        <FaHandPointRight style={{ fontSize: '20px', color: '#4a4e8a', marginRight: '10px', verticalAlign: 'middle' }} />
-                        <span style={{ fontWeight: 'bold', color: '#23275c' }}>Category:</span>
-                        <span style={{ color: '#4a4e8a' }}>{course.enrolledcoursecategory}</span>
-                    </Typography>
-                    <Typography variant="h7" display="block" sx={{ marginBottom: '15px' }}>
-                        <FaHandPointRight style={{ fontSize: '20px', color: '#4a4e8a', marginRight: '10px', verticalAlign: 'middle' }} />
-                        <span style={{ fontWeight: 'bold', color: '#23275c' }}>Level:</span>
-                        <span style={{ color: '#4a4e8a' }}>{course.enrolledcourselevels}</span>
-                    </Typography>
-                    <Typography variant="h7" display="block" sx={{ marginBottom: '15px' }}>
-                        <FaHandPointRight style={{ fontSize: '20px', color: '#4a4e8a', marginRight: '10px', verticalAlign: 'middle' }} />
-                        <span style={{ fontWeight: 'bold', color: '#23275c' }}>Topic Description:</span>
-                        <span style={{ color: '#4a4e8a' }}>{course.enrolledcourselevels}</span>
-                    </Typography>
-                    <Typography variant="h7" display="block" sx={{ marginBottom: '15px' }}>
-                        <FaHandPointRight style={{ fontSize: '20px', color: '#4a4e8a', marginRight: '10px', verticalAlign: 'middle' }} />
-                        <span style={{ fontWeight: 'bold', color: '#23275c' }}>Course Description:</span>
-                        <span style={{ color: '#4a4e8a' }}>
-                            {course.enrolledcoursedescription ? (isExpanded ? course.enrolledcoursedescription : `${course.enrolledcoursedescription.substring(0, 100)}...`) : 'No description available'}
-                        </span>
-                    </Typography>
-                    {course.enrolledcoursedescription && course.enrolledcoursedescription.length > 100 && (
-                        <Button
-                            size="small"
-                            color="primary"
-                            onClick={handleToggleDescription}
-                            sx={{
-                                alignSelf: 'flex-start',
-                                marginTop: '10px',
-                                background: '#23275c',
-                                color: 'white',
-                                padding: '8px 16px',
-                                borderRadius: '20px',
-                                '&:hover': {
-                                    background: '#ffffff',
-                                }
-                            }}
-                        >
-                            {isExpanded ? 'Show Less' : 'Show More'}
-                        </Button>
-                    )}
-                </CardContent>
-            </Card>
-
-
-        </>
-
-
-
-    )
+  const { courseId } = useParams();
+  const [tabValue, setTabValue] = useState(0);
+ 
+  const dispatch = useDispatch();
+  const course = useSelector((state) => state.fetchEnrolledIndividualCourse.individualcourse);
+ 
+  useEffect(() => {
+    dispatch(getIndividualEnrollCourseRequest(courseId));
+  }, [courseId, dispatch]);
+ 
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+ 
+  return (
+    <StyledCard>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <StyledCardMedia
+            component="img"
+            image={course.thumbnailimage}
+            alt="Course Thumbnail"
+          />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <CardContent>
+            <Typography variant="h4" gutterBottom>
+              {course.enrolledCoursename}
+            </Typography>
+            {/* <Box display="flex" alignItems="center" mb={2}>
+              <Rating value={4.5} readOnly />
+              <Typography variant="body2" ml={1}>
+                (123 reviews)
+              </Typography>
+            </Box> */}
+            <Typography variant="body1" paragraph>
+              {course.enrolledcoursedescription}
+            </Typography>
+            <Box mb={2}>
+              <StyledChip label={`Category: ${course.enrolledcoursecategory}`} />
+              <StyledChip label={`Level: ${course.enrolledcourselevels}`} />
+            </Box>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="course tabs">
+          <Tab label="Topics" />
+         
+         
+        </Tabs>
+      </Box>
+            <Box p={3}>
+        {tabValue === 0 && (
+          <div>
+            {course.topics && course.topics.map((topic) => (
+              <Accordion key={topic.topicId}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`topic-${topic.topicId}-content`}
+                  id={`topic-${topic.topicId}-header`}
+                >
+                  <Typography variant="h6">{topic.topicName}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    {topic.topicDescription}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </div>
+        )}
+        {tabValue === 1 && (
+          <Typography>Resources content goes here</Typography>
+        )}
+        {tabValue === 2 && (
+          <Typography>Discussion content goes here</Typography>
+        )}
+      </Box>
+          </CardContent>
+        </Grid>
+      </Grid>
+     
+     
+    </StyledCard>
+  );
 }
-
+ 
 export default CourseDescription;
+ 

@@ -9,6 +9,7 @@ import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/Top
 import Timer from "./Timer";
 import ConfirmationModal from "./ConfirmationModal";
 import Swal from "sweetalert2";
+import DynamicTimer from "./Timer";
  
  
 const AttemptQuiz = () => {
@@ -122,23 +123,33 @@ const AttemptQuiz = () => {
  
    
     const showAlert = () => {
-      const Toast = Swal.mixin({
-        className: "swal2-toast",
-        toast: true,
-        position: "top",
-        showConfirmButton: false,
-        timer: 2000,
-        background: "#fa4d56",
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: "warning",
+      // const Toast = Swal.mixin({
+      //   className: "swal2-toast",
+      //   toast: true,
+      //   position: "top",
+      //   showConfirmButton: false,
+      //   timer: 2000,
+      //   background: "#fa4d56",
+      //   timerProgressBar: true,
+      //   didOpen: (toast) => {
+      //     toast.onmouseenter = Swal.stopTimer;
+      //     toast.onmouseleave = Swal.resumeTimer;
+      //   },
+      // });
+      // Toast.fire({
+      //   icon: "warning",
+      //   title: "Here you couldn't copy the text",
+      //   color: "white",
+      // });
+ 
+      Swal.fire({
+        customClass:"msq-alert-msg ",
         title: "Here you couldn't copy the text",
-        color: "white",
+        icon: "warning",
+        confirmButtonText: "Ok",
+        cancelButtonText: "Cancel",
+        showCancelButton: true,
+        showCloseButton: true
       });
     };
  
@@ -175,7 +186,36 @@ const AttemptQuiz = () => {
         } else if (selectedForQuestion.length < 3) {
           updatedOptions[questionId] = [...selectedForQuestion, optionValue];
         } else {
-          alert("You can select a maximum of 3 options.");
+          // alert("You can select a maximum of 3 options.");
+ 
+          // Swal.fire({
+          //   title: "You can select a maximum of 3 options",
+          //   customClass:"msq-alert-msg ",
+          //   showClass: {
+          //     popup: `
+          //       animate__animated
+          //       animate__fadeInUp
+          //       animate__faster
+          //     `
+          //   },
+          //   hideClass: {
+          //     popup: `
+          //       animate__animated
+          //       animate__fadeOutDown
+          //       animate__faster
+          //     `
+          //   }
+          // });
+ 
+          Swal.fire({
+            customClass:"msq-alert-msg ",
+            title: "You can select maximum of 3 options",
+            icon: "warning",
+            confirmButtonText: "Ok",
+            cancelButtonText: "Cancel",
+            showCancelButton: true,
+            showCloseButton: true
+          });
         }
       } else {
         updatedOptions[questionId] = [optionValue];
@@ -266,7 +306,7 @@ const AttemptQuiz = () => {
               {Math.round(progressPercentage)}% COMPLETED
             </div>
           </div>
-          {progressPercentage === 100 ? (
+          {/* {progressPercentage === 100 ? (
             <button
               className="attempt-quiz-finish-attempt"
               onClick={handleSubmit}
@@ -282,8 +322,15 @@ const AttemptQuiz = () => {
             >
               Review all questions
             </button>
-          )}
+          )} */}
  
+            <button
+              className="attempt-quiz-finish-attempt"
+              onClick={handleSubmit}
+            >
+              Review all questions
+            </button>
+           
           <div className="attempt-quiz-last-saved">
             Last saved: {new Date().toLocaleString()}
           </div>
@@ -291,10 +338,10 @@ const AttemptQuiz = () => {
         <div className="attempt-quiz-main-content">
           <br />
           <br />
-          <Timer />
+          <DynamicTimer />
           <div className="attempt-quiz-top-bar">
             <h2 className="attempt-quiz-quiz-question-number">
-     Question {currentQuestionIndex + 1} of {questions.length}
+              Question {currentQuestionIndex + 1} of {questions.length}
             </h2>
             <button
               className={`attempt-quiz-flag-button ${
@@ -397,6 +444,4 @@ const AttemptQuiz = () => {
   );
 };
  
-export default AttemptQuiz;        
- 
- 
+export default AttemptQuiz;  

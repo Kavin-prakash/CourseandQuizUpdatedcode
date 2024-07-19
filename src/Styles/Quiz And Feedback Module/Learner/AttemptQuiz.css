@@ -7,10 +7,11 @@
 
 body {
   background-color: #f0f2f5;
+  /* height: 750px; */
 }
 
 .attempt-quiz-page {
-  margin-bottom: 70px;
+  /* margin-bottom: 20px; */
   display: flex;
   height: 100vh;
   background-color: #f0f2f5;
@@ -40,7 +41,7 @@ body {
   overflow-y: auto;
   margin: auto;
   padding: auto;
-  margin-top: 5%;
+  margin-top: -1%;
 }
 
 .attempt-quiz-top-bar {
@@ -268,6 +269,7 @@ input[type="checkbox"] {
   border-radius: 5px;
 }
 
+
 .attempt-quiz-flag-button {
   display: flex;
   align-items: center;
@@ -277,6 +279,7 @@ input[type="checkbox"] {
   color: #333;
   font-size: 14px;
 }
+
 
 .attempt-quiz-flag-icon {
   display: inline-block;
@@ -288,10 +291,17 @@ input[type="checkbox"] {
   margin-right: 5px;
 }
 
+
 .attempt-quiz-flag-button.flagged {
   color: red;
 }
 
+
 .attempt-quiz-flag-button.flagged .attempt-quiz-flag-icon {
   background-image: url('https://cdn-icons-png.flaticon.com/512/395/395841.png');
+}
+
+.msq-alert-msg {
+  font-size: 10px;
+  color: #27235c;
 }

@@ -656,6 +656,7 @@ import LearnerScoreProgressBarGraph from './LearnerScoreProgressBarGraph';
 import profile1 from '../../Images/profile1.png';
 import { useNavigate } from 'react-router-dom';
 import { Center, background } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { Block } from '@mui/icons-material';
 import Lxp3 from '../../Images/LXP3.png';
 // import { CircularProgressbar } from 'react-circular-progressbar';
@@ -1155,18 +1156,23 @@ const LearnerDashboard = ({ enrolledCourses, loading, error, search, profileimag
               </div>
               <div className="stat-wave"></div>
             </Card>
+             <Link
+                    to={"/completedcourse"}
+                    style={{ textDecoration: "none" }}
+                  >
             <Card className="stat-card completed">
               <div className="stat-content">
                 <IconButton className="stat-icon">
                   <MilitaryTechRoundedIcon fontSize="large" />
                 </IconButton>
                 <div className="stat-text">
-                  <Typography variant="h6">Completed</Typography>
+                  <Typography variant="h6">Completed Course</Typography>
                   <Typography variant="h3" className="stat-number">{selectcompletecount}</Typography>
                 </div>
               </div>
               <div className="stat-wave"></div>
             </Card>
+            </Link>
           </div>
  
           <div className="dashboard-lower-half">
