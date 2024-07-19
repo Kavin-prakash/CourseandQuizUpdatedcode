@@ -88,15 +88,19 @@ export default function AddTopic(props) {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
+    // handleClose();
+
     console.log("createdispatch",topics);
     const isFormValid = validateTopicForm(topics, setErrors);
    
       if (isFormValid) {
         try {
-          dispatch(createTopicsRequest(topics))
-          dispatch(fetchTopicsRequest(id));
 
-    handleClose();
+          dispatch(createTopicsRequest(topics))
+
+          dispatch(fetchTopicsRequest(id));
+    setOpen(false);
+
  
  
         } catch (error) {
@@ -114,7 +118,10 @@ export default function AddTopic(props) {
     
 
    // navigate('/savedtopics')
-    // handleClose();
+    handleClose();
+        setOpen(false);
+
+    
   
 
   };

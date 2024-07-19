@@ -61,19 +61,21 @@ function SidebarTopics() {
       name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
       isOpen: false,
       topics: selectedCourse && selectedCourse.topics
-        ? selectedCourse.topics.map((topic) => ({
+        ? selectedCourse.topics.map((topic, index) => ({
           name: topic.topicName,
           topicid: topic.topicId,
           isQuiz: topic.isQuiz ? !topic.isAttemptOver : false,
           isFeedBack: topic.isFeedBack,
           isPassed: topic.isPassed,
           isAttemptOver: topic.isAttemptOver,
-          isOpen: false,
+          isOpen: index === 0,
+          isFeedbackGiven: false,
           materials: topic.materials
             ? topic.materials.map((material) => ({
               materialId: material.materialId,
               materialname: material.materialName,
               materiallink: material.material,
+              isCompleted: material.isCompleted,
               materialType: material.materialType,
             }))
             : [],
@@ -88,19 +90,21 @@ function SidebarTopics() {
         name: selectedCourse ? selectedCourse.enrolledCoursename : "Loading...",
         isOpen: false,
         topics: selectedCourse && selectedCourse.topics
-          ? selectedCourse.topics.map((topic) => ({
+          ? selectedCourse.topics.map((topic, index) => ({
             name: topic.topicName,
             topicid: topic.topicId,
-            isOpen: false,
+            isOpen: index === 0,
             isQuiz: topic.isQuiz ? !topic.isAttemptOver : false,
             isFeedBack: topic.isFeedBack,
             isPassed: topic.isPassed,
             isAttemptOver: topic.isAttemptOver,
+            isFeedbackGiven: false,
             materials: topic.materials
               ? topic.materials.map((material) => ({
                 materialId: material.materialId,
                 materialname: material.materialName,
                 materiallink: material.material,
+                isCompleted: material.isCompleted,
                 materialType: material.materialType,
               }))
               : [],
@@ -201,29 +205,24 @@ function SidebarTopics() {
   const toggleTopic = async (folderIndex, topicIndex, e) => {
     e.stopPropagation();
  
-    if (
-      (topicIndex >= 0 ||
-        completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name))
-    ) {
-      if (topicIndex === 0 || !folders[folderIndex].topics[topicIndex - 1].isQuiz) {
-        const updatedFolders = [...folders];
-        updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
-          (topic, index) => ({
-            ...topic,
-            isOpen: index === topicIndex,
-          })
-        );
-        setFolders(updatedFolders);
+    if (topicIndex === 0 || completedTopics.has(folders[folderIndex].topics[topicIndex - 1].name)) {
+      const updatedFolders = [...folders];
+      updatedFolders[folderIndex].topics = updatedFolders[folderIndex].topics.map(
+        (topic, index) => ({
+          ...topic,
+          isOpen: index === topicIndex,
+        })
+      );
+      setFolders(updatedFolders);
  
-        const topic = topics[topicIndex];
-        setTopic(topic);
+      const topic = topics[topicIndex];
+      setTopic(topic);
  
-        if (topicIndex === folders[folderIndex].topics.length - 1) {
-          setAllTopicsDisplayed(true);
-        }
-      } else {
-        alertdisplayquiz();
+      if (topicIndex === folders[folderIndex].topics.length - 1) {
+        setAllTopicsDisplayed(true);
       }
+    } else {
+      alertdisplayquiz();
     }
   };
  
@@ -245,6 +244,22 @@ function SidebarTopics() {
       }
  
       return updatedMaterials;
+    });
+ 
+    // Update the folders state to mark the material as completed
+    setFolders(prevFolders => {
+      const updatedFolders = prevFolders.map(folder => ({
+        ...folder,
+        topics: folder.topics.map(topic => ({
+          ...topic,
+          materials: topic.materials.map(material =>
+            material.materialId === materialId
+              ? { ...material, isCompleted: true }
+              : material
+          )
+        }))
+      }));
+      return updatedFolders;
     });
  
     switch (type) {
@@ -284,12 +299,29 @@ function SidebarTopics() {
       navigate("/instruction");
       return updatedCompletedTopics;
     });
+ 
+    setFolders(prevFolders => {
+      const updatedFolders = [...prevFolders];
+      const currentTopicIndex = updatedFolders[0].topics.findIndex(topic => topic.name === topicName);
+      if (currentTopicIndex < updatedFolders[0].topics.length - 1) {
+        updatedFolders[0].topics[currentTopicIndex + 1].isOpen = true;
+      }
+      return updatedFolders;
+    });
   };
  
-  const giveFeedback = () => {
+  const giveFeedback = (topicId) => {
     setFeedbackGiven(true);
-    sessionStorage.setItem("topicId", topic.topicId);
+    sessionStorage.setItem("topicId", topicId);
     navigate("/topicfeedbackquestion");
+ 
+    setFolders(prevFolders => {
+      const updatedFolders = [...prevFolders];
+      updatedFolders[0].topics = updatedFolders[0].topics.map(topic =>
+        topic.topicid === topicId ? {...topic, isFeedbackGiven: true} : topic
+      );
+      return updatedFolders;
+    });
   };
  
   useEffect(() => { setlearnerfeedbacks(learnertopicfeedback); }, [learnertopicfeedback]);
@@ -353,6 +385,7 @@ function SidebarTopics() {
         <Col md={2} xs={4} style={{ color: 'white', backgroundColor: '#EEF5FF', height: '100vh' }}>
         <Row className="d-flex">
           <Row className="side">
+            <h3 style={{ color: '#333', marginBottom: '20px', textAlign: 'center' }}>Course Contents</h3>
             <ul className="tree">
               <AnimatePresence>
                 {folders.map((folder, folderIndex) => (
@@ -409,7 +442,7 @@ function SidebarTopics() {
                                           <BsFiletypePpt className="icon" style={{ color: "red" }} />
                                         )}
                                         {content.materialname}
-                                        {openedMaterials.has(content.materialId) && (
+                                        {content.isCompleted && (
                                           <FaCheck className="icon" style={{ color: "green", marginLeft: "5px" }} />
                                         )}
                                       </li>
@@ -428,16 +461,12 @@ function SidebarTopics() {
                                             Take Quiz
                                           </button>
                                         )}
-                                        {topic.isFeedBack ? (
+                                        {topic.isFeedBack && !topic.isFeedbackGiven && (
                                           <button
                                             className="btn btn-primary m-2"
                                             onClick={() => giveFeedback(topic.topicid)}
                                           >
                                             Give Feedback
-                                          </button>
-                                        ) : (
-                                          <button className="btn btn-primary m-2" disabled>
-                                            {topic.isFeedBack ? "Give Feedback" : "Feedback"}
                                           </button>
                                         )}
                                       </>
@@ -446,9 +475,11 @@ function SidebarTopics() {
                                         <button className="btn btn-primary m-2" disabled>
                                           Take Quiz
                                         </button>
-                                        <button className="btn btn-primary m-2" disabled>
-                                          Give Feedback
-                                        </button>
+                                        {topic.isFeedBack && !topic.isFeedbackGiven && (
+                                          <button className="btn btn-primary m-2" disabled>
+                                            Give Feedback
+                                          </button>
+                                        )}
                                       </>
                                     )}
                                     {topic.isAttemptOver && <p style={{color:'red'}}>Attempt is over</p>}
@@ -485,4 +516,3 @@ function SidebarTopics() {
 }
  
 export default SidebarTopics;
- 
