@@ -167,7 +167,7 @@ function CompletedCourses() {
             <img
               src={course.thumbnailimage}
               alt={course.enrolledCoursename}
-              className="course-thumbnail"
+              className="completedcourse-thumbnail"
             />
             <div className="course-info">
               <h3>{course.enrolledCoursename}</h3>
@@ -180,6 +180,14 @@ function CompletedCourses() {
                 className="view-certificate-btn"
               >
                 View Certificate
+              </button>
+              <button
+                onClick={() => {
+                  navigate(`/coursefeedbackquestion/${course.enrolledCourseId}`);
+                }}
+                className="view-certificate-btn"
+              >
+                Add Feedback
               </button>
             </div>
           </div>

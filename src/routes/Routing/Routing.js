@@ -68,6 +68,8 @@ import Certificate from "../../components/LearnerComponent/Certificate";
 import LearnerCourseLandingPage from '../.././components/LearnerComponent/LearnerCourseLandingPage';
  
 import CourseFeedback from "../../components/Course/Course/CourseFeedback";
+import { FetchCourseFeedbackQuestionApi } from "../../middleware/Quiz And Feedback Module/Learner/FetchCourseFeedbackQuestionApi";
+import FetchCourseFeedbackQuestion from "../../components/Quiz And Feedback Module/QuizComponents/Learner/FetchCourseFeedbackQuestion";
 function Routing() {
   return (
     <BrowserRouter>
@@ -190,6 +192,10 @@ function Routing() {
         <Route
           path="/quizfeedbackquestion"
           element={<FetchQuizFeedbackQuestion />}
+        />
+        <Route
+          path="/coursefeedbackquestion/:id"
+          element={<FetchCourseFeedbackQuestion />}
         />
         {/* course team */}
         <Route path="/addcourse" element={<AddCourseView />} />

@@ -1,5 +1,5 @@
 
- 
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -21,8 +21,11 @@ import { DialogTitle } from '@mui/material';
 import UnenrollCourseApi from "../../middleware/LearnerMiddleware/UnenrollApi";
 import Swal from "sweetalert2";
 import { BeatLoader } from 'react-spinners';
-import { Modal} from 'react-bootstrap';
- 
+import { Modal } from 'react-bootstrap';
+import StartCourseResumeCourseAPI from "../../middleware/LearnerMiddleware/StartCourse&ResumeCourseAPI";
+
+
+
 const GetEnrollment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -38,25 +41,25 @@ const GetEnrollment = () => {
   const [courses, setCourses] = useState([]);
   const learnerId = sessionStorage.getItem('UserSessionID');
   const enrollmentId = JSON.parse(sessionStorage.getItem('enrolled'));
- 
+
   useEffect(() => {
     dispatch(fetchenrollCourse(id));
-  }, [dispatch]);
- 
+  }, []);
+
   const [enrollmentcourseid, setenrollmentcourseid] = useState();
- 
+
   useEffect(() => {
     fetchprogress(learnerId, enrollmentId);
-  }, [learnerId, enrollmentId]);
- 
+  }, []);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
- 
+
   const handleClose = () => {
     setOpen(false);
   };
- 
+
   const fetchprogress = async (learnerId, enrollmentId) => {
     try {
       const data = await LearnerProgressApi(learnerId, enrollmentId);
@@ -70,11 +73,11 @@ const GetEnrollment = () => {
       console.error("Error fetching data", error);
     }
   };
- 
+
   const navigate = useNavigate();
+
+  const handleNavigation = (course) => {
  
-  const handleNavigation = (course) => (e) => {
-    e.preventDefault();
     dispatch(selectCourse(course));
     setStartedCourses(prevState => {
       const updatedCourses = { ...prevState, [course.enrolledCourseId]: true };
@@ -82,12 +85,13 @@ const GetEnrollment = () => {
       return updatedCourses;
     });
     navigate(`/ViewTopics/${course.enrolledCourseId}`);
+    window.location.reload();
   };
- 
+
   useEffect(() => {
     setCourses(viewcourse);
   }, [viewcourse]);
- 
+
   const handleUnenroll = (enrollid) => async (e) => {
     e.preventDefault();
     try {
@@ -124,7 +128,7 @@ const GetEnrollment = () => {
       }, 2000)
     }
   };
- 
+
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -132,7 +136,7 @@ const GetEnrollment = () => {
       </div>
     );
   }
- 
+
   // if (courses.length === 0) {
   //   return (
   //     <div>
@@ -141,78 +145,93 @@ const GetEnrollment = () => {
   //     </div>
   //   );
   // }
- 
+
+
+  const handleStartResumeCourse = async (course) => {
+
+    await StartCourseResumeCourseAPI(course.enrollmentid);
+    console.log("next");
+    handleNavigation(course);
+
+  }
+
   if (!courses || courses.length === 0) {
+
+
     return (
       <div>
         <LearnerNavbar />
-        <h2 style={{marginTop:"5%",marginLeft:"7%"}}>"No courses here yet? Let's change that! Dive into a
-        world of knowledge and start your learning journey today. Remember, the best investment you can ever
-         make is in yourself. Enroll in a course now and take the first step towards your future success!"
-</h2>
+        <h2 style={{ marginTop: "5%", marginLeft: "7%" }}>"No courses here yet? Let's change that! Dive into a
+          world of knowledge and start your learning journey today. Remember, the best investment you can ever
+          make is in yourself. Enroll in a course now and take the first step towards your future success!"
+        </h2>
       </div>
     );
-}
- 
-// bootstrap modal
-return (
-  <div id="learner-body" style={{  display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <LearnerNavbar />
-    <div className="d-block" id='box_learner' style={{ width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      {courses && courses.map((course, index) => (
-        <Card key={index} id="Card_learner" style={{ margin: '20px auto',  borderRadius: '15px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'row', overflow: 'hidden', transform: 'scale(1)', transition: 'transform 0.3s ease-in-out', width: '100%' }}>
-          <div style={{ width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img style={{ height: '250',width:'250', borderRadius: '15px 0 0 15px' }} id="thumbnail" src={course.thumbnailimage} alt="Course Thumbnail" />
-          </div>
-          <CardContent id="cardcontent_learner" style={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px' }}>
-            <div>
-              <Typography variant="h5" component="h2" style={{ fontWeight: 'bold' }}>
-                {course.enrolledCoursename}
-              </Typography>
-              <Typography variant="body1">
-                {course.enrolledcoursecategory}
-              </Typography>
-              <Typography color="textSecondary" style={{ marginBottom: '20px' }}>
-                {course.enrolledcoursedescription}
-              </Typography>
-              <div id='level'>
-                <Typography color="textSecondary" style={{ marginBottom: '10px' }}>
-                  Level: {course.enrolledcourselevels}
+  }
+
+  // bootstrap modal
+  return (
+    <div id="learner-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <LearnerNavbar />
+      <div className="d-block" id='box_learner' style={{ width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        {courses && courses.map((course, index) => (
+          <Card key={index} id="Card_learner" style={{ margin: '20px auto', borderRadius: '15px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'row', overflow: 'hidden', transform: 'scale(1)', transition: 'transform 0.3s ease-in-out', width: '100%' }}>
+            <div style={{ width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <img style={{ height: '250', width: '250', borderRadius: '15px 0 0 15px' }} id="thumbnail" src={course.thumbnailimage} alt="Course Thumbnail" />
+            </div>
+            <CardContent id="cardcontent_learner" style={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px' }}>
+              <div>
+                <Typography variant="h5" component="h2" style={{ fontWeight: 'bold' }}>
+                  {course.enrolledCoursename}
                 </Typography>
-                <LinearProgress variant='determinate' value={courseCompletionPercentages[course.courseId] || 0} style={{ height: '20px', borderRadius: '5px', marginBottom: '10px' }} />
+                <Typography variant="body1">
+                  {course.enrolledcoursecategory}
+                </Typography>
+                <Typography color="textSecondary" style={{ marginBottom: '20px' }}>
+                  {course.enrolledcoursedescription}
+                </Typography>
+                <div id='level'>
+                  <Typography color="textSecondary" style={{ marginBottom: '10px' }}>
+                    Level: {course.enrolledcourselevels}
+                  </Typography>
+                  <LinearProgress variant='determinate' value={courseCompletionPercentages[course.courseId] || 0} style={{ height: '20px', borderRadius: '5px', marginBottom: '10px' }} />
+                </div>
               </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button id="Learnerbuttonone" style={{ backgroundColor: "midnightblue" }} variant="contained" color="error" onClick={() => { handleClickOpen(); setenrollmentcourseid(course.enrollmentid) }}>
-                Unenroll
-              </Button>
-              <Modal centered backdrop="static" show={open} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>Are you sure you want to unenroll the course?</Modal.Title>
-              </Modal.Header>
-              <Modal.Footer>
-                <Button id="Learnerbuttonmodal" variant="secondary" onClick={handleClose}>No</Button>
-                <Button id="Learnerbuttonmodal" variant="primary" onClick={handleUnenroll(enrollmentcourseid)}>Yes</Button>
-              </Modal.Footer>
-            </Modal>
-              <Button id="Learnerbuttontwo" style={{ backgroundColor: "midnightblue"}} onClick={handleNavigation(course)} variant="contained">
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button id="Learnerbuttonone" style={{ backgroundColor: "midnightblue" }} variant="contained" color="error" onClick={() => { handleClickOpen(); setenrollmentcourseid(course.enrollmentid) }}>
+                  Unenroll
+                </Button>
+                <Modal centered backdrop="static" show={open} onHide={handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Are you sure you want to unenroll the course?</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Footer>
+                    <Button id="Learnerbuttonmodal" variant="secondary" onClick={handleClose}>No</Button>
+                    <Button id="Learnerbuttonmodal" variant="primary" onClick={handleUnenroll(enrollmentcourseid)}>Yes</Button>
+                  </Modal.Footer>
+                </Modal>
+                {/* <Button id="Learnerbuttontwo" style={{ backgroundColor: "midnightblue"}} onClick={handleNavigation(course)} variant="contained">
                 {startedCourses[course.enrolledCourseId] ? 'Resume Course' : 'Start Course'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+              </Button> */}
+
+
+                <Button id="Learnerbuttontwo" style={{ backgroundColor: "midnightblue"}}  onClick={() => { handleStartResumeCourse(course); }}>
+                  {course.courseStarted ? 'Resume Course' : 'Start Course'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
-  </div>
-);
- 
- 
- 
+  );
+
+
+
 };
- 
- 
- 
+
+
+
 export default GetEnrollment;
- 
- 
- 
+
+
