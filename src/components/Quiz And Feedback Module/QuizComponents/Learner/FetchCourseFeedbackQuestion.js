@@ -101,7 +101,7 @@ const FetchCourseFeedbackQuestion = () => {
     };
 
     const handleNavigate = () => {
-        navigate("/learnerscorepage");
+        navigate("/LearnerenrolledCourse");
     };
 
     const divStyle = {

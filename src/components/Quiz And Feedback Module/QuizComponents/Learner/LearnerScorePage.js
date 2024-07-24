@@ -81,6 +81,9 @@ export const LearnerScorePage = () => {
   if (!learnerAttempt.isPassed) {
     setIsReattempt(true);
   }
+
+
+  
   // Function to format the time
   const formatTime = (timeString) => {
     const date = new Date(timeString);
