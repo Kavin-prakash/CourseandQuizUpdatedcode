@@ -127,7 +127,7 @@ body {
     background-color: #f0f0f0; 
   } */
 
-.completedcertificate-courses-container {
+  .completedcertificate-courses-container {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -151,7 +151,7 @@ body {
     margin-left: 230px;
 }
 
-.content {
+.contentcompletioncertificate {
     position: absolute;
     top: 55px;
     left: 55px;

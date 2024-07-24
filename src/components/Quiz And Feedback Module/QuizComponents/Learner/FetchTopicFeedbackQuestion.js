@@ -406,7 +406,7 @@ const TopicFeedbackquestion = () => {
         <h4 style={{ fontWeight: "bold", textAlign: "center" }}>Topic Feedback</h4>
         <div>
           <Container fluid id="cardstyle" style={divStyle}>
-          <h6 style={instructionStyle}><b>Please rate from 1 to 5 on the mentioned Topic parameters .
+          <h6 style={instructionStyle}><b>Please rate from 1 to 5 on the mentioned Topic parameters.
             <b style={{ color: "red" }}> * </b>
             Poor = 1 ; Average = 3 ; Excellent = 5</b></h6>
           <h6 style={instructionStyle}>Please select the number, which most accurately reflects your satisfaction level</h6>
@@ -425,7 +425,6 @@ const TopicFeedbackquestion = () => {
                               topicfeedbackquestions.options.map(
                                 (option, optionIndex) => (
                                   <div key={optionIndex} className="custom-radio-button">
- 
                                     {/* <input
                                       id="feedbackradiobtn"
                                       type="radio"
@@ -440,11 +439,6 @@ const TopicFeedbackquestion = () => {
                                       name={`option_${topicfeedbackquestions.topicFeedbackQuestionId}`} // Unique name for each question
                                     /> */}
                                     {/* <label>{option.optionText}</label> */}
- 
- 
- 
- 
- 
                                     <input
                                       id={`option_${topicfeedbackquestions.topicFeedbackQuestionId}_${optionIndex}`}
                                       type="radio"

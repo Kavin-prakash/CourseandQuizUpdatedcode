@@ -111,6 +111,7 @@ const Content = () => {
     }
   }, [id]);
 
+
   // const handleAddTopic = (e) => {
   //   e.preventDefault();
   //   if (iscourse) {
@@ -227,6 +228,33 @@ const Content = () => {
       }
     };
     fetchData();
+    const responseurl = axios.get(course.thumbnail, { responseType: 'blob' }).then((res) =>
+      {
+        console.log("popo", res)
+        const blob = new Blob([res.data], { type: res.data.type });
+
+    const file = new File([blob], "example.txt", {
+      type: blob.type,
+      lastModified: new Date().getTime(),
+    });
+    setThumbnailimage(
+      blob );
+      })
+    console.log("responseurl=", responseurl);
+    console.log("responseurl=", responseurl);
+    console.log("responseurl=", course.thumbnail);
+    // const blob = new Blob([responseurl.data], { type: responseurl.data.type });
+
+    // const file = new File([blob], "example.txt", {
+    //   type: blob.type,
+    //   lastModified: new Date().getTime(),
+    // });
+    // setThumbnailimage(
+    //   Object.assign(file, {
+    //     preview: URL.createObjectURL(file),
+    //   })
+    // );
+    // console.log("lololo",URL.createObjectURL(thumbnailimage));
   }, [openDialog]);
   const [open, setOpen] = React.useState(false);
   const [topicopen, setTopicOpen] = React.useState(false);
@@ -360,7 +388,7 @@ const Content = () => {
 
     console.log("caadasd", blob);
 
-    const objecturl = URL.createObjectURL(blob);
+    // const objecturl = URL.createObjectURL(blob);
 
     setSelectedcourse({
       courseId: course.courseId,
@@ -372,8 +400,8 @@ const Content = () => {
       modifiedby: "Kavin",
       thumbnailimage: course.thumbnailimage,
     });
-
-    setThumbnailimage({ preview: objecturl });
+  
+    // setThumbnailimage( blob );
     setOpenDialog(true);
   };
 
@@ -478,6 +506,10 @@ const Content = () => {
     } catch (error) {
       console.error("Error updating course:", error);
     }
+    finally {
+      dispatch(fetchCourseRequest(id));
+
+    }
   };
   const handleAddFeedBackButtons = (courseId) => {
     sessionStorage.setItem("courseId", id);
@@ -495,7 +527,7 @@ const Content = () => {
         dispatch(createTopicsRequest(topics));
         dispatch(fetchTopicsRequest(id));
 
-        handleClose();
+        // handleClose();
       } catch (error) {
         console.error("Error creating course:", error);
       }
@@ -508,9 +540,9 @@ const Content = () => {
     });
 
     // navigate('/savedtopics')
-    // handleClose();
+    handleTopicClose();
   };
-
+  useEffect(() => { console.log("thumbnailimage ", thumbnailimage) }, [thumbnailimage])
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     // const {name,description,isactive}=e.target;
@@ -738,8 +770,8 @@ const Content = () => {
               value={topics.name}
               onChange={handleInputChange}
               style={{ fontWeight: "700px" }}
-              // onChange={(e) => setTopics({ ...topics, name: e.target.value })}
-              // style={{margin:'10px'}}
+            // onChange={(e) => setTopics({ ...topics, name: e.target.value })}
+            // style={{margin:'10px'}}
             />
             {errors.name && <p className="error">{errors.name}</p>}
             <TextField
@@ -869,12 +901,12 @@ const Content = () => {
               fullWidth
               value={selectedcourse.title}
               onChange={handleCourseInputChange}
-              // error={selectedcourse.title.trim() === ""}
-              // helperText={
-              //   selectedcourse.title.trim() === ""
-              //     ? "Course Title cannot be empty"
-              //     : " "
-              // }
+            // error={selectedcourse.title.trim() === ""}
+            // helperText={
+            //   selectedcourse.title.trim() === ""
+            //     ? "Course Title cannot be empty"
+            //     : " "
+            // }
             />
             <FormControl fullWidth style={{ marginTop: "15px" }}>
               <InputLabel id="course-level-id">Course Level</InputLabel>
@@ -885,12 +917,12 @@ const Content = () => {
                 label="Course Level"
                 value={selectedcourse.levelId}
                 onChange={handleCourseInputChange}
-                // error={selectedcourse.levelId.trim() === ""}
-                // helperText={
-                //   selectedcourse.levelId.trim() === ""
-                //     ? "Course Level cannot be empty"
-                //     : ""
-                // }
+              // error={selectedcourse.levelId.trim() === ""}
+              // helperText={
+              //   selectedcourse.levelId.trim() === ""
+              //     ? "Course Level cannot be empty"
+              //     : ""
+              // }
               >
                 {courselevel.map((level) => (
                   <MenuItem key={level.levelId} value={level.levelId}>
@@ -966,7 +998,7 @@ const Content = () => {
                 // <img src={thumbnail.preview} alt="Preview" style={{ width: '200px', height: '150px' }} />
                 <div>
                   <img
-                    src={thumbnailimage.preview}
+                    src={URL.createObjectURL(thumbnailimage)}
                     alt="Preview"
                     style={{ width: "200px", height: "150px" }}
                   />
