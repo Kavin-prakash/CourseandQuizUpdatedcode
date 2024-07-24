@@ -163,18 +163,6 @@ const Content = () => {
   //const [courseId,setCourseId]=useState(props.courseId??"273a1881-adb6-498c-9c35-5ba7d4b0c64b")
   // const Id=id;
   //console.log("topic inside courseId",Id);
-  const [selectedcourse, setSelectedcourse] = useState({
-    courseId: "",
-    title: "",
-    level: "",
-    category: "",
-    description: "",
-    duration: "",
-    modifiedby: "Kavin",
-    thumbnailimage: "null",
-    levelId: "",
-    categoryId: "",
-  });
   const [openDialog, setOpenDialog] = useState(false);
   const closedialog = () => {
     setOpenDialog(false);
@@ -240,7 +228,7 @@ const Content = () => {
       }
     };
     fetchData();
-    if(course.thumbnail!="" || course.thumbnail!=undefined){
+    if(!course.thumbnail || course.thumbnail!=""){
       const responseurl = axios.get(course.thumbnail, { responseType: 'blob' }).then((res) =>
       {
         console.log("popo", res)
@@ -253,10 +241,10 @@ const Content = () => {
     setThumbnailimage(
       blob );
       })
+    console.log("responseurl=", responseurl);
+    console.log("responseurl=", responseurl);
+    console.log("responseurl=", course.thumbnail);
     }
-    // console.log("responseurl=", responseurl);
-    // console.log("responseurl=", responseurl);
-    // console.log("responseurl=", course.thumbnail);
     // const blob = new Blob([responseurl.data], { type: responseurl.data.type });
 
     // const file = new File([blob], "example.txt", {
@@ -269,7 +257,7 @@ const Content = () => {
     //   })
     // );
     // console.log("lololo",URL.createObjectURL(thumbnailimage));
-  }, [selectedcourse]);
+  }, [openDialog]);
   const [open, setOpen] = React.useState(false);
   const [topicopen, setTopicOpen] = React.useState(false);
   const [topics, setTopics] = useState({
@@ -295,7 +283,18 @@ const Content = () => {
   });
   const [coursecategory, setCategory] = useState([]);
   const [courselevel, setLevel] = useState([]);
-  
+  const [selectedcourse, setSelectedcourse] = useState({
+    courseId: "",
+    title: "",
+    level: "",
+    category: "",
+    description: "",
+    duration: "",
+    modifiedby: "Kavin",
+    thumbnailimage: "null",
+    levelId: "",
+    categoryId: "",
+  });
   const isExist = useSelector((state) => state.Topic.isExisted);
   const [existMsg, setExistMsg] = useState("");
   const [showModal, setShowModal] = useState(false);
