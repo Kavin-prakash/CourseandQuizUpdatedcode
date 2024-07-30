@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
 import BasicPagination from "../../../../components/Quiz And Feedback Module/QuizComponents/Admin/Pagination";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { IconButton, Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
+import { IconButton, Tooltip } from '@mui/material';    // modification for  imports quizteam 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch } from 'react-redux';
@@ -15,12 +14,8 @@ import {
   UpdateQuizQuestionsApi,
 } from "../../../../middleware/Quiz And Feedback Module/Admin/QuestionApi";
 import { deleteQuizQuestionRequest } from "../../../../actions/Quiz And Feedback Module/Admin/DeleteQuizQuestionAction";
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { updateQuizQuestionRequest } from '../../../../actions/Quiz And Feedback Module/Admin/UpdateQuizQuestionAction';
-import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Container } from 'react-bootstrap';
-import { set } from 'react-hook-form';
 import { FetchQuizQuestionsApi } from '../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizQuestionsApi';
 import "../../../../Styles/Quiz And Feedback Module/QuestionTemplate.css";
 import { Modal as MuiModal, Box, Typography, TextField, Button as MuiButton } from '@mui/material';
@@ -28,6 +23,7 @@ import Swal from "sweetalert2";
 import { FormHelperText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useNavigate } from 'react-router-dom';
 
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
@@ -40,7 +36,12 @@ const QuestionTemplate = () => {
   const [questions, setQuestions] = useState([]);
 
   const [error, setError] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState({
+    question: "",
+    questionType: "",
+    options: [],
+    correctOptions: [],
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showEditQuestionModal, setShowEditQuestionModal] = useState(false);
@@ -54,6 +55,7 @@ const QuestionTemplate = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const [selectedFilterQuestionType, setSelectedFilterQuestionType] = useState('')
+  const [deleteQuestionId, setDeleteQuestionId] = useState(null);
   const [newQuestion, setNewQuestion] = useState({
     question: "",
     questionType: "",
@@ -67,10 +69,9 @@ const QuestionTemplate = () => {
     correctOptions: ["", "", ""],
   });
 
+  const navigate = useNavigate();
+
   const [showPopup, setShowPopup] = useState(false);
-
-
-  // const questions = useSelector((state) => state.quizQuestions.quizQuestions);
 
   const fetchQuestions = async (quizId) => {
     try {
@@ -83,22 +84,16 @@ const QuestionTemplate = () => {
     }
   };
 
-  const handleDeleteQuestion = (quizQuestionId) => {
-    setQuestionToDelete(quizQuestionId);
-    setShowPopup(true);
-  };
-
-
-  const handleConfirmDelete = async () => {
+  const handleDeleteQuestion = async (quizQuestionId) => {
     // Dispatch the delete request
-    await dispatch(deleteQuizQuestionRequest(questionToDelete));
+    await dispatch(deleteQuizQuestionRequest(quizQuestionId));
 
     // Update the questions state to remove the deleted question
     setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
 
     // Close the popup and reset questionToDelete
     setShowPopup(false);
-    setQuestionToDelete(null);
+    setDeleteQuestionId(null);
     const Toast = Swal.mixin({
       className: "swal2-toast",
       toast: true,
@@ -194,9 +189,15 @@ const QuestionTemplate = () => {
     setNewQuestion((prevState) => ({
       ...prevState,
       questionType: value,
-      options: [],
+      options: value === "T/F" ? ["True", "False"] : ["", "", "", ""],
       correctOptions: [],
     }));
+    setErrors({
+      question: "",
+      questionType: "",
+      options: [],
+      correctOptions: [],
+    });
   };
 
   const validateUpdateQuestion = () => {
@@ -204,10 +205,11 @@ const QuestionTemplate = () => {
       question: "",
       questionType: "",
       options: "",
-      correctOptions: "",
+      correctOptions: [],
       individualOptions: [],
       individualCorrectOptions: [],
     };
+
     if (!editedQuestion.question) {
       tempErrors.question = "Question is required";
     }
@@ -231,12 +233,11 @@ const QuestionTemplate = () => {
       editedQuestion.correctOptions.length === 0 ||
       !editedQuestion.correctOptions.some((option) => option)
     ) {
-      tempErrors.correctOptions = "Correct option is required";
+      tempErrors.correctOptions[0] = "Correct option is required";
     } else {
       editedQuestion.correctOptions.forEach((option, index) => {
         if (!option) {
-          tempErrors.individualCorrectOptions[index] = `Correct Option ${index + 1
-            } is required`;
+          tempErrors.correctOptions[index] = `Correct Option ${index + 1} is required`;
         }
       });
     }
@@ -271,9 +272,6 @@ const QuestionTemplate = () => {
       UpdateQuizQuestionsApi(requestBody)
       handleCloseEditQuestionModal();
     }
-    // setTimeout(function () {
-    //   window.location.reload(1);
-    // }, 1000);
     const Toast = Swal.mixin({
       className: "swal2-toast",
       toast: true,
@@ -336,23 +334,30 @@ const QuestionTemplate = () => {
     setErrors(tempErrors);
   };
   useEffect(() => {
-    const newFilteredQuestions = questions.filter(
+    const newFilteredQuestions = questions?.filter(
       (question) =>
         !selectedFilterQuestionType || question.questionType === selectedFilterQuestionType
     );
     setFilteredQuestions(newFilteredQuestions);
   }, [selectedFilterQuestionType, questions]);
 
-  const searchFilteredQuestions = questions.filter(
+  // const searchFilteredQuestions = questions?.filter(
+  //   (question) =>
+  //     question.question.toLowerCase().includes(searchTerm) &&
+  //     (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
+  // );
+
+  const searchFilteredQuestions = questions?.filter(
     (question) =>
-      question.question.toLowerCase().includes(searchTerm) &&
+      question.question.toLowerCase().includes(searchTerm) ||
+      (question.questionNo && question.questionNo.toString().includes(searchTerm)) &&
       (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
   );
 
   const indexOfLastQuestion = currentPage * questionsPerPage;
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
 
-  const currentQuestions = searchFilteredQuestions.slice(
+  const currentQuestions = searchFilteredQuestions?.slice(
     indexOfFirstQuestion,
     indexOfLastQuestion
   );
@@ -410,58 +415,109 @@ const QuestionTemplate = () => {
     let tempErrors = {
       question: "",
       questionType: "",
-      options: "",
-      correctOptions: "",
+      options: [],
+      correctOptions: [],
     };
+    let isValid = true;
 
-    let hasCorrectOption = false;
-    if (newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F") {
-      hasCorrectOption = !!newQuestion.correctOptions[0];
-    } else {
-      hasCorrectOption = newQuestion.correctOptions.some((option) => option);
-    }
-
-    if (!newQuestion.question) {
+    // Question validation
+    if (!newQuestion.question.trim()) {
       tempErrors.question = "Question is required";
+      isValid = false;
+    } else if (newQuestion.question.length > 500) {
+      tempErrors.question = "Question should not exceed 500 characters";
+      isValid = false;
     }
+
+    // Question type validation
     if (!newQuestion.questionType) {
       tempErrors.questionType = "Question type is required";
-    }
-    if (newQuestion.options.length === 0) {
-      tempErrors.options = "At least one option is required";
+      isValid = false;
     }
 
-    if (
-      tempErrors.question ||
-      tempErrors.questionType ||
-      tempErrors.options ||
-      !hasCorrectOption
-    ) {
-      tempErrors.correctOptions = "Correct option is required";
-      setErrors(tempErrors);
-      return;
+    // Options validation
+    if (newQuestion.questionType === "MCQ" || newQuestion.questionType === "MSQ") {
+      newQuestion.options.forEach((option, index) => {
+        if (!option.trim()) {
+          tempErrors.options[index] = "Option is required";
+          isValid = false;
+        } else if (option.length > 200) {
+          tempErrors.options[index] = "Option should not exceed 200 characters";
+          isValid = false;
+        }
+      });
+
+      const uniqueOptions = new Set(newQuestion.options.filter(Boolean).map(opt => opt.trim()));
+      if (uniqueOptions.size !== newQuestion.options.filter(Boolean).length) {
+        tempErrors.options.push("All options must be unique");
+        isValid = false;
+      }
     }
 
-    const requestBody = {
-      quizId: quizId,
-      question: newQuestion.question,
-      questionType: newQuestion.questionType,
-      options: newQuestion.options.map((option, index) => ({
-        option: option,
-        isCorrect:
-          newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F"
-            ? newQuestion.correctOptions[0] === option
-            : newQuestion.correctOptions.includes(option),
-      })),
-    };
+    // Correct options validation
+    if (newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F") {
+      if (!newQuestion.correctOptions[0]) {
+        tempErrors.correctOptions[0] = "Correct option is required";
+        isValid = false;
+      }
+    } else if (newQuestion.questionType === "MSQ") {
+      newQuestion.correctOptions.forEach((correctOption, index) => {
+        if (!correctOption) {
+          tempErrors.correctOptions[index] = "This correct option field is required";
+          isValid = false;
+        } else if (!newQuestion.options.includes(correctOption)) {
+          tempErrors.correctOptions[index] = "Selected correct option is not a valid option";
+          isValid = false;
+        }
+      });
 
+      if (newQuestion.correctOptions.filter(Boolean).length < 3) {
+        tempErrors.correctOptions[0] = "At least three correct options are required for MSQ";
+        isValid = false;
+      }
 
+      const uniqueCorrectOptions = new Set(newQuestion.correctOptions.filter(Boolean));
+      if (uniqueCorrectOptions.size !== newQuestion.correctOptions.filter(Boolean).length) {
+        tempErrors.correctOptions.push("All correct options must be unique");
+        isValid = false;
+      }
+    }
 
-    PostSingleQuestion(requestBody);
-    setNewQuestion({ ...newQuestion, question: "", options: ["", "", "", "", "", "", "", ""], correctOptions: ["", "", ""] })
-    handleCloseAddQuestionModal();
+    setErrors(tempErrors);
+
+    if (isValid) {
+      const requestBody = {
+        quizId: quizId,
+        question: newQuestion.question,
+        questionType: newQuestion.questionType,
+        options: newQuestion.options.map((option, index) => ({
+          option: option,
+          isCorrect:
+            newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F"
+              ? newQuestion.correctOptions[0] === option
+              : newQuestion.correctOptions.includes(option),
+        })),
+      };
+
+      PostSingleQuestion(requestBody);
+      setNewQuestion({ ...newQuestion, question: "", options: ["", "", "", "", "", "", "", ""], correctOptions: ["", "", ""] });
+      handleCloseAddQuestionModal();
+    }
+  };
+
+  const handleSubmit = () => {
+    try {
+      navigate(`/reviewquestions`)
+
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
 
   };
+
+  const handleQuizFeedback = () => {
+    navigate(`/quizfeedback`)
+  }
 
   const modalStyle = {
     position: 'absolute',
@@ -469,10 +525,12 @@ const QuestionTemplate = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 500,
+    maxHeight: '90vh', // Set a maximum height
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
     borderRadius: 2,
+    overflow: 'auto', // Enable scrolling
   };
 
 
@@ -480,56 +538,82 @@ const QuestionTemplate = () => {
   return (
     <Container >
       <div className='question-template-container'>
-        <div className="" style={{ marginBottom: '-200px' }}>
-          <div className=" " id="filter">
-            <Box sx={{ width: 190 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Question Type</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="questionType"
-                  value={selectedFilterQuestionType}
-                  label="Question Type"
-                  onChange={(e) => setSelectedFilterQuestionType(e.target.value)}
-                >
-                  <MenuItem value={""}>All</MenuItem>
-                  <MenuItem value={"MCQ"}>MCQ</MenuItem>
-                  <MenuItem value={"MSQ"}>MSQ</MenuItem>
-                  <MenuItem value={"T/F"}>True/False</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </div>
-          <div className="question-card-footer ">
+        <div className="question-card-footer d-block">
+          {questions ? <div><div className='mb-3'>
             <button
               onClick={handleOpenAddQuestionModal}
-              className="btn btn-light mt-3 mb-2"
+              className="btn btn-light"
               style={{ color: "white", backgroundColor: "#365486" }}
             >
-              Add More Question
+              Add Individual Question
             </button>
           </div>
-          <div style={{ textAlign: 'center' }} >
-            <input
-              id="search"
-              type="search"
-              placeholder="Search..."
-              className="search-box"
-              onChange={handleSearchChange}
-            />
-          </div>
+            <div>
+              <button
+                onClick={() => { navigate('/upload') }}
+                className="btn btn-light mb-2"
+                style={{ color: "white", backgroundColor: "#365486" }}
+              >
+                Add Bulk Question
+              </button>
+            </div>
+          </div> : <div>
+            <button
+              onClick={() => { navigate('/upload') }}
+              className="btn btn-light mb-2"
+              style={{ color: "white", backgroundColor: "#365486" }}
+            >
+              Add Questions
+            </button>
+          </div>}
+
+
         </div>
+        {questions?.length > 0 && (
+          <>
+            <div className="" style={{ marginBottom: '-200px' }}>
+              <div className=" " id="filter">
+                <Box sx={{ width: 190 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Question Type</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="questionType"
+                      value={selectedFilterQuestionType}
+                      label="Question Type"
+                      onChange={(e) => setSelectedFilterQuestionType(e.target.value)}
+                    >
+                      <MenuItem value={""}>All</MenuItem>
+                      <MenuItem value={"MCQ"}>MCQ</MenuItem>
+                      <MenuItem value={"MSQ"}>MSQ</MenuItem>
+                      <MenuItem value={"T/F"}>True/False</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </div>
 
 
+              <div style={{ textAlign: 'center' }} >
+                <input
+                  id="search"
+                  type="search"
+                  placeholder="Search..."
+                  className="search-box"
+                  onChange={handleSearchChange}
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="question-template">
           {error && <p>Error: {error}</p>}
-          {currentQuestions.length > 0 ? (
+          {currentQuestions?.length > 0 ? (
             <>
               <h5>Uploaded Questions</h5>
               <div style={{ gridColumn: "1 / -1", justifySelf: "end" }}>
                 <BasicPagination
-                  totalQuestions={filteredQuestions.length}
+                  totalQuestions={filteredQuestions?.length}
                   questionsPerPage={questionsPerPage}
                   page={currentPage}
                   onPageChange={handlePageChange}
@@ -551,14 +635,21 @@ const QuestionTemplate = () => {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Delete Question">
-                        <IconButton
-                          aria-label="Delete question"
-                          onClick={() => handleDeleteQuestion(question.quizQuestionId)}
-                        >
+                        <IconButton aria-label="Delete question" onClick={() => setDeleteQuestionId(question.quizQuestionId)}>
                           <DeleteIcon style={{ color: "#e74c3c" }} />
                         </IconButton>
                       </Tooltip>
                     </div>
+                    {deleteQuestionId === question.quizQuestionId && (
+                      <div id="popupQuizQuestionDelete">
+                        <div id="popup-contentQuizQuestionDelete">
+                          <button id="popup-close-buttonQuizQuestionDelete" onClick={() => setDeleteQuestionId(null)}>×</button>
+                          <p id='QuizQuestionDelete' style={{ marginTop: "5%" }}>Are you sure you want to delete the feedback?</p>
+                          <button onClick={() => handleDeleteQuestion(question.quizQuestionId)} id='delete-btn'>Delete</button>
+                          <button onClick={() => setDeleteQuestionId(null)}>Cancel</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="question-card-body">
                     <p className="quiz-question-number">Question {question.questionNo}</p>
@@ -581,9 +672,24 @@ const QuestionTemplate = () => {
               ))}
             </>
           ) : (
-            <p>No questions match your search.</p>
+            <p>No questions</p>
           )}
         </div>
+        {questions?.length > 0 && (
+          
+            <div className="d-flex justify-content-end mb-2" style={{ marginTop: 100 }}>
+              <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
+                Quiz Feedback
+              </Button>
+              <button onClick={handleSubmit} className="btn btn-light" style={{ color: "white", backgroundColor: "#365486" }}>Proceed to review</button>
+
+            </div>
+
+   
+        )}
+
+
+
 
         <MuiModal
           open={showAddQuestionModal}
@@ -648,8 +754,8 @@ const QuestionTemplate = () => {
                         variant="outlined"
                         value={newQuestion.options[index] || ""}
                         onChange={(e) => handleChange(index, "options", e.target.value)}
-                        error={!!errors.options}
-                        helperText={errors.options}
+                        error={errors.options && !!errors.options[index]}
+                        helperText={errors.options && errors.options[index]}
                       />
                       {index >= 5 && (
                         <IconButton
@@ -673,7 +779,7 @@ const QuestionTemplate = () => {
 
                   {[...Array(numCorrectOptions)].map((_, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <FormControl fullWidth margin="normal">
+                      <FormControl fullWidth margin="normal" error={errors.correctOptions && !!errors.correctOptions[index]}>
                         <InputLabel id={`correct-option-${index}-label`}>Correct Option {index + 1}</InputLabel>
                         <Select
                           labelId={`correct-option-${index}-label`}
@@ -682,10 +788,11 @@ const QuestionTemplate = () => {
                           label={`Correct Option ${index + 1}`}
                         >
                           <MenuItem value="">Select Correct Option</MenuItem>
-                          {newQuestion.options.map((option, optionIndex) => (
+                          {newQuestion.options.filter(Boolean).map((option, optionIndex) => (
                             <MenuItem key={optionIndex} value={option}>{option}</MenuItem>
                           ))}
                         </Select>
+                        {errors.correctOptions && errors.correctOptions[index] && <FormHelperText>{errors.correctOptions[index]}</FormHelperText>}
                       </FormControl>
                       {index >= 1 && (
                         <IconButton
@@ -698,9 +805,8 @@ const QuestionTemplate = () => {
                     </Box>
                   ))}
                   <Button
-                  className='btn-primary'
+                    className='btn-primary'
                     variant="contained"
-                    
                     startIcon={<AddIcon />}
                     onClick={handleAddCorrectOption}
                     sx={{ mt: 2, mb: 2 }}
@@ -721,11 +827,11 @@ const QuestionTemplate = () => {
                       variant="outlined"
                       value={newQuestion.options[index] || ""}
                       onChange={(e) => handleChange(index, "options", e.target.value)}
-                      error={!!errors.options}
-                      helperText={errors.options}
+                      error={errors.options && !!errors.options[index]}
+                      helperText={errors.options && errors.options[index]}
                     />
                   ))}
-                  <FormControl fullWidth margin="normal" error={!!errors.correctOptions}>
+                  <FormControl fullWidth margin="normal" error={errors.correctOptions && !!errors.correctOptions[0]}>
                     <InputLabel id="mcq-correct-option-label">Correct Option</InputLabel>
                     <Select
                       labelId="mcq-correct-option-label"
@@ -734,11 +840,11 @@ const QuestionTemplate = () => {
                       label="Correct Option"
                     >
                       <MenuItem value="">Select Correct Option</MenuItem>
-                      {newQuestion.options.map((option, index) => (
+                      {newQuestion.options.filter(Boolean).map((option, index) => (
                         <MenuItem key={index} value={option}>{option}</MenuItem>
                       ))}
                     </Select>
-                    {errors.correctOptions && <FormHelperText>{errors.correctOptions}</FormHelperText>}
+                    {errors.correctOptions && errors.correctOptions[0] && <FormHelperText>{errors.correctOptions[0]}</FormHelperText>}
                   </FormControl>
                 </>
               )}
@@ -754,11 +860,14 @@ const QuestionTemplate = () => {
                       variant="outlined"
                       value={newQuestion.options[index] || ""}
                       onChange={(e) => handleChange(index, "options", e.target.value)}
-                      error={!!errors.options}
-                      helperText={errors.options}
+                      error={errors.options && !!errors.options[index]}
+                      helperText={errors.options && errors.options[index]}
+                      InputProps={{
+                        readOnly: true,
+                      }}
                     />
                   ))}
-                  <FormControl fullWidth margin="normal" error={!!errors.correctOptions}>
+                  <FormControl fullWidth margin="normal" error={errors.correctOptions && !!errors.correctOptions[0]}>
                     <InputLabel id="tf-correct-option-label">Correct Option</InputLabel>
                     <Select
                       labelId="tf-correct-option-label"
@@ -767,12 +876,11 @@ const QuestionTemplate = () => {
                       label="Correct Option"
                     >
                       <MenuItem value="">Select Correct Option</MenuItem>
-                      {newQuestion.options.map((option, index) => (
+                      {newQuestion.options.filter(Boolean).map((option, index) => (
                         <MenuItem key={index} value={option}>{option}</MenuItem>
                       ))}
                     </Select>
-                    {errors.correctOptions && <FormHelperText>{errors.correctOptions}</FormHelperText>}
-                  </FormControl>
+                    {errors.correctOptions && errors.correctOptions[0] && <FormHelperText>{errors.correctOptions[0]}</FormHelperText>}                  </FormControl>
                 </>
               )}
             </Box>
@@ -797,98 +905,103 @@ const QuestionTemplate = () => {
           aria-labelledby="edit-question-modal-title"
         >
           <Box sx={modalStyle}>
-            <Typography id="edit-question-modal-title" variant="h6" component="h2" gutterBottom>
-              Edit Question
-            </Typography>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Question"
-              variant="outlined"
-              value={editedQuestion.question}
-              onChange={(e) => {
-                setEditedQuestion({
-                  ...editedQuestion,
-                  question: e.target.value,
-                });
-                validateField("question", e.target.value);
-              }}
-              error={!!errors.question}
-              helperText={errors.question}
-            />
-            {editedQuestion.options.map((option, index) => (
-              <TextField
-                key={index}
-                fullWidth
-                margin="normal"
-                label={`Option ${index + 1}`}
-                variant="outlined"
-                value={option}
-                onChange={(e) => {
-                  const updatedOptions = [...editedQuestion.options];
-                  updatedOptions[index] = e.target.value;
-                  setEditedQuestion({
-                    ...editedQuestion,
-                    options: updatedOptions,
-                  });
-                  validateField("options", e.target.value);
-                }}
-                error={!!errors.individualOptions && !!errors.individualOptions[index]}
-                helperText={errors.individualOptions && errors.individualOptions[index]}
-              />
-            ))}
-            {errors.options && (
-              <Typography color="error">{errors.options}</Typography>
-            )}
-            {editedQuestion.correctOptions.map((option, index) => (
-              <FormControl key={index} fullWidth margin="normal" error={!!errors.individualCorrectOptions && !!errors.individualCorrectOptions[index]}>
-                <InputLabel id={`correct-option-${index}-label`}>Correct Option {index + 1}</InputLabel>
-                <Select
-                  labelId={`correct-option-${index}-label`}
-                  value={option}
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Typography id="edit-question-modal-title" variant="h6" component="h2" gutterBottom>
+                Edit Question
+              </Typography>
+              <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Question"
+                  variant="outlined"
+                  value={editedQuestion.question}
                   onChange={(e) => {
-                    const updatedCorrectOptions = [...editedQuestion.correctOptions];
-                    updatedCorrectOptions[index] = e.target.value;
                     setEditedQuestion({
                       ...editedQuestion,
-                      correctOptions: updatedCorrectOptions,
+                      question: e.target.value,
                     });
-                    validateField("correctOptions", e.target.value, index);
+                    validateField("question", e.target.value);
                   }}
-                  label={`Correct Option ${index + 1}`}
-                >
-                  <MenuItem value="">
-                    <em>Select Correct Option</em>
-                  </MenuItem>
-                  {editedQuestion.options.map((opt, i) => (
-                    <MenuItem key={i} value={opt}>
-                      {opt}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {errors.individualCorrectOptions && errors.individualCorrectOptions[index] && (
-                  <FormHelperText>{errors.individualCorrectOptions[index]}</FormHelperText>
+                  error={!!errors.question}
+                  helperText={errors.question}
+                />
+                {editedQuestion.options.map((option, index) => (
+                  <TextField
+                    key={index}
+                    fullWidth
+                    margin="normal"
+                    label={`Option ${index + 1}`}
+                    variant="outlined"
+                    value={option}
+                    onChange={(e) => {
+                      const updatedOptions = [...editedQuestion.options];
+                      updatedOptions[index] = e.target.value;
+                      setEditedQuestion({
+                        ...editedQuestion,
+                        options: updatedOptions,
+                      });
+                      validateField("options", e.target.value);
+                    }}
+                    error={!!errors.individualOptions && !!errors.individualOptions[index]}
+                    helperText={errors.individualOptions && errors.individualOptions[index]}
+                  />
+                ))}
+                {errors.options && (
+                  <Typography color="error">{errors.options}</Typography>
                 )}
-              </FormControl>
-            ))}
-            {errors.correctOptions && (
-              <Typography color="error">{errors.correctOptions}</Typography>
-            )}
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-              <MuiButton onClick={handleCloseEditQuestionModal} sx={{ mr: 1 }}>
-                Cancel
-              </MuiButton>
-              <MuiButton
-                variant="contained"
-                color="primary"
-                onClick={validUpdatedQuestion}
-              >
-                Save Changes
-              </MuiButton>
+                {editedQuestion.correctOptions.map((option, index) => (
+                  <FormControl key={index} fullWidth margin="normal" error={!!errors.individualCorrectOptions && !!errors.individualCorrectOptions[index]}>
+                    <InputLabel id={`correct-option-${index}-label`}>Correct Option {index + 1}</InputLabel>
+                    <Select
+                      labelId={`correct-option-${index}-label`}
+                      value={option}
+                      onChange={(e) => {
+                        const updatedCorrectOptions = [...editedQuestion.correctOptions];
+                        updatedCorrectOptions[index] = e.target.value;
+                        setEditedQuestion({
+                          ...editedQuestion,
+                          correctOptions: updatedCorrectOptions,
+                        });
+                        validateField("correctOptions", e.target.value, index);
+                      }}
+                      label={`Correct Option ${index + 1}`}
+                    >
+                      <MenuItem value="">
+                        <em>Select Correct Option</em>
+                      </MenuItem>
+                      {editedQuestion.options.map((opt, i) => (
+                        <MenuItem key={i} value={opt}>
+                          {opt}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.individualCorrectOptions && errors.individualCorrectOptions[index] && (
+                      <FormHelperText>{errors.individualCorrectOptions[index]}</FormHelperText>
+                    )}
+                  </FormControl>
+                ))}
+                {errors.correctOptions && (
+                  <Typography color="error">{errors.correctOptions}</Typography>
+                )}
+              </Box>
+
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                <MuiButton onClick={handleCloseEditQuestionModal} sx={{ mr: 1 }}>
+                  Cancel
+                </MuiButton>
+                <MuiButton
+                  variant="contained"
+                  color="primary"
+                  onClick={validUpdatedQuestion}
+                >
+                  Save Changes
+                </MuiButton>
+              </Box>
             </Box>
           </Box>
         </MuiModal>
-        <Modal show={showPopup} onHide={() => setShowConfirmationModal(false)} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
+        {/* <Modal show={showPopup} onHide={() => setShowConfirmationModal(false)} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
           <Modal.Header>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
@@ -901,7 +1014,7 @@ const QuestionTemplate = () => {
               Delete
             </Button>
           </Modal.Footer>
-        </Modal>
+        </Modal> */}
       </div>
     </Container>
   );

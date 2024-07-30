@@ -1,65 +1,75 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../../../../Styles/Quiz And Feedback Module/CreateQuiz.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import {
-    createquizfeedbackRequest,
-} from "../../../../actions/Quiz And Feedback Module/Admin/QuizFeedbackAction";
 import { useDispatch } from 'react-redux';
-import AdminNavbar from './AdminNavbar';
-import { useLocation } from 'react-router-dom';
-import { fetchAllQuizQuestionRequest } from "../../../../actions/Quiz And Feedback Module/Admin/FetchQuizQuestionsAction";
-import { useSelector } from 'react-redux';
-import { Row, Container } from 'react-bootstrap';
-import Alert from "@mui/material/Alert";
+import styled from 'styled-components';
+import { Container, Row, Col, Card, Button, Modal, Form, Alert } from 'react-bootstrap';
+import { createquizfeedbackRequest } from "../../../../actions/Quiz And Feedback Module/Admin/QuizFeedbackAction";
+import { fetchQuizIdFailure } from "../../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction";
 import { FetchQuizQuestionsApi } from '../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizQuestionsApi';
-import { fetchQuizIdFailure } from '../../../../actions/Quiz And Feedback Module/Admin/FetchQuizIdAction';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const StyledContainer = styled(Container)`
+  padding-top: 2rem;
+  background-color: #f8f9fa;
+`;
+
+const QuestionGridCard = styled(Card)`
+  position: fixed;
+  top: 100px; // Adjust this value as needed
+  width: 300px; // Adjust this value as needed
+`;
+
+const QuestionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+`;
+
+const QuestionNumberBtn = styled(Button)`
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-weight: bold;
+`;
+
+const QuestionCard = styled(Card)`
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  &:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const OptionInput = styled(Form.Control)`
+  background-color: ${props => props.isCorrect ? '#d4edda' : 'white'};
+  border-color: ${props => props.isCorrect ? '#c3e6cb' : '#ced4da'};
+`;
 
 export const ReviewQuestions = () => {
-
     const courseId = sessionStorage.getItem('courseId');
-
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
-    const [questions, setQuestions] = useState();
-    const location = useLocation();
-    const [error, setError] = useState('');
-    const [errorfb, setErrorfb] = useState('');
-    // const [loading, setLoading] = useState('');
-    const [showAddfbModal, setShowAddfbModal] = useState(false);
-    const [showAddModal, setShowAddModal] = useState(false);
-    // const [handleTypeChange, setHandleTypeChange] = useState(false);
-    const searchParams = new URLSearchParams(location.search);
     const quizId = sessionStorage.getItem('quizId');
     const topicId = sessionStorage.getItem('topicId');
+
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [questions, setQuestions] = useState([]);
+    const [error, setError] = useState('');
+    const [errorfb, setErrorfb] = useState('');
+    const [showAddfbModal, setShowAddfbModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const handleSubmit = () => {
-        try {
-            // await GetAllQuestion();
-            navigate('/createquiz')
-                ``
-        } catch (error) {
-            console.error('Error fetching data:', error)
-        }
-
-    };
 
     const [fbQuestion, setFbQuestion] = useState({
         question: '',
         questionType: '',
         options: ['', '', '', '', '', '', '', ''],
-
     });
     const [selectedfbType, setSelectedfbType] = useState('');
 
-    // const [questions, setQuestions] = useState([]);
-
     useEffect(() => {
         fetchQuestions(quizId);
-    }, []);
+    }, [quizId]);
 
     const fetchQuestions = async (quizId) => {
         try {
@@ -67,10 +77,17 @@ export const ReviewQuestions = () => {
             setQuestions(questionsData);
         } catch (error) {
             console.error("Error fetching data:", error);
+            setError("Failed to fetch questions. Please try again.");
         }
     };
 
-    // const questions = useSelector((state) => state.quizQuestions.quizQuestions);
+    const handleSubmit = () => {
+        try {
+            navigate('/createquiz');
+        } catch (error) {
+            console.error('Error navigating:', error);
+        }
+    };
 
     const handleFeedback = () => {
         try {
@@ -89,7 +106,7 @@ export const ReviewQuestions = () => {
         if (!fbQuestion.questionType) {
             tempfbErrors.questionType = 'Question type is required';
         }
-        if (fbQuestion.options.length === 0 && fbQuestion.questionType == "MCQ") {
+        if (fbQuestion.options.length === 0 && fbQuestion.questionType === "MCQ") {
             tempfbErrors.optionText = 'At least one option is required';
         }
 
@@ -103,12 +120,11 @@ export const ReviewQuestions = () => {
             quizId: quizId,
             question: fbQuestion.question,
             questionType: fbQuestion.questionType,
-            options: fbQuestion.options.map((optionText, index) => ({
+            options: fbQuestion.options.map((optionText) => ({
                 optionText: optionText
-                // isCorrect: fbQuestion.correctOptions.includes(option) // Check if option is in correctOptions array
             }))
         };
-        console.log(requestBody)
+
         dispatch(createquizfeedbackRequest(requestBody));
         handleCloseAddfbQuestionModal();
     };
@@ -116,31 +132,20 @@ export const ReviewQuestions = () => {
     const handleOpenAddfbQuestionModal = () => {
         setShowAddfbModal(true);
     };
+
     const handleTypeChange = () => {
         setShowAddModal(true);
     };
 
-    const handleOpenModal = () => {
-        setShowAddModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowAddModal(false);
-    };
     const handleCloseAddfbQuestionModal = () => {
         setShowAddfbModal(false);
     };
+
     const handleChange = (index, field, value) => {
-        const updatedoptions = [...fbQuestion.options];
-        updatedoptions[index] = value;
-        setFbQuestion({ ...fbQuestion, options: updatedoptions });
-
-
         setFbQuestion(prevState => ({
             ...prevState,
             [field]: index === -1 ? value : [...prevState[field].slice(0, index), value, ...prevState[field].slice(index + 1)]
         }));
-        // }
     };
 
     const handlefbQuestionTypeChange = (e) => {
@@ -155,7 +160,6 @@ export const ReviewQuestions = () => {
 
     const handleSelectQuestion = (index) => {
         setSelectedQuestion(index);
-        // Scroll to the question details
         const questionElement = document.getElementById(`question-${index}`);
         if (questionElement) {
             questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -170,142 +174,137 @@ export const ReviewQuestions = () => {
         sessionStorage.removeItem("quizId");
         sessionStorage.removeItem("topicId");
         sessionStorage.removeItem("courseId");
-        navigate(`/addtopic/${courseId}`)
-        dispatch(fetchQuizIdFailure(topicId))
+        navigate(`/addtopic/${courseId}`);
+        dispatch(fetchQuizIdFailure(topicId));
     }
 
-
     return (
-        <>
-            <Container fluid style={{ marginTop: '300px' }}>
-                <div>
-                    <button class="btn btn-light" style={{ marginLeft: "95%", marginTop: "-29%", backgroundColor: "#365486", color: "white", width: '50' }} onClick={() => { handleNavigate() }}>Back</button>
-                    <div>
-
-                        <div className='question-template-container' style={{ display: 'flex', marginTop: "-10%" }}>
-                            <div className="question-grid-container ">
-                                {questions && questions.length > 0 && (
-                                    <div className="question-grid">
-                                        {questions.map((question, index) => (
-                                            <div
-                                                key={index}
-                                                className={`question-number ${selectedQuestion === index ? 'active' : ''}`}
-                                                onClick={() => handleSelectQuestion(index)}
-                                            >
-                                                {index + 1}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            <Container style={{ width:1200}}>
-                                <div className="question-details-container">
-
-                                    {error && <p>Error: {error}</p>}
-                                    {questions && questions.length > 0 && (
-                                        <div>
-                                            <h5 className='text' style={{ marginTop: "-5%" , marginLeft:"1%" }}>Review Questions</h5>
-                                            {questions.map((question, index) => (
-                                                <div
-                                                    key={index}
-                                                    id={`question-${index}`} // Add an ID to each question card
-                                                    className='card mt-3'>
-                                                    <div className="card-body" style={{backgroundColor:"#F9F5F6"}}>
-                                                        <h5 className="card-title">Question {question.questionNo}:</h5>
-                                                        <input value={question.question} className='form-control' readOnly />
-                                                        <div className="form-group">
-                                                            <label>Options:</label>
-                                                            {question.options.map((option, index) => (
-                                                                <input key={index} type="text" className="form-control mt-2" value={option.option} readOnly />
-                                                            ))}
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Correct Answers:</label>
-                                                            {question.options.filter(option => option.isCorrect).map((correctOption, index) => (
-                                                                <input key={index} type="text" className="form-control mt-2" value={correctOption.option} readOnly />
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-right" style={{ backgroundColor: "#365486", color: "white" }}>Go to Edit Page</button>
-                                            <button onClick={handleTypeChange} className="btn btn-light mb-5 float-right" style={{ backgroundColor: "#365486", color: "white", marginLeft: "80%", marginTop: "-15%" }}>Review & Publish</button>
-                                        </div>
-                                    )}
-                                </div>
-                            </Container>
-
-                            <div>
-                                <Modal show={showAddfbModal} onHide={handleCloseAddfbQuestionModal}>
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>Add Feedback Questions</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
-                                        <div className="form-group">
-                                            <label>Question Type:</label>
-                                            <select className='form-control' value={selectedfbType} onChange={handlefbQuestionTypeChange}>
-                                                <option value="">Select Question Type</option>
-                                                <option value="MCQ">MCQ</option>
-                                                <option value="Descriptive">Descriptive</option>
-                                            </select>
-                                            {errorfb.questionType && <div style={{ color: "red" }}>{errorfb.questionType}</div>}
-                                        </div>
-
-                                        {selectedfbType === 'MCQ' && (
-                                            <>
-                                                <div className="form-group">
-                                                    <label>Question:</label>
-                                                    <input className='form-control' type="text" value={fbQuestion.question} onChange={(e) => handleChange(-1, 'question', e.target.value)} />
-                                                    {errorfb.question && <div style={{ color: "red" }}>{errorfb.question}</div>}
-                                                </div>
-                                                {[...Array(4)].map((_, index) => (
-                                                    <div className="form-group" key={index}>
-                                                        <label>Option {index + 1}:</label>
-                                                        <input className='form-control' type="text" value={fbQuestion.options[index] || ''} onChange={(e) => handleChange(index, 'options', e.target.value)} />
-                                                        {errorfb.options && <div style={{ color: "red" }}>{errorfb.options}</div>}
-                                                    </div>
-                                                ))}
-                                            </>
-                                        )}
-                                        {selectedfbType === 'Descriptive' && (
-                                            <>
-                                                <div className="form-group">
-                                                    <label>Question:</label>
-                                                    <input className='form-control' type="text" value={fbQuestion.question} onChange={(e) => handleChange(-1, 'question', e.target.value)} />
-                                                    {errorfb.question && <div style={{ color: "red" }}>{errorfb.question}</div>}
-                                                </div>
-                                            </>
-                                        )}
-                                    </Modal.Body>
-                                    <Modal.Footer style={{ backgroundColor: "#F9F5F6" }}>
-                                        <Button variant="secondary" onClick={handleCloseAddfbQuestionModal}>Close</Button>
-                                        <Button variant="primary" onClick={() => { handleSaveQuestion() }}>Save</Button>
-
-                                    </Modal.Footer>
-                                </Modal>
-
-                                <Modal show={showAddModal} onHide={handleCloseModal} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
-                                    <Modal.Header closeButton style={{ backgroundColor: "#23275c" }}>
-                                    </Modal.Header>
-                                    <Modal.Body style={{ backgroundColor: "#F9F5F6" }}>
-                                        <div onChange={handleTypeChange}>
-                                            <Alert severity="success" color='info'>Quiz Questions Published successfully</Alert>
-                                        </div>
-                                    </Modal.Body>
-                                    <Modal.Footer style={{ backgroundColor: "#F9F5F6", display:'flex' }}>
-                                        <Button onClick={handleFeedback} className="btn btn-light" style={{ backgroundColor: "#365486", color: "white" }}>Add Feedback</Button>
-                                        <Button className="btn btn-light" style={{ backgroundColor: "#365486", color: "white", marginLeft: "40%" }} onClick={handleClose}>Go to course</Button>
-
-                                    </Modal.Footer>
-                                </Modal>
-                            </div>
-                        </div>
+        <StyledContainer fluid>
+            <Row className="justify-content-end mt-5">
+                <Col xs="auto">
+                    <Button variant="primary" onClick={handleNavigate}>Back</Button>
+                </Col>
+            </Row>
+            
+            <Row>
+            <Col md={3}>
+                    <QuestionGridCard>
+                        <Card.Body>
+                            <h5 className="text-center mb-4">Question Navigator</h5>
+                            <QuestionGrid>
+                                {questions && questions.map((_, index) => (
+                                    <QuestionNumberBtn
+                                        key={index}
+                                        variant={selectedQuestion === index ? 'primary' : 'outline-primary'}
+                                        onClick={() => handleSelectQuestion(index)}
+                                    >
+                                        {index + 1}
+                                    </QuestionNumberBtn>
+                                ))}
+                            </QuestionGrid>
+                        </Card.Body>
+                    </QuestionGridCard>
+                </Col>
+                
+                <Col md={9}>
+                    <h3 className="mb-4">Review Questions</h3>
+                    {error && <Alert variant="danger">{error}</Alert>}
+                    {questions && questions.map((question, index) => (
+                        <QuestionCard key={index} id={`question-${index}`} className="mb-4">
+                            <Card.Header>
+                                <h5>Question {question.questionNo}</h5>
+                            </Card.Header>
+                            <Card.Body>
+                                <Form.Group>
+                                    <Form.Label>Question:</Form.Label>
+                                    <Form.Control as="textarea"  value={question.question} readOnly />
+                                </Form.Group>
+                                <Form.Group className="mt-3">
+                                    <Form.Label>Options:</Form.Label>
+                                    {question.options.map((option, optIndex) => (
+                                        <OptionInput 
+                                            key={optIndex} 
+                                            type="text" 
+                                            value={option.option} 
+                                            readOnly 
+                                            className="mt-2"
+                                            isCorrect={option.isCorrect}
+                                        />
+                                    ))}
+                                </Form.Group>
+                            </Card.Body>
+                        </QuestionCard>
+                    ))}
+                    
+                    <div className="d-flex justify-content-between mt-4 mb-5">
+                        <Button variant="primary" onClick={handleSubmit}>Go to Edit Page</Button>
+                        <Button variant="success" onClick={handleTypeChange}>Review & Publish</Button>
                     </div>
-                </div>
+                </Col>
+            </Row>
 
-            </Container>
-        </>
+            <Modal show={showAddfbModal} onHide={handleCloseAddfbQuestionModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Feedback Questions</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Question Type:</Form.Label>
+                            <Form.Control as="select" value={selectedfbType} onChange={handlefbQuestionTypeChange}>
+                                <option value="">Select Question Type</option>
+                                <option value="MCQ">MCQ</option>
+                                <option value="Descriptive">Descriptive</option>
+                            </Form.Control>
+                            {errorfb.questionType && <Form.Text className="text-danger">{errorfb.questionType}</Form.Text>}
+                        </Form.Group>
+
+                        {selectedfbType && (
+                            <Form.Group className="mt-3">
+                                <Form.Label>Question:</Form.Label>
+                                <Form.Control 
+                                    type="text" 
+                                    value={fbQuestion.question} 
+                                    onChange={(e) => handleChange(-1, 'question', e.target.value)} 
+                                />
+                                {errorfb.question && <Form.Text className="text-danger">{errorfb.question}</Form.Text>}
+                            </Form.Group>
+                        )}
+
+                        {selectedfbType === 'MCQ' && (
+                            [...Array(4)].map((_, index) => (
+                                <Form.Group className="mt-3" key={index}>
+                                    <Form.Label>Option {index + 1}:</Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        value={fbQuestion.options[index] || ''} 
+                                        onChange={(e) => handleChange(index, 'options', e.target.value)} 
+                                    />
+                                </Form.Group>
+                            ))
+                        )}
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseAddfbQuestionModal}>Close</Button>
+                    <Button variant="primary" onClick={handleSaveQuestion}>Save</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static" className='mt-5'>
+                <Modal.Header closeButton>
+                    <Modal.Title>Quiz Published</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Alert variant="success">Quiz Questions Published successfully</Alert>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleFeedback}>Add Feedback</Button>
+                    <Button variant="secondary" onClick={handleClose}>Go to course</Button>
+                </Modal.Footer>
+            </Modal>
+        </StyledContainer>
     );
 };
 
-export default ReviewQuestions
+export default ReviewQuestions;

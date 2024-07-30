@@ -24,7 +24,7 @@ import {
         };
   
       case FETCH_TOPICS_SUCCESS:
-        console.log("Topicsreducer",action.payload);
+        // console.log("Topicsreducer",action.payload);
         return{
           ...state,
           topics:action.payload,

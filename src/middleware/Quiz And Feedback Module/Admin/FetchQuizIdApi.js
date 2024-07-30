@@ -9,6 +9,7 @@ export const FetchQuizById = ({dispatch}) => (next) => async (action) => {
       console.log("sending topicId", action.payload);
       const response = await axios.get(`http://localhost:5199/api/Get/topic/${action.payload}`);
       console.log("api quiz id:",response.data);
+      sessionStorage.setItem('quizId',response.data);
       dispatch(fetchQuizIdSuccess(response.data));
     } catch (error) {
       console.log("Fetching quizid: ", error.message);
