@@ -30,7 +30,7 @@ const QuestionTemplate = () => {
 
   useEffect(() => {
     fetchQuestions(quizId);
-  });
+  }, [quizId]);
 
   const dispatch = useDispatch();
   const [questions, setQuestions] = useState([]);
@@ -201,65 +201,110 @@ const QuestionTemplate = () => {
   };
 
   const validateUpdateQuestion = () => {
+    console.log("Starting validation...");
+    console.log("Current editedQuestion:", editedQuestion);
+  
     let tempErrors = {
       question: "",
       questionType: "",
-      options: "",
+      options: [],
       correctOptions: [],
       individualOptions: [],
       individualCorrectOptions: [],
     };
-
-    if (!editedQuestion.question) {
+    let isValid = true;
+  
+    // Question validation
+    if (!editedQuestion.question.trim()) {
+      console.log("Question is empty");
       tempErrors.question = "Question is required";
+      isValid = false;
+    } else if (editedQuestion.question.length > 500) {
+      console.log("Question is too long");
+      tempErrors.question = "Question should not exceed 500 characters";
+      isValid = false;
     }
+  
+    // Question type validation
     if (!editedQuestion.questionType) {
+      console.log("Question type is empty");
       tempErrors.questionType = "Question type is required";
+      isValid = false;
     }
-    if (
-      editedQuestion.options.length === 0 ||
-      !editedQuestion.options.some((option) => option)
-    ) {
-      tempErrors.options = "option is required";
-    } else {
+  
+    // Options validation
+    if (editedQuestion.questionType === "MCQ" || editedQuestion.questionType === "MSQ") {
       editedQuestion.options.forEach((option, index) => {
-        if (!option) {
-          tempErrors.individualOptions[index] = `Option ${index + 1
-            } is required`;
+        if (!option.trim()) {
+          console.log(`Option ${index + 1} is empty`);
+          tempErrors.individualOptions[index] = "Option is required";
+          isValid = false;
+        } else if (option.length > 200) {
+          console.log(`Option ${index + 1} is too long`);
+          tempErrors.individualOptions[index] = "Option should not exceed 200 characters";
+          isValid = false;
         }
       });
+  
+      const uniqueOptions = new Set(editedQuestion.options.filter(Boolean).map(opt => opt.trim()));
+      if (uniqueOptions.size !== editedQuestion.options.filter(Boolean).length) {
+        console.log("Duplicate options found");
+        tempErrors.options.push("All options must be unique");
+        isValid = false;
+      }
     }
-    if (
-      editedQuestion.correctOptions.length === 0 ||
-      !editedQuestion.correctOptions.some((option) => option)
-    ) {
-      tempErrors.correctOptions[0] = "Correct option is required";
-    } else {
-      editedQuestion.correctOptions.forEach((option, index) => {
-        if (!option) {
-          tempErrors.correctOptions[index] = `Correct Option ${index + 1} is required`;
+  
+    // Correct options validation
+    if (editedQuestion.questionType === "MCQ" || editedQuestion.questionType === "T/F") {
+      if (!editedQuestion.correctOptions[0]) {
+        console.log("Correct option is empty for MCQ or T/F");
+        tempErrors.correctOptions[0] = "Correct option is required";
+        isValid = false;
+      }
+    } else if (editedQuestion.questionType === "MSQ") {
+      editedQuestion.correctOptions.forEach((correctOption, index) => {
+        if (!correctOption) {
+          console.log(`Correct option ${index + 1} is empty for MSQ`);
+          tempErrors.individualCorrectOptions[index] = "This correct option field is required";
+          isValid = false;
+        } else if (!editedQuestion.options.includes(correctOption)) {
+          console.log(`Correct option ${index + 1} is not a valid option`);
+          tempErrors.individualCorrectOptions[index] = "Selected correct option is not a valid option";
+          isValid = false;
         }
       });
+  
+      if (editedQuestion.correctOptions.filter(Boolean).length < 2) {
+        console.log("Not enough correct options for MSQ");
+        tempErrors.correctOptions[0] = "At least two correct options are required for MSQ";
+        isValid = false;
+      }
+  
+      const uniqueCorrectOptions = new Set(editedQuestion.correctOptions.filter(Boolean));
+      if (uniqueCorrectOptions.size !== editedQuestion.correctOptions.filter(Boolean).length) {
+        console.log("Duplicate correct options found");
+        tempErrors.correctOptions.push("All correct options must be unique");
+        isValid = false;
+      }
     }
-
+  
+    console.log("Validation errors:", tempErrors);
+    console.log("Is valid:", isValid);
+  
     setErrors(tempErrors);
-    return (
-      !tempErrors.question &&
-      !tempErrors.questionType &&
-      !tempErrors.options &&
-      !tempErrors.correctOptions &&
-      tempErrors.individualOptions.every((e) => !e) &&
-      tempErrors.individualCorrectOptions.every((e) => !e)
-    );
+    return isValid;
   };
 
-  const handleUpdateQuestion = () => {
+  const handleUpdateQuestion = async () => {
+    console.log("Starting update process");
+    console.log("Edited question:", editedQuestion);
+  
     const { quizQuestionId, questionType, ...updatedQuestion } = editedQuestion;
     const updatedOptions = updatedQuestion.options.map((option, index) => ({
       option,
       isCorrect: updatedQuestion.correctOptions.includes(option),
     }));
-
+  
     const requestBody = {
       ...updatedQuestion,
       options: updatedOptions,
@@ -267,30 +312,29 @@ const QuestionTemplate = () => {
       quizId: quizId,
       quizQuestionId: quizQuestionId,
     };
-
+  
+    console.log("Request body:", requestBody);
+  
     if (validateUpdateQuestion()) {
-      UpdateQuizQuestionsApi(requestBody)
-      handleCloseEditQuestionModal();
-    }
-    const Toast = Swal.mixin({
-      className: "swal2-toast",
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2000,
-      background: 'green',
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
+      try {
+        const response = await UpdateQuizQuestionsApi(requestBody);
+        console.log("API response:", response);
+  
+        setQuestions(prevQuestions => {
+          const newQuestions = prevQuestions.map(q => 
+            q.quizQuestionId === quizQuestionId ? { ...q, ...requestBody } : q
+          );
+          console.log("Updated questions:", newQuestions);
+          return newQuestions;
+        });
+  
+        handleCloseEditQuestionModal();
+        
+        // ... (Toast code remains the same)
+      } catch (error) {
+        console.error("Error updating question:", error);
       }
-    });
-    Toast.fire({
-      icon: "success",
-      title: "Question Updated Successfully",
-      color: 'white'
-    });
-
+    }
   };
 
   const validateField = (fieldName, value, index = null) => {
@@ -676,16 +720,16 @@ const QuestionTemplate = () => {
           )}
         </div>
         {questions?.length > 0 && (
-          
-            <div className="d-flex justify-content-end mb-2" style={{ marginTop: 100 }}>
-              <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
-                Quiz Feedback
-              </Button>
-              <button onClick={handleSubmit} className="btn btn-light" style={{ color: "white", backgroundColor: "#365486" }}>Proceed to review</button>
 
-            </div>
+          <div className="d-flex justify-content-end mb-2" style={{ marginTop: 100 }}>
+            <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
+              Quiz Feedback
+            </Button>
+            <button onClick={handleSubmit} className="btn btn-light" style={{ color: "white", backgroundColor: "#365486" }}>Proceed to review</button>
 
-   
+          </div>
+
+
         )}
 
 
@@ -993,7 +1037,7 @@ const QuestionTemplate = () => {
                 <MuiButton
                   variant="contained"
                   color="primary"
-                  onClick={validUpdatedQuestion}
+                  onClick={handleUpdateQuestion}
                 >
                   Save Changes
                 </MuiButton>
@@ -1001,20 +1045,6 @@ const QuestionTemplate = () => {
             </Box>
           </Box>
         </MuiModal>
-        {/* <Modal show={showPopup} onHide={() => setShowConfirmationModal(false)} backdrop='static' style={{ marginTop: "2.5%", marginLeft: "3%" }}>
-          <Modal.Header>
-            <Modal.Title>Confirm Delete</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this question?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowPopup(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleConfirmDelete}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
       </div>
     </Container>
   );
