@@ -25,15 +25,30 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useNavigate } from 'react-router-dom';
 
+
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
+  const dispatch = useDispatch();
+  const [questions, setQuestions] = useState([]);
+
+  const fetchQuestions = async (quizId) => {
+    try {
+      const data = await FetchQuizQuestionsApi(quizId);
+      setQuestions(data);
+      const newFilteredQuestions = data.filter(
+        (question) =>
+          !selectedFilterQuestionType || question.questionType === selectedFilterQuestionType
+      );
+      setFilteredQuestions(newFilteredQuestions);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
 
   useEffect(() => {
     fetchQuestions(quizId);
   }, [quizId]);
 
-  const dispatch = useDispatch();
-  const [questions, setQuestions] = useState([]);
 
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({
@@ -50,10 +65,7 @@ const QuestionTemplate = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const fetch = useRef(false);
   const [numOptions, setNumOptions] = useState(5);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState(null);
   const [selectedFilterQuestionType, setSelectedFilterQuestionType] = useState('')
   const [deleteQuestionId, setDeleteQuestionId] = useState(null);
   const [newQuestion, setNewQuestion] = useState({
@@ -71,48 +83,74 @@ const QuestionTemplate = () => {
 
   const navigate = useNavigate();
 
-  const [showPopup, setShowPopup] = useState(false);
-
-  const fetchQuestions = async (quizId) => {
+  const handleDeleteQuestion = async (quizQuestionId) => {
     try {
+      await dispatch(deleteQuizQuestionRequest(quizQuestionId));
 
-      // dispatch(fetchAllQuizQuestionRequest(quizId));
-      const data = await FetchQuizQuestionsApi(quizId);
-      setQuestions(data);
+      setQuestions(prevQuestions => {
+        const updatedQuestions = prevQuestions.filter(question => question.quizQuestionId !== quizQuestionId);
+        const newTotalPages = Math.ceil(updatedQuestions.length / questionsPerPage);
+        if (currentPage > newTotalPages) {
+          setCurrentPage(newTotalPages);
+        }
+
+        return updatedQuestions;
+      });
+
+      setFilteredQuestions(prevFilteredQuestions =>
+        prevFilteredQuestions.filter(question => question.quizQuestionId !== quizQuestionId)
+      );
+
+      setDeleteQuestionId(null);
+
+      const Toast = Swal.mixin({
+        className: "swal2-toast",
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2000,
+        background: 'green',
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Question Deleted Successfully",
+        color: 'white'
+      });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error deleting question:", error);
     }
   };
 
-  const handleDeleteQuestion = async (quizQuestionId) => {
-    // Dispatch the delete request
-    await dispatch(deleteQuizQuestionRequest(quizQuestionId));
+  useEffect(() => {
+    const newFilteredQuestions = questions?.filter(
+      (question) =>
+        !selectedFilterQuestionType || question.questionType === selectedFilterQuestionType
+    );
+    setFilteredQuestions(newFilteredQuestions);
+    const newTotalPages = Math.ceil(newFilteredQuestions.length / questionsPerPage);
+    if (currentPage > newTotalPages) {
+      setCurrentPage(newTotalPages || 1); // Set to 1 if newTotalPages is 0
+    }
+  }, [selectedFilterQuestionType, questions, questionsPerPage]);
 
-    // Update the questions state to remove the deleted question
-    setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
+  const searchFilteredQuestions = questions?.filter(
+    (question) =>
+      (question.question.toLowerCase().includes(searchTerm) ||
+        (question.questionNo && question.questionNo.toString().includes(searchTerm))) &&
+      (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
+  );
 
-    // Close the popup and reset questionToDelete
-    setShowPopup(false);
-    setDeleteQuestionId(null);
-    const Toast = Swal.mixin({
-      className: "swal2-toast",
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2000,
-      background: 'green',
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: " Question Deleted Successfully",
-      color: 'white'
-    });
-  };
+  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const currentQuestions = searchFilteredQuestions?.slice(
+    indexOfFirstQuestion,
+    indexOfLastQuestion
+  );
 
   const handleOpenEditQuestionModal = async (quizQuestionId) => {
     try {
@@ -171,14 +209,6 @@ const QuestionTemplate = () => {
     setCurrentPage(value);
   };
 
-  const validUpdatedQuestion = (event) => {
-    event.preventDefault();
-
-    if (validateUpdateQuestion()) {
-      handleUpdateQuestion();
-    }
-  };
-
   const handleCloseAddQuestionModal = () => {
     setShowAddQuestionModal(false);
   };
@@ -203,7 +233,7 @@ const QuestionTemplate = () => {
   const validateUpdateQuestion = () => {
     console.log("Starting validation...");
     console.log("Current editedQuestion:", editedQuestion);
-  
+
     let tempErrors = {
       question: "",
       questionType: "",
@@ -213,7 +243,7 @@ const QuestionTemplate = () => {
       individualCorrectOptions: [],
     };
     let isValid = true;
-  
+
     // Question validation
     if (!editedQuestion.question.trim()) {
       console.log("Question is empty");
@@ -224,14 +254,14 @@ const QuestionTemplate = () => {
       tempErrors.question = "Question should not exceed 500 characters";
       isValid = false;
     }
-  
+
     // Question type validation
     if (!editedQuestion.questionType) {
       console.log("Question type is empty");
       tempErrors.questionType = "Question type is required";
       isValid = false;
     }
-  
+
     // Options validation
     if (editedQuestion.questionType === "MCQ" || editedQuestion.questionType === "MSQ") {
       editedQuestion.options.forEach((option, index) => {
@@ -245,7 +275,7 @@ const QuestionTemplate = () => {
           isValid = false;
         }
       });
-  
+
       const uniqueOptions = new Set(editedQuestion.options.filter(Boolean).map(opt => opt.trim()));
       if (uniqueOptions.size !== editedQuestion.options.filter(Boolean).length) {
         console.log("Duplicate options found");
@@ -253,7 +283,7 @@ const QuestionTemplate = () => {
         isValid = false;
       }
     }
-  
+
     // Correct options validation
     if (editedQuestion.questionType === "MCQ" || editedQuestion.questionType === "T/F") {
       if (!editedQuestion.correctOptions[0]) {
@@ -273,13 +303,13 @@ const QuestionTemplate = () => {
           isValid = false;
         }
       });
-  
+
       if (editedQuestion.correctOptions.filter(Boolean).length < 2) {
         console.log("Not enough correct options for MSQ");
         tempErrors.correctOptions[0] = "At least two correct options are required for MSQ";
         isValid = false;
       }
-  
+
       const uniqueCorrectOptions = new Set(editedQuestion.correctOptions.filter(Boolean));
       if (uniqueCorrectOptions.size !== editedQuestion.correctOptions.filter(Boolean).length) {
         console.log("Duplicate correct options found");
@@ -287,10 +317,10 @@ const QuestionTemplate = () => {
         isValid = false;
       }
     }
-  
+
     console.log("Validation errors:", tempErrors);
     console.log("Is valid:", isValid);
-  
+
     setErrors(tempErrors);
     return isValid;
   };
@@ -298,13 +328,13 @@ const QuestionTemplate = () => {
   const handleUpdateQuestion = async () => {
     console.log("Starting update process");
     console.log("Edited question:", editedQuestion);
-  
+
     const { quizQuestionId, questionType, ...updatedQuestion } = editedQuestion;
     const updatedOptions = updatedQuestion.options.map((option, index) => ({
       option,
       isCorrect: updatedQuestion.correctOptions.includes(option),
     }));
-  
+
     const requestBody = {
       ...updatedQuestion,
       options: updatedOptions,
@@ -312,25 +342,23 @@ const QuestionTemplate = () => {
       quizId: quizId,
       quizQuestionId: quizQuestionId,
     };
-  
+
     console.log("Request body:", requestBody);
-  
+
     if (validateUpdateQuestion()) {
       try {
         const response = await UpdateQuizQuestionsApi(requestBody);
         console.log("API response:", response);
-  
+
         setQuestions(prevQuestions => {
-          const newQuestions = prevQuestions.map(q => 
+          const newQuestions = prevQuestions.map(q =>
             q.quizQuestionId === quizQuestionId ? { ...q, ...requestBody } : q
           );
           console.log("Updated questions:", newQuestions);
           return newQuestions;
         });
-  
+
         handleCloseEditQuestionModal();
-        
-        // ... (Toast code remains the same)
       } catch (error) {
         console.error("Error updating question:", error);
       }
@@ -385,26 +413,6 @@ const QuestionTemplate = () => {
     setFilteredQuestions(newFilteredQuestions);
   }, [selectedFilterQuestionType, questions]);
 
-  // const searchFilteredQuestions = questions?.filter(
-  //   (question) =>
-  //     question.question.toLowerCase().includes(searchTerm) &&
-  //     (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
-  // );
-
-  const searchFilteredQuestions = questions?.filter(
-    (question) =>
-      question.question.toLowerCase().includes(searchTerm) ||
-      (question.questionNo && question.questionNo.toString().includes(searchTerm)) &&
-      (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
-  );
-
-  const indexOfLastQuestion = currentPage * questionsPerPage;
-  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-
-  const currentQuestions = searchFilteredQuestions?.slice(
-    indexOfFirstQuestion,
-    indexOfLastQuestion
-  );
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -455,7 +463,7 @@ const QuestionTemplate = () => {
   };
 
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = async () => {
     let tempErrors = {
       question: "",
       questionType: "",
@@ -543,10 +551,46 @@ const QuestionTemplate = () => {
         })),
       };
 
-      PostSingleQuestion(requestBody);
-      setNewQuestion({ ...newQuestion, question: "", options: ["", "", "", "", "", "", "", ""], correctOptions: ["", "", ""] });
-      handleCloseAddQuestionModal();
+      try {
+        await PostSingleQuestion(requestBody);
+        await fetchQuestions(quizId);
+        setNewQuestion({
+          question: "",
+          questionType: "",
+          options: ["", "", "", "", "", "", "", ""],
+          correctOptions: ["", "", ""]
+        });
+
+        handleCloseAddQuestionModal();
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Question added successfully'
+        });
+
+      } catch (error) {
+        console.error("Error adding question:", error);
+        // Show error message
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong while adding the question!',
+        });
+      }
     }
+
   };
 
   const handleSubmit = () => {
@@ -721,7 +765,7 @@ const QuestionTemplate = () => {
         </div>
         {questions?.length > 0 && (
 
-          <div className="d-flex justify-content-end mb-2" style={{ marginTop: 100 }}>
+          <div className="d-flex justify-content-end mb-2" style={{ marginTop: 30 }}>
             <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
               Quiz Feedback
             </Button>
@@ -731,9 +775,6 @@ const QuestionTemplate = () => {
 
 
         )}
-
-
-
 
         <MuiModal
           open={showAddQuestionModal}
@@ -970,7 +1011,7 @@ const QuestionTemplate = () => {
                   error={!!errors.question}
                   helperText={errors.question}
                 />
-                {editedQuestion.options.map((option, index) => (
+                {editedQuestion.questionType !== "T/F" && editedQuestion.options.map((option, index) => (
                   <TextField
                     key={index}
                     fullWidth
@@ -989,6 +1030,19 @@ const QuestionTemplate = () => {
                     }}
                     error={!!errors.individualOptions && !!errors.individualOptions[index]}
                     helperText={errors.individualOptions && errors.individualOptions[index]}
+                  />
+                ))}
+                {editedQuestion.questionType === "T/F" && editedQuestion.options.map((option, index) => (
+                  <TextField
+                    key={index}
+                    fullWidth
+                    margin="normal"
+                    label={`Option ${index + 1}`}
+                    variant="outlined"
+                    value={option}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 ))}
                 {errors.options && (
