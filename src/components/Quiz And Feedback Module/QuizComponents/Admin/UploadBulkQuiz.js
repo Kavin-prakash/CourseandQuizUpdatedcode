@@ -542,7 +542,7 @@ const UploadBulkQuiz = () => {
           <FixedHeader position="static" style={{display:'flex'}}>
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Add Individual Questions
+                Added Questions
               </Typography>
               <Button color="inherit" onClick={handleOpenAddQuestionModal} startIcon={<AddIcon />} style={{height:'50'}}>
                 Add Question
