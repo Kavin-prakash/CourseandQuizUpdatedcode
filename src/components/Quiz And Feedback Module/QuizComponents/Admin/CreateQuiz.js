@@ -5,17 +5,12 @@ import { IconButton, Stack, Tooltip } from '@mui/material';    // modification f
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ImFolderUpload } from "react-icons/im";
-import { BiSolidCoinStack } from "react-icons/bi";
-import { AiFillEdit } from "react-icons/ai";
-import { FaTrashCan } from "react-icons/fa6";
 import { FaUpload } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import AdminNavbar from "./AdminNavbar";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col, Form, Card, ProgressBar, OverlayTrigger } from 'react-bootstrap';
-import { FaInfoCircle, FaArrowRight } from 'react-icons/fa';
+import { Row, Col, Form, Card, OverlayTrigger } from 'react-bootstrap';
 import "../../../../Styles/Quiz And Feedback Module/CreateQuiz.css";
 import {
     ValidationQuizTitle,
@@ -25,7 +20,6 @@ import {
 } from "../../../../utils/Quiz And Feedback Module/ValidationCreateQuiz";
 import { DeleteQuizDetails } from "../../../../middleware/Quiz And Feedback Module/Admin/api";
 import { GetQuizDetails } from "../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizApi";
-import { setQuizDetailsRequest } from "../../../../actions/Quiz And Feedback Module/Admin/CreateQuizAction";
 import { useNavigate } from "react-router-dom";
 import { editQuizDetailsRequest } from "../../../../actions/Quiz And Feedback Module/Admin/EditQuizAction";
 import QuestionTemplateView from "../../../../View/Quiz And Feedback Module/QuestionTemplateView";
@@ -37,11 +31,11 @@ import { useSelector } from "react-redux";
 import { Modal as MuiModal, Box, Typography, TextField, Button as MuiButton } from '@mui/material';
 import { fetchTopicsRequest } from "../../../../actions/Course/Topic/FetchTopicsAction";
 
+const MotionCard = motion(Card);
 export const Home = () => {
     const quizId = sessionStorage.getItem('quizId');
     const topicId = sessionStorage.getItem('topicId');
     const courseId = sessionStorage.getItem('courseId');
-    const [button, setButton] = useState(true);
     const selectorTopicsDetail = useSelector((state) => state.fetchTopic.topics[0]);
 
     // const [viewCourse, setViewCourse] = useState([course])
@@ -49,7 +43,6 @@ export const Home = () => {
     const [showQuestions, setShowQuestions] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [showOptions, setShowOptions] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [quizTitle, setQuizTitle] = useState('');
     const [duration, setDuration] = useState('');
@@ -65,6 +58,12 @@ export const Home = () => {
     const [inputQuizTitle, setInputQuizTitle] = useState('');
     const [errordeletequiz, setErrorDeleteQuiz] = useState('');
     const [formComplete, setFormComplete] = useState(false);
+    const [editErrors, setEditErrors] = useState({
+        nameOfQuiz: '',
+        duration: '',
+        passMark: '',
+        attemptsAllowed: ''
+      });
     const [quizDetails, setQuizDetails] = useState({
         topicId: topicId,
         nameOfQuiz: '',
@@ -98,22 +97,48 @@ export const Home = () => {
     }, []);
 
     useEffect(() => {
-        if(selectorTopicsDetail?.topics){
+        if (selectorTopicsDetail?.topics) {
             const topic = selectorTopicsDetail.topics.find(topic => topic.topicId === topicId);
             setCurrentTopic(topic);
         }
         // Find the correct topic
     }, [selectorTopicsDetail, topicId]);
 
-    const toggleOptions = (event) => {
-        event.preventDefault();
-        setShowOptions(!showOptions);
-        event.target.nextSibling.style.display = showOptions ? 'none' : 'block';
-    };
-
-    const toggleQuestions = () => {
-        setShowQuestions(!showQuestions);
-    };
+    const validateEditFields = () => {
+        let isValid = true;
+        const newErrors = {...editErrors};
+    
+        if (!quizData.nameOfQuiz.trim()) {
+          newErrors.nameOfQuiz = 'Quiz title is required';
+          isValid = false;
+        } else {
+          newErrors.nameOfQuiz = '';
+        }
+    
+        if (!quizData.duration) {
+          newErrors.duration = 'Duration is required';
+          isValid = false;
+        } else {
+          newErrors.duration = '';
+        }
+    
+        if (!quizData.passMark) {
+          newErrors.passMark = 'Grade to be secured is required';
+          isValid = false;
+        } else {
+          newErrors.passMark = '';
+        }
+    
+        if (!quizData.attemptsAllowed) {
+          newErrors.attemptsAllowed = 'Attempts allowed is required';
+          isValid = false;
+        } else {
+          newErrors.attemptsAllowed = '';
+        }
+    
+        setEditErrors(newErrors);
+        return isValid;
+      };
 
 
     const handleUploadClick = async (e) => {
@@ -187,16 +212,6 @@ export const Home = () => {
         );
     };
 
-    const handleSubmit = () => {
-        try {
-            navigate(`/reviewquestions`)
-
-        } catch (error) {
-            console.error('Error fetching data:', error)
-        }
-
-    };
-
     const handleDurationChange = (e) => {
         setDuration('SET_DURATION', e.target.value);
     };
@@ -216,17 +231,18 @@ export const Home = () => {
     }
 
     const handleUpdateQuiz = () => {
-        const updatedQuizData = {
+        if (validateEditFields()) {
+          const updatedQuizData = {
             quizId: quizId,
             nameOfQuiz: quizData.nameOfQuiz,
             duration: parseInt(quizData.duration),
             attemptsAllowed: parseInt(quizData.attemptsAllowed),
             passMark: parseInt(quizData.passMark)
-        };
-        console.log("update", updatedQuizData);
-        dispatch(editQuizDetailsRequest(updatedQuizData));
-        handleCloseQuizEditModal();
-        const Toast = Swal.mixin({
+          };
+          console.log("update", updatedQuizData);
+          dispatch(editQuizDetailsRequest(updatedQuizData));
+          handleCloseQuizEditModal();
+          const Toast = Swal.mixin({
             className: "swal2-toast",
             toast: true,
             position: "top",
@@ -235,17 +251,17 @@ export const Home = () => {
             background: 'green',
             timerProgressBar: true,
             didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
             }
-        });
-        Toast.fire({
+          });
+          Toast.fire({
             icon: "success",
             title: "Quiz Updated Successfully",
             color: 'white'
-        });
-
-    };
+          });
+        }
+      };
 
     const handleDeleteQuiz = (quizId) => {
         setShowQuestions(false);
@@ -300,7 +316,13 @@ export const Home = () => {
         navigate(`/quizfeedback`)
     }
 
-    const modalStyle = {
+    const fadeInUp = {
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.5 }
+      };
+    
+      const modalStyle = {
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -310,268 +332,260 @@ export const Home = () => {
         boxShadow: 24,
         p: 4,
         borderRadius: 2,
-    };
+      };
 
     return (
-        <div>
-            <Container fluid className="creat-quiz-container">
-                <div >
-                    <div className="d-flex justify-content-end mb-5" style={{ marginTop: 100 }}>
-                        <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
-                            Quiz Feedback
+        <Container fluid className="create-quiz-container bg-light py-5">
+        <motion.div initial="initial" animate="animate" variants={fadeInUp}>
+          <Row className="justify-content-end mb-4">
+            <Col xs="auto">
+              <Button variant="secondary" onClick={handleNavigate}>
+                Back
+              </Button>
+            </Col>
+          </Row>
+          
+          <Row>
+            <Col md={6}>
+              <MotionCard className="mb-4 shadow-sm" variants={fadeInUp}>
+                <Card.Header as="h5" className="bg-primary text-white">Course Details</Card.Header>
+                <Card.Body>
+                  <Form style={{fontSize:12}}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Course:</Form.Label>
+                      <Form.Control type="text" value={selectorTopicsDetail?.courseTitle} readOnly />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Topic:</Form.Label>
+                      <Form.Control type="text" value={currentTopic?.topicName} readOnly />
+                    </Form.Group>
+                  </Form>
+                </Card.Body>
+              </MotionCard>
+              
+              <MotionCard className="mb-4 shadow-sm" variants={fadeInUp}>
+                <Card.Header as="h5" className="bg-info text-white">On this page, you can:</Card.Header>
+                <Card.Body>
+                  <ul className="list-unstyled" style={{fontSize:12}}>
+                    <li>✓ View and manage the entire quiz</li>
+                    <li>✓ Navigate to quiz feedback or proceed to review questions</li>
+                    <li>✓ View and manage the quiz questions</li>
+                    <li>✓ Use search or filter options to view questions</li>
+                    <li>✓ Use the "Proceed" button at the bottom to move to the next step</li>
+                  </ul>
+                </Card.Body>
+              </MotionCard>
+            </Col>
+            
+            <Col md={6}>
+              <MotionCard className="shadow-sm" variants={fadeInUp}>
+                <Card.Header as="h5" className="bg-success text-white d-flex justify-content-between align-items-center">
+                  Quiz Details
+                  <div>
+                    <OverlayTrigger placement="top" overlay={<Tooltip>Edit quiz</Tooltip>}>
+                      <IconButton onClick={handleOpenQuizEditModal} size="small">
+                        <EditIcon style={{ color: "white" }} />
+                      </IconButton>
+                    </OverlayTrigger>
+                    <OverlayTrigger placement="top" overlay={<Tooltip>Delete quiz</Tooltip>}>
+                      <IconButton onClick={handleOpenQuizDeleteModal} size="small">
+                        <DeleteIcon style={{ color: "white" }} />
+                      </IconButton>
+                    </OverlayTrigger>
+                  </div>
+                </Card.Header>
+                <Card.Body>
+                  <Form>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Quiz Title<span className="text-danger">*</span></Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="nameOfQuiz"
+                        value={quizData.nameOfQuiz}
+                        readOnly={!isQuizEditable}
+                        onChange={handleQuizTitleChange}
+                        isInvalid={!!error}
+                      />
+                      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+                    </Form.Group>
+                    
+                    <Form.Group className="mb-3">
+                      <Form.Label>Duration<span className="text-danger">*</span></Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="duration"
+                        value={quizData.duration}
+                        readOnly={!isQuizEditable}
+                        onChange={handleInputChange}
+                        isInvalid={!!errorduration}
+                      />
+                      <Form.Control.Feedback type="invalid">{errorduration}</Form.Control.Feedback>
+                    </Form.Group>
+  
+                    <Form.Group className="mb-3">
+                      <Form.Label>Grade to be secured<span className="text-danger">*</span></Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="passMark"
+                        value={quizData.passMark}
+                        readOnly={!isQuizEditable}
+                        onChange={handlemarkChange}
+                        isInvalid={!!errormark}
+                      />
+                      <Form.Control.Feedback type="invalid">{errormark}</Form.Control.Feedback>
+                    </Form.Group>
+  
+                    <Form.Group className="mb-3">
+                      <Form.Label>Attempts Allowed<span className="text-danger">*</span></Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="attemptsAllowed"
+                        value={quizData.attemptsAllowed}
+                        readOnly={!isQuizEditable}
+                        onChange={handleattemptsChange}
+                        isInvalid={!!errorattempts}
+                      />
+                      <Form.Control.Feedback type="invalid">{errorattempts}</Form.Control.Feedback>
+                    </Form.Group>
+  
+                    {!quizId && (
+                      <div className="text-center mt-4">
+                        <Button
+                          type="submit"
+                          variant="primary"
+                          onClick={handleUploadClick}
+                          disabled={!formComplete}
+                        >
+                          <FaUpload className="me-2" /> Add Question
                         </Button>
-                        <button class="btn btn-light" style={{ color: "white", width: '50', backgroundColor: "#365486" }} onClick={() => { handleNavigate() }}>Back</button>
-                    </div>
-                    <Row>
-                        <Col md={6}>
-                            <Card className="mb-4">
-                                <Card.Header as="h5">Course Details</Card.Header>
-                                <Card.Body>
-                                    <Form>
-                                        <Form.Group className="mb-3 d-flex">
-                                            <Form.Label className="mt-1" style={{ width: 80 }}>Course: </Form.Label>
-                                            <Form.Control type="text" value={selectorTopicsDetail?.courseTitle} readOnly />
-                                        </Form.Group>
-                                        <Form.Group className="mb-3 d-flex">
-                                            <Form.Label className="mt-1" style={{ width: 80 }}>Topic: </Form.Label>
-                                            <Form.Control type="text" value={currentTopic?.topicName} readOnly />
-                                        </Form.Group>
-
-                                    </Form>
-                                </Card.Body>
-                            </Card>
-                            <Card className="mb-4">
-                                <Card.Header as="h5">On this page, you can:</Card.Header>
-                                <Card.Body style={{ fontSize: 13 }}>
-                                    <ul>
-                                        <li>View and manage the entire quiz</li>
-                                        <li>Navigate to quiz feedback or proceed to review questions</li>
-                                        <li>View and manage the quiz questions</li>
-                                        <li>Use search or filter options to view questions</li> 
-                                        <li>Use the "Proceed" button at the bottom to move to the next step</li>
-                                    </ul>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col md={6}>
-                            <Card>
-                                <Card.Header as="h5" className="d-flex justify-content-between align-items-center">
-                                    Quiz Details
-                                    <div>
-                                        <Tooltip title="Edit quiz"><IconButton aria-label="Editquiz" onClick={handleOpenQuizEditModal}  ><EditIcon style={{ color: "#365486" }} variant="outlined" /> </IconButton></Tooltip>
-                                        <Tooltip title="Delete quiz"><IconButton aria-label="deletequiz" onClick={handleOpenQuizDeleteModal}  ><DeleteIcon style={{ color: "C80036" }} /></IconButton></Tooltip>
-                                    </div>
-                                </Card.Header>
-                                <Card.Body>
-                                    <Form>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Quiz Title<span id='required'>*</span></Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="nameOfQuiz"
-                                                value={quizData.nameOfQuiz}
-                                                readOnly={!isQuizEditable}
-                                                onChange={handleQuizTitleChange}
-                                            />
-                                            {error && <Form.Text className="text-danger">{error}</Form.Text>}
-                                        </Form.Group>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Duration<span id='required'>*</span></Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                name="duration"
-                                                value={quizData.duration}
-                                                readOnly={!isQuizEditable}
-                                                onChange={handleInputChange}
-                                            />
-                                            {errorduration && <Form.Text className="text-danger">{errorduration}</Form.Text>}
-                                        </Form.Group>
-
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Grade to be secured<span id='required'>*</span></Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                name="passMark"
-                                                value={quizData.passMark}
-                                                readOnly={!isQuizEditable}
-                                                onChange={handlemarkChange}
-                                            />
-                                            {errormark && <Form.Text className="text-danger">{errormark}</Form.Text>}
-                                        </Form.Group>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Attempts Allowed<span id='required'>*</span></Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                name="attemptsAllowed"
-                                                value={quizData.attemptsAllowed}
-                                                readOnly={!isQuizEditable}
-                                                onChange={handleattemptsChange}
-                                            />
-                                            {errorattempts && <Form.Text className="text-danger">{errorattempts}</Form.Text>}
-                                        </Form.Group>
-
-                                        {quizId ? (
-                                            <div></div>
-                                        ) : (
-                                            <div className="form-group" style={{ textAlign: 'center' }}>
-                                                <div className="">
-                                                    <Button
-                                                        type="submit"
-                                                        className="btn btn-primary"
-                                                        onClick={(e) => {
-                                                            handleUploadClick(e);
-                                                        }}
-                                                        style={{ color: 'white', width: 200 }}
-                                                        disabled={!formComplete}
-                                                    >
-                                                        <FaUpload /> Add Question
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </Form>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                    {/* --------------------------------------------------------------*/}
-                    {showQuestions && quizId ? (
-                        <div className="">
-                            <QuestionTemplateView />
-                        </div>
-                    ) : (
-                        <div></div>
+                      </div>
                     )}
-                    {/* {quizId ? <div>
-                        <button onClick={handleSubmit} className="btn btn-light mt-3 mb-5 float-left" style={{ color: "white", marginLeft: "92%", backgroundColor: "#365486" }}>Proceed</button>
-                    </div> : <div></div>} */}
-                    {/* DeleteQuiz */}
-                    <MuiModal
-                        open={showQuizDeleteModal}
-                        onClose={handleCloseQuizDeleteModal}
-                        aria-labelledby="delete-quiz-modal-title"
-                    >
-                        <Box sx={modalStyle}>
-                            <Typography id="delete-quiz-modal-title" variant="h6" component="h2" gutterBottom>
-                                Delete Quiz
-                            </Typography>
-                            <Typography variant="body1" gutterBottom>
-                                All the quiz related data will be removed permanently. <br />
-                                To confirm deletion, please type the quiz title:
-                                <br />
-                                <strong>"{quizData.nameOfQuiz}"</strong>
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                margin="normal"
-                                variant="outlined"
-                                placeholder="Enter the Quiz Title"
-                                onChange={handleQuizTitle}
-                                error={!!errordeletequiz}
-                                helperText={errordeletequiz}
-                            />
-                            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                                <MuiButton onClick={handleCloseQuizDeleteModal} sx={{ mr: 1 }}>
-                                    Cancel
-                                </MuiButton>
-                                <MuiButton
-                                    variant="contained"
-                                    color="error"
-                                    onClick={() => handleDeleteQuiz(quizId)}
-                                >
-                                    Delete
-                                </MuiButton>
-                            </Box>
-                        </Box>
-                    </MuiModal>
-
-                    {/* EditQuiz */}
-                    <MuiModal
-                        open={showQuizEditModal}
-                        onClose={handleCloseQuizEditModal}
-                        aria-labelledby="edit-quiz-modal-title"
-                    >
-                        <Box sx={modalStyle}>
-                            <Typography id="edit-quiz-modal-title" variant="h6" component="h2" gutterBottom>
-                                Edit Quiz
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                margin="normal"
-                                label="Quiz Title"
-                                variant="outlined"
-                                name="nameOfQuiz"
-                                value={quizData.nameOfQuiz}
-                                onChange={(e) => { handleQuizTitleChange(e); handleQuizChange(e) }}
-                                error={!!error}
-                                helperText={error}
-                            />
-                            <TextField
-                                fullWidth
-                                margin="normal"
-                                label="Duration (minutes)"
-                                variant="outlined"
-                                type="number"
-                                name="duration"
-                                value={quizData.duration}
-                                onChange={(e) => { handleDurationChange(e); handleQuizChange(e); handleInputChange(e) }}
-                                error={!!errorduration}
-                                helperText={errorduration}
-                            />
-                            <TextField
-                                fullWidth
-                                margin="normal"
-                                label="Grade to be Secured"
-                                variant="outlined"
-                                type="number"
-                                name="passMark"
-                                value={quizData.passMark}
-                                onChange={(e) => { handleGradeChange(e); handleQuizChange(e); handlemarkChange(e) }}
-                                error={!!errormark}
-                                helperText={errormark}
-                            />
-                            <TextField
-                                fullWidth
-                                margin="normal"
-                                label="Attempts Allowed"
-                                variant="outlined"
-                                type="number"
-                                name="attemptsAllowed"
-                                value={quizData.attemptsAllowed}
-                                onChange={(e) => { handleQuizChange(e); handleattemptsChange(e) }}
-                                error={!!errorattempts}
-                                helperText={errorattempts}
-                            />
-                            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                                <MuiButton onClick={handleCloseQuizEditModal} sx={{ mr: 1 }}>
-                                    Cancel
-                                </MuiButton>
-                                <MuiButton
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleUpdateQuiz}
-                                >
-                                    Update
-                                </MuiButton>
-                            </Box>
-                        </Box>
-                    </MuiModal>
-                    <Modal show={showModal} onHide={closeModal}>
-                        <Modal.Header closeButton>
-                            <Modal.Title id='questitle'>Question Library</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            {/* <h6><BiSolidCoinStack style={{ fontSize: "30", color: "GrayText", marginBottom: "11", marginLeft: "10" }} /><Link id='bulklink' onClick={() => { handleBulkUpload(bulkQuizId) }}> Add Question from Bulk Upload</Link></h6> */}
-                            <h6><ImFolderUpload style={{ fontSize: "20", color: "GrayText", marginBottom: "11", marginLeft: "13" }} /><Link id='newquelink' onClick={() => { handleOpenAddQuestionModal(); closeModal() }}> Add New Question</Link></h6>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={closeModal}>Close</Button>
-                        </Modal.Footer>
-                    </Modal>
-                </div>
-
-            </Container>
-        </div>
+                  </Form>
+                </Card.Body>
+              </MotionCard>
+            </Col>
+          </Row>
+  
+          {showQuestions && quizId && (
+            <MotionCard className="mt-4 shadow-sm" variants={fadeInUp}>
+              <Card.Header as="h5" className="bg-warning">Question Preview</Card.Header>
+              <Card.Body >
+                <QuestionTemplateView />
+              </Card.Body>
+            </MotionCard>
+          )}
+  
+          {/* Delete Quiz Modal */}
+          <MuiModal
+            open={showQuizDeleteModal}
+            onClose={handleCloseQuizDeleteModal}
+            aria-labelledby="delete-quiz-modal-title"
+          >
+            <Box sx={modalStyle}>
+              <Typography id="delete-quiz-modal-title" variant="h6" component="h2" gutterBottom>
+                Delete Quiz
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                All the quiz related data will be removed permanently. <br />
+                To confirm deletion, please type the quiz title:
+                <br />
+                <strong>"{quizData.nameOfQuiz}"</strong>
+              </Typography>
+              <TextField
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                placeholder="Enter the Quiz Title"
+                onChange={handleQuizTitle}
+                error={!!errordeletequiz}
+                helperText={errordeletequiz}
+              />
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="secondary" onClick={handleCloseQuizDeleteModal} className="me-2">
+                  Cancel
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDeleteQuiz(quizId)}
+                >
+                  Delete
+                </Button>
+              </Box>
+            </Box>
+          </MuiModal>
+  
+          {/* Edit Quiz Modal */}
+          <MuiModal
+      open={showQuizEditModal}
+      onClose={handleCloseQuizEditModal}
+      aria-labelledby="edit-quiz-modal-title"
+    >
+      <Box sx={modalStyle}>
+        <Typography id="edit-quiz-modal-title" variant="h6" component="h2" gutterBottom>
+          Edit Quiz
+        </Typography>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Quiz Title"
+          variant="outlined"
+          name="nameOfQuiz"
+          value={quizData.nameOfQuiz}
+          onChange={(e) => { handleQuizTitleChange(e); handleQuizChange(e) }}
+          error={!!editErrors.nameOfQuiz}
+          helperText={editErrors.nameOfQuiz}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Duration (minutes)"
+          variant="outlined"
+          type="number"
+          name="duration"
+          value={quizData.duration}
+          onChange={(e) => { handleDurationChange(e); handleQuizChange(e); handleInputChange(e) }}
+          error={!!editErrors.duration}
+          helperText={editErrors.duration}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Grade to be Secured"
+          variant="outlined"
+          type="number"
+          name="passMark"
+          value={quizData.passMark}
+          onChange={(e) => { handleGradeChange(e); handleQuizChange(e); handlemarkChange(e) }}
+          error={!!editErrors.passMark}
+          helperText={editErrors.passMark}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Attempts Allowed"
+          variant="outlined"
+          type="number"
+          name="attemptsAllowed"
+          value={quizData.attemptsAllowed}
+          onChange={(e) => { handleQuizChange(e); handleattemptsChange(e) }}
+          error={!!editErrors.attemptsAllowed}
+          helperText={editErrors.attemptsAllowed}
+        />
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button variant="secondary" onClick={handleCloseQuizEditModal} className="me-2">
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleUpdateQuiz}
+          >
+            Update
+          </Button>
+        </Box>
+      </Box>
+    </MuiModal>
+        </motion.div>
+      </Container>
     );
 };
 
