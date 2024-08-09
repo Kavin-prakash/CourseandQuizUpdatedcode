@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
 import BasicPagination from "../../../../components/Quiz And Feedback Module/QuizComponents/Admin/Pagination";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { IconButton, Stack, Tooltip } from '@mui/material';    // modification for  imports quizteam 
+import { IconButton, Tooltip } from '@mui/material';    // modification for  imports quizteam 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch } from 'react-redux';
@@ -15,12 +14,8 @@ import {
   UpdateQuizQuestionsApi,
 } from "../../../../middleware/Quiz And Feedback Module/Admin/QuestionApi";
 import { deleteQuizQuestionRequest } from "../../../../actions/Quiz And Feedback Module/Admin/DeleteQuizQuestionAction";
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { updateQuizQuestionRequest } from '../../../../actions/Quiz And Feedback Module/Admin/UpdateQuizQuestionAction';
-import { FaMinus, FaPlus } from 'react-icons/fa';
 import { Container } from 'react-bootstrap';
-import { set } from 'react-hook-form';
 import { FetchQuizQuestionsApi } from '../../../../middleware/Quiz And Feedback Module/Admin/FetchQuizQuestionsApi';
 import "../../../../Styles/Quiz And Feedback Module/QuestionTemplate.css";
 import { Modal as MuiModal, Box, Typography, TextField, Button as MuiButton } from '@mui/material';
@@ -32,16 +27,35 @@ import { useNavigate } from 'react-router-dom';
 
 const QuestionTemplate = () => {
   const quizId = sessionStorage.getItem("quizId");
-
-  useEffect(() => {
-    fetchQuestions(quizId);
-  });
-
   const dispatch = useDispatch();
   const [questions, setQuestions] = useState([]);
 
+  const fetchQuestions = async (quizId) => {
+    try {
+      const data = await FetchQuizQuestionsApi(quizId);
+      setQuestions(data);
+      const newFilteredQuestions = data.filter(
+        (question) =>
+          !selectedFilterQuestionType || question.questionType === selectedFilterQuestionType
+      );
+      setFilteredQuestions(newFilteredQuestions);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions(quizId);
+  }, [quizId]);
+
+
   const [error, setError] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState({
+    question: "",
+    questionType: "",
+    options: [],
+    correctOptions: [],
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
   const [showEditQuestionModal, setShowEditQuestionModal] = useState(false);
@@ -50,10 +64,7 @@ const QuestionTemplate = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const fetch = useRef(false);
   const [numOptions, setNumOptions] = useState(5);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState(null);
   const [selectedFilterQuestionType, setSelectedFilterQuestionType] = useState('')
   const [deleteQuestionId, setDeleteQuestionId] = useState(null);
   const [newQuestion, setNewQuestion] = useState({
@@ -71,51 +82,74 @@ const QuestionTemplate = () => {
 
   const navigate = useNavigate();
 
-  const [showPopup, setShowPopup] = useState(false);
-
-
-  // const questions = useSelector((state) => state.quizQuestions.quizQuestions);
-
-  const fetchQuestions = async (quizId) => {
+  const handleDeleteQuestion = async (quizQuestionId) => {
     try {
+      await dispatch(deleteQuizQuestionRequest(quizQuestionId));
 
-      // dispatch(fetchAllQuizQuestionRequest(quizId));
-      const data = await FetchQuizQuestionsApi(quizId);
-      setQuestions(data);
+      setQuestions(prevQuestions => {
+        const updatedQuestions = prevQuestions.filter(question => question.quizQuestionId !== quizQuestionId);
+        const newTotalPages = Math.ceil(updatedQuestions.length / questionsPerPage);
+        if (currentPage > newTotalPages) {
+          setCurrentPage(newTotalPages);
+        }
+
+        return updatedQuestions;
+      });
+
+      setFilteredQuestions(prevFilteredQuestions =>
+        prevFilteredQuestions.filter(question => question.quizQuestionId !== quizQuestionId)
+      );
+
+      setDeleteQuestionId(null);
+
+      const Toast = Swal.mixin({
+        className: "swal2-toast",
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2000,
+        background: 'green',
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Question Deleted Successfully",
+        color: 'white'
+      });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error deleting question:", error);
     }
   };
 
-  const handleDeleteQuestion = async (quizQuestionId) => {
-    // Dispatch the delete request
-    await dispatch(deleteQuizQuestionRequest(quizQuestionId));
+  useEffect(() => {
+    const newFilteredQuestions = questions?.filter(
+      (question) =>
+        !selectedFilterQuestionType || question.questionType === selectedFilterQuestionType
+    );
+    setFilteredQuestions(newFilteredQuestions);
+    const newTotalPages = Math.ceil(newFilteredQuestions.length / questionsPerPage);
+    if (currentPage > newTotalPages) {
+      setCurrentPage(newTotalPages || 1); // Set to 1 if newTotalPages is 0
+    }
+  }, [selectedFilterQuestionType, questions, questionsPerPage]);
 
-    // Update the questions state to remove the deleted question
-    setQuestions(questions.filter(question => question.quizQuestionId !== questionToDelete));
+  const searchFilteredQuestions = questions?.filter(
+    (question) =>
+      (question.question.toLowerCase().includes(searchTerm) ||
+        (question.questionNo && question.questionNo.toString().includes(searchTerm))) &&
+      (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
+  );
 
-    // Close the popup and reset questionToDelete
-    setShowPopup(false);
-    setDeleteQuestionId(null);
-    const Toast = Swal.mixin({
-      className: "swal2-toast",
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2000,
-      background: 'green',
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: " Question Deleted Successfully",
-      color: 'white'
-    });
-  };
+  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const currentQuestions = searchFilteredQuestions?.slice(
+    indexOfFirstQuestion,
+    indexOfLastQuestion
+  );
 
   const handleOpenEditQuestionModal = async (quizQuestionId) => {
     try {
@@ -174,14 +208,6 @@ const QuestionTemplate = () => {
     setCurrentPage(value);
   };
 
-  const validUpdatedQuestion = (event) => {
-    event.preventDefault();
-
-    if (validateUpdateQuestion()) {
-      handleUpdateQuestion();
-    }
-  };
-
   const handleCloseAddQuestionModal = () => {
     setShowAddQuestionModal(false);
   };
@@ -192,65 +218,116 @@ const QuestionTemplate = () => {
     setNewQuestion((prevState) => ({
       ...prevState,
       questionType: value,
-      options: [],
+      options: value === "T/F" ? ["True", "False"] : ["", "", "", ""],
       correctOptions: [],
     }));
+    setErrors({
+      question: "",
+      questionType: "",
+      options: [],
+      correctOptions: [],
+    });
   };
 
   const validateUpdateQuestion = () => {
+    console.log("Starting validation...");
+    console.log("Current editedQuestion:", editedQuestion);
+
     let tempErrors = {
       question: "",
       questionType: "",
-      options: "",
-      correctOptions: "",
+      options: [],
+      correctOptions: [],
       individualOptions: [],
       individualCorrectOptions: [],
     };
-    if (!editedQuestion.question) {
+    let isValid = true;
+
+    // Question validation
+    if (!editedQuestion.question.trim()) {
+      console.log("Question is empty");
       tempErrors.question = "Question is required";
+      isValid = false;
+    } else if (editedQuestion.question.length > 500) {
+      console.log("Question is too long");
+      tempErrors.question = "Question should not exceed 500 characters";
+      isValid = false;
     }
+
+    // Question type validation
     if (!editedQuestion.questionType) {
+      console.log("Question type is empty");
       tempErrors.questionType = "Question type is required";
+      isValid = false;
     }
-    if (
-      editedQuestion.options.length === 0 ||
-      !editedQuestion.options.some((option) => option)
-    ) {
-      tempErrors.options = "option is required";
-    } else {
+
+    // Options validation
+    if (editedQuestion.questionType === "MCQ" || editedQuestion.questionType === "MSQ") {
       editedQuestion.options.forEach((option, index) => {
-        if (!option) {
-          tempErrors.individualOptions[index] = `Option ${index + 1
-            } is required`;
+        if (!option.trim()) {
+          console.log(`Option ${index + 1} is empty`);
+          tempErrors.individualOptions[index] = "Option is required";
+          isValid = false;
+        } else if (option.length > 200) {
+          console.log(`Option ${index + 1} is too long`);
+          tempErrors.individualOptions[index] = "Option should not exceed 200 characters";
+          isValid = false;
         }
       });
+
+      const uniqueOptions = new Set(editedQuestion.options.filter(Boolean).map(opt => opt.trim()));
+      if (uniqueOptions.size !== editedQuestion.options.filter(Boolean).length) {
+        console.log("Duplicate options found");
+        tempErrors.options.push("All options must be unique");
+        isValid = false;
+      }
     }
-    if (
-      editedQuestion.correctOptions.length === 0 ||
-      !editedQuestion.correctOptions.some((option) => option)
-    ) {
-      tempErrors.correctOptions = "Correct option is required";
-    } else {
-      editedQuestion.correctOptions.forEach((option, index) => {
-        if (!option) {
-          tempErrors.individualCorrectOptions[index] = `Correct Option ${index + 1
-            } is required`;
+
+    // Correct options validation
+    if (editedQuestion.questionType === "MCQ" || editedQuestion.questionType === "T/F") {
+      if (!editedQuestion.correctOptions[0]) {
+        console.log("Correct option is empty for MCQ or T/F");
+        tempErrors.correctOptions[0] = "Correct option is required";
+        isValid = false;
+      }
+    } else if (editedQuestion.questionType === "MSQ") {
+      editedQuestion.correctOptions.forEach((correctOption, index) => {
+        if (!correctOption) {
+          console.log(`Correct option ${index + 1} is empty for MSQ`);
+          tempErrors.individualCorrectOptions[index] = "This correct option field is required";
+          isValid = false;
+        } else if (!editedQuestion.options.includes(correctOption)) {
+          console.log(`Correct option ${index + 1} is not a valid option`);
+          tempErrors.individualCorrectOptions[index] = "Selected correct option is not a valid option";
+          isValid = false;
         }
       });
+
+      if (editedQuestion.correctOptions.filter(Boolean).length < 2) {
+        console.log("Not enough correct options for MSQ");
+        tempErrors.correctOptions[0] = "At least two correct options are required for MSQ";
+        isValid = false;
+      }
+
+      const uniqueCorrectOptions = new Set(editedQuestion.correctOptions.filter(Boolean));
+      if (uniqueCorrectOptions.size !== editedQuestion.correctOptions.filter(Boolean).length) {
+        console.log("Duplicate correct options found");
+        tempErrors.correctOptions.push("All correct options must be unique");
+        isValid = false;
+      }
     }
+
+    console.log("Validation errors:", tempErrors);
+    console.log("Is valid:", isValid);
 
     setErrors(tempErrors);
-    return (
-      !tempErrors.question &&
-      !tempErrors.questionType &&
-      !tempErrors.options &&
-      !tempErrors.correctOptions &&
-      tempErrors.individualOptions.every((e) => !e) &&
-      tempErrors.individualCorrectOptions.every((e) => !e)
-    );
+    return isValid;
   };
 
-  const handleUpdateQuestion = () => {
+  const handleUpdateQuestion = async () => {
+    console.log("Starting update process");
+    console.log("Edited question:", editedQuestion);
+
     const { quizQuestionId, questionType, ...updatedQuestion } = editedQuestion;
     const updatedOptions = updatedQuestion.options.map((option, index) => ({
       option,
@@ -265,32 +342,26 @@ const QuestionTemplate = () => {
       quizQuestionId: quizQuestionId,
     };
 
-    if (validateUpdateQuestion()) {
-      UpdateQuizQuestionsApi(requestBody)
-      handleCloseEditQuestionModal();
-    }
-    // setTimeout(function () {
-    //   window.location.reload(1);
-    // }, 1000);
-    const Toast = Swal.mixin({
-      className: "swal2-toast",
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      timer: 2000,
-      background: 'green',
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      }
-    });
-    Toast.fire({
-      icon: "success",
-      title: "Question Updated Successfully",
-      color: 'white'
-    });
+    console.log("Request body:", requestBody);
 
+    if (validateUpdateQuestion()) {
+      try {
+        const response = await UpdateQuizQuestionsApi(requestBody);
+        console.log("API response:", response);
+
+        setQuestions(prevQuestions => {
+          const newQuestions = prevQuestions.map(q =>
+            q.quizQuestionId === quizQuestionId ? { ...q, ...requestBody } : q
+          );
+          console.log("Updated questions:", newQuestions);
+          return newQuestions;
+        });
+
+        handleCloseEditQuestionModal();
+      } catch (error) {
+        console.error("Error updating question:", error);
+      }
+    }
   };
 
   const validateField = (fieldName, value, index = null) => {
@@ -341,19 +412,6 @@ const QuestionTemplate = () => {
     setFilteredQuestions(newFilteredQuestions);
   }, [selectedFilterQuestionType, questions]);
 
-  const searchFilteredQuestions = questions?.filter(
-    (question) =>
-      question.question.toLowerCase().includes(searchTerm) &&
-      (!selectedFilterQuestionType || question.questionType === selectedFilterQuestionType)
-  );
-
-  const indexOfLastQuestion = currentPage * questionsPerPage;
-  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-
-  const currentQuestions = searchFilteredQuestions?.slice(
-    indexOfFirstQuestion,
-    indexOfLastQuestion
-  );
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -404,62 +462,149 @@ const QuestionTemplate = () => {
   };
 
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = async () => {
     let tempErrors = {
       question: "",
       questionType: "",
-      options: "",
-      correctOptions: "",
+      options: [],
+      correctOptions: [],
     };
+    let isValid = true;
 
-    let hasCorrectOption = false;
-    if (newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F") {
-      hasCorrectOption = !!newQuestion.correctOptions[0];
-    } else {
-      hasCorrectOption = newQuestion.correctOptions.some((option) => option);
-    }
-
-    if (!newQuestion.question) {
+    // Question validation
+    if (!newQuestion.question.trim()) {
       tempErrors.question = "Question is required";
+      isValid = false;
+    } else if (newQuestion.question.length > 500) {
+      tempErrors.question = "Question should not exceed 500 characters";
+      isValid = false;
     }
+
+    // Question type validation
     if (!newQuestion.questionType) {
       tempErrors.questionType = "Question type is required";
-    }
-    if (newQuestion.options.length === 0) {
-      tempErrors.options = "At least one option is required";
+      isValid = false;
     }
 
-    if (
-      tempErrors.question ||
-      tempErrors.questionType ||
-      tempErrors.options ||
-      !hasCorrectOption
-    ) {
-      tempErrors.correctOptions = "Correct option is required";
-      setErrors(tempErrors);
-      return;
+    // Options validation
+    if (newQuestion.questionType === "MCQ" || newQuestion.questionType === "MSQ") {
+      newQuestion.options.forEach((option, index) => {
+        if (!option.trim()) {
+          tempErrors.options[index] = "Option is required";
+          isValid = false;
+        } else if (option.length > 200) {
+          tempErrors.options[index] = "Option should not exceed 200 characters";
+          isValid = false;
+        }
+      });
+
+      const uniqueOptions = new Set(newQuestion.options.filter(Boolean).map(opt => opt.trim()));
+      if (uniqueOptions.size !== newQuestion.options.filter(Boolean).length) {
+        tempErrors.options.push("All options must be unique");
+        isValid = false;
+      }
     }
 
-    const requestBody = {
-      quizId: quizId,
-      question: newQuestion.question,
-      questionType: newQuestion.questionType,
-      options: newQuestion.options.map((option, index) => ({
-        option: option,
-        isCorrect:
-          newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F"
-            ? newQuestion.correctOptions[0] === option
-            : newQuestion.correctOptions.includes(option),
-      })),
-    };
+    // Correct options validation
+    if (newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F") {
+      if (!newQuestion.correctOptions[0]) {
+        tempErrors.correctOptions[0] = "Correct option is required";
+        isValid = false;
+      }
+    } else if (newQuestion.questionType === "MSQ") {
+      newQuestion.correctOptions.forEach((correctOption, index) => {
+        if (!correctOption) {
+          tempErrors.correctOptions[index] = "This correct option field is required";
+          isValid = false;
+        } else if (!newQuestion.options.includes(correctOption)) {
+          tempErrors.correctOptions[index] = "Selected correct option is not a valid option";
+          isValid = false;
+        }
+      });
 
+      if (newQuestion.correctOptions.filter(Boolean).length < 3) {
+        tempErrors.correctOptions[0] = "At least three correct options are required for MSQ";
+        isValid = false;
+      }
 
+      const uniqueCorrectOptions = new Set(newQuestion.correctOptions.filter(Boolean));
+      if (uniqueCorrectOptions.size !== newQuestion.correctOptions.filter(Boolean).length) {
+        tempErrors.correctOptions.push("All correct options must be unique");
+        isValid = false;
+      }
+    }
 
-    PostSingleQuestion(requestBody);
-    setNewQuestion({ ...newQuestion, question: "", options: ["", "", "", "", "", "", "", ""], correctOptions: ["", "", ""] })
-    handleCloseAddQuestionModal();
+    setErrors(tempErrors);
+
+    if (isValid) {
+      const requestBody = {
+        quizId: quizId,
+        question: newQuestion.question,
+        questionType: newQuestion.questionType,
+        options: newQuestion.options.map((option, index) => ({
+          option: option,
+          isCorrect:
+            newQuestion.questionType === "MCQ" || newQuestion.questionType === "T/F"
+              ? newQuestion.correctOptions[0] === option
+              : newQuestion.correctOptions.includes(option),
+        })),
+      };
+
+      try {
+        await PostSingleQuestion(requestBody);
+        await fetchQuestions(quizId);
+        setNewQuestion({
+          question: "",
+          questionType: "",
+          options: ["", "", "", "", "", "", "", ""],
+          correctOptions: ["", "", ""]
+        });
+
+        handleCloseAddQuestionModal();
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Question added successfully'
+        });
+
+      } catch (error) {
+        console.error("Error adding question:", error);
+        // Show error message
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong while adding the question!',
+        });
+      }
+    }
 
   };
+
+  const handleSubmit = () => {
+    try {
+      navigate(`/reviewquestions`)
+
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+
+  };
+
+  const handleQuizFeedback = () => {
+    navigate(`/quizfeedback`)
+  }
 
   const modalStyle = {
     position: 'absolute',
@@ -480,28 +625,16 @@ const QuestionTemplate = () => {
   return (
     <Container >
       <div className='question-template-container'>
-
-        <div className="" style={{ marginBottom: '-200px' }}>
-          <div className=" " id="filter">
-            <Box sx={{ width: 190 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Question Type</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="questionType"
-                  value={selectedFilterQuestionType}
-                  label="Question Type"
-                  onChange={(e) => setSelectedFilterQuestionType(e.target.value)}
-                >
-                  <MenuItem value={""}>All</MenuItem>
-                  <MenuItem value={"MCQ"}>MCQ</MenuItem>
-                  <MenuItem value={"MSQ"}>MSQ</MenuItem>
-                  <MenuItem value={"T/F"}>True/False</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+        <div className="question-card-footer d-block">
+          {questions ? <div><div className='mb-3'>
+            <button
+              onClick={handleOpenAddQuestionModal}
+              className="btn btn-light"
+              style={{ color: "white", backgroundColor: "#365486" }}
+            >
+              Add Individual Question
+            </button>
           </div>
-          <div className="question-card-footer d-block">
             <div>
               <button
                 onClick={() => { navigate('/upload') }}
@@ -511,26 +644,55 @@ const QuestionTemplate = () => {
                 Add Bulk Question
               </button>
             </div>
-            <div>
-              <button
-                onClick={handleOpenAddQuestionModal}
-                className="btn btn-light"
-                style={{ color: "white", backgroundColor: "#365486" }}
-              >
-                Add More Question
-              </button>
-            </div>
-          </div>
-          <div style={{ textAlign: 'center' }} >
-            <input
-              id="search"
-              type="search"
-              placeholder="Search..."
-              className="search-box"
-              onChange={handleSearchChange}
-            />
-          </div>
+          </div> : <div>
+            <button
+              onClick={() => { navigate('/upload') }}
+              className="btn btn-light mb-2"
+              style={{ color: "white", backgroundColor: "#365486" }}
+            >
+              Add Questions
+            </button>
+          </div>}
+
+
         </div>
+        {questions?.length > 0 && (
+          <>
+            <div className="" style={{ marginBottom: '-200px' }}>
+              <div className=" " id="filter">
+                <Box sx={{ width: 190 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Question Type</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="questionType"
+                      value={selectedFilterQuestionType}
+                      label="Question Type"
+                      onChange={(e) => setSelectedFilterQuestionType(e.target.value)}
+                    >
+                      <MenuItem value={""}>All</MenuItem>
+                      <MenuItem value={"MCQ"}>MCQ</MenuItem>
+                      <MenuItem value={"MSQ"}>MSQ</MenuItem>
+                      <MenuItem value={"T/F"}>True/False</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </div>
+
+
+              <div style={{ textAlign: 'center' }} >
+                <input
+                  id="search"
+                  type="search"
+                  placeholder="Search..."
+                  className="search-box"
+                  onChange={handleSearchChange}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
         <div className="question-template">
           {error && <p>Error: {error}</p>}
           {currentQuestions?.length > 0 ? (
@@ -597,9 +759,21 @@ const QuestionTemplate = () => {
               ))}
             </>
           ) : (
-            <p>No questions match your search.</p>
+            <p>No questions</p>
           )}
         </div>
+        {questions?.length > 0 && (
+
+          <div className="d-flex justify-content-end mb-2" style={{ marginTop: 30 }}>
+            <Button variant="primary" onClick={handleQuizFeedback} style={{ height: '50px', marginRight: 10 }}>
+              Quiz Feedback
+            </Button>
+            <button onClick={handleSubmit} className="btn btn-light" style={{ color: "white", backgroundColor: "#365486" }}>Proceed to review</button>
+
+          </div>
+
+
+        )}
 
         <MuiModal
           open={showAddQuestionModal}
@@ -664,8 +838,8 @@ const QuestionTemplate = () => {
                         variant="outlined"
                         value={newQuestion.options[index] || ""}
                         onChange={(e) => handleChange(index, "options", e.target.value)}
-                        error={!!errors.options}
-                        helperText={errors.options}
+                        error={errors.options && !!errors.options[index]}
+                        helperText={errors.options && errors.options[index]}
                       />
                       {index >= 5 && (
                         <IconButton
@@ -689,7 +863,7 @@ const QuestionTemplate = () => {
 
                   {[...Array(numCorrectOptions)].map((_, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <FormControl fullWidth margin="normal">
+                      <FormControl fullWidth margin="normal" error={errors.correctOptions && !!errors.correctOptions[index]}>
                         <InputLabel id={`correct-option-${index}-label`}>Correct Option {index + 1}</InputLabel>
                         <Select
                           labelId={`correct-option-${index}-label`}
@@ -698,10 +872,11 @@ const QuestionTemplate = () => {
                           label={`Correct Option ${index + 1}`}
                         >
                           <MenuItem value="">Select Correct Option</MenuItem>
-                          {newQuestion.options.map((option, optionIndex) => (
+                          {newQuestion.options.filter(Boolean).map((option, optionIndex) => (
                             <MenuItem key={optionIndex} value={option}>{option}</MenuItem>
                           ))}
                         </Select>
+                        {errors.correctOptions && errors.correctOptions[index] && <FormHelperText>{errors.correctOptions[index]}</FormHelperText>}
                       </FormControl>
                       {index >= 1 && (
                         <IconButton
@@ -716,7 +891,6 @@ const QuestionTemplate = () => {
                   <Button
                     className='btn-primary'
                     variant="contained"
-
                     startIcon={<AddIcon />}
                     onClick={handleAddCorrectOption}
                     sx={{ mt: 2, mb: 2 }}
@@ -737,11 +911,11 @@ const QuestionTemplate = () => {
                       variant="outlined"
                       value={newQuestion.options[index] || ""}
                       onChange={(e) => handleChange(index, "options", e.target.value)}
-                      error={!!errors.options}
-                      helperText={errors.options}
+                      error={errors.options && !!errors.options[index]}
+                      helperText={errors.options && errors.options[index]}
                     />
                   ))}
-                  <FormControl fullWidth margin="normal" error={!!errors.correctOptions}>
+                  <FormControl fullWidth margin="normal" error={errors.correctOptions && !!errors.correctOptions[0]}>
                     <InputLabel id="mcq-correct-option-label">Correct Option</InputLabel>
                     <Select
                       labelId="mcq-correct-option-label"
@@ -750,11 +924,11 @@ const QuestionTemplate = () => {
                       label="Correct Option"
                     >
                       <MenuItem value="">Select Correct Option</MenuItem>
-                      {newQuestion.options.map((option, index) => (
+                      {newQuestion.options.filter(Boolean).map((option, index) => (
                         <MenuItem key={index} value={option}>{option}</MenuItem>
                       ))}
                     </Select>
-                    {errors.correctOptions && <FormHelperText>{errors.correctOptions}</FormHelperText>}
+                    {errors.correctOptions && errors.correctOptions[0] && <FormHelperText>{errors.correctOptions[0]}</FormHelperText>}
                   </FormControl>
                 </>
               )}
@@ -770,11 +944,14 @@ const QuestionTemplate = () => {
                       variant="outlined"
                       value={newQuestion.options[index] || ""}
                       onChange={(e) => handleChange(index, "options", e.target.value)}
-                      error={!!errors.options}
-                      helperText={errors.options}
+                      error={errors.options && !!errors.options[index]}
+                      helperText={errors.options && errors.options[index]}
+                      InputProps={{
+                        readOnly: true,
+                      }}
                     />
                   ))}
-                  <FormControl fullWidth margin="normal" error={!!errors.correctOptions}>
+                  <FormControl fullWidth margin="normal" error={errors.correctOptions && !!errors.correctOptions[0]}>
                     <InputLabel id="tf-correct-option-label">Correct Option</InputLabel>
                     <Select
                       labelId="tf-correct-option-label"
@@ -783,12 +960,11 @@ const QuestionTemplate = () => {
                       label="Correct Option"
                     >
                       <MenuItem value="">Select Correct Option</MenuItem>
-                      {newQuestion.options.map((option, index) => (
+                      {newQuestion.options.filter(Boolean).map((option, index) => (
                         <MenuItem key={index} value={option}>{option}</MenuItem>
                       ))}
                     </Select>
-                    {errors.correctOptions && <FormHelperText>{errors.correctOptions}</FormHelperText>}
-                  </FormControl>
+                    {errors.correctOptions && errors.correctOptions[0] && <FormHelperText>{errors.correctOptions[0]}</FormHelperText>}                  </FormControl>
                 </>
               )}
             </Box>
@@ -834,7 +1010,7 @@ const QuestionTemplate = () => {
                   error={!!errors.question}
                   helperText={errors.question}
                 />
-                {editedQuestion.options.map((option, index) => (
+                {editedQuestion.questionType !== "T/F" && editedQuestion.options.map((option, index) => (
                   <TextField
                     key={index}
                     fullWidth
@@ -853,6 +1029,19 @@ const QuestionTemplate = () => {
                     }}
                     error={!!errors.individualOptions && !!errors.individualOptions[index]}
                     helperText={errors.individualOptions && errors.individualOptions[index]}
+                  />
+                ))}
+                {editedQuestion.questionType === "T/F" && editedQuestion.options.map((option, index) => (
+                  <TextField
+                    key={index}
+                    fullWidth
+                    margin="normal"
+                    label={`Option ${index + 1}`}
+                    variant="outlined"
+                    value={option}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 ))}
                 {errors.options && (
@@ -901,7 +1090,7 @@ const QuestionTemplate = () => {
                 <MuiButton
                   variant="contained"
                   color="primary"
-                  onClick={validUpdatedQuestion}
+                  onClick={handleUpdateQuestion}
                 >
                   Save Changes
                 </MuiButton>
@@ -909,7 +1098,6 @@ const QuestionTemplate = () => {
             </Box>
           </Box>
         </MuiModal>
-
       </div>
     </Container>
   );

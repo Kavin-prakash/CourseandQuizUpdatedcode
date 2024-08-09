@@ -135,7 +135,7 @@
 }
 
 .question-template-container {
-margin-top: 70px;
+margin-top: 20px;
 }
 
 .question-template {
@@ -186,3 +186,6 @@ margin-top: 70px;
 .swal2-toast {
   margin-top: 50px !important;
 }
+
+/* -------------------- */
+

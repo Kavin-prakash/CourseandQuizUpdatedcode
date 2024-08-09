@@ -19,7 +19,7 @@ import { FETCH_COURSE_REQUEST,FETCH_COURSE_SUCCESS,FETCH_COURSE_FAILURE } from "
         };
   
       case FETCH_COURSE_SUCCESS:
-        console.log("coursedetailreducer",action.payload);
+        // console.log("coursedetailreducer",action.payload);
         return{
           ...state,
           courses:action.payload,

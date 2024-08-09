@@ -3,7 +3,8 @@ import { DELETE_QUIZ_QUESTION_REQUEST, deleteQuizQuestionSuccess, deleteQuizQues
 import { UPDATE_QUIZ_QUESTION_REQUEST, updateQuizQuestionSuccess, updateQuizQuestionFailure } from '../../../actions/Quiz And Feedback Module/Admin/UpdateQuizQuestionAction';
 
 export const BulkUploadQuestion = async (files, quizId) => {
-  if (files && files.length > 0) {
+  console.log("api file",files, quizId);
+  if (files) {
     const file = files[0];
     const formData = new FormData();
     formData.append('file', file);
@@ -80,6 +81,7 @@ export const PostSingleQuestion = async (requestBody) => {
   console.log("single question: ", requestBody)
   try {
     const response = await axios.post('http://localhost:5199/api/QuizQuestions/AddQuestion', requestBody);
+    console.log("single question response: ", response.data);
     return response.data.data;
   } catch (error) {
     console.error("Error:", error.message);

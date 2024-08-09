@@ -217,7 +217,7 @@ export const ReviewQuestions = () => {
                             <Card.Body>
                                 <Form.Group>
                                     <Form.Label>Question:</Form.Label>
-                                    <Form.Control as="textarea" rows={3} value={question.question} readOnly />
+                                    <Form.Control as="textarea"  value={question.question} readOnly />
                                 </Form.Group>
                                 <Form.Group className="mt-3">
                                     <Form.Label>Options:</Form.Label>

@@ -1,23 +1,12 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import "../../Styles/Learner/GetEnrollment.css";
 import LearnerNavbar from '..//../components/LearnerComponent/LearnerNavbar';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchenrollCourse, selectCourse } from "../../actions/LearnerAction/EnrolledCourseAction";
-import { Link } from "react-router-dom";
 // import LearnerNavbar from "../../components/LearnerComponent/LearnerNavbar";
 import LearnerProgressApi from "../../middleware/LearnerMiddleware/LearnerProgressApi";
-import LinearProgress from '@mui/material/LinearProgress';
-import { DialogActions } from '@mui/material';
 import { Button } from '@mui/material';
-import { DialogContent } from '@mui/material';
-import { Dialog } from '@mui/material';
-import { DialogTitle } from '@mui/material';
 import UnenrollCourseApi from "../../middleware/LearnerMiddleware/UnenrollApi";
 import Swal from "sweetalert2";
 import { BeatLoader } from 'react-spinners';
@@ -77,7 +66,7 @@ const GetEnrollment = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (course) => {
- 
+
     dispatch(selectCourse(course));
     setStartedCourses(prevState => {
       const updatedCourses = { ...prevState, [course.enrolledCourseId]: true };
@@ -171,66 +160,53 @@ const GetEnrollment = () => {
 
   // bootstrap modal
   return (
-    <div id="learner-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="page-container_Mycourse">
       <LearnerNavbar />
-      <div className="d-block" id='box_learner' style={{ width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        {courses && courses.map((course, index) => (
-          <Card key={index} id="Card_learner" style={{ margin: '20px auto', borderRadius: '15px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'row', overflow: 'hidden', transform: 'scale(1)', transition: 'transform 0.3s ease-in-out', width: '100%' }}>
-            <div style={{ width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <img style={{ height: '250', width: '250', borderRadius: '15px 0 0 15px' }} id="thumbnail" src={course.thumbnailimage} alt="Course Thumbnail" />
+      {/* <div className="title-bar">My Courses</div> */}
+      <div className="course-grid_Mycourse">
+        {courses.map((course, index) => (
+          <div className="course-card_Mycourse" key={index}>
+            <div className="course-header_Mycourse">
+              <img className="course-image_Mycourse" src={course.thumbnailimage} alt="Course Thumbnail" />
+              <div className="course-title-container_Mycourse">
+                <h3 className="course-title_Mycourse">{course.enrolledCoursename}</h3>
+              </div>
             </div>
-            <CardContent id="cardcontent_learner" style={{ width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px' }}>
-              <div>
-                <Typography variant="h5" component="h2" style={{ fontWeight: 'bold' }}>
-                  {course.enrolledCoursename}
-                </Typography>
-                <Typography variant="body1">
-                  {course.enrolledcoursecategory}
-                </Typography>
-                <Typography color="textSecondary" style={{ marginBottom: '20px' }}>
-                  {course.enrolledcoursedescription}
-                </Typography>
-                <div id='level'>
-                  <Typography color="textSecondary" style={{ marginBottom: '10px' }}>
-                    Level: {course.enrolledcourselevels}
-                  </Typography>
-                  <LinearProgress variant='determinate' value={courseCompletionPercentages[course.courseId] || 0} style={{ height: '20px', borderRadius: '5px', marginBottom: '10px' }} />
-                </div>
+            <div className="course-content_Mycourse">
+              <p className="course-details_Mycourse"><strong>Category:</strong> {course.enrolledcoursecategory}</p>
+              <p className="course-details_Mycourse"><strong>Level:</strong> {course.enrolledcourselevels}</p>
+
+              <div className="progress-bar_Mycourse">
+                <div
+                  className="progress-fill_Mycourse"
+                  style={{ width: `${courseCompletionPercentages[course.courseId] || 0}%` }}
+                ></div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button id="Learnerbuttonone" style={{ backgroundColor: "midnightblue" }} variant="contained" color="error" onClick={() => { handleClickOpen(); setenrollmentcourseid(course.enrollmentid) }}>
+              <div className="button-container_Mycourse">
+                <button className="button_Mycourse unenroll" onClick={() => { handleClickOpen(); setenrollmentcourseid(course.enrollmentid) }}>
                   Unenroll
-                </Button>
-                <Modal centered backdrop="static" show={open} onHide={handleClose}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>Are you sure you want to unenroll the course?</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Footer>
-                    <Button id="Learnerbuttonmodal" variant="secondary" onClick={handleClose}>No</Button>
-                    <Button id="Learnerbuttonmodal" variant="primary" onClick={handleUnenroll(enrollmentcourseid)}>Yes</Button>
-                  </Modal.Footer>
-                </Modal>
-                {/* <Button id="Learnerbuttontwo" style={{ backgroundColor: "midnightblue"}} onClick={handleNavigation(course)} variant="contained">
-                {startedCourses[course.enrolledCourseId] ? 'Resume Course' : 'Start Course'}
-              </Button> */}
-
-
-                <Button id="Learnerbuttontwo" style={{ backgroundColor: "midnightblue"}}  onClick={() => { handleStartResumeCourse(course); }}>
-                  {course.courseStarted ? 'Resume Course' : 'Start Course'}
-                </Button>
+                </button>
+                <button className="button_Mycourse start" onClick={handleNavigation(course)}>
+                  {startedCourses[course.enrolledCourseId] ? 'Resume Course' : 'Start Course'}
+                </button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
+      <Modal centered backdrop="static" show={open} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are you sure you want to unenroll the course?</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button id="Learnerbuttonmodal" variant="secondary" onClick={handleClose}>No</Button>
+          <Button id="Learnerbuttonmodal" variant="primary" onClick={handleUnenroll(enrollmentcourseid)}>Yes</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
+
   );
-
-
-
-};
-
+}
 
 
 export default GetEnrollment;
-
