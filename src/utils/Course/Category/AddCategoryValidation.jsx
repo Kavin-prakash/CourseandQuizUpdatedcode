@@ -7,10 +7,6 @@ export const validateCategoryForm = (category,setErrors) => {
       errors.category = 'This field is required';
       CatagoryValid= false;
     }
-  
-   
-    
-  
     setErrors(errors);
     return CatagoryValid ;
   };

@@ -7,22 +7,14 @@ import {CREATE_TOPICS_REQUEST,SET_TOPICS_STATUS,createTopicsSuccess,createTopics
 const API_URL = 'http://localhost:5199/lxp/course/topic';
 
  const addTopic = ({ dispatch,getState}) => (next) =>async (action) => {
-  // console.log("topicMiddleware",action.payload);
-
+  
   if (action.type === CREATE_TOPICS_REQUEST ) {
-  // const{isRequesting}=getState().topics;
-  //   if (!isRequesting) {
-  //     dispatch({ type: SET_TOPICS_STATUS, payload: true });
   console.log("isRequesting", getState().Topic);
-
   const ReducerData = getState().Topic;
-  // Check if 'topicsState' is defined and has the 'isRequesting' property
   if (!ReducerData.isRequesting) {
     dispatch({ type: SET_TOPICS_STATUS, payload: true });
     
     try {
-      // console.log("post",action.payload)
-      // Assuming 'action.payload' contains the data you want to senda
       const response = await axios.post(API_URL,action.payload);
       console.log('API Response1:', response.data); // Log the response data
       if(response.data.statusCode==412){

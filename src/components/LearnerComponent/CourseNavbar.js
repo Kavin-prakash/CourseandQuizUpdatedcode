@@ -325,33 +325,6 @@ export default function MiniDrawer() {
                   
                 }
               </SearchBar>
-              {/* <SearchBar className="ms-5">
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <SearchInput
-                  placeholder="Search..."
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-                {suggestions && suggestions.length > 0 ? (
-                  <ul className="suggestions-dropdown">
-                    {suggestions.map((suggestions) => (
-                      <li
-                        key={suggestions.courseId}
-                        onClick={() => handleSuggestionClick(suggestions)}
-                      >
-                        {suggestions.title}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <ul className="suggestions-dropdown">
-                    <li>No result found</li>
-                  </ul>
-                )}
-              </SearchBar> */}
-
                  <Avatar {...stringAvatar(`${firstname} ${lastname}`)}
                   sx={{ cursor: 'pointer' }}
                   onMouseEnter={handleMenuOpen}

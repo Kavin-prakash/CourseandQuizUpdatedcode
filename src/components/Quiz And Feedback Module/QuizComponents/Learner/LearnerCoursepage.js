@@ -57,23 +57,6 @@ function LearnerCoursepage() {
     navigate("/quizfeedbackquestion");
   };
 
-  //   const handleFeedback = (topicId) => {
-  //     try {
-  //       navigate(`/topicfeedback?topicId=${topicId}`);
-  //     } catch (error) {
-  //       console.error('Error navigating:', error);
-  //     }
-  //   };
-
-  //   const handleQuizFeedback = async (topicId) => {
-  //     try {
-  //       // dispatch(fetchQuizById(topicId));
-  //       // setQuizId(id);
-  //       // navigate(`/quizfeedback?quizId=${id}&topicId=${topicId}`);
-  //     } catch (error) {
-  //       console.error('Error navigating:', error);
-  //     }
-  //   };
 
   return (
     <div>

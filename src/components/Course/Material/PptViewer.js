@@ -9,15 +9,6 @@ export default function PptViewerComponent(prop) {
     }, [material])
     const [documentPath, setDocumentPath] = useState('');
     const containerRef = useRef(null);
-    // const dispatch = useDispatch();
-    // const content = useSelector(state => state.fetchContentUrl.content); // Assuming 'state.content' is where your content data is stored
-
-    // Dispatch the fetchIndividualContentRequest action
-    // useEffect(() => {
-    //     dispatch(fetchContentUrlRequest(materialId));
-    // }, [materialId]);
-
-    // Update documentPath when content is fetched3
     useEffect(() => {
 
         setDocumentPath(viewpdf);

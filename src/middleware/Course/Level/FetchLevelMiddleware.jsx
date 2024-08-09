@@ -8,11 +8,8 @@ const fetchlevelApi = ({ dispatch }) => (next) => async (action) => {
   if (action.type === FETCH_LEVEL_REQUEST) {
     try {
       const response = await axios.get(API_URL);
-      console.log('API Response:', response.data); // Log the response data
-      
+      console.log('API Response:', response.data); 
         dispatch(fetchLevelSuccess(response.data.data));
-        // console.log("levelmiddleware",response.data);
-       
     } catch (error) {
       console.error('API Error:', error.message);
       dispatch(fetchLevelFailure(error.message));

@@ -10,12 +10,6 @@ const intialState ={
     error : null,
  
 }
- 
- 
- 
- 
- 
- 
  const  PasswordChangeReducer = (state= intialState, action) => {
     switch(action.type)
     {

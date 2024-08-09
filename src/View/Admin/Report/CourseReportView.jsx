@@ -298,13 +298,6 @@ const CourseReportView = ({ FetchCoursereportRequest, coursereport }) => {
       setPage(0);
     };
 
-
-    // const handleChangeRowsPerPage = (event) => {
-    //   const newRowsPerPage = parseInt(event.target.value, 10);
-    //   setRowsPerPage(parseInt(event.target.value, 10));
-    //   setPage(0);
-    // };
-
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     const emptyRows =

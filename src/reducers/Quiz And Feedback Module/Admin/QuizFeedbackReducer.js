@@ -1,11 +1,3 @@
-import React from 'react'
-
-// import {
-//     CREATE_QUIZFEEDBACK_REQUEST,
-//     CREATE_QUIZFEEDBACK_SUCCESS,
-//     CREATE_QUIZFEEDBACK_FAILURE,
-//   } from '../../src/actions/QuizFeedbackAction';
-
 import { CREATE_QUIZFEEDBACK_REQUEST,CREATE_QUIZFEEDBACK_SUCCESS,CREATE_QUIZFEEDBACK_FAILURE } from '../../actions/Quiz And Feedback Module/QuizFeedbackAction';
   
   const initialState = {

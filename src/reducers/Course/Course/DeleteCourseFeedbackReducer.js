@@ -1,7 +1,3 @@
-
-import React from 'react'
-
-// import { DELETE_TOPICFEEDBACK_REQUEST,DELETE_TOPICFEEDBACK_SUCCESS,DELETE_TOPICFEEDBACK_FAILURE } from '../../actions/Quiz And Feedback Module/DeleteTopicFeedbackAction';
 import { DELETE_COURSEFEEDBACK_REQUEST,DELETE_COURSEFEEDBACK_SUCCESS,DELETE_COURSEFEEDBACK_FAILURE } from '../../../actions/Course/Course/DeleteCourseFeedbackAction';
 
  const initialState = {

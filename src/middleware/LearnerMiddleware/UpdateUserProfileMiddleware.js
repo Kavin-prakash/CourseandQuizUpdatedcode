@@ -1,6 +1,5 @@
 import axios from "axios";
  
-// import { PUT_USER_PROFILE_REQUEST } from "../../actions/LearnerAction/UpdateUserProfileAction";
 import { put_user_profile_failure } from "../../actions/LearnerAction/UpdateUserProfileAction";
 import { put_user_profile_success } from "../../actions/LearnerAction/UpdateUserProfileAction";
 import { PUT_USER_PROFILE_REQUEST } from "../../actions/LearnerAction/UpdateUserProfileAction";
@@ -35,4 +34,3 @@ export const updateUserData =
     return next(action);
   };
  
-// export { updateUserData, fetchProfileData };

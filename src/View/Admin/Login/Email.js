@@ -104,24 +104,6 @@ function Email() {
 
                                 // loading?<SpinnerComponent/>:
                                 <form onSubmit={handleSubmit(onSubmit)}>
-                                    {/* <div>
-                                        <input
-                                            {...register('email', {
-                                                required: validationMessages.email.required,
-                                                pattern: {
-                                                    value: emailRegex,
-                                                    message: validationMessages.email.pattern
-                                                }
-                                            })}
-                                            type='text'
-                                            placeholder='Enter Your Email'
-                                            className='form-control'
-                                            id='Email-input'
-
-                                            onChange={(e) => SetsendEmailButton(e.target.value)}
-                                        />
-                                    </div> */}
-
                                     <div>
                                         <input
                                             {...register('email', {
@@ -139,28 +121,6 @@ function Email() {
                                         />
                                     </div>
                                     <p id='loginerrormessage'>{errors.email?.message}</p>
-                                    {/* {
-                                    loading?
-                                    <SpinnerComponent/>: */}
-                                    {/* <div className='button-login'>
-                                 {
-                                     sendemailbutton.length > 0 ?
-                                         <button type='submit' className='btn btn-primary'>Send Email</button> 
-                                         : <button type='submit' id='Button-Disabled' className='btn btn-primary' disabled>Send Email</button>         
-                                 }
-                             </div> */}
-
-                                    {/* } */}
-                                    {/* {loading ? (
-                                        <SpinnerComponent /> // Render the spinner when loading is true
-                                    ) : (
-                                        sendemailbutton.length > 0 && isSuccessemail===false ? ( 
-                                            <button type='submit' className='btn btn-primary'>Send Email</button>
-                                        ) : (
-                                            <button type='submit' id='Button-Disabled' className='btn btn-primary' disabled >Send Email</button>
-                                        )
-                                    )} */}
-
                                     {loading ? (
                                         <SpinnerComponent /> // Render the spinner when loading is true
                                     ) : (

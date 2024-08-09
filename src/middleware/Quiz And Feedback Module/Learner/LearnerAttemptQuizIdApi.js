@@ -32,8 +32,6 @@ export const LearnerAttemptQuizIdApi =
                 dispatch(CreateAttemptSuccess(response.data));
                 console.log("Successful response", response.data);
               }
-              // sessionStorage.setItem("attemptId",response.data.data.learnerAttemptId)
-              // console.log("attempt ID :",response.data.data.learnerAttemptId)
             } catch (error) {
               console.error("API Error:", error.message);
               dispatch(CreateAttemptFailure(error.message));

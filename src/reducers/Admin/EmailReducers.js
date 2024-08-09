@@ -58,17 +58,3 @@ const emailReducer=(state = initialState,action)=>{
 
 export default emailReducer;
 
-// const emailReducer = (state = initialState, action) => {
-//     switch (action.type) {
-//         case SUBMIT_EMAIL:
-//             return {
-//                 ...state,
-//                 email: action.payload.email,
-//                 submitting: true, 
-//             };
-//         default:
-//             return state;
-//     }
-// };
- 
-// export default emailReducer;

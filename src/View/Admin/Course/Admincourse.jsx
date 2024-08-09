@@ -16,21 +16,10 @@ const Admincourse = ({ fetchCourses, courses }) => {
   const [loading, setLoading] = useState(true);
   const rootRef = React.useRef(null);
 
-  // useEffect(() => {
-  //     const timer = setTimeout(() => {
-  //         setLoading(false)
-  //     }, 1000);
-  //     return () => clearTimeout(timer);
-
-  // }, []);
-
   useEffect(() => {
     fetchCourses();
   }, [fetchCourses]);
 
-  // if ( loading||courses.length === 0) {
-  //     return <div className='spinnerclass'> <Spinner /></div>;
-  // }
   return (
     <div id="admin_recentcourse">
 
@@ -60,8 +49,6 @@ const Admincourse = ({ fetchCourses, courses }) => {
               </Row>
               <div className="scrollable-content" >
                 {courses.map((course) => (
-                  // <Card key={index} sx={{ maxWidth: 250, maxHeight: 250, mb:5,borderRadius:1}}>
-
                   <Card
                     component={Link}
                     to={'/coursecontent/' + course.courseId}
@@ -78,14 +65,6 @@ const Admincourse = ({ fetchCourses, courses }) => {
                     }}
                   >
                     <CardActionArea>
-                      {/* <CardMedia
-                                                    component="img"
-                                                    height="140"
-                                                    // width="80"
-                                                    image={course.thumbnailimage}
-                                                    alt={course.title || 'Course image'}
-                                                    style={{objectFit:"contain"}}
-                                                /> */}
                       <CardMedia
                         component="img"
                         height="200"
