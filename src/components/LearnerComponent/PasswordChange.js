@@ -19,11 +19,6 @@ import passwordimagegirl from '../../assets/Learner/Reset password-amico.png'
 import updatePasswordApi from '../../middleware/LearnerMiddleware/PasswordChangeApi';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-
-
- 
-
- 
  
 const alertDisplayPasswordFailure = () => {
  
@@ -42,13 +37,6 @@ const alertDisplayPasswordFailure = () => {
     }
   });
 }
- 
- 
-//   setTimeout(() => {
-//     window.location.reload();
-//   }, 3000);
-// }
- 
 const PasswordChange = () => {
     const [learnerId] = useState(sessionStorage.getItem('UserSessionID'));
     console.log("learnerid", learnerId);

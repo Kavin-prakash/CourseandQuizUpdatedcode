@@ -20,9 +20,6 @@ import PauseIcon from "@mui/icons-material/Pause";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import { watchTimeRequest } from "../../actions/LearnerAction/WatchTimeAction";
-//import watchTimeRequest from '../../actions/LearnerAction/WatchTimeAction';
-// import { updateWatchTimeRequest } from "../../actions/LearnerAction/UpdateWatchTimeAction";
-//import updateWatchTimeRequest from '../../actions/LearnerAction/UpdateWatchTimeAction';
  
 const Video = styled.video`
   flex-shrink: 1;
@@ -296,17 +293,6 @@ const LearnerVideoViewer = ({ material,materialId ,materialName}) => {
       }
     }
   };
- 
-  // const seekToPosition = (pos) => {
-  //   if (!videoRef.current) return;
-  //   if (pos < 0 || pos > 1) return;
- 
-  //   const durationMs = videoRef.current.duration * 1000 || 0;
-  //   const newElapsedMs = durationMs * pos;
-  //   const newTimeSec = newElapsedMs / 1000;
-  //   videoRef.current.currentTime = newTimeSec;
-  // };
- 
  
   const seekToPosition = (pos) => {
     if (!videoRef.current) return;

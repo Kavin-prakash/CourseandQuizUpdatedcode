@@ -112,12 +112,6 @@ const Content = () => {
   }, [id]);
 
 
-  // const handleAddTopic = (e) => {
-  //   e.preventDefault();
-  //   if (iscourse) {
-  //     navigate(`/addtopic/${courseid}`);
-  //   }
-  // };
   const [dialogMessage, setDialogMessage] = useState("");
   const [showEnableModal, setShowEnableModal] = useState(false);
   const EnableOrDisable = () => {
@@ -144,25 +138,12 @@ const Content = () => {
   const handleToggleDescription = () => {
     setIsExpanded(!isExpanded);
   };
-  // useEffect(() => {
-  //   fetchCourses();
-  // }, [fetchCourses]);
-  // const divStyle = {
-  //   boxShadow: '0px 4px 8px #23275c',
-  //   height: '400px',
-  //   width: '1200px',backgroundColor:'#DDDDDD'
 
-  // };
-  //**************************************************************************************************** */
   sessionStorage.setItem("userName", "Mano");
   //end
   //const navigate=useNavigate();
   const [errors, setErrors] = useState({});
-  //const dispatch = useDispatch();
-  //const { id } = useParams();
-  //const [courseId,setCourseId]=useState(props.courseId??"273a1881-adb6-498c-9c35-5ba7d4b0c64b")
-  // const Id=id;
-  //console.log("topic inside courseId",Id);
+
   const [openDialog, setOpenDialog] = useState(false);
   const closedialog = () => {
     setOpenDialog(false);
@@ -228,33 +209,22 @@ const Content = () => {
       }
     };
     fetchData();
-    const responseurl = axios.get(course.thumbnail, { responseType: 'blob' }).then((res) =>
-      {
+    if (!course.thumbnail || course.thumbnail != "") {
+      const responseurl = axios.get(course.thumbnail, { responseType: 'blob' }).then((res) => {
         console.log("popo", res)
         const blob = new Blob([res.data], { type: res.data.type });
 
-    const file = new File([blob], "example.txt", {
-      type: blob.type,
-      lastModified: new Date().getTime(),
-    });
-    setThumbnailimage(
-      blob );
+        const file = new File([blob], "example.txt", {
+          type: blob.type,
+          lastModified: new Date().getTime(),
+        });
+        setThumbnailimage(
+          blob);
       })
-    console.log("responseurl=", responseurl);
-    console.log("responseurl=", responseurl);
-    console.log("responseurl=", course.thumbnail);
-    // const blob = new Blob([responseurl.data], { type: responseurl.data.type });
-
-    // const file = new File([blob], "example.txt", {
-    //   type: blob.type,
-    //   lastModified: new Date().getTime(),
-    // });
-    // setThumbnailimage(
-    //   Object.assign(file, {
-    //     preview: URL.createObjectURL(file),
-    //   })
-    // );
-    // console.log("lololo",URL.createObjectURL(thumbnailimage));
+      console.log("responseurl=", responseurl);
+      console.log("responseurl=", responseurl);
+      console.log("responseurl=", course.thumbnail);
+    }
   }, [openDialog]);
   const [open, setOpen] = React.useState(false);
   const [topicopen, setTopicOpen] = React.useState(false);
@@ -299,12 +269,6 @@ const Content = () => {
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   useEffect(() => {
     if (isExist) {
-      // setExistMsg('Topic already exists');
-      // const timer = setTimeout(() => {
-      //   setExistMsg('');
-      // }, 5000);
-
-      // return () => clearTimeout(timer);
       const Toast = Swal.mixin({
         customClass: "topic-created-success-messgae",
         toast: true,
@@ -400,7 +364,7 @@ const Content = () => {
       modifiedby: "Kavin",
       thumbnailimage: course.thumbnailimage,
     });
-  
+
     // setThumbnailimage( blob );
     setOpenDialog(true);
   };
@@ -454,13 +418,7 @@ const Content = () => {
   const handleCourseSubmit = async (event) => {
     event.preventDefault();
 
-    // const checkcoursevalidform = validationform();
 
-    // if (!checkcoursevalidform) {
-    //   setDialogMessage("All the fields are required for validation");
-    //   setOpen(true);
-    //   return;
-    // }
 
     const formData = new FormData();
 
@@ -474,10 +432,7 @@ const Content = () => {
     formData.append("Duration", selectedcourse.duration);
     formData.append("ModifiedBy", selectedcourse.modifiedby);
 
-    // console.log(
-    //   "Selected course thumbnail image:",
-    //   selectedcourse.thumbnailimage
-    // );
+
 
     if (thumbnailimage && thumbnailimage.preview) {
       formData.append("Thumbnailimage", selectedcourse.thumbnailimage);
@@ -604,15 +559,6 @@ const Content = () => {
               className="mt-2"
             >
               <CardContent sx={{ flex: 1, width: "80%" }}>
-                {/* <Row className="mt-1 mx-1">
-              <Tooltip title="Delete Topic">
-                <IconButton aria-label="Deletecourse" onClick={() => handleDeleteClick(course.courseId)}>
-                  <DeleteIcon style={{ color: "#C80036" }} />
-                </IconButton>
-                 
-              </Tooltip> 
-              </Row> */}
-                {/**Edited codes */}
                 <Row>
                   <Box className=" d-flex justify-content-between align-items-end  ">
                     <Box marginBottom="6px" width={"25vw"}>
@@ -727,18 +673,8 @@ const Content = () => {
                       />
                     </b>
                   </Typography>
-                  {/* <Typography variant="h6" display="block" className="mt-2"><FaHandPointRight style={{ fontSize: '20px', color: 'gray', marginRight: '10px' }} />
-                  <b>Course Description: </b>
-                  {course.description ? (isExpanded ? course.description : `${course.description.substring(0, 100)}...`) : 'No description available'}
-                </Typography>
-                {course.description && course.description.length > 100 && (
-                  <Button size="small" color="primary" onClick={handleToggleDescription}>
-                    {isExpanded ? 'Show Less' : 'Show More'}
-                  </Button>
-                )} */}
                 </Row>
                 <Row>
-                  {/* <Button className=" d-flex justify-content-end align-items-end" onClick={handleClickOpen} size="large" variant="text">Add Topic</Button> */}
                 </Row>
               </CardContent>
             </Card>

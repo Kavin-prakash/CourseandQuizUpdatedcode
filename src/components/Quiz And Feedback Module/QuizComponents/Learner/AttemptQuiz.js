@@ -123,25 +123,6 @@ const AttemptQuiz = () => {
  
    
     const showAlert = () => {
-      // const Toast = Swal.mixin({
-      //   className: "swal2-toast",
-      //   toast: true,
-      //   position: "top",
-      //   showConfirmButton: false,
-      //   timer: 2000,
-      //   background: "#fa4d56",
-      //   timerProgressBar: true,
-      //   didOpen: (toast) => {
-      //     toast.onmouseenter = Swal.stopTimer;
-      //     toast.onmouseleave = Swal.resumeTimer;
-      //   },
-      // });
-      // Toast.fire({
-      //   icon: "warning",
-      //   title: "Here you couldn't copy the text",
-      //   color: "white",
-      // });
- 
       Swal.fire({
         customClass:"msq-alert-msg ",
         title: "Here you couldn't copy the text",
@@ -185,28 +166,7 @@ const AttemptQuiz = () => {
           );
         } else if (selectedForQuestion.length < 3) {
           updatedOptions[questionId] = [...selectedForQuestion, optionValue];
-        } else {
-          // alert("You can select a maximum of 3 options.");
- 
-          // Swal.fire({
-          //   title: "You can select a maximum of 3 options",
-          //   customClass:"msq-alert-msg ",
-          //   showClass: {
-          //     popup: `
-          //       animate__animated
-          //       animate__fadeInUp
-          //       animate__faster
-          //     `
-          //   },
-          //   hideClass: {
-          //     popup: `
-          //       animate__animated
-          //       animate__fadeOutDown
-          //       animate__faster
-          //     `
-          //   }
-          // });
- 
+        } else { 
           Swal.fire({
             customClass:"msq-alert-msg ",
             title: "You can select maximum of 3 options",
@@ -306,24 +266,6 @@ const AttemptQuiz = () => {
               {Math.round(progressPercentage)}% COMPLETED
             </div>
           </div>
-          {/* {progressPercentage === 100 ? (
-            <button
-              className="attempt-quiz-finish-attempt"
-              onClick={handleSubmit}
-            >
-              Review all questions
-            </button>
-          ) : (
-            <button
-              disabled
-              style={{ cursor: "not-allowed" }}
-              className="attempt-quiz-finish-attempt"
-              onClick={handleSubmit}
-            >
-              Review all questions
-            </button>
-          )} */}
- 
             <button
               className="attempt-quiz-finish-attempt"
               onClick={handleSubmit}

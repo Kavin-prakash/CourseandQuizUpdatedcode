@@ -30,9 +30,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useState, useEffect, } from 'react';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FetchuserDataRequest } from '../../../../actions/LearnerAction/FetchRegisterAction';
 
 const learnerId = sessionStorage.getItem('UserSessionID')
@@ -145,8 +145,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MiniDrawer() {
-const name = useSelector((state)=> state.fetchlearner)
-console.log("name",name)
+  const name = useSelector((state) => state.fetchlearner)
+  console.log("name", name)
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -162,7 +162,7 @@ console.log("name",name)
   };
   useEffect(() => {
     fetchData((learnerId));
-   
+
   }, [dispatch]);
 
   const handleDrawerClose = () => {
@@ -176,28 +176,28 @@ console.log("name",name)
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    
+
   };
 
   const fetchData = async (learnerId) => {
     try {
-     
-        dispatch(FetchuserDataRequest(learnerId));
-     
-      
-     
+
+      dispatch(FetchuserDataRequest(learnerId));
+
+
+
     } catch (error) {
       console.error("Error fetching data", error);
     }
   };
 
 
-const Logout=()=>{
-  handleMenuClose();
-  navigate('/')
-  sessionStorage.removeItem("UserSessionID")
-  
-}
+  const Logout = () => {
+    handleMenuClose();
+    navigate('/')
+    sessionStorage.removeItem("UserSessionID")
+
+  }
 
 
   return (
@@ -207,18 +207,6 @@ const Logout=()=>{
       <AppBar position="fixed" open={open} className='bar'>
         <div style={{ backgroundColor: '#27235C' }}>
           <Toolbar>
-            {/* <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                marginRight: 5,
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton> */}
             <a className="navbar-brand_learner" href="Relevantz"><img src={logo} alt="Relevantz Logo" className='navbar-imaged' /></a>
             <div className='navbar-name_learner'><h5>Learning Experience Platform</h5></div>
             <Typography variant="h6" noWrap component="div">
@@ -243,105 +231,6 @@ const Logout=()=>{
           </Toolbar>
         </div>
       </AppBar>
-      {/* <Drawer variant="permanent" open={open} >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-
-        <List>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <Link to='/LearnerDashboard'>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <HomeOutlinedIcon />
-                </ListItemIcon>
-              </Link>
-              <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <Link to='/LearnerPage'>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <MenuBookIcon />
-                </ListItemIcon>
-              </Link>
-              <ListItemText primary="Courses" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <Link to='/LearnerenrolledCourse'>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <SchoolOutlinedIcon />
-                </ListItemIcon>
-              </Link>
-              <ListItemText primary="My Course" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <Link to='/LearnerScorePage'>
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <EmojiEventsOutlinedIcon />
-                </ListItemIcon>
-              </Link>
-              <ListItemText primary="Scores" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </Drawer> */}
       <Box component="main-learner" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
       </Box>

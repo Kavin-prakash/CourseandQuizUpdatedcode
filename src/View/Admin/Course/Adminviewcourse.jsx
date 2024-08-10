@@ -174,19 +174,6 @@ const Adminviewcourse = ({
   useEffect(() => {
     fetchCourses();
   }, [fetchCourses]);
-
-  // Form Validation
-  // const validationform = () => {
-  //   const { title, level, category, description, duration } = selectedcourse;
-  //   return (
-  //     title.trim() !== "" &&
-  //     level.trim() !== "" &&
-  //     category.trim() !== "" &&
-  //     description.trim() !== "" &&
-  //     duration > 0
-  //   );
-  // };
-
   // check the the values in the dialog box container when its open
 
   useEffect(() => {
@@ -199,19 +186,10 @@ const Adminviewcourse = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // const checkcoursevalidform = validationform();
-
-    // if (!checkcoursevalidform) {
-    //   setDialogMessage("All the fields are required for validation");
-    //   setOpen(true);
-    //   return;
-    // }
 
     const formData = new FormData();
 
     formData.append("CourseId", selectedcourse.courseId);
-    // console.log("checking the courseID", selectedcourse.courseId);
-
     formData.append("Title", selectedcourse.title);
     formData.append("LevelId", selectedcourse.level);
     formData.append("CategoryId", selectedcourse.category);
@@ -219,12 +197,7 @@ const Adminviewcourse = ({
     formData.append("Duration", selectedcourse.duration);
     formData.append("ModifiedBy", selectedcourse.modifiedby);
 
-    // console.log(
-    //   "Selected course thumbnail image:",
-    //   selectedcourse.thumbnailimage
-    // );
-
-
+    
     if (thumbnail && thumbnail.preview) {
 
       formData.append("Thumbnailimage", selectedcourse.thumbnailimage);
@@ -332,41 +305,7 @@ const Adminviewcourse = ({
     setOpen(false);
   };
 
-  // DELETE COURSE HANDLING
-
-  // useEffect(() => {
-  //   if (istrue) {
-  //     // setOpen(true);
-
-  //     // Tostify Alert Message for the successmessage
-
-  // const Toast = Swal.mixin({
-  //   toast: true, background: 'green', position: "top",
-  //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
-  //   didOpen: (toast) => {
-  //     toast.onmouseenter = Swal.stopTimer;
-  //     toast.onmouseleave = Swal.resumeTimer;
-  //   }
-  // });
-  // Toast.fire({
-  //   icon: "success", iconColor: 'white', title: "Deleted Successfully", customClass: {
-  //     popup: 'deletecourse-toast'
-  //   }
-  // });
-
-
-  //     fetchCourses().then(()=>
-  //     {
-  //       dispatch({type:RESET_DELETE_SUCCESS_COURSES_MESSAGE});  
-  //     });
-  //   }
-  //    else if (isfalse) {
-  //     setOpen(true);
-  //     setDialogMessage(failuremessage);
-  //   }
-  // }, [istrue, mes, isfalse, failuremessage, fetchCourses ,dispatch]);
-
-
+  
 
   // OLD useEffect Mock Data
 
@@ -375,20 +314,7 @@ const Adminviewcourse = ({
     let message = '';
     if (istrue) {
       message = mes;
-      // const Toast = Swal.mixin({
-      //   toast: true, background: 'red', position: "top",
-      //   showConfirmButton: false, timer: 3000, timerProgressBar: true,
-      //   didOpen: (toast) => {
-      //     toast.onmouseenter = Swal.stopTimer;
-      //     toast.onmouseleave = Swal.resumeTimer;
-      //   }
-      // });
-      // Toast.fire({
-      //   icon: "success", iconColor: 'white', title: "Deleted Successfully", customClass: {
-      //     popup: 'updatecourse-toast'
-      //   }
-      // });
-
+  
       fetchCourses().then(() => {
         dispatch({ type: RESET_DELETE_SUCCESS_COURSES_MESSAGE });
       });

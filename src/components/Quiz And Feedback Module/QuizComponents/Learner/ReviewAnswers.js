@@ -89,22 +89,6 @@ const ReviewAnswers = ({ attemptId }) => {
   };
 
   const handleSubmit = () => {
-    // const unanswered = localQuestions.reduce((acc, question, index) => {
-    //   const response = localReviewData.questionResponses.find(
-    //     (q) => q.quizQuestionId === question.quizQuestionId
-    //   );
-    //   if (!response || !response.selectedOptions || response.selectedOptions.length === 0) {
-    //     acc.push(index + 1); // Push 1-based index
-    //   }
-    //   return acc;
-    // }, []);
-
-    // if (unanswered.length > 0) {
-    //   setUnansweredQuestions(unanswered);
-    //   setUnansweredError(true);
-    //   return;
-    // }
-
     if (AttemptId && !isSubmitting) {
       setIsSubmitting(true);
       dispatch(submitAttemptRequest(AttemptId))
@@ -169,13 +153,6 @@ const ReviewAnswers = ({ attemptId }) => {
               (response) => response.quizQuestionId === question.quizQuestionId
             );
             return (
-              // <button
-              //   key={index}
-              //   className={isAnswered ? "sidebar-question-button answered" : "sidebar-question-button"}
-              //   onClick={() => scrollToQuestion(index)}
-              // >
-              //   {index + 1}
-              // </button>
               <button
                 key={index}
                 // className={isAnswered ? "sidebar-question-button answered" : "sidebar-question-button"}
@@ -226,18 +203,9 @@ const ReviewAnswers = ({ attemptId }) => {
                   return (
                     <li key={optionIndex}>
                       <label
-                        className={`option-label ${
-                          isAnswered ? "selected" : ""
-                        }`}
+                        className={`option-label ${isAnswered ? "selected" : ""
+                          }`}
                       >
-                        {/* <input
-                          type={question.questionType === "MSQ" ? "checkbox" : "radio"}
-                          name={question.quizQuestionId}
-                          value={option.option}
-                          checked={isAnswered}
-                          readOnly
-                          className="option-type"
-                        /> */}
                         <input
                           type={
                             question.questionType === "MSQ"
@@ -265,9 +233,6 @@ const ReviewAnswers = ({ attemptId }) => {
           ))}
         </div>
         <br />
-        {/* <button className="finish-quiz-attempt" onClick={() => setShowPopup(true)}>
-          Submit Quiz
-        </button> */}
       </div>
       {showPopup && (
         <div className="reviewanswers-popup">
@@ -281,13 +246,6 @@ const ReviewAnswers = ({ attemptId }) => {
             </button>
             <br />
             <br />
-            {/* {unansweredError && (
-              <p className="error-message">
-                Please answer all questions before submitting. Unanswered questions:
-                <br/>
-                {unansweredQuestions.join(", ")}
-              </p>
-            )} */}
             {!unansweredError && (
               <>
                 <p className="submit-quiz-text">

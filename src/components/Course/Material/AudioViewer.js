@@ -157,24 +157,6 @@ const AudioViewer = ({ material }) => {
   useEffect(()=>{
     setSrc(material)
   },[material])
-  // const dispatch = useDispatch();
-  // const selectorVideoView = useSelector((state) => state.fetchContentUrl.content);
-  // const storeselector = useSelector((state) => state);
-
-  // useEffect(() => {
-  //   dispatch(fetchContentUrlRequest(material));
-  // }, [material, dispatch]);
-
-  // useEffect(() => {
-  //   if(selectorVideoView.filePath){
-  //   setSrc(selectorVideoView.filePath);
-
-  //   }
-  //   // setSrc(selectorVideoView.filePath);
-  //   console.log("src", src);
-  //   console.log("storeselector", storeselector);
-  // }, [selectorVideoView]);
-
   useEffect(() => {
     if (!videoRef.current) return;
 

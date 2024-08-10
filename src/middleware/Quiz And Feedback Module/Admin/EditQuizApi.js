@@ -1,13 +1,5 @@
 import axios from "axios";
-// import {
-//   EDIT_QUIZ_DETAILS_REQUEST,
-//   editQuizDetailsSuccess,
-//   editQuizDetailsFailure,
-// } from "../actions/EditQuizAction";
 import { EDIT_QUIZ_DETAILS_REQUEST, editQuizDetailsSuccess,editQuizDetailsFailure } from "../../../actions/Quiz And Feedback Module/Admin/EditQuizAction";
-// const quizId = sessionStorage.getItem("quizId");
-
-// const API_URL = `http://localhost:5199/api/Quiz/${quizId}`;
 
 export const PutQuizDetails =
   ({ dispatch }) =>

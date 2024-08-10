@@ -14,8 +14,6 @@ export const CoursebyScoreApi = ({ dispatch }) => (next) => async (action) => {
             console.log("console-log", response.data.data);
 
             dispatch(fetchCourseScoreSuccess(response.data.data));
-            // console.log("dispatch-checker", dispatch(fetchCourseScoreSuccess(response.data.data)))
-
         }
         catch (error) {
 

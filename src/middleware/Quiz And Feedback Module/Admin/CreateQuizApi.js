@@ -14,7 +14,7 @@ export const CreateQuizApi = async (action) => {
         console.log("feed Post API Response:", response.data);
       } catch (error) {
         console.error("API Error:", error.message);
-        throw error; // Throw the error for better error handling
+        throw error; 
       }
 
   };

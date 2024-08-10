@@ -8,11 +8,6 @@ import {
 } from "../../actions/LearnerAction/GetUpdateUserProfileAction";
 
 import { getUserProfileSuccess } from "../../actions/LearnerAction/GetUpdateUserProfileAction";
-
-
-
-
-
 export const fetchUserData = async (userId) => {
   try {
     const response = await axios.get(`http://localhost:5199/lxp/view/learnerProfile/${userId}`);
@@ -24,17 +19,6 @@ export const fetchUserData = async (userId) => {
     throw error; // Added to re-throw the error after logging
   }
 };
-
-// Removed default export here
-
-
-
-
-
-
-
-
-
 
 export const fetchProfileData = ({ dispatch }) => (next) => async (action) => {
   if (action.type === GET_USER_PROFILE_REQUEST) {
@@ -59,10 +43,4 @@ export const fetchProfileData = ({ dispatch }) => (next) => async (action) => {
   }
   return next(action);
 };
-
-// Removed default export here
-
-// export { fetchUserData, fetchProfileData }; // Exporting as named exports
-
-
 

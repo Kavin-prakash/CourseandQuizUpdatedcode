@@ -10,7 +10,7 @@ import { Container } from "react-bootstrap";
 import TopBar from "../../../Quiz And Feedback Module/QuizComponents/Learner/TopBar";
 import Swal from "sweetalert2";
 import Textarea from '@mui/joy/Textarea';
- 
+
 
 const FetchQuizFeedbackQuestion = () => {
   const navigate = useNavigate();
@@ -20,26 +20,26 @@ const FetchQuizFeedbackQuestion = () => {
     (state) => state.fetchquizfeedbackquestion.quizfeedbackquestions
   );
   console.log("selector", quizfeedbackquestionfetch);
- 
+
   const quizfeedback = useSelector(
     (state) => state.fetchquizinstruction.quizinstructiondetails
   );
   console.log("fetch quiz id", quizfeedback.quizId);
-  
+
   const quizId = sessionStorage.getItem("quizId");
- 
+
   useEffect(() => {
     dispatch(fetchquizfeedbackquestionrequest(quizId));
   }, [quizId]);
- 
+
   const learnerId = sessionStorage.getItem("LearnerId");
   const getlearners = useSelector((state) => state.fetchlearnerid.learnerId);
   console.log(getlearners);
- 
+
   console.log("Learner ID :", learnerId);
- 
+
   const [answers, setAnswers] = useState([]);
- 
+
   useEffect(() => {
     if (quizfeedbackquestionfetch) {
       setAnswers(
@@ -54,10 +54,10 @@ const FetchQuizFeedbackQuestion = () => {
       );
     }
   }, [quizfeedbackquestionfetch]);
- 
+
   // sessionStorage.getItem("quizId",quizId);
- 
- 
+
+
   // Handle change for both MCQ and text responses
   const onhandleChange = (questionId, optionType, optionValue) => {
     setAnswers(answers.map((answer) => answer.quizFeedbackQuestionId === questionId ? { ...answer, [optionType]: optionValue } : answer));
@@ -105,38 +105,38 @@ const FetchQuizFeedbackQuestion = () => {
       navigate("/LearnerenrolledCourse");
     }, 2000);
   };
- 
+
   const handleNavigate = () => {
     // sessionStorage.removeItem("topicId");
     navigate("/learnerscorepage");
   };
- 
+
   const divStyle = {
     boxShadow: "0px 4px 8px #23275c",
     // backgroundColor: "#F9F5F6",
     backgroundColor: "#F5F7F8",
-    width:"750px",
-    height:"100%",
+    width: "750px",
+    height: "100%",
     marginTop: "2%"
   };
- 
+
   const allAnswered = answers.every(
     (answer) => answer.optionText || answer.response
   );
- 
+
   const instructionStyle = {
     padding: "10px",
     margin: "10px",
   };
- 
+
   const labels = {
     1: 'Easy',
     5: 'Hard'
   };
- 
- 
- 
- 
+
+
+
+
   return (
     <div>
       <TopBar />
@@ -165,8 +165,8 @@ const FetchQuizFeedbackQuestion = () => {
               <b style={{ color: "red" }}> * </b>
               Easy = 1 ; Intermediate = 3 ; Hard = 5</b></h6>
             <h6 style={instructionStyle}>Please select the number, which most accurately reflects your satisfaction level</h6>
- 
- 
+
+
             {quizfeedbackquestionfetch &&
               quizfeedbackquestionfetch.map((quizfeedbackquestions, index) => (
                 <div className="cont mt-2">
@@ -203,84 +203,11 @@ const FetchQuizFeedbackQuestion = () => {
                       </div>
                     </div>
                   </div>
- 
- 
-                  {/* <div className="card mt-3" key={index}>
-                    <div className="card-body">
-                      <h5 style={{ fontWeight: "bold", fontSize: "18px" }}>{quizfeedbackquestions.questionNo}.{" "}{quizfeedbackquestions.question} <b style={{ color: "red" }}>*</b></h5> */}
-                  {/* <h6>
-                        {quizfeedbackquestions.questionNo} .{" "}
-                        {quizfeedbackquestions.question}
-                      </h6> */}
-                  {/* </div> */}
-                  {/* <div className="card-body">
-                      <div className="form-group"> */}
-                  {/* <h6 className='card-title'>Options:</h6> */}
-                  {/* {quizfeedbackquestions.questionType === "MCQ" ? (
-                          quizfeedbackquestions.options.map(
-                            (option, optionIndex) => (
-                              <div key={optionIndex}> */}
-                  {/* <input
-                                  id="feedbackradiobtn"
-                                  type="radio"
-                                  onChange={() =>
-                                    onhandleChange(
-                                      quizfeedbackquestions.quizFeedbackQuestionId,
-                                      "optionText",
-                                      option.optionText
-                                    )
-                                  }
-                                  value={option.optionText}
-                                  name={`option_${quizfeedbackquestions.quizFeedbackQuestionId}`} // Unique name for each question
-                                />
-                                <label>{option.optionText}</label> */}
-                  {/* <div className="radio-container">
-                        {quizfeedbackquestions.questionType === "MCQ" ? (
-                          quizfeedbackquestions.options.map((option, optionIndex) => (
-                            <div key={optionIndex} className="custom-radio-button">
-                              <input
-                                id={`option_${quizfeedbackquestions.quizFeedbackQuestionId}_${optionIndex}`}
-                                type="radio"
-                                onChange={() => onhandleChange(quizfeedbackquestions.quizFeedbackQuestionId, "optionText", option.optionText)}
-                                value={option.optionText}
-                                name={`option_${quizfeedbackquestions.quizFeedbackQuestionId}`}
-                                className="custom-radio-input"
-                              />
-                              <label htmlFor={`option_${quizfeedbackquestions.quizFeedbackQuestionId}_${optionIndex}`} className="custom-radio-label">
-                                {option.optionText}
-                              </label>
-                              {labels[option.optionText] && <div className="rating-tag">{labels[option.optionText]}</div>}
-                            </div>
-                           
- 
- 
-                          )
-                          )
-                        ) : (
-                          <textarea
-                           id="feedbacktextarea"
-                            onChange={onhandleResponse(
-                              quizfeedbackquestions.quizFeedbackQuestionId,
-                              "response"
-                            )}
-                            value={
-                              answers.find(
-                                (answer) =>
-                                  answer.quizFeedbackQuestionId ===
-                                  quizfeedbackquestions.quizFeedbackQuestionId
-                              )?.response
-                            }
-                            name="response"
-                            className="form-control"
-                          />
-                        )}
-                        </div>
-                      </div> */}
                 </div>
                 //   </div>
                 // </div>
               ))}
- 
+
             {/* <Button onClick={handleSubmit}>Submit</Button> */}
             <Button
               type="submit"
@@ -297,24 +224,6 @@ const FetchQuizFeedbackQuestion = () => {
             >
               Submit
             </Button>
- 
-            {/* <div>
-              <Button
-                variant="default"
-                style={{
-                  backgroundColor: "#365486",
-                  color: "whitesmoke",
-                  width: "150px",
-                  marginTop:"-5%",
-                  marginRight: "-20%",
-                }}
-                onClick={() => {
-                  navigate("/LearnerenrolledCourse");
-                }}
-              >
-                Go To Course
-              </Button>
-            </div> */}
           </Container>
           <div>
             <Button
@@ -338,6 +247,5 @@ const FetchQuizFeedbackQuestion = () => {
     </div>
   );
 };
- 
+
 export default FetchQuizFeedbackQuestion;
- 

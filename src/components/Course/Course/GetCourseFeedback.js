@@ -149,35 +149,35 @@ export const GetCourseFeedback = () => {
   };
 
   return (
-    <Container maxWidth="lg" style={{marginBottom:'275px'}}>
-      <Typography variant="h5" style={{marginBottom:'25px'}}>
-        {coursefeedback ? <b style={{marginBottom:'95px'}}>COURSE FEEDBACK QUESTION</b> : <h2 style={{paddingTop:'150px'}}><img src="https://i.pinimg.com/originals/ec/c0/15/ecc015d4e89f77b435df3cd81928ad48.gif" style={{height:'90px',width:'90px'}}></img>No Feedback Available</h2>}
-      
+    <Container maxWidth="lg" style={{ marginBottom: '275px' }}>
+      <Typography variant="h5" style={{ marginBottom: '25px' }}>
+        {coursefeedback ? <b style={{ marginBottom: '95px' }}>COURSE FEEDBACK QUESTION</b> : <h2 style={{ paddingTop: '150px' }}><img src="https://i.pinimg.com/originals/ec/c0/15/ecc015d4e89f77b435df3cd81928ad48.gif" style={{ height: '90px', width: '90px' }}></img>No Feedback Available</h2>}
+
       </Typography>
       {coursefeedback &&
         coursefeedback.length > 0 &&
         coursefeedback.map((feedback, index) => (
-          <Card key={index} sx={{ mb: 2, backgroundColor: '#F6F5F5', boxShadow: '0px 4px 8px #23275c', borderRadius: '20px'}}>
+          <Card key={index} sx={{ mb: 2, backgroundColor: '#F6F5F5', boxShadow: '0px 4px 8px #23275c', borderRadius: '20px' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Tooltip title="Edit Feedback">
                   <IconButton onClick={() => handleOpenEditQuestionModal(feedback.courseFeedbackQuestionId)}>
-                  <FaRegEdit style={{ color: "#604CC3" }} variant="outlined" />
+                    <FaRegEdit style={{ color: "#604CC3" }} variant="outlined" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete Feedback">
                   <IconButton onClick={() => setDeleteQuestionId(feedback.courseFeedbackQuestionId)}>
-                  <DeleteIcon style={{ color: "#C80036" }} />
+                    <DeleteIcon style={{ color: "#C80036" }} />
                   </IconButton>
                 </Tooltip>
               </Box>
               {deleteQuestionId === feedback.courseFeedbackQuestionId && (
                 <div id="popupQuizQuestionDelete">
-                  <div id="popup-contentQuizQuestionDelete" style={{width:'500px',height:'240px'}}>
+                  <div id="popup-contentQuizQuestionDelete" style={{ width: '500px', height: '240px' }}>
                     <button id="popup-close-buttonQuizQuestionDelete" onClick={() => setDeleteQuestionId(null)}>×</button>
-                    <div style={{display: 'flex', alignItems: 'center'}}><TiWarningOutline style={{ marginRight: '10px', color: 'red', fontSize: '25px' }} />
-                    <h4 style={{ paddingTop: '5px' }}><b>Confirm Deletion</b></h4></div>
-                    <p id='QuizQuestionDelete' style={{ marginTop: "5%" ,fontSize:'20px'}}>Are you sure you want to delete the feedback?</p>
+                    <div style={{ display: 'flex', alignItems: 'center' }}><TiWarningOutline style={{ marginRight: '10px', color: 'red', fontSize: '25px' }} />
+                      <h4 style={{ paddingTop: '5px' }}><b>Confirm Deletion</b></h4></div>
+                    <p id='QuizQuestionDelete' style={{ marginTop: "5%", fontSize: '20px' }}>Are you sure you want to delete the feedback?</p>
                     <button onClick={() => handleDeletecoursefbQuestion(feedback.courseFeedbackQuestionId)} id='delete-btn' style={{ backgroundColor: '#E01950', color: 'white', borderRadius: '10px', padding: '10px 35px' }}>Delete</button>
                     <button onClick={() => setDeleteQuestionId(null)} style={{ backgroundColor: '#0F62FE', color: 'white', borderRadius: '10px', padding: '10px 35px' }}>Cancel</button>
                   </div>
@@ -206,7 +206,7 @@ export const GetCourseFeedback = () => {
         <Button
           onClick={() => setShowAddModal(true)}
           variant="contained"
-          sx={{ backgroundColor: 'blue', color: 'white', borderRadius: '10px', float: "right", mb: 2 ,padding: '10px 35px' }}
+          sx={{ backgroundColor: 'blue', color: 'white', borderRadius: '10px', float: "right", mb: 2, padding: '10px 35px' }}
         >
           Submit
         </Button>
@@ -218,8 +218,8 @@ export const GetCourseFeedback = () => {
         aria-labelledby="submit-modal-title"
       >
         <Box sx={modalStyle}>
-         
-         
+
+
           <Alert severity="success" sx={{ mb: 2 }}>
             CourseFeedback Published successfully!
           </Alert>
@@ -260,27 +260,7 @@ export const GetCourseFeedback = () => {
             helperText={errors.question}
             sx={{ mb: 2 }}
           />
-          {/* {editedQuestion.options && editedQuestion.options.map((option, index) => (
-            <TextField
-              key={index}
-              fullWidth
-              label={`Option ${index + 1}`}
-              variant="outlined"
-              value={option}
-              onChange={(e) => {
-                const updatedOptions = [...editedQuestion.options];
-                updatedOptions[index] = e.target.value;
-                setEditedQuestion({
-                  ...editedQuestion,
-                  options: updatedOptions,
-                });
-                validateField("options", e.target.value, index);
-              }}
-              error={!!errors.individualOptions && !!errors.individualOptions[index]}
-              helperText={errors.individualOptions && errors.individualOptions[index]}
-              sx={{ mb: 2 }}
-            />
-          ))} */}
+
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
             <Button onClick={() => setShowEditfbQuestionModal(false)} sx={{ mr: 1 }}>
               Cancel

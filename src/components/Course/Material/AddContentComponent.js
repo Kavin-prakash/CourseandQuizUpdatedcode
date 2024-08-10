@@ -395,18 +395,21 @@ function AddContentComponent() {
           file.type.includes("audio") ? "audio" : "video"
         );
         media.src = URL.createObjectURL(file);
-        media.onloadedmetadata = () => {
+        media.onloadedmetadata = async () => {
           // Fetch duration and format it as hh:mm:ss
           let duration = media.duration;
           let hours = Math.floor(duration / 3600);
           let minutes = Math.floor((duration - hours * 3600) / 60);
           let seconds = Math.floor(duration - hours * 3600 - minutes * 60);
-
           hours = hours < 10 ? "0" + hours : hours;
           minutes = minutes < 10 ? "0" + minutes : minutes;
           seconds = seconds < 10 ? "0" + seconds : seconds;
-
-          setDuration(`${hours}:${minutes}:${seconds}`);
+          const fdura=`${hours}:${minutes}:${seconds}` 
+          setDuration(fdura);
+          setMaterial((material) => ({
+            ...material,
+            duration: fdura
+          }));
           // Revoke the object URL to avoid memory leaks
           URL.revokeObjectURL(media.src);
         };
@@ -432,7 +435,7 @@ function AddContentComponent() {
 
   const handleSubmit = async (event) => {
     console.log("po", material);
-
+    handleMaterial(event);
     event.preventDefault();
     setaddupdatebtn("Add");
     selectorMaterialType.forEach((item) => {

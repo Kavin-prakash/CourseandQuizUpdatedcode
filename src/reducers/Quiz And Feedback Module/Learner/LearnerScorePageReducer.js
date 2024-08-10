@@ -35,10 +35,4 @@ const LearnerScorePageReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-
-
-
-
-
 export default LearnerScorePageReducer

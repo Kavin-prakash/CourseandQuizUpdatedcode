@@ -11,7 +11,7 @@ const fetchcategoryApi = ({ dispatch }) => (next) => async (action) => {
       console.log('API Response:', response.data); // Log the response data
       
         dispatch(fetchCategorySuccess(response.data.data));
-        // console.log("categorymiddleware",response.data)
+       
       
     } catch (error) {
       console.error('API Error:', error.message);

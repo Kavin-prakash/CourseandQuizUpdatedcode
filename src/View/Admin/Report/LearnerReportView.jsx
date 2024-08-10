@@ -378,23 +378,6 @@ const LearnerReportView = ({ fetchlearnersreport, learnerreport }) => {
           </Typography>
           <div id="learnersreport">
             <TableContainer ref={pdfRef}>
-              {/* <Typography
-                sx={{ flex: "1 1 100%" }}
-                variant="h4"
-                id="tableTitle"
-                component="div"
-                align="center"
-                style={{ marginBottom: "15px" }}
-              >
-                Learners Report
-              </Typography>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}>
-                <h6>LXP - Project: {today.toLocaleDateString() + " " + today.toLocaleTimeString()}</h6>
-              </div> */}
               <Table
                 sx={{ width: "100%" }}
                 aria-labelledby="tableTitle"

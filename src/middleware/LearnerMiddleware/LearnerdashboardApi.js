@@ -1,12 +1,5 @@
 import { FETCH_DASHBOARD_REQUEST, FetchDashboardSuccess, FetchDashboardFailure } from "../../actions/LearnerAction/LearnerdashboardAction";
-
 import axios from 'axios';
-
-import { userData } from './/..//..//../src/components/LearnerComponent/Register';
-import { useState } from 'react';
-
-// const BASE_URL = 'http://localhost:5199/lxp/view/learner/ ';
-
 const LearnerdashboardApi = ({ dispatch }) => (next) => async (action) => {
     if (action.type === FETCH_DASHBOARD_REQUEST) {
         try {
@@ -17,7 +10,6 @@ const LearnerdashboardApi = ({ dispatch }) => (next) => async (action) => {
         } catch (error) {
             dispatch(FetchDashboardFailure(error))
         }
-
     }
     return next(action)
 }

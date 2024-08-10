@@ -2,7 +2,6 @@ import { FETCH_COURSE_REQUEST, fetchCourseSuccess, fetchCourseFailure } from "..
 import axios from "axios";
 
 const API_URL = 'http://localhost:5199/lxp/course';
-
 const fetchcourseApi = ({ dispatch }) => (next) => async (action) => {
   next(action);
 
@@ -10,10 +9,8 @@ const fetchcourseApi = ({ dispatch }) => (next) => async (action) => {
     try {
       console.log("action", action.payload);
       const response = await axios.get(`http://localhost:5199/lxp/course/${action.payload}`);
-      console.log('API Response course:', response.data.data); // Log the response data
+      console.log('API Response course:', response.data.data);
       dispatch(fetchCourseSuccess(response.data.data));
-      // console.log("categorymiddleware",response.data)
-
     } catch (error) {
       console.error('API Error:', error.message);
       dispatch(fetchCourseFailure(error.message));

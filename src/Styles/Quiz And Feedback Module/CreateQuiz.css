@@ -1,3 +1,4 @@
+
 #QuizCard {
   
   width: 450px;
@@ -95,13 +96,6 @@
 }
 
 
-/* .question-details-container{
-  margin-top:-10%;
-  margin-left:-3%;
-  width:840px;
-  position: inherit;
-} */
-
 #required {
   color: Red;
 }
@@ -188,4 +182,3 @@ margin-top: 20px;
 }
 
 /* -------------------- */
-

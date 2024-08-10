@@ -1,5 +1,3 @@
-// reducers/CreateQuizReducer.js
-// import { EDIT_QUIZ_DETAILS_FAILURE, EDIT_QUIZ_DETAILS_REQUEST, EDIT_QUIZ_DETAILS_SUCCESS } from "../../actions/Quiz And Feedback Module/EditQuizAction";
 import { EDIT_QUIZ_DETAILS_REQUEST,EDIT_QUIZ_DETAILS_SUCCESS,EDIT_QUIZ_DETAILS_FAILURE } from "../../../actions/Quiz And Feedback Module/Admin/EditQuizAction";
 
 const initialState = {

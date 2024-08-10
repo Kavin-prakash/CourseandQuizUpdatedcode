@@ -3,7 +3,7 @@ import { FETCH_LEARNERS_REQUEST, fetchLearnerFailure, fetchLearnerSuccess } from
 import { baseUrl } from "./api";
 
 const API_URL = `${baseUrl}/lxp/learner/getalllearnerdetails`;
-// const API_URL = 'http://localhost:3001/ViewAllLearners';
+
 
 const apiViewAllLearners = ({ dispatch }) => (next) => async (action) => {
     if (action.type === FETCH_LEARNERS_REQUEST) {

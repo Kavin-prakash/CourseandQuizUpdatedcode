@@ -5,11 +5,6 @@ const initialstate ={
     loading :false,
     error:null
 }
- 
- 
- 
- 
- 
     const UpdateUserProfileReducer = (state = initialstate, action)=>{
     switch(action.type)
     {

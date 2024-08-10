@@ -157,7 +157,7 @@ const CourseEnrollmentReportView = ({
     });
   };
 
-  const ExportExcel=()=>{
+  const ExportExcel = () => {
     const selectedFields = rows.map(row => ({
       courseName: row.courseName,
       enrolledUsers: row.enrolledUsers,
@@ -169,8 +169,8 @@ const CourseEnrollmentReportView = ({
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], {type: 'application/octet-stream'});
-    saveAs(blob,`Course_Enrollment_Reports_${Dates}.xlsx`);
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, `Course_Enrollment_Reports_${Dates}.xlsx`);
   };
 
 
@@ -346,18 +346,18 @@ const CourseEnrollmentReportView = ({
               />
             </form>
             <DropdownButton
-      id="dropdown-basic-button"
-      title={
-        <>
-          Download Report <ArrowDownwardIcon />
-        </>
-      }
-      variant="success"
-      style={{ marginLeft: '48%' }}
-    >
-      <Dropdown.Item onClick={ExportPdf}>Pdf Format</Dropdown.Item>
-      <Dropdown.Item onClick={ExportExcel}>Excel Format</Dropdown.Item>
-    </DropdownButton>
+              id="dropdown-basic-button"
+              title={
+                <>
+                  Download Report <ArrowDownwardIcon />
+                </>
+              }
+              variant="success"
+              style={{ marginLeft: '48%' }}
+            >
+              <Dropdown.Item onClick={ExportPdf}>Pdf Format</Dropdown.Item>
+              <Dropdown.Item onClick={ExportExcel}>Excel Format</Dropdown.Item>
+            </DropdownButton>
           </div>
           <Typography
             sx={{ flex: "1 1 100%" }}
@@ -415,7 +415,6 @@ const CourseEnrollmentReportView = ({
                           to={'/individualenrollcourselearner/' + row.courseId}
                           sx={{ textDecoration: "none" }}
                         >
-                          {/* {row.lastLogin.replace("T", " ")} */}
                           <Tooltip title={row.courseName + ' Enrolled Users'} >
                             {row.enrolledUsers}
                           </Tooltip>
@@ -424,9 +423,6 @@ const CourseEnrollmentReportView = ({
                         {
                           row.inprogressUsers === 0 ?
                             <TableCell align="left"
-                            // component={Link}
-                            // to={'/individualenrollprogresscourselearner/' + row.courseId}
-                            // sx={{ textDecoration: "none" }}
                             >
                               <Tooltip title={row.courseName + ' In Progress Users'} >
                                 {row.inprogressUsers}
@@ -442,18 +438,6 @@ const CourseEnrollmentReportView = ({
                               </Tooltip>
                             </TableCell>
                         }
-
-                        {/* <TableCell align="left"
-                          component={Link}
-                          to={'/individualenrollprogresscourselearner/' + row.courseId}
-                          sx={{ textDecoration: "none" }}
-                        >
-                          <Tooltip title={row.courseName + ' In Progress Users'} >
-                            {row.inprogressUsers}
-                          </Tooltip>
-                        </TableCell> */}
-
-
                         {row.completedUsers === 0 ?
                           <TableCell align="left"
                             sx={{ textDecoration: "none" }}>

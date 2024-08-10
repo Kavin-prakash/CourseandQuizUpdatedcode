@@ -1,11 +1,3 @@
-import React from 'react'
-
-// import {
-//     CREATE_TOPICFEEDBACK_REQUEST,
-//     CREATE_TOPICFEEDBACK_SUCCESS,
-//     CREATE_TOPICFEEDBACK_FAILURE,
-//   } from '../actions/TopicFeedbackAction';
-
 import { CREATE_TOPICFEEDBACK_REQUEST,CREATE_TOPICFEEDBACK_SUCCESS,CREATE_TOPICFEEDBACK_FAILURE } from '../../actions/Quiz And Feedback Module/TopicFeedbackAction';
 
   

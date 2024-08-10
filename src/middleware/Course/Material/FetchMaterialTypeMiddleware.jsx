@@ -9,10 +9,7 @@ const fetchMaterialTypeApi = ({ dispatch }) => (next) => async (action) => {
     try {
       const response = await axios.get(API_URL);
       console.log('API Response:', response.data); // Log the response data
-      
-        dispatch(fetchMaterialTypeSuccess(response.data.data));
-        // console.log("MaterialTypemiddleware",response.data)
-      
+        dispatch(fetchMaterialTypeSuccess(response.data.data));   
     } catch (error) {
       console.error('API Error:', error.message);
       dispatch(fetchMaterialTypeFailure(error.message));

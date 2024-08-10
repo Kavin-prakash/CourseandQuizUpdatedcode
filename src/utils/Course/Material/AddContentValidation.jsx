@@ -64,11 +64,6 @@ export const validateContentForm = (material,setErrors,materialType) => {
      }
   
     }
- 
-       
-     
-    
-  
     setErrors(errors);
     return formIsValid;
   };

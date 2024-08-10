@@ -8,11 +8,8 @@ import { updateCoursesRequest } from '../../../actions/Admin/Updatecourse';
 import { useParams } from 'react-router-dom';
 import { validateForm } from '../../../utils/Admin/ValidationUpdatecourse';
 
-
-
 const Courseupdate = () => {
 
-    // const navigate = useNavigate();
     const { courseId } = useParams(); // Destructure the courseId from the URL
     const dispatch = useDispatch();
     const [coursecategory, setCategory] = useState([]);

@@ -49,20 +49,7 @@ export const DeleteQuizQuestionsApi = ({ dispatch }) => (next) => async (action)
   return next(action);
 }
 
-// export const UpdateQuizQuestionsApi = ({ dispatch }) => (next) => async (action) => {  
-//   if (action.type === UPDATE_QUIZ_QUESTION_REQUEST) {
-//       try {
-//           console.log("updatingting questionId", action.payload.quizQuestionId);
-//           const response = await axios.put(`http://localhost:5199/api/QuizQuestions/UpdateQuestion?quizQuestionId=${action.payload.quizQuestionId}`,action.payload);
-//           console.log("update api questions:",response.data);
-//           dispatch(updateQuizQuestionSuccess(response.data.data));
-//       } catch (error) {
-//           console.log("Error fetching question: ", error.message);
-//           dispatch(updateQuizQuestionFailure(error.message));
-//       }
-//   }
-//   return next(action);
-// }
+
 
 export const UpdateQuizQuestionsApi = async (action) => {
 
